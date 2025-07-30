@@ -12,7 +12,7 @@ class AddNameToReportsTable extends Migration
      */
     public function up()
     {
-        Schema::table('new_reports', function (Blueprint $table) {
+        Schema::table('reports', function (Blueprint $table) {
             $table->text('name');
         });
     }
@@ -24,7 +24,7 @@ class AddNameToReportsTable extends Migration
      */
     public function down()
     {
-        Schema::table('new_reports', function (Blueprint $table) {
+        Schema::table('reports', function (Blueprint $table) {
             $table->dropColumn('name');
         });
     }

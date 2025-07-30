@@ -1,0 +1,63 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: talent-assessment-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./storage:/var/www/storage
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=mysql
+      - DB_DATABASE=talent_assessment
+      - DB_USERNAME=talent_user
+      - DB_PASSWORD=talent_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - talent-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: talent-assessment-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: talent_assessment
+      MYSQL_USER: talent_user
+      MYSQL_PASSWORD: talent_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - talent-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: talent-assessment-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - talent-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  talent-network:
+    driver: bridge 
