@@ -1,0 +1,84 @@
+// Select Boxes
+.selectboxit-container span, 
+.selectboxit-container .selectboxit-options a {
+    height: 45px;
+    line-height: 45px;
+}
+
+.selectboxit.input-lg {
+
+    .selectboxit-text {
+        font-size: 17px;
+    }
+
+    .selectboxit-arrow-container .selectboxit-arrow {
+        top: 15px;
+    }
+
+    &:hover, &:focus {
+
+        .selectboxit-arrow-container .selectboxit-arrow {
+            color: @main-text-color;
+        }        
+    }
+}
+
+.selectboxit-container {
+
+    .selectboxit-list > .selectboxit-focus > .selectboxit-option-anchor {
+        background-color: @complement;
+    }
+}
+
+html .select2-drop .select2-results li.select2-highlighted {
+    background-color: @complement;
+}
+
+html .select2-container .select2-choice {
+    height: 45px;
+
+    .select2-chosen,
+    .select2-search-choice-close,
+    .select2-arrow {
+        line-height: 45px;
+    }
+}
+
+// Tags input
+.bootstrap-tagsinput {
+    display: block;
+    width: 100%;
+    color: #555;
+    background-color: #FFF;
+    background-image: none;
+    border: 2px solid #E4E4E4;
+    border-radius: 0px;
+    //box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    height: 45px;
+    padding: 10px 16px;
+    font-size: 17px;
+    line-height: 1.33;
+
+    .tag {
+        background-color: #ddd;
+        border-radius: 5px;
+        color: @main-text-color;
+        padding: 9px 12px;
+        position: relative;
+        top: -2.5px;
+        left: -13px;
+    }
+
+    &.bootstrap-tagsinput-max {
+        border-color: white;
+
+        input[type="text"] {
+            opacity: 0;
+        }
+    }
+}
+
+.weight-input {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,42 @@
+// Login
+.login-page,
+.login-page.login-light {
+    background: white;
+}
+.login-page .login-form,
+.login-page.login-light .login-form {
+    max-width: 370px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+
+    .form-group {
+
+        .control-label {
+            color: lighten(@neutral, 30%);
+            font-size: 16px;
+        }
+
+        .form-control {
+            border-color: @border-color;
+            font-size: 16px;
+        }
+
+        .btn {
+            font-size: 16px;
+        }
+    }
+
+    .login-footer {
+        color: @neutral;
+        font-size: 15px;
+
+        a {
+            color: @neutral;
+
+            &:hover {
+                color: @primary;
+            }
+        }
+    }
+}

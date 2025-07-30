@@ -1,0 +1,287 @@
+// Assignment styles
+.assignment {
+     background-color: white;
+
+     .question-container {
+          margin-bottom: 50px;
+     }
+
+     &.details {
+          background: #eee;
+
+          .main-content {
+               background: #eee;
+          }
+     }
+
+     .heading {
+          height: 300px;
+          overflow: hidden;
+          position: relative;
+
+          img.background {
+               position: absolute;
+               left: 0;
+               top: 0;
+               width: 100%;
+               height: auto;
+               min-height: 100%;
+          }
+     }
+
+     .main-content {
+          display: block;
+          background-color: white;
+          max-width: 1170px;
+          margin: 0 auto;
+     }
+
+     .logo {
+          position: relative;
+          text-align: center;
+          margin-top: 50px;
+          height: 136px;
+     }
+
+     .title {
+          text-transform: uppercase;
+          //font-size: 80px;
+          font-size: 4vw;
+          font-weight: bold;
+          font-family: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+          padding: 0 30px;
+          line-height: 55px;
+          position: relative;
+          top: 62px;
+          max-width: 1170px;
+          margin: 0 auto;
+     }
+
+     .description {
+          margin-bottom: 70px;
+     }
+
+     p {
+          color: #555;
+          font-size: 16px;
+
+          &.text-danger {
+               color: #cc3f44;
+          }
+     }
+
+     h1, h2, h3 {
+          color: #03244A;
+          font-family: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+          text-transform: uppercase;
+     }
+
+     h3 {
+          font-size: 20px;
+     }
+
+     h1 {
+          font-weight: bold;
+          font-size: 50px;
+     }
+
+     .btn-group {
+          //border-bottom: 3px solid #EFEFEF;
+          width: 100%;
+     }
+
+     .btn-gray {
+          color: #777;
+          padding: 20px;
+          margin-right: 5px;
+          margin-bottom: 0;
+          border-right: 4px solid #fff;
+          white-space: normal;
+          //-ms-word-break: break-all;
+          //word-break: break-all;
+
+          input[type="radio"] {
+               display: none;
+          }
+     }
+
+     .btn-gray:active, .btn-gray.active {
+          box-shadow: none;
+          background-color: @primary;
+          color: white;
+          font-weight: bold;
+     }
+
+     .badge {
+          display: inline-block;
+          min-width: 10px;
+          //padding: 6px 13px;
+          padding: 0px 6px;
+          //font-size: 12px;
+          font-weight: bold;
+          color: #fff;
+          line-height: 1;
+          vertical-align: baseline;
+          white-space: nowrap;
+          text-align: center;
+          background-color: #777777;
+          border-radius: 46px;
+     }
+
+     footer {
+          text-align: center;
+          padding: 60px 0;
+     }
+
+     .pager {
+
+          a {
+               color: #155E99;
+               font-size: 16px;
+               text-decoration: underline;
+               font-style: italic;
+          }
+     }
+
+     #countdown {
+          color: #333;
+          display: inline-block;
+          text-align: center;
+          font-size: 30px;
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          z-index: 10;
+
+          & > div {
+               padding: 10px;
+               border-radius: 3px;
+               background: fade(#fff, 20%);
+               display: inline-block;
+
+               span {
+                    padding: 15px;
+                    border-radius: 3px;
+                    background: fade(#fff, 50%);
+                    display: inline-block;
+                    line-height: 15px;
+               }
+          }
+     }
+
+     #comp {
+          text-align: center;
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+          -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+     }
+
+     &.preview {
+
+          #countdown {
+               top: 70px;
+          }
+     }
+
+     &.wmtask {
+
+          .main-content {
+               max-width: 100%;
+               margin: 0;
+               height: 100%;
+               position: absolute;
+               padding: 0;
+          }
+
+          .btn-default {
+               color: #606060;
+               padding: 10px 20px;
+               margin-right: 5px;
+               margin-bottom: 0;
+               border: 1px solid #c5c5c5;
+               white-space: normal;
+               background: #eeeeee;
+          }
+     }
+
+     @media (max-width: 768px) {
+
+          .btn-gray {
+               margin-bottom: 5px;
+               display: block;
+               width: 100%;
+          }
+     }
+}
+
+// Fix for preview navbar pushing down wm comp
+.navbar.horizontal-menu.navbar-minimal.navbar-fixed-top + .assignment.preview.wmtask {
+     margin-top: 0;
+}
+
+// Page styles
+.page-assignments {
+
+     input.error {
+          border-color: red;
+     }
+     .remove-row-button {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding: 10px;
+          color: #bbbbbb;
+     }
+     .remove-row-button:hover {
+          color: #eee;
+     }
+     html .select2-container.select2-container-multi .select2-choices .select2-search-choice {
+          padding: 6px 9px 6px 21px;
+     }
+     html .select2-container.select2-container-multi .select2-choices {
+          padding: 4px;
+     }
+     .control-label {
+          font-size: 18px;
+     }
+     .form-group {
+          margin-bottom: 30px;
+     }
+     .label.label-blue {
+          background-color: #9CC2CB;
+     }
+     .panel {
+          .panel-default {
+               .field-email {
+                    display:none
+               }
+          }
+     }
+     .panel {
+          .panel-headerless {
+               margin-bottom: 5px;
+          }
+     }
+     .pull-right {
+          a {
+               //display: none;
+          }
+     }
+     .templates {
+          display: none;
+     }
+     .modal {
+          .fade {
+               .modal-dialog {
+                    width: 60%;
+               }
+          }
+     }
+     .progress-bar {
+          .progress-bar-success {
+               width: 0%;
+          }
+     }
+}

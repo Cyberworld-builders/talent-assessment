@@ -1,0 +1,252 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the controller to call when that URI is requested.
+|
+*/
+
+// Temp
+//Route::get('generate', 'DashboardController@generateDefaults');
+//Route::get('generate_new', 'DashboardController@generate_new');
+//Route::get('test', 'DashboardController@test');
+
+// Authenticated
+Route::group(['middleware' => ['auth']], function()
+{
+	// Must Be An AOE Admin
+	Route::group(['middleware' => ['level:4']], function()
+	{
+		// Dashboard
+		Route::get('dashboard', 'DashboardController@index');
+		Route::post('dashboard/check_user', 'DashboardController@check_if_user_exists');
+		Route::get('download/{file}', 'DashboardController@download')->where('filename', '[A-Za-z0-9\-\_\.]+');
+		Route::get('dashboard/get-user', 'DashboardController@getUser');
+		Route::post('dashboard/sort', 'DashboardController@sort');
+		Route::get('dashboard/test', 'DashboardController@test');
+
+		// Clients
+		Route::resource('dashboard/clients', 'ClientsController');
+		Route::get('dashboard/clients/{id}/export-users', 'ClientsController@export_users');
+
+
+		// Client Users
+		Route::get('dashboard/clients/{id}/users', 'UsersController@show_users_for_client');
+
+		// Client Groups
+		Route::get('dashboard/clients/{id}/groups', 'GroupsController@index');
+		Route::get('dashboard/clients/{id}/groups/create', 'GroupsController@create');
+		Route::post('dashboard/clients/{id}/groups', 'GroupsController@store');
+		Route::get('dashboard/clients/{id}/groups/{groupId}/edit', 'GroupsController@edit');
+		Route::patch('dashboard/clients/{id}/groups/{groupId}', 'GroupsController@update');
+		Route::delete('dashboard/clients/{id}/groups/{groupId}', 'GroupsController@destroy');
+		Route::post('dashboard/clients/{id}/generate-groups', 'GroupsController@autoGenerateGroups');
+		Route::post('dashboard/clients/{id}/upload-groups', 'GroupsController@uploadGroups');
+
+		// Client Jobs
+		Route::get('dashboard/clients/{id}/jobs', 'JobsController@index');
+		Route::get('dashboard/clients/{id}/jobs/create', 'JobsController@create');
+		Route::post('dashboard/clients/{id}/jobs', 'JobsController@store');
+		Route::get('dashboard/clients/{id}/jobs/{jobId}/edit', 'JobsController@edit');
+		Route::patch('dashboard/clients/{id}/jobs/{jobId}', 'JobsController@update');
+		Route::delete('dashboard/clients/{id}/jobs/{jobId}', 'JobsController@destroy');
+
+		// Client Surveys
+		Route::get('dashboard/clients/{id}/surveys', 'SurveysController@index');
+		Route::get('dashboard/clients/{id}/surveys/{date}', 'SurveysController@show');
+
+		// Client Job Applicants
+		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants', 'JobsController@applicants');
+		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants/add', 'JobsController@addApplicants');
+		Route::post('dashboard/clients/{id}/jobs/{jobId}/applicants', 'JobsController@storeApplicants');
+		Route::post('dashboard/clients/{id}/jobs/{jobId}/applicants/{userId}/reject', 'JobsController@rejectApplicant');
+
+		// Client Weighting
+		Route::get('dashboard/clients/{id}/weights', 'WeightsController@index');
+		Route::get('dashboard/clients/{id}/weights/create/{jobId}/{assessmentId}', 'WeightsController@create');
+		Route::post('dashboard/clients/{id}/weights/{jobId}/{assessmentId}', 'WeightsController@store');
+		Route::get('dashboard/clients/{id}/weights/{weightId}/edit', 'WeightsController@edit');
+		Route::patch('dashboard/clients/{id}/weights/{weightId}', 'WeightsController@update');
+		Route::delete('dashboard/clients/{id}/weights/{weightId}', 'WeightsController@destroy');
+
+		// Client Assignments
+		Route::get('dashboard/clients/{id}/assignments', 'AssignmentsController@assignments');
+		Route::get('dashboard/clients/{id}/assign', 'AssignmentsController@assignToClient');
+		Route::post('dashboard/clients/{id}/assign', 'AssignmentsController@assignAssessment');
+		Route::post('dashboard/clients/{id}/add-from-groups', 'AssignmentsController@addFromGroups');
+
+		// Client Job Analysis
+		Route::get('dashboard/clients/{id}/analysis', 'AnalysisController@index');
+		Route::get('dashboard/clients/{id}/analysis/create', 'AnalysisController@create');
+		Route::get('dashboard/clients/{id}/analysis/{analysisId}', 'AnalysisController@show');
+		Route::post('dashboard/clients/{id}/analysis', 'AnalysisController@store');
+		Route::get('dashboard/clients/{id}/analysis/{analysisId}/edit', 'AnalysisController@edit');
+		Route::patch('dashboard/clients/{id}/analysis/{analysisId}', 'AnalysisController@update');
+		Route::delete('dashboard/clients/{id}/analysis/{analysisId}', 'AnalysisController@destroy');
+		Route::get('dashboard/clients/{id}/analysis/{analysisId}/send', 'AnalysisController@send');
+
+		// Client JAQ
+		Route::get('dashboard/clients/{id}/analysis/{analysisId}/jaqs/{jaqId}', 'JaqsController@show');
+
+<<<<<<< HEAD
+    // Client Reports
+		Route::get('dashboard/clients/{id}/reports', 'ClientReportsController@index');
+		Route::delete('dashboard/clients/{id}/reports/{reportsId}', 'ClientReportsController@destroy');
+||||||| merged common ancestors
+        // Client Reports
+        Route::get('dashboard/clients/{id}/reports', 'ReportsController@index');
+				Route::get('dashboard/clients/{id}/clientReports', 'ClientReportsController@index');
+=======
+        // Client Reports
+        Route::get('dashboard/clients/{id}/reports', 'ReportsController@index');
+>>>>>>> 1eddb0676abafb06814662055511cfc9798aa26d
+
+		// Assessments
+		Route::resource('dashboard/assessments', 'AssessmentsController');
+		Route::get('dashboard/assessments/{id}/assign', 'AssessmentsController@assign');
+		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@assign_assessment');
+		Route::post('dashboard/assessments/upload', 'AssessmentsController@upload_from_file');
+
+		// Assessment Dimensions
+		Route::get('dashboard/assessments/{id}/dimensions', 'DimensionsController@index');
+		Route::get('dashboard/assessments/{id}/dimensions/create', 'DimensionsController@create');
+		Route::post('dashboard/assessments/{id}/dimensions', 'DimensionsController@store');
+		Route::get('dashboard/assessments/{id}/dimensions/{dimensionId}/edit', 'DimensionsController@edit');
+		Route::patch('dashboard/assessments/{id}/dimensions/{dimensionId}', 'DimensionsController@update');
+		Route::delete('dashboard/assessments/{id}/dimensions/{dimensionId}', 'DimensionsController@destroy');
+
+		// Assessment Translations
+		Route::get('dashboard/assessments/{id}/translations', 'TranslationsController@index');
+		Route::get('dashboard/assessments/{id}/translations/create', 'TranslationsController@create');
+		Route::post('dashboard/assessments/{id}/translations', 'TranslationsController@store');
+		Route::get('dashboard/assessments/{id}/translations/{translationId}/edit', 'TranslationsController@edit');
+		Route::patch('dashboard/assessments/{id}/translations/{translationId}', 'TranslationsController@update');
+		Route::delete('dashboard/assessments/{id}/translations/{translationId}', 'TranslationsController@destroy');
+
+		// Users
+		Route::resource('dashboard/users', 'UsersController');
+		Route::get('dashboard/users/client/{id}', 'UsersController@show_users_for_client');
+		Route::get('dashboard/users/create/{id}', 'UsersController@add_users_to_client');
+		Route::post('dashboard/users/create/{id}', 'UsersController@store_multiple');
+		Route::post('dashboard/users/generate_password', 'UsersController@generate_password');
+		Route::post('dashboard/users/generate_username', 'UsersController@generate_username');
+		Route::delete('dashboard/users/{id}', 'UsersController@destroy');
+		Route::post('dashboard/users/get_users_from_ids', 'UsersController@get_users_from_ids');
+
+		// Dimensions
+//		Route::resource('dashboard/dimensions', 'DimensionsController');
+
+		// Assignments
+		Route::get('dashboard/assignments', 'AssignmentsController@index');
+		Route::get('dashboard/assignments/{id}/edit', 'AssignmentsController@edit');
+		Route::patch('dashboard/assignments/{id}', 'AssignmentsController@update');
+		Route::get('dashboard/assignments/{id}/bulk', 'AssignmentsController@bulk');
+		Route::post('dashboard/assignments/bulk', 'AssignmentsController@bulk_update');
+		Route::get('dashboard/assignments/{id}/details', 'AssignmentsController@show_assignment_details');
+		Route::get('dashboard/assignment/{id}/download', 'AssignmentsController@download_assignment');
+		Route::get('dashboard/assignments/download/{client_id}', 'AssignmentsController@download_all_assignments_for_client');
+		Route::get('dashboard/assign', 'AssignmentsController@assign');
+		Route::post('dashboard/assign', 'AssignmentsController@assignAssessment');
+		Route::get('dashboard/assignments/user/{user_id}', 'AssignmentsController@show_assignments_for_user');
+		Route::post('dashboard/assignments/upload', 'AssignmentsController@upload_from_file');
+		Route::delete('dashboard/assignments/{id}', 'AssignmentsController@destroy');
+
+		// Translate
+//		Route::get('dashboard/translate/{id}', 'TranslationsController@create');
+//		Route::post('dashboard/translate/{id}', 'TranslationsController@store');
+//		Route::get('dashboard/translations/{id}/edit', 'TranslationsController@edit');
+//		Route::patch('dashboard/translations/{id}', 'TranslationsController@update');
+//		Route::delete('dashboard/translations/{id}', 'TranslationsController@destroy');
+
+		// Functions
+//		Route::get('dashboard/weighting/{weight_id}/functions', 'FunctionsController@index');
+//		Route::get('dashboard/weighting/{weight_id}/functions/{id}/edit', 'FunctionsController@edit');
+//		Route::post('dashboard/weighting/{weight_id}/functions/{id}/edit', 'FunctionsController@update');
+//		Route::post('dashboard/functions/add-dimension', 'FunctionsController@add_dimension');
+	});
+
+	// Must Be Any Role Above Standard User
+	Route::group(['middleware' => ['level:2']], function()
+	{
+		// Helper Functions
+
+
+		// Dashboard
+		Route::get('dashboard', 'DashboardController@index');
+		Route::post('dashboard/check_applicant', 'DashboardController@check_if_applicant_exists');
+		Route::get('download/{file}', 'DashboardController@download')->where('filename', '[A-Za-z0-9\-\_\.]+');
+
+		// Client Dashboard
+		Route::get('dashboard/selection', 'ClientDashboardController@selection');
+		Route::get('dashboard/development', 'ClientDashboardController@development');
+		Route::get('dashboard/development/{id}', 'ClientDashboardController@specificDev');
+		Route::get('dashboard/jobs/{id}', 'ClientDashboardController@job');
+		Route::get('dashboard/jobs/{id}/assign', 'ClientDashboardController@assign');
+		Route::post('dashboard/assign', 'AssignmentsController@assignAssessment');
+		Route::get('dashboard/add-applicants', 'ClientDashboardController@addApplicants');
+		Route::post('dashboard/add-applicants', 'ClientDashboardController@storeApplicants');
+		Route::get('dashboard/all-users', 'ClientDashboardController@users');
+		Route::get('dashboard/all-users/{id}', 'ClientDashboardController@user');
+		Route::get('dashboard/jobs/{id}/download', 'ClientDashboardController@download_job_data');
+		Route::post('dashboard/assign/add-users', 'AssignmentsController@add_users_to_assignment_from_client');
+		Route::post('dashboard/assign/add-user', 'AssignmentsController@add_user_to_assignment');
+//		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@generate_assignment_for_assessment');
+
+		// Client Job Applicants
+		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants', 'JobsController@applicants');
+		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants/add', 'JobsController@addApplicants');
+		Route::post('dashboard/clients/{id}/jobs/{jobId}/applicants/{userId}/reject', 'JobsController@rejectApplicant');
+		Route::post('dashboard/clients/{id}/jobs/{jobId}/applicants/{userId}/unreject', 'JobsController@unrejectApplicant');
+
+		// Client Assignments
+		Route::post('dashboard/assign/add-applicants', 'AssignmentsController@add_users_to_assignment_from_job');
+
+		// Reports
+		Route::get('dashboard/report/{clientId}/{jobId}/{userId}', 'ReportsController@index');
+//		Route::get('dashboard/report/{templateId}/{assignmentId}', 'ReportsController@template');
+		Route::get('dashboard/report/cacique', 'ReportsController@caciquetest');
+
+		// Users
+		Route::post('dashboard/users/upload', 'UsersController@upload_from_file');
+
+		// My Account
+		Route::get('account', 'DashboardController@account');
+	});
+
+	// Assignments
+	Route::get('assignments', 'AssignmentsController@index');
+	Route::get('assignments/stage/{id}', 'AssignmentsController@stage');
+	Route::get('assignment/{id}', 'AssignmentsController@show');
+	Route::post('assignment/{id}', 'AssignmentsController@store_answers');
+	Route::post('assignment/{id}/update_time', 'AssignmentsController@update_time_limit');
+	Route::post('assignment/wm/save', 'AssignmentsController@wm_save');
+
+	// Users
+	Route::get('language', 'UsersController@language');
+	Route::post('language', 'UsersController@update_language');
+	Route::get('profile', 'UsersController@profile');
+	Route::post('profile', 'UsersController@update_profile');
+	Route::get('terms', 'UsersController@terms');
+	Route::post('terms', 'UsersController@update_terms');
+	Route::get('profile/research', 'UsersController@research');
+	Route::post('profile/research', 'UsersController@store_research');
+});
+
+// Authentication
+Route::get('login', 'Auth\AuthController@getLogin');
+Route::post('login', 'Auth\AuthController@postLogin');
+Route::get('logout', 'Auth\AuthController@getLogout');
+Route::get('password', 'Auth\PasswordController@getEmail');
+Route::post('password', 'Auth\PasswordController@postEmail');
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset/{token}', 'Auth\PasswordController@postReset');
+Route::get('sendreminder', 'AssignmentsController@send_reminder');
+
+// Registration
+//Route::get('register', 'Auth\AuthController@getRegister');
+//Route::post('register', 'Auth\AuthController@postRegister');

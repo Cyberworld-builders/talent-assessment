@@ -1,0 +1,85 @@
+// Sidebar Theme
+.xenon-sidebar-skin-variant(@bg-color; @text-color; @text-active-color; @border-color; @primary; @secondary; @scroll-color: #fff);
+
+// Sidebar
+.sidebar-menu {
+    width: 270px;
+    background-color: @main-text-color;
+
+    .sidebar-menu-inner {
+        background-color: @bg-color;
+        transition: 0.2s ease-out all;
+
+        &.collapsed {
+            width: 43px;
+
+            .logo {
+                width: 0px;
+            }
+
+            .main-menu {
+                padding-left: 10px;
+                padding-right: 10px;
+
+                li span.title,
+                li span.label {
+                    display: none;
+                }
+            }
+        }
+    }
+
+	.logo-env {
+    	padding: 10px 20px;
+    }
+
+    .logo {
+        height: 54px;
+        overflow: hidden;
+
+        h2 {
+    	   color: white;
+    	   margin: 12px 0;
+        }
+    }
+
+    .main-menu {
+    	padding-left: 20px;
+    	padding-right: 20px;
+
+    	li {
+    		font-size: 16px;
+    		font-weight: 300;
+
+            a {
+                cursor: pointer;
+            }
+    	}
+    }
+
+    .sidebar-menu-under {
+        margin-left: 43px;
+        position: fixed;
+
+        .menu-category {
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .main-menu {
+            padding: 0;
+            margin: 0;
+
+            li {
+                font-size: 13px;
+
+                a {
+                    border: none;
+                    padding: 8px 0;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,67 @@
+// Main content area
+.main-content {
+    color: @main-text-color;
+
+    .page-heading {
+        background-color: @bg-color;
+        padding: 20px;
+        margin-bottom: 5px;
+        overflow: hidden;
+
+        h1 {
+            color: white;
+            margin: 0;
+            float:left;
+        }
+        h3{
+        color:white;
+        float:right;
+
+        a{
+        color:white !important;
+        }
+        }
+        
+    }
+
+    .section {
+        background-color: white;
+        padding: 20px 20px;
+        margin-bottom: 5px;
+        overflow: hidden;
+
+        h2 {
+            margin: 0;
+        }
+
+        .control-label {
+            font-size: 18px;
+        }
+
+        .form-control {
+            border-width: 2px;
+
+            &:hover, &:focus {
+                border-color: @complement;
+            }
+        }
+    }
+
+    .section.info {
+        margin-bottom: 30px;
+    }
+}
+
+div.datepicker thead tr:first-child th, div.datepicker tfoot tr th,
+div.datepicker table tr td span,
+div.datepicker thead tr:first-child th.datepicker-switch, div.datepicker tfoot tr th.datepicker-switch,
+div.datepicker table tr td.day:hover {
+    color: #333;
+}
+
+.version-number {
+    padding: 28px;
+    position: absolute;
+    bottom: 0px;
+    color: #5a5a5a;
+}

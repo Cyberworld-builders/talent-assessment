@@ -1,0 +1,721 @@
+
+// Assessments
+.assessments {
+
+    .assessment {
+        background-color: white;
+        padding: 30px 20px;
+        margin-bottom: 2px;
+        overflow: hidden;
+
+        .checkbox {
+            float: left;
+            margin-right: 20px;
+        }
+
+        .body {
+            float: left;
+
+            h3 {
+                margin: 0 0 3px 0;
+            }
+
+            .date {
+                font-size: 11px;
+            }
+        }
+
+        .controls {
+            float: right;
+            text-align: right;
+
+            .control {
+                text-align: center;
+                margin-left: 10px;
+                display: inline-block;
+                min-width: 48px;
+                cursor: pointer;
+
+                i {
+                    font-size: 22px;
+                    transition: 0.2s ease all;
+                }
+
+                span {
+                    transition: 0.2s ease all;
+                }
+
+                &:hover {
+                    i, span {
+                        color: @complement;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Questions
+.questions,
+.uk-nestable-list-dragged {
+
+    .question {
+        position: relative;
+        background-color: white;
+        margin-bottom: 2px;
+        color: @main-text-color;
+
+        .question-header {
+            padding: 22px 20px 0 20px;
+        }
+
+        .question-body {
+            padding: 10px 20px 20px 38px;
+            min-height: 100px;
+
+            .body {
+                padding-left: 20px;
+            }
+        }
+
+        .reorder {
+            position: absolute;
+            top: 9px;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 18px;
+            height: 17px;
+
+            i {
+                font-size: 22px;
+                transition: 0.2s ease all;
+            }
+
+            &:hover i {
+                color: @complement;
+            }
+        }
+
+        #number {
+            font-size: 22px;
+            position: absolute;
+            font-weight: bold;
+            top: 42px;
+            left: 15px;
+            color: #9E9E9E;
+        }
+
+        .body {
+            padding-left: 38px;
+
+            #content {
+                font-size: 16px;
+                display: inline-block;
+                margin: 5px 0;
+
+                img {
+                    max-width: 400px;
+                }
+            }
+
+            .date {
+                font-size: 11px;
+            }
+
+            input {
+                border-width: 2px;
+            }
+
+            input.question-edit-input {
+                font-style: italic;
+                font-size: 16px;
+
+                &:hover, &:focus {
+                    border-color: @complement;
+
+                    & + .input-group-addon, 
+                    .input-group-addon + & {
+                        border-color: @complement;
+                    }
+                }
+            }
+
+            .input-group.input-group-minimal .input-group-addon {
+                padding: 9px 16px;
+                border-width: 2px;
+            }
+        }
+
+        #practice {
+            display: inline-block;
+            font-size: 12px;
+            padding: 6px 11px;
+            border: 1px solid #ECECEC;
+            color: #bfbfbf;
+            margin-right: 2px;
+            position: relative;
+            top: -5px;
+            cursor: pointer;
+            background: transparent;
+
+            &.active {
+                background: #828f93;
+                border-color: #828f93;
+                color: white;
+            }
+        }
+
+        #dimension {
+            font-size: 12px;
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 7px 11px;
+            position: relative;
+            top: -5px;
+            margin-right: 3px;
+            cursor: pointer;
+            opacity: 0.5;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            &.active {
+                background-color: #828f93;
+                color: white;
+                opacity: 1;
+
+                &:hover {
+                    background-color: lighten(#828f93, 10%);
+                }
+            }
+        }
+
+        .question-type-column {
+            padding-right: 0px;
+            //width: 10%;
+        }
+
+        #question-type {
+            font-size: 12px;
+            background-color: #f0f0f0;
+            padding: 6px 11px;
+            margin-bottom: 3px;
+            cursor: pointer;
+            display: inline-block;
+            display: block;
+            width: 100%;
+            
+            &:hover {
+                background-color: darken(#f0f0f0, 10%);
+            }
+        }
+
+        .anchors-column {
+            padding-left: 3px;
+        }
+
+        #anchors {
+
+            .anchor {
+                font-size: 12px;
+                background-color: #f0f0f0;
+                padding: 7px 11px;
+                margin-bottom: 3px;
+
+                &.disabled {
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .controls {
+            text-align: right;
+            position: relative;
+            top: 9px;
+
+            .control {
+                text-align: center;
+                margin-left: 10px;
+                display: inline-block;
+                max-width: 40px;
+                line-height: 0;
+                cursor: pointer;
+
+                i {
+                    font-size: 22px;
+                    transition: 0.2s ease all;
+                }
+
+                .fa-long-arrow-left {
+                    height: 0;
+                    position: relative;
+                    top: -3px;
+                }
+
+                .fa-long-arrow-right {
+                    height: 0;
+                    margin-top: -12px;
+                    position: relative;
+                    top: 4px;
+                    left: 2px;
+                }
+
+                span {
+                    transition: 0.2s ease all;
+                }
+
+                &:hover {
+                    i, span {
+                        color: @complement;
+                    }
+                }
+            }
+        }
+
+        .edit-field {
+            display: none;
+
+            .input-group {
+                margin-bottom: 10px;
+            }
+        }
+
+        #remove-field {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            background-color: #ddd;
+            text-align: center;
+            padding: 20px;
+
+            h3 {
+                margin: 0;
+            }
+        }
+
+        #question-type-field {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            padding: 20px;
+
+            h3 {
+                margin: 0;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .question-types {
+                margin-top: 20px;
+            }
+
+            .question-type {
+                display: inline-block;
+                height: 48px;
+
+                span {
+                    font-size: 18px;
+                    background-color: #f0f0f0;
+                    padding: 10px 14px;
+                    margin-bottom: 6px;
+                    margin-right: 3px;
+                    cursor: pointer;
+                }
+
+                &:hover {
+
+                    & > span {
+                        background-color: darken(#f0f0f0, 10%);
+                    }
+                }
+
+                &.active {
+
+                    & > span {
+                        background-color: @secondary;
+                        color: #fff;
+                    }
+                }
+            }
+
+            #cancel-question-type {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        #dimension-field {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            padding: 20px;
+
+            &.subdimension-field {
+
+                .dimension {
+                    display: none;
+
+                    &.active {
+                        display: inline-block;
+
+                        .sub-dimensions {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+
+            h3 {
+                margin: 0;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .dimensions {
+                margin-top: 20px;
+            }
+
+            .dimension {
+                display: inline-block;
+                height: 48px;
+
+                span {
+                    font-size: 18px;
+                    background-color: #f0f0f0;
+                    padding: 10px 14px;
+                    margin-bottom: 6px;
+                    margin-right: 3px;
+                    cursor: pointer;
+                }
+
+                .sub-dimensions {
+                    display: none;
+
+                    .sub-dimension {
+                        display: inline-block;
+
+                        &:hover {
+                            & > span {
+                                background-color: darken(#f0f0f0, 10%);
+                            }
+                        }
+
+                        &.active {
+                            & > span {
+                                background-color: lighten(@secondary, 10%);
+                                color: #fff;
+                            }
+                        }
+                    }
+
+                    .sub-arrow {
+                        display: inline-block;
+                    }
+                }
+
+                &:hover {
+
+                    & > span {
+                        background-color: darken(#f0f0f0, 10%);
+                    }
+                }
+
+                &.active {
+
+                    & > span {
+                        background-color: @secondary;
+                        color: #fff;
+                    }
+                }
+            }
+
+            #cancel-dimension {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        .dropdown {
+
+            .uk-nestable-list {
+                padding: 4px;
+            }
+        }
+    }
+}
+
+///////////////////////
+//Begin assessment page-specific styles
+//////////////////////
+
+.page-assessments {   
+    
+    .form-group {         
+        .field-items-per-page {
+            display: none;
+        }
+        
+        .field-language {
+            display: none;
+        }
+        
+        .field-company-labeled-for{
+            display: none;
+        }
+        
+        .row {
+            .custom-field {
+                margin-bottom: 5px;
+            }
+        }
+        
+        .field-time-limit {
+            display: none;  
+        }
+        
+        #modal {
+            .modal {
+                .fade {
+                    .modal-dialog {
+                        width: 60%;
+                    }
+                }
+            }   
+        }
+        
+        #modal-wysiwyg {
+            .modal {
+                .fade {
+                    .modal-dialog {
+                        width: 60%;
+                    }
+                }
+            }   
+        }  
+    }
+    
+    .section {
+        .info {
+            .field-custom-fields {
+                display: none;
+            }
+        }
+    }
+    
+    .row .custom-field {
+        margin-bottom: 5px; 
+    }
+
+    #remove-custom-field {
+        font-size: 18px; 
+        color: rgb(159, 159, 159); 
+        cursor: pointer; position: 
+        relative; top: 8px;
+    }
+}
+
+///////////////////////
+//End assessment page-specific styles
+//////////////////////
+
+.preview-link {
+    font-size: 16px;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-right: 30px;
+    position: relative;
+    top: 17px;
+    color: #5e5e5e;
+}
+
+// Nestable Items
+.uk-nestable-list-item {
+    margin-bottom: 5px;
+}
+
+.uk-nestable-item .uk-nestable-handle {
+    padding: 0;
+    background: none;
+    color: @main-text-color;
+    //transition: 0.2s ease all;
+
+    &:hover {
+        color: @complement;
+        background: none;
+    }
+}
+
+.uk-nestable-placeholder {
+    border-color: #555;
+}
+
+.uk-nestable-list-dragged {
+
+}
+
+.modal-title,
+.modal-content {
+    color: #444;
+}
+
+.modal-header {
+    border: none;
+}
+
+.modal-footer {
+    border: none;
+}
+
+// Assessments
+.assignment table.cke_show_border {
+    margin-top: -45px;
+}
+
+table.cke_show_border td {
+    width: 20%;
+    padding: 20px;
+    border: 1px solid #dfdfdf;
+}
+
+// WYSIWYG
+
+.wysiwyg-color-black {
+    color: black;
+}
+
+.wysiwyg-color-silver {
+    color: silver;
+}
+
+.wysiwyg-color-gray {
+    color: gray;
+}
+
+.wysiwyg-color-white {
+    color: white;
+}
+
+.wysiwyg-color-maroon {
+    color: maroon;
+}
+
+.wysiwyg-color-red {
+    color: red;
+}
+
+.wysiwyg-color-purple {
+    color: purple;
+}
+
+.wysiwyg-color-fuchsia {
+    color: fuchsia;
+}
+
+.wysiwyg-color-green {
+    color: green;
+}
+
+.wysiwyg-color-lime {
+    color: lime;
+}
+
+.wysiwyg-color-olive {
+    color: olive;
+}
+
+.wysiwyg-color-yellow {
+    color: yellow;
+}
+
+.wysiwyg-color-navy {
+    color: navy;
+}
+
+.wysiwyg-color-blue {
+    color: blue;
+}
+
+.wysiwyg-color-teal {
+    color: teal;
+}
+
+.wysiwyg-color-aqua {
+    color: aqua;
+}
+
+.wysiwyg-color-orange {
+    color: orange;
+}
+
+.assignment .handle {
+    left: 0%;
+    position: absolute;
+    color: #03244A;
+    font-family: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    padding-top: 32px;
+    width: 35px;
+    margin-left: -9px;
+    z-index: 10;
+    cursor: grab;
+    text-align: center;
+}
+.assignment .handle:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 30px;
+    background: #E77928;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    z-index: 1;
+    top: -11px;
+    left: 9px;
+}
+.assignment .rating-container {
+    position: relative;
+}
+.assignment .rating {
+    height: 8px;
+    background: #efefef;
+    border-radius: 2px;
+}
+
+.assignment .rating-description {
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-top: -9px;
+    font-size: 14px;
+    text-align: center;
+    color: #b8b8b8;
+}
+
+.page-container .main-content .page-title.blue {
+    background: #7788AE;
+    color: #fff;
+}
+
+.page-container .main-content .page-title.orange {
+    background: #E67728;
+    color: #fff;
+}
+
+.tab-content .tab-pane .table {
+    border: 2px solid #f6f6f6;
+    border-top: none;
+}

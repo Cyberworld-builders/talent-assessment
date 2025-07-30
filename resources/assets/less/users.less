@@ -1,0 +1,17 @@
+.members-table tbody tr td .name {
+	color: #555;
+}
+
+.form-control.input-lg {
+	font-size: 16px;
+	border-width: 2px;
+
+	&:hover, &:focus {
+		border-color: @complement;
+
+		& + .input-group-addon,
+		.input-group-addon + & {
+			border-color: @complement;
+		}
+	}
+}
