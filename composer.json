@@ -12,7 +12,6 @@
         "guzzlehttp/guzzle": "^6.1",
         "bican/roles": "^2.1",
         "maatwebsite/excel": "^2.1",
-        "bower-asset/marked": "^0.3.6",
         "aws/aws-sdk-php-laravel": "^3.1",
         "cangelis/pdf": "^2.2",
         "league/flysystem": "^1.0",
