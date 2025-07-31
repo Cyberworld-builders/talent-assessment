@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.4-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -9,8 +9,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    python \
-    build-essential
+    wget \
+    build-essential \
+    python
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -18,17 +19,28 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Node.js 6.17.1
+RUN wget https://nodejs.org/dist/v6.17.1/node-v6.17.1-linux-x64.tar.xz \
+    && tar -xf node-v6.17.1-linux-x64.tar.xz \
+    && mv node-v6.17.1-linux-x64 /opt/nodejs \
+    && ln -sf /opt/nodejs/bin/node /usr/local/bin/node \
+    && ln -sf /opt/nodejs/bin/npm /usr/local/bin/npm \
+    && rm node-v6.17.1-linux-x64.tar.xz
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
+# Copy composer files
+COPY composer.json composer.lock ./
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install PHP dependencies
+RUN composer install --no-scripts --no-autoloader
+
+# Copy application files
+COPY . .
 
 # Create storage directories and set permissions
 RUN mkdir -p /var/www/storage/logs \
@@ -38,25 +50,27 @@ RUN mkdir -p /var/www/storage/logs \
     && chown -R www-data:www-data /var/www/storage \
     && chmod -R 775 /var/www/storage
 
-# Create laravel.log file
 RUN touch /var/www/storage/logs/laravel.log \
     && chown www-data:www-data /var/www/storage/logs/laravel.log \
     && chmod 666 /var/www/storage/logs/laravel.log
 
-# Allow Composer plugin
-RUN composer config --no-plugins allow-plugins.kylekatarnls/update-helper true
+# Install Node.js dependencies and build frontend assets
+RUN npm install && npm run gulp
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+# Generate autoloader and optimize
+RUN composer dump-autoload --optimize
 
-# Clear compiled classes
-RUN php artisan clear-compiled
+# Set permissions
+RUN chown -R www-data:www-data /var/www
 
-# Commented out due to encoding errors
-# RUN php artisan optimize
+# Configure Apache
+RUN a2enmod rewrite
+
+# Copy Apache configuration
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port 8000
 EXPOSE 8000
 
-# Start Laravel development server
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=8000 || echo 'Failed to start Laravel' && sleep 10"] 
+# Start Apache
+CMD ["apache2-foreground"] 
