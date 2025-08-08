@@ -29,7 +29,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-net"
       - "traefik.http.routers.talent-assessment.entrypoints=websecure"
-      - "traefik.http.routers.talent-assessment.rule=Host(`talent.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-assessment.rule=Host(`${APP_URL}`)"
       - "traefik.http.routers.talent-assessment.tls=true"
       - "traefik.http.routers.talent-assessment.tls.certresolver=letsencrypt"
       - "traefik.http.services.talent-assessment.loadbalancer.server.port=8000"

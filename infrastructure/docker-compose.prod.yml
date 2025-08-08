@@ -1,0 +1,126 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - "--providers.docker"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@cyberworldbuilders.dev"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+  app:
+    build:
+      context: /opt/talent-assessment
+      dockerfile: Dockerfile
+    container_name: talent-assessment-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./storage:/var/www/storage
+      - ./public:/var/www/public
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=https://talent.cyberworldbuilders.dev
+      - DB_HOST=mysql
+      - DB_DATABASE=talent_assessment
+      - DB_USERNAME=talent_user
+      - DB_PASSWORD=talent_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - talent-network
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.talent-assessment.entrypoints=websecure"
+      - "traefik.http.routers.talent-assessment.rule=Host(`talent.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-assessment.tls=true"
+      - "traefik.http.routers.talent-assessment.tls.certresolver=letsencrypt"
+      - "traefik.http.services.talent-assessment.loadbalancer.server.port=8000"
+      - "traefik.http.middlewares.talent-assessment-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.talent-assessment-http.entrypoints=web"
+      - "traefik.http.routers.talent-assessment-http.rule=Host(`talent.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-assessment-http.middlewares=talent-assessment-redirect"
+
+  mysql:
+    image: mysql:8.0
+    container_name: talent-assessment-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: talent_assessment
+      MYSQL_USER: talent_user
+      MYSQL_PASSWORD: talent_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - talent-network
+    command: --default-authentication-plugin=mysql_native_password
+
+  redis:
+    image: redis:7-alpine
+    container_name: talent-assessment-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - talent-network
+    command: redis-server --appendonly yes
+
+  # Optional: Add a backup service
+  backup:
+    image: alpine:latest
+    container_name: talent-assessment-backup
+    restart: "no"
+    volumes:
+      - mysql_data:/backup/mysql
+      - ./backups:/backup/local
+    networks:
+      - talent-network
+    command: |
+      sh -c "
+        apk add --no-cache mysql-client
+        mysqldump -h mysql -u talent_user -ptalent_password talent_assessment > /backup/local/mysql_backup_$(date +%Y%m%d_%H%M%S).sql
+        echo 'Backup completed at $(date)'
+      "
+
+volumes:
+  mysql_data:
+  redis_data:
+  letsencrypt:
+
+networks:
+  talent-network:
+    driver: bridge
+  traefik-net:
+    driver: bridge
