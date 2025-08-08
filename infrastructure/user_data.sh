@@ -1,7 +1,8 @@
 #!/bin/bash
+set -euo pipefail
 
-# Wait for cloud-init to finish
-cloud-init status --wait
+# NOTE: Do NOT call 'cloud-init status --wait' from within a cloud-init
+# user-data script, as it will deadlock (cloud-init waits on itself).
 
 # Update system packages
 apt-get update
