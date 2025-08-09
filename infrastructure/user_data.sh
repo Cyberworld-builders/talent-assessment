@@ -62,12 +62,16 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--api.dashboard=true"
       - "--api.insecure=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@cyberworldbuilders.dev"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"  # Traefik dashboard
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
     networks:
       - traefik-net
 
@@ -103,9 +107,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-net"
-      - "traefik.http.routers.talent-assessment.entrypoints=web"
+      - "traefik.http.routers.talent-assessment.entrypoints=websecure"
       - "traefik.http.routers.talent-assessment.rule=Host(`${domain}`)"
-      - "traefik.http.services.talent-assessment.loadbalancer.server.port=8000"
+      - "traefik.http.routers.talent-assessment.tls=true"
+      - "traefik.http.routers.talent-assessment.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.talent-assessment-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.talent-assessment-http.entrypoints=web"
+      - "traefik.http.routers.talent-assessment-http.rule=Host(`${domain}`)"
+      - "traefik.http.routers.talent-assessment-http.middlewares=talent-assessment-redirect"
+      - "traefik.http.services.talent-assessment.loadbalancer.server.port=80"
 
   mysql:
     image: mysql:8.0
@@ -135,6 +145,7 @@ services:
 volumes:
   mysql_data:
   redis_data:
+  letsencrypt:
 
 networks:
   talent-network:
