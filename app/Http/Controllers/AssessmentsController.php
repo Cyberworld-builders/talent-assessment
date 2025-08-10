@@ -148,11 +148,13 @@ class AssessmentsController extends Controller
         \Auth::user()->assessments()->save($assessment);
 
 		// Store the questions
-        foreach ($question_data as $data)
-        {
-			$array = json_decode(json_encode($data), true);
-            $question = new Question($array);
-            $assessment->questions()->save($question);
+        if ($question_data) {
+            foreach ($question_data as $data)
+            {
+				$array = json_decode(json_encode($data), true);
+                $question = new Question($array);
+                $assessment->questions()->save($question);
+            }
         }
 
         return \Response::json([
