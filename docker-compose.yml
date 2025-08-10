@@ -11,9 +11,14 @@ services:
     ports:
       - "8001:8000"
     environment:
-      - APP_ENV=local
+      - APP_NAME=Talen Assessment
+      - APP_ENV=dev
       - APP_DEBUG=true
+      - APP_KEY=nX62LMzsVKgNzXMgjWs836VEo768vaQN
+      - APP_URL=talent-aws.cyberworldbuilders.com
+      - DB_CONNECTION=mysql
       - DB_HOST=mysql
+      - DB_PORT=3306
       - DB_DATABASE=talent_assessment
       - DB_USERNAME=talent_user
       - DB_PASSWORD=talent_password
@@ -29,7 +34,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-net"
       - "traefik.http.routers.talent-assessment.entrypoints=websecure"
-      - "traefik.http.routers.talent-assessment.rule=Host(`talent.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-assessment.rule=Host(`talent-aws.cyberworldbuilders.dev`)"
       - "traefik.http.routers.talent-assessment.tls=true"
       - "traefik.http.routers.talent-assessment.tls.certresolver=letsencrypt"
       - "traefik.http.services.talent-assessment.loadbalancer.server.port=8000"
@@ -66,4 +71,4 @@ networks:
   talent-network:
     driver: bridge
   traefik-net:
-    external: true 
+    external: true
