@@ -43,7 +43,7 @@ This release represents a major milestone in the Talent Assessment application, 
 ### Docker & Containerization
 
 #### Multi-Container Architecture
-- **Laravel Application**: PHP 8.1 with Apache web server
+- **Laravel Application**: PHP 7.4 with Apache web server
 - **MySQL Database**: Version 8.0 with persistent storage
 - **Redis Cache**: Version 7-alpine for session and cache management
 - **Traefik Proxy**: Version 2.10 for load balancing and SSL termination
