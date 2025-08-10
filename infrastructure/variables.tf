@@ -40,6 +40,8 @@ variable "domain_name" {
   default     = "talent.cyberworldbuilders.dev"
 }
 
+
+
 variable "ssh_key_name" {
   description = "Name of the SSH key pair"
   type        = string

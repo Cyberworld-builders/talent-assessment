@@ -17,10 +17,12 @@ return [
     |
     */
 
-	'credentials' => [
-		'key'    => env('AWS_ACCESS_KEY_ID'),
-		'secret' => env('AWS_SECRET_ACCESS_KEY'),
-	],
+	// IAM Role credentials will be automatically loaded from instance metadata
+	// No need for long-lived access keys when using IAM roles
+	// 'credentials' => [
+	// 	'key'    => env('AWS_ACCESS_KEY_ID'),
+	// 	'secret' => env('AWS_SECRET_ACCESS_KEY'),
+	// ],
     'region' => env('AWS_REGION', 'us-west-2'),
     'version' => 'latest',
     'ua_append' => [

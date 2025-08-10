@@ -129,7 +129,7 @@ class AssessmentsController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$assessment_data['logo'] = $imageName;
-			$assessment_data['logo'] = $result->get('ObjectURL');
+			$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store the background
@@ -140,7 +140,7 @@ class AssessmentsController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$assessment_data['background'] = $imageName;
-			$assessment_data['background'] = $result->get('ObjectURL');
+			$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store assessment
@@ -236,7 +236,7 @@ class AssessmentsController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$assessment_data['logo'] = $imageName;
-			$assessment_data['logo'] = $result->get('ObjectURL');
+			$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store the background
@@ -247,7 +247,7 @@ class AssessmentsController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$assessment_data['background'] = $imageName;
-			$assessment_data['background'] = $result->get('ObjectURL');
+			$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Update the assessment

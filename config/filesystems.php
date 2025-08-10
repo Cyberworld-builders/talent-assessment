@@ -64,10 +64,11 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key'    => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
+            // IAM Role credentials will be automatically loaded
+            // 'key'    => env('AWS_ACCESS_KEY_ID'),
+            // 'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_REGION', 'us-east-2'),
+            'bucket' => env('AWS_S3_BUCKET', 'talent-assessment-development-uploads'),
         ],
 
         'rackspace' => [
