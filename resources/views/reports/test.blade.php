@@ -3,10 +3,10 @@
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+    <script src="/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/wp/wp-content/themes/aoe/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/reports/reports.css">
     <style>
         h5 {
             position: relative;
@@ -15,7 +15,7 @@
         body {
             /*background-image:none;*/
             /*background-color:#ddd;*/
-            background:url('/wp/wp-content/themes/aoe/images/aoe-group_home-banner.jpg') fixed no-repeat;
+            background:url('/assets/images/aoe-group_home-banner.jpg') fixed no-repeat;
             background-size: 100% 100%;
         }
         .page-container {
@@ -1496,7 +1496,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
             </div>
         </div>
 
@@ -1532,7 +1532,7 @@
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/report-logo-1.png">
+                <img class="img-responsive" src="/assets/images/report-logo-1.png">
             </div>
         </div>
     </div>
@@ -1542,7 +1542,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1553,7 +1553,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h1>Employee Morale</h1>
@@ -1603,7 +1603,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1614,7 +1614,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h5>Employee Morale - Overall Score</h5>
@@ -1654,7 +1654,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1715,7 +1715,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1726,7 +1726,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h1>Leader Involvement</h1>
@@ -1789,7 +1789,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1800,7 +1800,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h5>Leader Involvement - Overall Score</h5>
@@ -1843,7 +1843,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1914,7 +1914,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1925,7 +1925,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h1>Organizational Mindset</h1>
@@ -1978,7 +1978,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1989,7 +1989,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h5>Organizational Mindset - Overall Score</h5>
@@ -2028,7 +2028,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2089,7 +2089,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2100,7 +2100,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h1>Team Climate</h1>
@@ -2155,7 +2155,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2166,7 +2166,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
                     </div>
                 </div>
                 <h5>Team Climate - Overall Score</h5>
@@ -2208,7 +2208,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
