@@ -188,6 +188,16 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+# Elastic IP
+resource "aws_eip" "dev_eip" {
+  domain = "vpc"
+  
+  tags = {
+    Name = "${var.project_name}-${var.environment}-eip"
+    Environment = var.environment
+  }
+}
+
 # EC2 Instance
 resource "aws_instance" "dev_instance" {
   ami                    = data.aws_ami.ubuntu.id
@@ -198,7 +208,7 @@ resource "aws_instance" "dev_instance" {
   key_name               = aws_key_pair.dev_key.key_name
   iam_instance_profile   = aws_iam_instance_profile.dev_profile.name
 
-  user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+  user_data_base64 = base64encode(templatefile("${path.module}/user_data.sh", {
     domain = var.domain_name
   }))
 
@@ -211,6 +221,12 @@ resource "aws_instance" "dev_instance" {
     Name = "${var.project_name}-${var.environment}"
     Environment = var.environment
   }
+}
+
+# Associate Elastic IP with EC2 Instance
+resource "aws_eip_association" "dev_eip_assoc" {
+  instance_id   = aws_instance.dev_instance.id
+  allocation_id = aws_eip.dev_eip.id
 }
 
 

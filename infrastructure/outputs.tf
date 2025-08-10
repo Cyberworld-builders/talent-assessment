@@ -1,6 +1,6 @@
 output "public_ip" {
   description = "Public IP of the EC2 instance"
-  value       = aws_instance.dev_instance.public_ip
+  value       = aws_eip.dev_eip.public_ip
 }
 
 output "instance_id" {
@@ -25,17 +25,17 @@ output "security_group_id" {
 
 output "ssh_command" {
   description = "SSH command to connect to the instance"
-  value       = "ssh -i ~/.ssh/dev-key ubuntu@${aws_instance.dev_instance.public_ip}"
+  value       = "ssh -i ~/.ssh/dev-key ubuntu@${aws_eip.dev_eip.public_ip}"
 }
 
 output "application_url" {
   description = "URL to access the application"
-  value       = "http://${aws_instance.dev_instance.public_ip}"
+  value       = "http://${aws_eip.dev_eip.public_ip}"
 }
 
 output "traefik_dashboard_url" {
   description = "URL to access the Traefik dashboard"
-  value       = "http://${aws_instance.dev_instance.public_ip}:8080"
+  value       = "http://${aws_eip.dev_eip.public_ip}:8080"
 }
 
 output "deployment_summary" {
@@ -45,18 +45,18 @@ output "deployment_summary" {
     
     📍 Instance Details:
     - Instance ID: ${aws_instance.dev_instance.id}
-    - Public IP: ${aws_instance.dev_instance.public_ip}
+    - Public IP: ${aws_eip.dev_eip.public_ip}
     - Instance Type: ${aws_instance.dev_instance.instance_type}
     
     🌐 Access URLs:
-    - Application: http://${aws_instance.dev_instance.public_ip}
-    - Traefik Dashboard: http://${aws_instance.dev_instance.public_ip}:8080
+    - Application: http://${aws_eip.dev_eip.public_ip}
+    - Traefik Dashboard: http://${aws_eip.dev_eip.public_ip}:8080
     
     🔑 SSH Access:
-    ssh -i ~/.ssh/dev-key ubuntu@${aws_instance.dev_instance.public_ip}
+    ssh -i ~/.ssh/dev-key ubuntu@${aws_eip.dev_eip.public_ip}
     
     📋 Next Steps:
-    1. Update your domain DNS to point to: ${aws_instance.dev_instance.public_ip}
+    1. Update your domain DNS to point to: ${aws_eip.dev_eip.public_ip}
     2. Upload your Laravel application files to the server
     3. Configure SSL certificates for HTTPS
     4. Set up environment variables for production
