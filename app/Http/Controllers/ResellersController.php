@@ -83,7 +83,7 @@ class ResellersController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$data['logo'] = $imageName;
-			$data['logo'] = $result->get('ObjectURL');
+			$data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store the background
@@ -94,7 +94,7 @@ class ResellersController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$data['background'] = $imageName;
-			$data['background'] = $result->get('ObjectURL');
+			$data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Setup new database credentials
@@ -183,7 +183,7 @@ class ResellersController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$data['logo'] = $imageName;
-			$data['logo'] = $result->get('ObjectURL');
+			$data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Update the background
@@ -194,7 +194,7 @@ class ResellersController extends Controller
 			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$data['background'] = $imageName;
-			$data['background'] = $result->get('ObjectURL');
+			$data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		$reseller->update($data);
