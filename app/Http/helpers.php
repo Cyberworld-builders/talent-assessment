@@ -259,7 +259,7 @@ function show_image($image)
 function s3_to_cloudfront_url($s3Url)
 {
 	// If not an S3 URL, return as is
-	if (strpos($s3Url, 's3.amazonaws.com') === false && strpos($s3Url, 's3-') === false) {
+	if (strpos($s3Url, 's3.amazonaws.com') === false && strpos($s3Url, 's3-') === false && strpos($s3Url, '.s3.') === false) {
 		return $s3Url;
 	}
 	

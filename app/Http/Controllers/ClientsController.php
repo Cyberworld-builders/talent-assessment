@@ -70,7 +70,7 @@ class ClientsController extends Controller
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$data['logo'] = $imageName;
 			$data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
@@ -81,7 +81,7 @@ class ClientsController extends Controller
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$data['background'] = $imageName;
 			$data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
@@ -182,7 +182,7 @@ class ClientsController extends Controller
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$data['logo'] = $imageName;
 			$data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
@@ -193,7 +193,7 @@ class ClientsController extends Controller
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$data['background'] = $imageName;
 			$data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
