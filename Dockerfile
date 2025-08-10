@@ -30,14 +30,18 @@ RUN wget https://nodejs.org/dist/v6.17.1/node-v6.17.1-linux-x64.tar.xz \
 # Set working directory
 WORKDIR /var/www
 
-# Copy composer files
-COPY composer.json composer.lock ./
+# Disable Composer plugins when running as root in CI/containers
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_NO_PLUGINS=1
+
+# Copy composer files (composer.lock may not exist in repo)
+COPY composer.json ./
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install PHP dependencies
-RUN composer install --no-scripts --no-autoloader
+RUN composer install --no-plugins --no-scripts --no-autoloader
 
 # Copy application files
 COPY . .
@@ -58,7 +62,7 @@ RUN touch /var/www/storage/logs/laravel.log \
 RUN npm install && npm run gulp
 
 # Generate autoloader and optimize
-RUN composer dump-autoload --optimize
+RUN composer dump-autoload --no-plugins --optimize
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www
