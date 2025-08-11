@@ -241,7 +241,40 @@ function uploads_path()
  */
 function show_image($image)
 {
-	return (substr($image, 0, 4) === 'http' ? $image : '/uploads/'.$image);
+	// If it's already a full URL, convert S3 to CloudFront if possible
+	if (substr($image, 0, 4) === 'http') {
+		return s3_to_cloudfront_url($image);
+	}
+	
+	// If it's a local file, return local path
+	return '/uploads/'.$image;
+}
+
+/**
+ * Convert S3 URL to CloudFront URL for better performance and security.
+ *
+ * @param string $s3Url
+ * @return string
+ */
+function s3_to_cloudfront_url($s3Url)
+{
+	// If not an S3 URL, return as is
+	if (strpos($s3Url, 's3.amazonaws.com') === false && strpos($s3Url, 's3-') === false && strpos($s3Url, '.s3.') === false) {
+		return $s3Url;
+	}
+	
+	// Extract the path from S3 URL
+	$path = parse_url($s3Url, PHP_URL_PATH);
+	
+	// Get CloudFront domain from environment
+	$cloudfrontDomain = env('AWS_CLOUDFRONT_DOMAIN');
+	
+	if ($cloudfrontDomain) {
+		return 'https://' . $cloudfrontDomain . $path;
+	}
+	
+	// Fallback to S3 URL if CloudFront not configured
+	return $s3Url;
 }
 
 /**

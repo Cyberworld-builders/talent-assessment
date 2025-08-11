@@ -387,7 +387,7 @@ class DashboardController extends Controller
 		// Upload the file
 		$file = fopen('uploads/aoe-a.png', 'r');
 		$s3 = new S3Client(config('aws'));
-		$result = $s3->upload('aoe-uploads', 'images/aoe-a.png', $file);
+		$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/aoe-a.png', $file);
 
 		// Store the URL path to the image in the database
 		dd($result->get('ObjectURL'));

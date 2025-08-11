@@ -3,10 +3,10 @@
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+    <script src="/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/wp/wp-content/themes/aoe/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/reports/reports.css">
     <style>
         /*ol li, ul li, p {*/
             /*font-size: 14px;*/
@@ -33,7 +33,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/AOE-Ls.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/AOE-Ls.png">
             </div>
         </div>
 
@@ -64,7 +64,7 @@
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/report-logo-1.png">
+                <img class="img-responsive" src="/assets/images/report-logo-1.png">
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
 <!--Page 3-->
 <div class="page-container" id="3">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -126,7 +126,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 <p>Leader involvement refers to how well you engage and empower others. AOE-Ls is designed to provide a detailed summary of how involved leaders are in engaging others. High Involvement Leadership (HIL) exists when others (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
                 <p>It is critical that all 5 dimensions are present at the same time. If one dimension is missing, involvement will be low. Your leadership data is presented along with the overall average leadership data for your entire institution. This allows you to see how well you are doing on Involvement compared to all other leaders at your institution.</p>
                 <br>
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/HIL-flow.png">
+                <img class="img-responsive" src="/assets/images/HIL-flow.png">
             </div>
         </div>
     </div>
@@ -146,7 +146,7 @@
 <!--Page 4-->
 <div class="page-container" id="4">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -158,7 +158,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
                     </div>
                 </div>
             </div>
@@ -246,7 +246,7 @@
 <!--Page 5-->
 <div class="page-container" id="5">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -258,7 +258,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
                     </div>
                 </div>
                 <h1>Overall Scores</h1>
@@ -274,7 +274,7 @@
 <!--Page 6-->
 <div class="page-container" id="6">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -305,7 +305,7 @@
 <!--Page 8-->
 <div class="page-container" id="8">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -336,7 +336,7 @@
 <!--Page 11-->
 <div class="page-container" id="11">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -382,7 +382,7 @@
 <!--Page 12-->
 <div class="page-container" id="12">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -413,7 +413,7 @@
 <!--Page 15-->
 <div class="page-container" id="15">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>

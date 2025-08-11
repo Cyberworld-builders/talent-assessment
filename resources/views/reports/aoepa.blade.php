@@ -9,76 +9,76 @@
     <meta name="viewport" content="width=device-width">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="{{ $baseUri }}/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+    <script src="{{ $baseUri }}/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="{{ $baseUri }}/wp/wp-content/themes/aoe/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="{{ $baseUri }}/assets/reports/reports.css">
     <style>
         {{-- Localize the fonts for the PDF export, as it can't pull them from the stylesheet --}}
         @if ($export)
             @font-face {
                 font-family: 'Bebas Neue';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/bebasneue_regular-webfont.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/bebasneue_regular-webfont.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/bebasneue_regular-webfont.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/bebasneue_regular-webfont.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/bebasneue_regular-webfont.svg#Bebas Neue') format('svg');
+                src: url('/var/www/public/assets/fonts/bebasneue_regular-webfont.eot');
+                src: url('/var/www/public/assets/fonts/bebasneue_regular-webfont.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/bebasneue_regular-webfont.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/bebasneue_regular-webfont.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/bebasneue_regular-webfont.svg#Bebas Neue') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'Didot';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Roman.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Roman.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Roman.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Roman.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Roman.svg#Didot') format('svg');
+                src: url('/var/www/public/assets/fonts/DidotLTStd-Roman.eot');
+                src: url('/var/www/public/assets/fonts/DidotLTStd-Roman.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Roman.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Roman.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Roman.svg#Didot') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'Didot Italic';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Italic.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Italic.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Italic.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Italic.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/DidotLTStd-Italic.svg#Didot Italic') format('svg');
+                src: url('/var/www/public/assets/fonts/DidotLTStd-Italic.eot');
+                src: url('/var/www/public/assets/fonts/DidotLTStd-Italic.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Italic.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Italic.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/DidotLTStd-Italic.svg#Didot Italic') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'Avenir Next LT Pro';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Regular.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Regular.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Regular.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Regular.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Regular.svg#Avenir Next LT Pro') format('svg');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Regular.eot');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Regular.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Regular.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Regular.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Regular.svg#Avenir Next LT Pro') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'Avenir Next LT Pro Medium';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Medium.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Medium.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Medium.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Medium.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Medium.svg#Avenir Next LT Pro Medium') format('svg');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Medium.eot');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Medium.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Medium.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Medium.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Medium.svg#Avenir Next LT Pro Medium') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'Avenir Next LT Pro Bold';
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Bold.eot');
-                src: url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Bold.eot?#iefix') format('embedded-opentype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Bold.woff') format('woff'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Bold.ttf') format('truetype'),
-                     url('/var/www/public/wp/wp-content/themes/aoe/fonts/AvenirNextLTPro-Bold.svg#Avenir Next LT Pro Bold') format('svg');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Bold.eot');
+                src: url('/var/www/public/assets/fonts/AvenirNextLTPro-Bold.eot?#iefix') format('embedded-opentype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Bold.woff') format('woff'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Bold.ttf') format('truetype'),
+                     url('/var/www/public/assets/fonts/AvenirNextLTPro-Bold.svg#Avenir Next LT Pro Bold') format('svg');
                 font-weight: normal;
                 font-style: normal;
             }
         @endif
         body {
-            background:url('{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-group_home-banner.jpg') fixed no-repeat;
+            background:url('{{ $baseUri }}/assets/images/aoe-group_home-banner.jpg') fixed no-repeat;
             background-size: 100% 100%;
         }
         #chart2 {
@@ -479,7 +479,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
             </div>
         </div>
         <!--Candidate-->
@@ -512,7 +512,7 @@
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
-                <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/report-logo-1.png">
+                <img class="img-responsive" src="{{ $baseUri }}/assets/images/report-logo-1.png">
             </div>
         </div>
     </div>
@@ -577,7 +577,7 @@
 <!--Page 5-->
 <div class="page-container" id="5">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small>Page 2</small>
     </div>
     <div class="container">
@@ -587,7 +587,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/AOE-A.png">
+                        <img class="img-responsive " src="{{ $baseUri }}/assets/images/AOE-A.png">
                     </div>
                 </div>
                 <h1>Reasoning Report</h1>
@@ -622,7 +622,7 @@
 <!--Page 6-->
 <div class="page-container" id="6">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small>Page 3</small>
     </div>
     <div class="container">
@@ -632,7 +632,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/AOE-A.png">
+                        <img class="img-responsive " src="{{ $baseUri }}/assets/images/AOE-A.png">
                     </div>
                 </div>
                 <h1>Reasoning Ability Evaluation</h1>
@@ -679,11 +679,11 @@
                 <div class="col-xs-6">
                     <br><br>
                     @if ($scores['Ability']['Division'] == 5)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/not recommended.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/not recommended.png">
                     @elseif ($scores['Ability']['Division'] == 3)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/caution.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/caution.png">
                     @elseif ($scores['Ability']['Division'] == 1)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/pursue.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/pursue.png">
                     @endif
                 </div>
             </div>
@@ -694,7 +694,7 @@
 <!--Page 7-->
 <div class="page-container" id="7">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small>Page 4</small>
     </div>
     <div class="container">
@@ -704,7 +704,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/AOE-P-01.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/AOE-P-01.png">
                     </div>
                 </div>
                 <h1>Personality Report</h1>
@@ -778,7 +778,7 @@
 <!--Page 8-->
 <div class="page-container" id="8">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small>Page 5</small>
     </div>
     <div class="container">
@@ -788,7 +788,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/AOE-P-01.png">
+                        <img class="img-responsive " src="{{ $baseUri }}/assets/images/AOE-P-01.png">
                     </div>
                 </div>
                 <h1>Scoring and Importance</h1>
@@ -824,7 +824,7 @@
 <!--Page 9-->
 <div class="page-container" id="9">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 6</small>
     </div>
@@ -956,7 +956,7 @@
 <!--Page 10-->
 <div class="page-container" id="10">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 7</small>
     </div>
@@ -1088,7 +1088,7 @@
 <!--Page 11-->
 <div class="page-container" id="11">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 8</small>
     </div>
@@ -1220,7 +1220,7 @@
 <!--Page 12-->
 <div class="page-container" id="12">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
         <small>Page 9</small>
     </div>
     <div class="container">
@@ -1240,15 +1240,15 @@
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8">
                     @if ($scores['Personality']['Division'] == 5)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/low.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/low.png">
                     @elseif ($scores['Personality']['Division'] == 4)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/mid-to-low.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/mid-to-low.png">
                     @elseif ($scores['Personality']['Division'] == 3)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/mid.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/mid.png">
                     @elseif ($scores['Personality']['Division'] == 2)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/mid-to-high.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/mid-to-high.png">
                     @elseif ($scores['Personality']['Division'] == 1)
-                        <img class="img-responsive" src="{{ $baseUri }}/wp/wp-content/themes/aoe/images/high.png">
+                        <img class="img-responsive" src="{{ $baseUri }}/assets/images/high.png">
                     @endif
                 </div>
             </div>

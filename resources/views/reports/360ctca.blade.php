@@ -3,10 +3,10 @@
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+    <script src="/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/wp/wp-content/themes/aoe/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/reports/reports.css">
     <style>
         h4.small-title {font-size: 20px;}
         .par {font-family:Avenir Next LT Pro Medium;}
@@ -15,7 +15,7 @@
         @if ($user->client->id == 22)
             .cover-for {padding-top: 90px; padding-bottom: 00px;}
         @endif
-        #score-360 {background:url('/wp/wp-content/themes/aoe/images/360-gradient.jpg') center center no-repeat; background-size:contain; height:50px;}
+        #score-360 {background:url('/assets/images/360-gradient.jpg') center center no-repeat; background-size:contain; height:50px;}
         .score-bar {
             background: #02244a;
             height: 60px;
@@ -89,9 +89,9 @@
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
                 @if ($user->client->id == 22)
-                    <img class="img-responsive text-center cover-logo" style="padding:0px 0px 0px;" src="/wp/wp-content/themes/aoe/images/ctca-logo.png">
+                    <img class="img-responsive text-center cover-logo" style="padding:0px 0px 0px;" src="/assets/images/ctca-logo.png">
                 @else
-                    <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                    <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
                 @endif
             </div>
         </div>
@@ -132,7 +132,7 @@
                 </small>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/report-logo-1.png">
+                <img class="img-responsive" src="/assets/images/report-logo-1.png">
             </div>
         </div>
     </div>
@@ -145,7 +145,7 @@
     <!--Page 2-->
     <div class="page-container" id="2">
         <div class="img-container-1">
-            <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+            <img src="/assets/images/aoe-science_logo.png">
             <small>Page {{ $page }}</small>
         </div>
         <div class="container">
@@ -155,7 +155,7 @@
                     <div class="row">
                         <div id="invisible-4" class="col-xs-4 visible-xs"></div>
                         <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                            <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/aoe-360.png">
+                            <img class="img-responsive" src="/assets/images/aoe-360.png">
                         </div>
                         <h1>Developmental Performance Management Systems for:</h1>
                         <h4>{{ $user->name }}</h4>
@@ -168,9 +168,9 @@
                     <div class="row">
                         <div class="col-sm-12" id="score-360">
                             <div class="row">
-                                <img class="score-bar-background" src="/wp/wp-content/themes/aoe/images/360-gradient.jpg" />
+                                <img class="score-bar-background" src="/assets/images/360-gradient.jpg" />
                             </div>
-                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }}" src="/wp/wp-content/themes/aoe/images/score-bar.jpg" />
+                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }}" src="/assets/images/score-bar.jpg" />
                             <div class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }}"></div>
                         </div>
                     </div>
@@ -201,8 +201,8 @@
 					<?php if ($category == 'Total') continue; ?>
                     <div class="col-xs-6" id="score-360-sm">
                         <div style="position:relative;">
-                            <img class="score-bar-background" src="http://aoescience.com/wp/wp-content/themes/aoe/images/360-gradient.jpg">
-                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}" src="http://aoescience.com/wp/wp-content/themes/aoe/images/score-bar.jpg">
+                            <img class="score-bar-background" src="http://aoescience.com/assets/images/360-gradient.jpg">
+                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}" src="http://aoescience.com/assets/images/score-bar.jpg">
                             <div class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}"></div>
                         </div>
                     </div>
@@ -233,7 +233,7 @@
         <!--Page 3-->
         <div class="page-container" id="3">
             <div class="img-container-1">
-                <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img src="/assets/images/aoe-science_logo.png">
                 <small>Page {{ $page }}</small>
             </div>
             <div class="container">
@@ -270,7 +270,7 @@
         <!--Page 3-->
         <div class="page-container" id="3">
             <div class="img-container-1">
-                <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img src="/assets/images/aoe-science_logo.png">
 				<?php $page++; ?>
                 <small>Page {{ $page }}</small>
             </div>
