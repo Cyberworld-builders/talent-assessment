@@ -3,10 +3,10 @@
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+    <script src="/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/wp/wp-content/themes/aoe/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/reports/reports.css">
     <style>
         ol li, ul li, p.small {
             font-size: 14px;
@@ -42,7 +42,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/AOE-L.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/AOE-L.png">
             </div>
         </div>
 
@@ -73,7 +73,7 @@
                 </p>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/report-logo-1.png">
+                <img class="img-responsive" src="/assets/images/report-logo-1.png">
             </div>
         </div>
     </div>
@@ -123,7 +123,7 @@
 <!--Page 3-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -135,7 +135,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/AOE-L.png">
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
                 <p>Leader involvement refers to how well leaders in your organization engage and empower their employees to take control over their own work. AOE-L is designed to provide a detailed summary of how involved leaders are in engaging their direct reports. High Involvement Leadership (HIL) exists when employees throughout an organization (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
                 <p>It is critical that all 5 dimensions are present at the same time. If one dimension is missing, involvement will be low. Your leadership data is presented along with the overall average leadership data for your entire organization. This allows you to see how well you are doing on Involvement compared to all other leaders at your company.</p>
                 <br>
-                <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/HIL-flow.png">
+                <img class="img-responsive" src="/assets/images/HIL-flow.png">
             </div>
         </div>
     </div>
@@ -155,7 +155,7 @@
 <!--Page 4-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -167,7 +167,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/AOE-L.png">
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
 <!--Page 5-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -267,7 +267,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/AOE-L.png">
                     </div>
                 </div>
                 <h1>Overall Scores</h1>
@@ -283,7 +283,7 @@
 <!--Page 6-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -315,7 +315,7 @@
 @if (! empty($opportunities['Power']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -355,7 +355,7 @@
 <!--Page 8-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -387,7 +387,7 @@
 @if (! empty($opportunities['Information']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -428,7 +428,7 @@
 @if (count($opportunities['Information']) > 2)
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -463,7 +463,7 @@
 <!--Page 11-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -509,7 +509,7 @@
 <!--Page 12-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -541,7 +541,7 @@
 @if (! empty($opportunities['Knowledge']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -582,7 +582,7 @@
 @if (count($opportunities['Knowledge']) > 2)
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -617,7 +617,7 @@
 <!--Page 15-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -647,7 +647,7 @@
 @if (! empty($opportunities['Relationships']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/assets/images/aoe-science_logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -688,7 +688,7 @@
 @if (count($opportunities['Relationships']) > 2)
     <div class="page-container" id="{{ $page }}">
         <div class="img-container-1">
-            <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+            <img src="/assets/images/aoe-science_logo.png">
             <?php $page++; ?>
             <small>Page {{ $page }}</small>
         </div>

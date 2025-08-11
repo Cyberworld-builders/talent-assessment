@@ -126,10 +126,10 @@ class AssessmentsController extends Controller
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$assessment_data['logo'] = $imageName;
-			$assessment_data['logo'] = $result->get('ObjectURL');
+			$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store the background
@@ -137,10 +137,10 @@ class AssessmentsController extends Controller
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$assessment_data['background'] = $imageName;
-			$assessment_data['background'] = $result->get('ObjectURL');
+			$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store assessment
@@ -148,11 +148,13 @@ class AssessmentsController extends Controller
         \Auth::user()->assessments()->save($assessment);
 
 		// Store the questions
-        foreach ($question_data as $data)
-        {
-			$array = json_decode(json_encode($data), true);
-            $question = new Question($array);
-            $assessment->questions()->save($question);
+        if ($question_data) {
+            foreach ($question_data as $data)
+            {
+				$array = json_decode(json_encode($data), true);
+                $question = new Question($array);
+                $assessment->questions()->save($question);
+            }
         }
 
         return \Response::json([
@@ -231,10 +233,10 @@ class AssessmentsController extends Controller
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('logo')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
 			//$request->file('logo')->move(uploads_path(), $imageName);
 			//$assessment_data['logo'] = $imageName;
-			$assessment_data['logo'] = $result->get('ObjectURL');
+			$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Store the background
@@ -242,10 +244,10 @@ class AssessmentsController extends Controller
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload('aoe-uploads', 'images/'.$imageName, file_get_contents($request->file('background')));
+			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
 			//$request->file('background')->move(uploads_path(), $imageName);
 			//$assessment_data['background'] = $imageName;
-			$assessment_data['background'] = $result->get('ObjectURL');
+			$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
 		}
 
 		// Update the assessment
