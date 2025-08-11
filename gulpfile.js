@@ -63,5 +63,9 @@ elixir(function(mix) {
         .copy('resources/assets/xenon/js/uikit', 'public/assets/js/uikit')
         .copy('resources/assets/xenon/js/ckeditor', 'public/assets/js/ckeditor')
         .copy('resources/assets/xenon/js/tagsinput', 'public/assets/js/tagsinput')
+        .copy('resources/assets/xenon/js/icheck', 'public/assets/js/icheck')
+        .copy('resources/assets/xenon/js/select2', 'public/assets/js/select2')
+        .copy('resources/assets/xenon/js/jquery-ui', 'public/assets/js/jquery-ui')
+        .copy('resources/assets/xenon/js/selectboxit', 'public/assets/js/selectboxit')
         .copy('resources/assets/xenon/css/fonts', 'public/assets/css/fonts');
 });
