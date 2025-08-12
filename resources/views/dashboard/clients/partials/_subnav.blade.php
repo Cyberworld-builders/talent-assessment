@@ -21,10 +21,10 @@
 		'name' => 'Groups',
 		'link' => $baseUrl.'/groups',
 	];
-    $selectionTab = [
-		'name' => 'Selection',
-		'link' => $baseUrl.'/jobs',
-	];
+    // $selectionTab = [
+	// 	'name' => 'Selection',
+	// 	'link' => $baseUrl.'/jobs',
+	// ];
     $developmentTab = [
 		'name' => 'Development',
 		'link' => $baseUrl.'/surveys',
@@ -33,18 +33,18 @@
 		'name' => 'Predictive Modeling',
 		'link' => $baseUrl.'/models',
 	];
-    $weightingTab = [
-		'name' => 'Weighting',
-		'link' => $baseUrl.'/weights',
-	];
+    // $weightingTab = [
+	// 	'name' => 'Weighting',
+	// 	'link' => $baseUrl.'/weights',
+	// ];
     $assignmentsTab = [
 		'name' => 'Assignments',
 		'link' => $baseUrl.'/assignments',
 	];
-    $jobAnalysisTab = [
-		'name' => 'Job Analysis',
-		'link' => $baseUrl.'/analysis',
-	];
+    // $jobAnalysisTab = [
+	// 	'name' => 'Job Analysis',
+	// 	'link' => $baseUrl.'/analysis',
+	// ];
     $reportsTab = [
 		'name' => 'Reports',
 		'link' => $baseUrl.'/reports',
@@ -60,14 +60,14 @@
 	if (!isset($reseller))
 	{
 		$tabs[] = $groupsTab;
-		$tabs[] = $selectionTab;
+		// $tabs[] = $selectionTab; // Temporarily disabled
 	}
 
     if (Auth::user()->is('admin') && !isset($reseller))
     {
 		$tabs[] = $developmentTab;
 		$tabs[] = $predictiveModelingTab;
-		$tabs[] = $weightingTab;
+		// $tabs[] = $weightingTab; // Temporarily disabled
     }
 
 	if (Auth::user()->is('reseller'))
@@ -80,7 +80,7 @@
 
 	if (Auth::user()->is('admin') && !isset($reseller))
     {
-		$tabs[] = $jobAnalysisTab;
+		// $tabs[] = $jobAnalysisTab; // Temporarily disabled
 		$tabs[] = $reportsTab;
     }
 ?>
