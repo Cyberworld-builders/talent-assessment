@@ -197,3 +197,5 @@ The updated seeder successfully creates:
 - **3 Assessments** (Personality, Cognitive, Leadership) owned by the admin user
 - **9 Jobs** distributed across the clients
 - **40+ Users** including admin users and applicant users for each client
+
+> **📖 User Access Guide**: For detailed instructions on how to log in and navigate the application with this seeded data, see the [User Access Guide](user-access-guide.md).
