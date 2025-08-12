@@ -121,10 +121,12 @@ After successful login, you'll be redirected to the appropriate dashboard based 
 
 ### Client Admin Dashboard (e.g., `techadmin@techcorp.com`)
 - **Users**: Manage users within your client organization
-- **Jobs**: Manage job postings and requirements
+- **Groups**: Manage user groups and permissions
 - **Assignments**: Assign assessments to users
 - **Reports**: View reports for your organization
 - **Settings**: Configure client-specific settings and branding
+
+> **Note**: The Selection, Weighting, and Job Analysis tabs have been temporarily disabled. If you need access to these features, please contact your system administrator.
 
 ### User Dashboard (`user@example.com`)
 - **My Assessments**: View assigned assessments
