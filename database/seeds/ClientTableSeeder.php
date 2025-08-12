@@ -37,40 +37,49 @@ class ClientTableSeeder extends Seeder
     {
         $assessments = [];
         
-        // Create personality assessment
-        $personality = Assessment::create([
+        // Get the admin user for assessments
+        $adminUser = User::where('email', 'admin@example.com')->first();
+        
+        // Create personality assessment using relationship method
+        $personality = $adminUser->assessments()->create([
             'name' => 'Personality Assessment',
             'description' => 'Comprehensive personality evaluation for workplace compatibility',
+            'logo' => '',
+            'background' => '',
             'paginate' => 10,
             'items_per_page' => 10,
             'timed' => false,
             'use_custom_fields' => false,
-            'last_modified' => now()
+            'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['personality'] = $personality;
         
-        // Create cognitive assessment
-        $cognitive = Assessment::create([
+        // Create cognitive assessment using relationship method
+        $cognitive = $adminUser->assessments()->create([
             'name' => 'Cognitive Ability Test',
             'description' => 'Problem-solving and analytical thinking assessment',
+            'logo' => '',
+            'background' => '',
             'paginate' => 15,
             'items_per_page' => 15,
             'timed' => true,
             'time_limit' => 45,
             'use_custom_fields' => false,
-            'last_modified' => now()
+            'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['cognitive'] = $cognitive;
         
-        // Create leadership assessment
-        $leadership = Assessment::create([
+        // Create leadership assessment using relationship method
+        $leadership = $adminUser->assessments()->create([
             'name' => 'Leadership Potential',
             'description' => 'Assessment of leadership skills and potential',
+            'logo' => '',
+            'background' => '',
             'paginate' => 12,
             'items_per_page' => 12,
             'timed' => false,
             'use_custom_fields' => true,
-            'last_modified' => now()
+            'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['leadership'] = $leadership;
         
