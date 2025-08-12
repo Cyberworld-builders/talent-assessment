@@ -155,10 +155,12 @@
 
 			@role('client')
 				<li>
+					{{-- Temporarily disabled
 					<a href="{{ url('dashboard/selection') }}">
 						<i class="fa-user"></i>
 						<span class="title">Employee Selection</span>
 					</a>
+					--}}
 				</li>
 				<li>
 					<a href="{{ url('dashboard/development') }}">

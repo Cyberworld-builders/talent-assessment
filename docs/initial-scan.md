@@ -95,6 +95,84 @@ Based on my analysis of the codebases, documentation, and example reports, I can
 - **White-label capabilities** with custom branding
 - **Database management** per reseller/client
 
+### **Data Model Architecture**
+
+#### **Client Model**
+A **Client** represents an organization or company that uses the talent assessment system. It is **NOT** a user in the traditional sense - it does not authenticate or log into the system directly. Instead, it's a data container that represents a business entity.
+
+**Key Characteristics:**
+- **Organization-level entity**: Represents companies, not individuals
+- **No authentication**: Clients don't log in directly
+- **Data container**: Holds organization-specific settings and branding
+- **Multi-user support**: One client can have many users
+
+**Client Table Structure:**
+- `id` (primary key)
+- `name` (text) - Company/organization name
+- `address` (text, nullable) - Physical address
+- `logo` (text, nullable) - Logo image path
+- `background` (text, nullable) - Background image path
+- `assessments` (text, serialized) - Array of assessment IDs
+- `require_profile` (boolean) - Whether profile completion is required
+- `require_research` (boolean) - Whether research completion is required
+- `whitelabel` (boolean) - Whether this is a whitelabeled client
+- `primary_color` (text) - Brand primary color
+- `accent_color` (text) - Brand accent color
+
+#### **User Model**
+A **User** is an individual person who can authenticate and use the system. Users belong to clients and have specific roles and permissions.
+
+**Key Characteristics:**
+- **Individual-level entity**: Represents people, not organizations
+- **Authentication enabled**: Users can log into the system
+- **Role-based permissions**: Users have specific access levels
+- **Client association**: Users belong to specific client organizations
+
+**User Table Structure:**
+- `id` (primary key)
+- `username` (string) - Login username
+- `name` (string) - Full name
+- `email` (string) - Email address
+- `password` (string) - Hashed password
+- `client_id` (integer, nullable) - Foreign key to clients table
+- `job_title` (string) - User's job title
+- `job_family` (string) - User's job family/category
+- `language_id` (integer) - Preferred language
+
+#### **Role System**
+The application uses a hierarchical role-based permission system:
+
+1. **AOE Admin** (level 4) - System administrators with full access
+2. **Reseller** (level 3) - Reseller organizations with client management
+3. **Client Admin** (level 2) - Client administrators with organization-level access
+4. **User** (level 1) - Regular users/applicants with limited access
+
+#### **Key Relationships**
+
+**Client → User Relationship:**
+- **One-to-Many**: One client can have many users
+- **Optional**: Users can exist without a client (client_id is nullable)
+- **Direction**: Users belong to clients, not the other way around
+
+**User → Assessment Relationship:**
+- **One-to-Many**: One user can create many assessments
+- **Required**: Every assessment must have a user_id (foreign key constraint)
+- **Purpose**: Assessments are created by users, not by clients directly
+
+#### **Authentication Flow**
+- **Users authenticate** and log into the system
+- **Clients do not authenticate** - they are represented by their users
+- **Client administrators** are users with elevated permissions within their client organization
+- **System admins** can access all data across all clients
+
+#### **Multi-tenancy Implementation**
+The system is designed for multi-tenancy where:
+- Multiple clients (organizations) can use the system simultaneously
+- Each client has their own users and data isolation
+- Users can only access data within their client organization
+- System admins can access all data across all clients
+- Resellers can manage multiple clients with their own branding
+
 ---
 
 ## Involved Talent Application Features

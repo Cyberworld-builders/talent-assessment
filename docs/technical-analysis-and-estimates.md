@@ -20,6 +20,8 @@
 - Client dashboard
 - Multi-tenant architecture with resellers
 
+> **Note**: For detailed information about the data model architecture, including Client and User relationships, see the [Data Model Architecture section in the Initial Scan document](initial-scan.md#data-model-architecture).
+
 #### Source2 Codebase Additional Features
 
 ### 1. **LINC (Leadership Intelligence & Coaching) System**
