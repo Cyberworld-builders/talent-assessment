@@ -5,7 +5,9 @@
         @if (! $client->home)
             <li class="nav-icons">
                 <a href="{{ url('dashboard/all-users') }}"><i class="linecons-user"></i></a>
-                <a href="{{ url('dashboard/selection') }}"><i class="fa-line-chart"></i></a>
+                {{-- Temporarily disabled
+<a href="{{ url('dashboard/selection') }}"><i class="fa-line-chart"></i></a>
+--}}
                 <a href="{{ url('dashboard/assignments') }}"><i class="fa-list-ol"></i></a>
                 <a href="{{ url('account') }}"><i class="linecons-cog"></i></a>
             </li>
