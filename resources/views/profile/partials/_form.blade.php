@@ -54,6 +54,10 @@
                         {!! Form::label('password_confirmation', translate('Confirm New Password').' *', ['class' => 'control-label']) !!}
                         {!! Form::input('password', 'password_confirmation', null, ['class' => 'form-control input-lg']) !!}
                     </div>
+                    <div class="input-field">
+                        {!! Form::label('industry_id', translate('Industry'), ['class' => 'control-label']) !!}
+                        {!! Form::select('industry_id', ['' => 'Select Industry'] + App\Industry::orderBy('name')->pluck('name', 'id')->toArray(), $user->industry_id, ['class' => 'form-control input-lg']) !!}
+                    </div>
                 </div>
             </div>
         </div>

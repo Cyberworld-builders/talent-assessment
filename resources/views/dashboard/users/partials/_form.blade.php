@@ -135,6 +135,21 @@
                 </div>
             </div>
 
+            {{-- Industry --}}
+            <div class="row">
+                <div class="col-sm-3">
+                    {!! Form::label('industry_id', 'Industry', ['class' => 'control-label']) !!}
+                    <p class="small text-muted">The industry to which this user belongs.</p>
+                </div>
+                <div class="col-sm-9">
+                    @if ($edit)
+                        {!! Form::select('industry_id', $industriesArray, $user->industry_id, ['class' => 'form-control input-lg', 'id' => 'industry']) !!}
+                    @else
+                        {!! Form::select('industry_id', $industriesArray, null, ['class' => 'form-control input-lg', 'id' => 'industry']) !!}
+                    @endif
+                </div>
+            </div>
+
         </div>
 
     </div>
