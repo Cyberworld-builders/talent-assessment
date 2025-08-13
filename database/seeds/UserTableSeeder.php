@@ -17,7 +17,10 @@ class UserTableSeeder extends Seeder
         // Create a test client first
         $client = Client::create([
             'name' => 'Test Client',
-            'address' => '123 Test Street'
+            'address' => '123 Test Street',
+            'primary_color' => '#007bff',
+            'accent_color' => '#28a745',
+            'whitelabel' => false
         ]);
 
         // Create a test user

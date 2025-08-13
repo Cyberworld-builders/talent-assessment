@@ -50,6 +50,7 @@ class ClientTableSeeder extends Seeder
             'items_per_page' => 10,
             'timed' => false,
             'use_custom_fields' => false,
+            'target' => 1,
             'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['personality'] = $personality;
@@ -65,6 +66,7 @@ class ClientTableSeeder extends Seeder
             'timed' => true,
             'time_limit' => 45,
             'use_custom_fields' => false,
+            'target' => 1,
             'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['cognitive'] = $cognitive;
@@ -79,6 +81,7 @@ class ClientTableSeeder extends Seeder
             'items_per_page' => 12,
             'timed' => false,
             'use_custom_fields' => true,
+            'target' => 1,
             'last_modified' => \Carbon\Carbon::now()
         ]);
         $assessments['leadership'] = $leadership;
