@@ -295,6 +295,14 @@ Route::get('dashboard/benchmarks/{assessmentId}/{industryId}', 'BenchmarksContro
 Route::post('dashboard/benchmarks', 'BenchmarksController@store');
 Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@upload');
 
+		// Feedback
+		Route::get('dashboard/feedback', 'FeedbackController@index');
+		Route::get('dashboard/feedback/create', 'FeedbackController@create');
+		Route::post('dashboard/feedback', 'FeedbackController@store');
+		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit');
+		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update');
+		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy');
+
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
 		Route::get('dashboard/assessments/{id}/assign', 'AssessmentsController@assign');
