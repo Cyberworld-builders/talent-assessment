@@ -243,7 +243,12 @@ class BenchmarkTest extends TestCase
             ]);
             $this->fail('Expected exception was not thrown');
         } catch (\Illuminate\Database\QueryException $e) {
-            $this->assertContains('Duplicate entry', $e->getMessage());
+            $message = $e->getMessage();
+            $this->assertTrue(
+                strpos($message, 'UNIQUE constraint failed') !== false || 
+                strpos($message, 'Duplicate entry') !== false,
+                'Expected unique constraint violation, got: ' . $message
+            );
         }
     }
 }
