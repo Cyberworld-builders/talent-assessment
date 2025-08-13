@@ -137,6 +137,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="{{ url('dashboard/benchmarks') }}">
+						<i class="fa-signal"></i>
+						<span class="title">Benchmarks</span>
+					</a>
+				</li>
+				<li>
 					<a href="{{ url('dashboard/users') }}">
 						<i class="fa-user"></i>
 						<span class="title">Users</span>
