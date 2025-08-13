@@ -67,8 +67,11 @@ jobs:
         done
         echo "MySQL is ready!"
 
+    - name: Setup Environment for Artisan
+      run: cp .env.testing .env
+
     - name: Run Migrations
-      run: APP_ENV=testing php artisan migrate --force
+      run: php artisan migrate --force
 
     - name: Execute tests (via phpunit)
-      run: APP_ENV=testing vendor/bin/phpunit --colors=never
+      run: vendor/bin/phpunit --colors=never
