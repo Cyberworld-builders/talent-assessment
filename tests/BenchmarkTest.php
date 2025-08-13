@@ -26,7 +26,14 @@ class BenchmarkTest extends TestCase
         // Create an assessment using relationship
         $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
+            'logo' => '',
+            'background' => '',
+            'paginate' => 10,
+            'items_per_page' => 10,
+            'timed' => 0,
+            'use_custom_fields' => 0,
+            'target' => 1
         ]);
 
         // Create a dimension
@@ -112,7 +119,14 @@ class BenchmarkTest extends TestCase
         // Create test data
         $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
+            'logo' => '',
+            'background' => '',
+            'paginate' => 10,
+            'items_per_page' => 10,
+            'timed' => 0,
+            'use_custom_fields' => 0,
+            'target' => 1
         ]);
 
         $dimension1 = $assessment->dimensions()->create([
@@ -174,7 +188,14 @@ class BenchmarkTest extends TestCase
         // Create test data
         $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
+            'logo' => '',
+            'background' => '',
+            'paginate' => 10,
+            'items_per_page' => 10,
+            'timed' => 0,
+            'use_custom_fields' => 0,
+            'target' => 1
         ]);
 
         $dimension = $assessment->dimensions()->create([
