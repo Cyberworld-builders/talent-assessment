@@ -15,48 +15,17 @@ class BenchmarkTest extends TestCase
      */
     public function testBenchmarkCanBeCreated()
     {
-        // Create a user first
-        $user = \App\User::create([
-            'username' => 'testuser' . time(),
-            'name' => 'Test User',
-            'email' => 'test' . time() . '@example.com',
-            'password' => bcrypt('password')
-        ]);
+        $user = factory(\App\User::class)->create();
+        $assessment = factory(\App\Assessment::class)->create(['user_id' => $user->id]);
+        $dimension = factory(\App\Dimension::class)->create(['assessment_id' => $assessment->id]);
+        $industry = factory(\App\Industry::class)->create();
 
-        // Create an assessment using relationship
-        $assessment = $user->assessments()->create([
-            'name' => 'Test Assessment',
-            'description' => 'Test Description',
-            'logo' => '',
-            'background' => '',
-            'paginate' => 10,
-            'items_per_page' => 10,
-            'timed' => 0,
-            'use_custom_fields' => 0,
-            'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
-        ]);
-
-        // Create a dimension
-        $dimension = $assessment->dimensions()->create([
-            'name' => 'Test Dimension',
-            'parent' => 0,
-            'code' => 'TEST'
-        ]);
-
-        // Create an industry
-        $industry = Industry::create([
-            'name' => 'Test Industry'
-        ]);
-
-        // Create a benchmark
-        $benchmark = Benchmark::create([
+        $benchmark = factory(\App\Benchmark::class)->create([
             'dimension_id' => $dimension->id,
             'industry_id' => $industry->id,
             'value' => '75'
         ]);
 
-        // Assert the benchmark was created
         $this->assertInstanceOf('App\Benchmark', $benchmark);
         $this->assertEquals($dimension->id, $benchmark->dimension_id);
         $this->assertEquals($industry->id, $benchmark->industry_id);
