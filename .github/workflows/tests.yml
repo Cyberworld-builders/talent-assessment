@@ -36,12 +36,32 @@ jobs:
       run: |
         sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
         sed -i 's/DB_DATABASE=.*/DB_DATABASE=storage\/database.sqlite/' .env
+        echo "Cleaning any existing SQLite database..."
         rm -f storage/database.sqlite
+        rm -f database/database.sqlite
+        echo "Creating fresh SQLite database..."
         touch storage/database.sqlite
         chmod 666 storage/database.sqlite
+        ls -la storage/
+        echo "Database file created successfully"
+
+    - name: Clear All Caches
+      run: |
+        php artisan cache:clear
+        php artisan config:clear
+        php artisan route:clear
+        php artisan view:clear
+        composer dump-autoload
 
     - name: Run Migrations
       run: php artisan migrate --force
+
+    - name: Debug Database Schema
+      run: |
+        echo "Checking clients table schema..."
+        sqlite3 storage/database.sqlite ".schema clients"
+        echo "Checking if whitelabel column exists..."
+        sqlite3 storage/database.sqlite "PRAGMA table_info(clients);"
 
     - name: Seed Database
       run: php artisan db:seed --force
