@@ -283,6 +283,14 @@ Route::group(['middleware' => ['auth']], function()
 		Route::patch('dashboard/resellers/{id}/models/{modelId}', 'ResellersController@updateModels');
 		Route::delete('dashboard/resellers/{id}/models/{modelId}', 'ResellersController@destroyModels');
 
+		// Industries
+		Route::get('dashboard/industries', 'IndustriesController@index');
+		Route::get('dashboard/industries/create', 'IndustriesController@create');
+		Route::post('dashboard/industries', 'IndustriesController@store');
+		Route::get('dashboard/industries/{id}/edit', 'IndustriesController@edit');
+		Route::patch('dashboard/industries/{id}', 'IndustriesController@update');
+		Route::delete('dashboard/industries/{id}', 'IndustriesController@destroy');
+
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
 		Route::get('dashboard/assessments/{id}/assign', 'AssessmentsController@assign');

@@ -131,6 +131,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="{{ url('dashboard/industries') }}">
+						<i class="fa-flask"></i>
+						<span class="title">Industries</span>
+					</a>
+				</li>
+				<li>
 					<a href="{{ url('dashboard/users') }}">
 						<i class="fa-user"></i>
 						<span class="title">Users</span>

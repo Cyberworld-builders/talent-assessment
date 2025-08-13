@@ -14,12 +14,14 @@ class LanguageTableSeeder extends Seeder
 		DB::table('languages')->insert([
 			'name' => 'English',
 			'native_name' => 'English',
-			'code' => 'en'
+			'code' => 'en',
+			'terms' => 'Terms and Conditions'
 		]);
 		DB::table('languages')->insert([
 			'name' => 'Spanish',
 			'native_name' => 'Español',
-			'code' => 'es'
+			'code' => 'es',
+			'terms' => 'Términos y Condiciones'
 		]);
     }
 }
