@@ -62,6 +62,39 @@ docker compose exec app bash
 - **MySQL**: Database (port 3306)
 - **Redis**: Cache (port 6379)
 
+## Testing
+
+### Local Testing
+```bash
+# Run all tests
+docker compose exec app ./vendor/bin/phpunit
+
+# Run specific test file
+docker compose exec app ./vendor/bin/phpunit tests/IndustryTest.php
+
+# Run tests with verbose output
+docker compose exec app ./vendor/bin/phpunit --verbose
+```
+
+### CI/CD
+
+This project uses GitHub Actions for continuous integration. Tests are automatically run on:
+
+- **Pull Requests**: Any PR targeting the `main` branch
+- **Pushes to main**: Direct pushes to the main branch
+
+#### Available Workflows
+
+1. **`tests.yml`** - Full test suite with MySQL database
+2. **`tests-simple.yml`** - Simplified test suite with SQLite (faster)
+
+#### Test Coverage
+
+The test suite includes:
+- **Model Tests**: Industry model functionality and relationships
+- **Controller Tests**: Authentication and route protection
+- **Integration Tests**: Database operations and migrations
+
 ## Official Documentation
 
 Documentation for the platform will be available to admins at [http://aoescience.com/docs](http://aoescience.com/docs).
