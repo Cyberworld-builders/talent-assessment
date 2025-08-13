@@ -23,11 +23,11 @@ jobs:
     - name: Copy .env
       run: cp .env.example .env
 
-    - name: Setup Testing Environment
-      run: |
-        cp .env .env.testing
-        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env.testing
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=:memory:/' .env.testing
+    # - name: Setup Testing Environment
+    #   run: |
+    #     cp .env .env.testing
+    #     sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env.testing
+    #     sed -i 's/DB_DATABASE=.*/DB_DATABASE=:memory:/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
