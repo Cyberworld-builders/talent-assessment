@@ -9,7 +9,8 @@ class Dimension extends Model
 	protected $fillable = [
 		'name',
 		'parent',
-		'code'
+		'code',
+		'assessment_id'
 	];
 
 	/**
@@ -20,6 +21,16 @@ class Dimension extends Model
 	public function assessment()
 	{
 		return $this->belongsTo('App\Assessment');
+	}
+
+	/**
+	 * Get all benchmarks for this dimension.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function benchmarks()
+	{
+		return $this->hasMany('App\Benchmark');
 	}
 
 	/**

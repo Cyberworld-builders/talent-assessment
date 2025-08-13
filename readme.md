@@ -65,37 +65,27 @@ docker compose exec app bash
 ## Testing
 
 ### Local Testing
+Run the test suite locally using SQLite:
+
 ```bash
 # Run all tests
 docker compose exec app ./vendor/bin/phpunit
 
 # Run specific test file
 docker compose exec app ./vendor/bin/phpunit tests/IndustryTest.php
-
-# Run tests with verbose output
-docker compose exec app ./vendor/bin/phpunit --verbose
 ```
 
-### CI/CD
+### CI/CD Pipeline
+The GitHub Actions workflow uses MySQL for testing to ensure consistency with the production environment. The pipeline:
+- Uses MySQL 5.7 service container
+- Creates a fresh test database for each run
+- Runs migrations and executes all tests
+- Uses the `mysql_testing` database connection
 
-This project uses GitHub Actions for continuous integration. Tests are automatically run on:
-
-- **Pull Requests**: Any PR targeting the `main` branch
-- **Pushes to main**: Direct pushes to the main branch
-
-#### Workflow
-
-**`tests.yml`** - Test suite with SQLite database
-- **Fast execution** with minimal dependencies
-- **Reliable testing** environment
-- **Automatic setup** of Laravel and database
-
-#### Test Coverage
-
-The test suite includes:
-- **Model Tests**: Industry model functionality and relationships
-- **Controller Tests**: Authentication and route protection
-- **Integration Tests**: Database operations and migrations
+### Test Configuration
+- **Local**: Uses SQLite in-memory database (`:memory:`) for fast, isolated testing
+- **CI/CD**: Uses MySQL service container with dedicated test database
+- **Test Traits**: Uses `DatabaseTransactions` to rollback changes after each test
 
 ## Official Documentation
 

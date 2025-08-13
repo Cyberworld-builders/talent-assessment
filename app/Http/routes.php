@@ -284,12 +284,16 @@ Route::group(['middleware' => ['auth']], function()
 		Route::delete('dashboard/resellers/{id}/models/{modelId}', 'ResellersController@destroyModels');
 
 		// Industries
-		Route::get('dashboard/industries', 'IndustriesController@index');
-		Route::get('dashboard/industries/create', 'IndustriesController@create');
-		Route::post('dashboard/industries', 'IndustriesController@store');
-		Route::get('dashboard/industries/{id}/edit', 'IndustriesController@edit');
-		Route::patch('dashboard/industries/{id}', 'IndustriesController@update');
-		Route::delete('dashboard/industries/{id}', 'IndustriesController@destroy');
+		Route::resource('dashboard/industries', 'IndustriesController');
+
+		// Benchmarks
+Route::get('dashboard/benchmarks', 'BenchmarksController@selectAssessment');
+Route::get('dashboard/benchmarks/{assessmentId}', 'BenchmarksController@selectIndustry');
+Route::get('dashboard/benchmarks/{assessmentId}/template', 'BenchmarksController@downloadTemplate');
+Route::get('dashboard/benchmarks/{assessmentId}/template-csv', 'BenchmarksController@downloadCsvTemplate');
+Route::get('dashboard/benchmarks/{assessmentId}/{industryId}', 'BenchmarksController@index');
+Route::post('dashboard/benchmarks', 'BenchmarksController@store');
+Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@upload');
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
