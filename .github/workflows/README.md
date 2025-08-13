@@ -1,57 +1,44 @@
 # GitHub Actions Workflows
 
-This directory contains GitHub Actions workflows for continuous integration.
+This directory contains GitHub Actions workflows for automated testing and deployment.
 
-## Available Workflows
+## Workflows
 
-### `tests.yml` - Test Suite
-- **Trigger**: Push to main branch or pull requests
-- **Database**: SQLite (file-based)
-- **PHP Version**: 7.4
-- **Features**: Fast, reliable test environment
+### `tests.yml`
+Runs the Laravel test suite using MySQL service container.
 
-## Workflow Steps
+**Features:**
+- Uses MySQL 5.7 service for consistent database testing
+- Fresh database for each test run
+- Automatic migration and seeding
+- Comprehensive test coverage
 
-The workflow follows these steps:
-
-1. **Checkout**: Clone the repository
-2. **Setup PHP**: Install PHP 7.4 with required extensions
-3. **Environment**: Copy .env.example and configure
-4. **Dependencies**: Install Composer dependencies
-5. **Laravel Setup**: Generate app key and set permissions
-6. **Database**: Configure SQLite and run migrations
-7. **Seeding**: Populate database with test data
-8. **Testing**: Run PHPUnit test suite
-
-## Test Results
-
-- ✅ **Passing**: All tests pass, PR can be merged
-- ❌ **Failing**: Tests fail, review required before merge
-
-## Local Testing
-
-To test workflows locally before pushing:
-
-```bash
-# Run tests in Docker (same as CI)
-docker compose exec app ./vendor/bin/phpunit
-
-# Test with SQLite (like CI workflow)
-docker compose exec app php artisan config:cache
-docker compose exec app ./vendor/bin/phpunit
-```
+**Configuration:**
+- **Database**: MySQL service container with `testing` database
+- **Connection**: Uses `mysql_testing` connection from `config/database.php`
+- **Environment**: `APP_ENV=testing` with proper cache clearing
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Database Connection**: Ensure SQLite file is created in storage/database.sqlite
-2. **Permissions**: Check storage and bootstrap/cache permissions
-3. **Dependencies**: Verify composer.json is up to date
-4. **Environment**: Confirm .env.example exists and is valid
+1. **Database Connection Issues**
+   - Ensure MySQL service is healthy before running tests
+   - Check that `mysql_testing` connection is properly configured
+   - Verify environment variables are set correctly
 
-### Debugging
+2. **Test Failures**
+   - Tests use `DatabaseTransactions` trait for automatic rollback
+   - Each test should be independent and not rely on previous test data
+   - Use factories for test data creation
 
-- Check GitHub Actions logs for detailed error messages
-- Test locally with Docker before pushing
-- Verify SQLite database file exists in storage/database.sqlite and has proper permissions
+3. **Environment Issues**
+   - Clear all caches before running tests
+   - Ensure proper file permissions on storage and bootstrap/cache
+   - Check that all required PHP extensions are installed
+
+### Local vs CI Differences
+
+- **Local**: Uses SQLite for faster development testing
+- **CI**: Uses MySQL for production-like environment testing
+- Both environments should produce the same test results

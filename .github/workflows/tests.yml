@@ -1,4 +1,4 @@
-name: Run Tests
+name: Tests
 
 on:
   push:
@@ -10,6 +10,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: 
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
     - uses: actions/checkout@v4
 
@@ -17,12 +27,17 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, phar, tokenizer, zip
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqlnd, zip, gd, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar, iconv, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar
         coverage: none
 
-
-
-
+    - name: Setup Testing Environment
+      run: |
+        cp .env .env.testing
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
+        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -33,8 +48,6 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
-
-
     - name: Clear All Caches
       run: |
         php artisan cache:clear
@@ -43,13 +56,8 @@ jobs:
         php artisan view:clear
         composer dump-autoload
 
-    - name: Setup SQLite Database
-      run: |
-        touch storage/database.sqlite
-        chmod 666 storage/database.sqlite
-
     - name: Run Migrations
-      run: php artisan migrate --force
+      run: APP_ENV=testing php artisan migrate --force
 
     - name: Execute tests (via phpunit)
-      run: vendor/bin/phpunit --colors=never
+      run: APP_ENV=testing vendor/bin/phpunit --colors=never
