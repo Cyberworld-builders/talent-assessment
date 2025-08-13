@@ -6,6 +6,7 @@ use App\Client;
 use App\Language;
 use App\Research;
 use App\User;
+use App\Industry;
 use Bican\Roles\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
@@ -96,7 +97,8 @@ class UsersController extends Controller
             'last_name' => 'required',
             'email' => 'required|email',
             //'organization_id' => 'required',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:6|confirmed',
+            'industry_id' => 'nullable|exists:industries,id'
         ]);
 
         if ($validator->fails())
@@ -260,6 +262,7 @@ class UsersController extends Controller
     {
         $clients = Client::all();
         $roles = Role::all();
+        $industries = Industry::orderBy('name')->get();
 
 		// If Reseller, don't include AOE Admin role
 		if (Auth::user()->isReseller())
@@ -277,7 +280,11 @@ class UsersController extends Controller
         foreach ($clients as $client)
             $clientsArray[$client->id] = $client->name;
 
-        return view('dashboard.users.create', compact('rolesArray', 'clientsArray'));
+        $industriesArray = [null => 'Select Industry'];
+        foreach ($industries as $industry)
+            $industriesArray[$industry->id] = $industry->name;
+
+        return view('dashboard.users.create', compact('rolesArray', 'clientsArray', 'industriesArray'));
     }
 
     /**
@@ -362,6 +369,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $clients = Client::all();
+        $industries = Industry::orderBy('name')->get();
 
 		$rolesArray = [
 			1 => 'AOE Admin',
@@ -388,7 +396,11 @@ class UsersController extends Controller
         foreach ($clients as $client)
             $clientsArray[$client->id] = $client->name;
 
-        return view('dashboard.users.edit', compact('user', 'rolesArray', 'clientsArray'));
+        $industriesArray = [null => 'Select Industry'];
+        foreach ($industries as $industry)
+            $industriesArray[$industry->id] = $industry->name;
+
+        return view('dashboard.users.edit', compact('user', 'rolesArray', 'clientsArray', 'industriesArray'));
     }
 
     /**

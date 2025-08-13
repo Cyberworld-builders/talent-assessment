@@ -101,7 +101,9 @@ class AuthController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'username' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
+            'industry_id' => 'nullable|exists:industries,id',
         ]);
     }
 
@@ -116,7 +118,9 @@ class AuthController extends Controller
         return User::create([
             'name' => $data['name'],
             'username' => $data['username'],
+            'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'industry_id' => $data['industry_id'] ?? null,
         ]);
     }
 

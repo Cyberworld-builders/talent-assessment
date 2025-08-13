@@ -99,6 +99,7 @@
                                     @else
                                         <th>Client</th>
                                     @endif
+                                    <th>Industry</th>
                                     <th>Settings</th>
                                 </tr>
                             </thead>
@@ -138,6 +139,13 @@
                                             </td>
                                             <td>
                                                 {{ \App\Reseller::find($user->reseller_id)->name }}
+                                            </td>
+                                            <td>
+                                                @if ($user->industry)
+                                                    {{ $user->industry->name }}
+                                                @else
+                                                    ---
+                                                @endif
                                             </td>
                                             <td>
                                                 {!! Form::open(['method' => 'delete', 'action' => ['UsersController@destroy', $user->id]]) !!}
@@ -189,6 +197,13 @@
                                             <td>
                                                 @if ($user->client)
                                                     {{ $user->client->name }}
+                                                @else
+                                                    ---
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($user->industry)
+                                                    {{ $user->industry->name }}
                                                 @else
                                                     ---
                                                 @endif
