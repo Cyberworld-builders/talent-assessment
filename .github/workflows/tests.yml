@@ -42,8 +42,5 @@ jobs:
         php artisan view:clear
         composer dump-autoload
 
-    - name: Run Migrations
-      run: php artisan migrate --force
-
     - name: Execute tests (via phpunit)
       run: vendor/bin/phpunit --colors=never
