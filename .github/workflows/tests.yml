@@ -14,7 +14,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: 
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: testing
         ports:
           - 3306:3306
@@ -37,7 +37,7 @@ jobs:
         sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
         sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
         sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=/' .env.testing
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
