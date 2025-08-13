@@ -48,15 +48,15 @@
                     
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>Upload Excel File</h4>
-                            <p class="text-muted">Upload an Excel file with dimension names and benchmark values.</p>
+                            <h4>Upload CSV File</h4>
+                            <p class="text-muted">Upload a CSV file with dimension names and benchmark values. Excel support coming soon.</p>
                             
                             {!! Form::open(['url' => 'dashboard/benchmarks/' . $assessment->id . '/upload', 'files' => true]) !!}
                                 {!! Form::hidden('industry_id', $industry->id) !!}
                                 
                                 <div class="form-group">
-                                    {!! Form::label('excel_file', 'Excel File (.xls or .xlsx)') !!}
-                                    {!! Form::file('excel_file', ['class' => 'form-control', 'accept' => '.xls,.xlsx']) !!}
+                                    {!! Form::label('excel_file', 'CSV File (.csv)') !!}
+                                    {!! Form::file('excel_file', ['class' => 'form-control', 'accept' => '.csv']) !!}
                                     <p class="help-block">File should have dimension names in column A and benchmark values in column B.</p>
                                 </div>
                                 
@@ -64,15 +64,19 @@
                                     {!! Form::submit('Upload Benchmarks', ['class' => 'btn btn-primary']) !!}
                                 </div>
                             {!! Form::close() !!}
+                            
+                            <div class="alert alert-info mt-3">
+                                <strong>Note:</strong> Excel file uploads are temporarily unavailable. Please use CSV format for now.
+                            </div>
                         </div>
                         
                         <div class="col-md-6">
                             <h4>Download Template</h4>
-                            <p class="text-muted">Download a template Excel file with the correct format.</p>
+                            <p class="text-muted">Download a CSV template file with the correct format. Excel support coming soon.</p>
                             
-                            <a href="{{ url('dashboard/benchmarks/' . $assessment->id . '/template') }}" 
+                            <a href="{{ url('dashboard/benchmarks/' . $assessment->id . '/template-csv') }}" 
                                class="btn btn-success">
-                                <i class="fa-download"></i> Download Template
+                                <i class="fa-download"></i> Download CSV Template
                             </a>
                             
                             <div class="mt-3">
@@ -109,7 +113,7 @@
 
         {{-- Manual Entry Section --}}
         <div class="col-md-12">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-manual-entry">
                 <div class="panel-heading">
                     <h3 class="panel-title">Manual Benchmark Entry</h3>
                 </div>
@@ -129,14 +133,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($dimensions as $dimension)
+                                    @foreach($dimensions as $index => $dimension)
                                         <tr>
                                             <td>
                                                 <strong>{{ $dimension->name }}</strong>
-                                                {!! Form::hidden('benchmarks[' . $loop->index . '][dimension_id]', $dimension->id) !!}
+                                                {!! Form::hidden('benchmarks[' . $index . '][dimension_id]', $dimension->id) !!}
                                             </td>
                                             <td>
-                                                {!! Form::text('benchmarks[' . $loop->index . '][value]', 
+                                                {!! Form::text('benchmarks[' . $index . '][value]', 
                                                     isset($benchmarks[$dimension->id]) ? $benchmarks[$dimension->id]->value : '', 
                                                     ['class' => 'form-control', 'placeholder' => 'Enter benchmark value']) !!}
                                             </td>
@@ -163,11 +167,59 @@
 
 @stop
 
+@section('styles')
+    <style>
+        /* Ensure the manual entry panel is always visible */
+        .panel-manual-entry {
+            display: block !important;
+        }
+        .panel-manual-entry .panel-body {
+            display: block !important;
+        }
+        .panel-manual-entry .table-responsive {
+            display: block !important;
+        }
+        .panel-manual-entry .table {
+            display: table !important;
+        }
+        .panel-manual-entry .table tbody {
+            display: table-row-group !important;
+        }
+        .panel-manual-entry .table tr {
+            display: table-row !important;
+        }
+        .panel-manual-entry .table td,
+        .panel-manual-entry .table th {
+            display: table-cell !important;
+        }
+        /* Ensure input fields are visible and interactive */
+        .panel-manual-entry input[type="text"] {
+            display: block !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 34px !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        .panel-manual-entry .form-control {
+            display: block !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 34px !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+@stop
+
 @section('scripts')
     <script>
         $(document).ready(function() {
-            // Add some basic validation
-            $('form').on('submit', function() {
+            // Ensure manual entry panel is not collapsed
+            $('.panel-manual-entry').removeClass('collapsed');
+            
+            // Add validation only to the manual entry form (not the upload form)
+            $('.panel-manual-entry form').on('submit', function() {
                 var hasValues = false;
                 $('input[name*="[value]"]').each(function() {
                     if ($(this).val().trim() !== '') {

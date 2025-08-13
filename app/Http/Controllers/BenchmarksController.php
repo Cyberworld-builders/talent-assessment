@@ -70,13 +70,19 @@ class BenchmarksController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug: Log the incoming data
+        \Log::info('Benchmark store request data:', $request->all());
+        
         $validator = Validator::make($request->all(), [
             'assessment_id' => 'required|exists:assessments,id',
             'industry_id' => 'required|exists:industries,id',
-            'benchmarks' => 'required|array',
-            'benchmarks.*.dimension_id' => 'required|exists:dimensions,id',
-            'benchmarks.*.value' => 'required|string|max:1000'
+            'benchmarks' => 'required|array'
         ]);
+
+        // Debug validation errors
+        if ($validator->fails()) {
+            \Log::info('Validation errors:', $validator->errors()->toArray());
+        }
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -90,7 +96,12 @@ class BenchmarksController extends Controller
 
         foreach ($benchmarks as $benchmarkData) {
             $dimensionId = $benchmarkData['dimension_id'];
-            $value = $benchmarkData['value'];
+            $value = trim($benchmarkData['value'] ?? '');
+
+            // Skip if no value provided
+            if (empty($value)) {
+                continue;
+            }
 
             // Check if dimension belongs to the assessment
             $dimension = Dimension::where('id', $dimensionId)
@@ -129,14 +140,40 @@ class BenchmarksController extends Controller
         // Suppress deprecation warnings for PHPExcel
         error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
         
-        $validator = Validator::make($request->all(), [
-            'industry_id' => 'required|exists:industries,id',
-            'excel_file' => 'required|file|mimes:xls,xlsx|max:2048'
-        ]);
-
-        if ($validator->fails()) {
+        // Debug: Log the uploaded file info
+        if ($request->hasFile('excel_file')) {
+            $file = $request->file('excel_file');
+            \Log::info('Uploaded file info:', [
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+                'extension' => $file->getClientOriginalExtension()
+            ]);
+        } else {
+            \Log::info('No file uploaded');
+        }
+        
+        // Manual validation instead of using Laravel's file validation
+        if (!$request->hasFile('excel_file')) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->with('error', 'Please select a file to upload.')
+                ->withInput();
+        }
+
+        $file = $request->file('excel_file');
+        
+        // Check file size (2MB limit)
+        if ($file->getSize() > 2048 * 1024) {
+            return redirect()->back()
+                ->with('error', 'File size must be less than 2MB.')
+                ->withInput();
+        }
+
+        // Check file extension - CSV only for now
+        $extension = strtolower($file->getClientOriginalExtension());
+        if ($extension !== 'csv') {
+            return redirect()->back()
+                ->with('error', 'Please upload a CSV file (.csv). Excel support coming soon.')
                 ->withInput();
         }
 
@@ -147,10 +184,34 @@ class BenchmarksController extends Controller
         try {
             $file = $request->file('excel_file');
             
-            // Read Excel file
-            $data = Excel::load($file->getPathname(), function($reader) {
-                $reader->noHeading();
-            })->get();
+            // Debug: Check file details
+            \Log::info('Processing file:', [
+                'path' => $file->getPathname(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+                'extension' => $file->getClientOriginalExtension()
+            ]);
+            
+            // ZipArchive check only needed for Excel files, not CSV
+            
+            // CSV only for now - Excel support coming soon
+            $data = [];
+            
+            // Read CSV file
+            $handle = fopen($file->getPathname(), 'r');
+            if ($handle) {
+                $isFirstRow = true;
+                while (($row = fgetcsv($handle)) !== false) {
+                    // Skip header row
+                    if ($isFirstRow) {
+                        $isFirstRow = false;
+                        continue;
+                    }
+                    $data[] = $row;
+                }
+                fclose($handle);
+            }
+            \Log::info('CSV file processed successfully. Rows: ' . count($data));
 
             $successCount = 0;
             $errorCount = 0;
@@ -212,12 +273,18 @@ class BenchmarksController extends Controller
 
     /**
      * Download benchmark template Excel file.
+     * TEMPORARILY DISABLED - Excel support coming soon
      *
      * @param int $assessmentId
      * @return \Illuminate\Http\Response
      */
     public function downloadTemplate($assessmentId)
     {
+        return redirect()->back()
+            ->with('error', 'Excel template downloads are temporarily unavailable. Please use CSV format instead.');
+        
+        // TODO: Re-enable when PHP/Laravel versions are upgraded
+        /*
         // Suppress deprecation warnings for PHPExcel
         error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
         
@@ -237,5 +304,41 @@ class BenchmarksController extends Controller
                 $sheet->fromArray($data);
             });
         })->download('xlsx');
+        */
+    }
+
+    /**
+     * Download benchmark template CSV file.
+     *
+     * @param int $assessmentId
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadCsvTemplate($assessmentId)
+    {
+        $assessment = Assessment::findOrFail($assessmentId);
+        $dimensions = $assessment->dimensions()->orderBy('name')->get();
+
+        $filename = "benchmarks_template_{$assessment->name}.csv";
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($dimensions) {
+            $file = fopen('php://output', 'w');
+            
+            // Add header row
+            fputcsv($file, ['Dimension Name', 'Benchmark Value']);
+            
+            // Add data rows
+            foreach ($dimensions as $dimension) {
+                fputcsv($file, [$dimension->name, '']);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

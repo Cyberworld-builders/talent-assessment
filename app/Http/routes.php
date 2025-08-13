@@ -290,6 +290,7 @@ Route::group(['middleware' => ['auth']], function()
 Route::get('dashboard/benchmarks', 'BenchmarksController@selectAssessment');
 Route::get('dashboard/benchmarks/{assessmentId}', 'BenchmarksController@selectIndustry');
 Route::get('dashboard/benchmarks/{assessmentId}/template', 'BenchmarksController@downloadTemplate');
+Route::get('dashboard/benchmarks/{assessmentId}/template-csv', 'BenchmarksController@downloadCsvTemplate');
 Route::get('dashboard/benchmarks/{assessmentId}/{industryId}', 'BenchmarksController@index');
 Route::post('dashboard/benchmarks', 'BenchmarksController@store');
 Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@upload');
