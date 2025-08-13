@@ -49,7 +49,7 @@ jobs:
         composer dump-autoload
 
     - name: Run Migrations
-      run: php artisan migrate --force
+      run: APP_ENV=testing php artisan migrate --force
 
     - name: Execute tests (via phpunit)
-      run: vendor/bin/phpunit --colors=never
+      run: APP_ENV=testing vendor/bin/phpunit --colors=never
