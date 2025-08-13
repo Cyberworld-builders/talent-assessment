@@ -1,8 +1,8 @@
-@extends('dashboard.layout')
+@extends('dashboard.dashboard')
 
 @section('title')
     Feedback Libraries
-@stop
+@endsection
 
 @section('content')
     <div class="row">
@@ -68,4 +68,4 @@
             </div>
         </div>
     </div>
-@stop
+@endsection

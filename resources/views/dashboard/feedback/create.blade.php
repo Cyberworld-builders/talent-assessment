@@ -1,8 +1,8 @@
-@extends('dashboard.layout')
+@extends('dashboard.dashboard')
 
 @section('title')
     Create Feedback Library
-@stop
+@endsection
 
 @section('content')
     <div class="row">
@@ -83,4 +83,4 @@
             });
         });
     </script>
-@stop
+@endsection
