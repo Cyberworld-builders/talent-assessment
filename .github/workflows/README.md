@@ -45,7 +45,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ### Common Issues
 
-1. **Database Connection**: Ensure SQLite file is created and writable
+1. **Database Connection**: Ensure SQLite file is created in storage/database.sqlite
 2. **Permissions**: Check storage and bootstrap/cache permissions
 3. **Dependencies**: Verify composer.json is up to date
 4. **Environment**: Confirm .env.example exists and is valid
@@ -54,4 +54,4 @@ docker compose exec app ./vendor/bin/phpunit
 
 - Check GitHub Actions logs for detailed error messages
 - Test locally with Docker before pushing
-- Verify SQLite database file exists and has proper permissions
+- Verify SQLite database file exists in storage/database.sqlite and has proper permissions
