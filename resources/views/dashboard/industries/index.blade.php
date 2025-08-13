@@ -1,4 +1,4 @@
-@extends('app')
+@extends('dashboard.dashboard')
 
 @section('title')
     Industries
