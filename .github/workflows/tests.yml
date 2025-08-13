@@ -32,7 +32,7 @@ jobs:
 
     - name: Setup Testing Environment
       run: |
-        cp .env .env.testing
+        cp .env.example .env.testing
         sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
         sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
         sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
