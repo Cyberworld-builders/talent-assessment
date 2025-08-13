@@ -23,17 +23,15 @@ class BenchmarkTest extends TestCase
             'password' => bcrypt('password')
         ]);
 
-        // Create an assessment
-        $assessment = Assessment::create([
+        // Create an assessment using relationship
+        $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description',
-            'user_id' => $user->id
+            'description' => 'Test Description'
         ]);
 
         // Create a dimension
-        $dimension = Dimension::create([
-            'name' => 'Test Dimension',
-            'assessment_id' => $assessment->id
+        $dimension = $assessment->dimensions()->create([
+            'name' => 'Test Dimension'
         ]);
 
         // Create an industry
@@ -69,10 +67,9 @@ class BenchmarkTest extends TestCase
         ]);
 
         // Create test data
-        $assessment = Assessment::create([
+        $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description',
-            'user_id' => $user->id
+            'description' => 'Test Description'
         ]);
 
         $dimension = Dimension::create([
@@ -113,20 +110,17 @@ class BenchmarkTest extends TestCase
         ]);
 
         // Create test data
-        $assessment = Assessment::create([
+        $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description',
-            'user_id' => $user->id
+            'description' => 'Test Description'
         ]);
 
-        $dimension1 = Dimension::create([
-            'name' => 'Dimension 1',
-            'assessment_id' => $assessment->id
+        $dimension1 = $assessment->dimensions()->create([
+            'name' => 'Dimension 1'
         ]);
 
-        $dimension2 = Dimension::create([
-            'name' => 'Dimension 2',
-            'assessment_id' => $assessment->id
+        $dimension2 = $assessment->dimensions()->create([
+            'name' => 'Dimension 2'
         ]);
 
         $industry1 = Industry::create(['name' => 'Industry 1']);
@@ -178,15 +172,13 @@ class BenchmarkTest extends TestCase
         ]);
 
         // Create test data
-        $assessment = Assessment::create([
+        $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description',
-            'user_id' => $user->id
+            'description' => 'Test Description'
         ]);
 
-        $dimension = Dimension::create([
-            'name' => 'Test Dimension',
-            'assessment_id' => $assessment->id
+        $dimension = $assessment->dimensions()->create([
+            'name' => 'Test Dimension'
         ]);
 
         $industry = Industry::create([
