@@ -9,22 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: talent_assessment_test
-          MYSQL_USER: talent_user
-          MYSQL_PASSWORD: talent_password
-          MYSQL_ROOT_PASSWORD: root_password
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 3306:3306
 
     steps:
     - uses: actions/checkout@v4
@@ -33,7 +17,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json, pdo, phar, tokenizer, zip
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, phar, tokenizer, zip
         coverage: none
 
     - name: Copy .env
@@ -48,18 +32,12 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
-    - name: Create Database
+    - name: Configure SQLite Database
       run: |
-        mysql -u root -proot_password -e "CREATE DATABASE IF NOT EXISTS talent_assessment_test;"
-        mysql -u root -proot_password -e "GRANT ALL PRIVILEGES ON talent_assessment_test.* TO 'talent_user'@'%';"
-        mysql -u root -proot_password -e "FLUSH PRIVILEGES;"
-
-    - name: Configure Database
-      run: |
-        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=talent_assessment_test/' .env
-        sed -i 's/DB_USERNAME=.*/DB_USERNAME=talent_user/' .env
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=talent_password/' .env
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=database\/database.sqlite/' .env
+        touch database/database.sqlite
+        chmod 666 database/database.sqlite
 
     - name: Run Migrations
       run: php artisan migrate --force

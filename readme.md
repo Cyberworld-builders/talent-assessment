@@ -83,10 +83,12 @@ This project uses GitHub Actions for continuous integration. Tests are automatic
 - **Pull Requests**: Any PR targeting the `main` branch
 - **Pushes to main**: Direct pushes to the main branch
 
-#### Available Workflows
+#### Workflow
 
-1. **`tests.yml`** - Full test suite with MySQL database
-2. **`tests-simple.yml`** - Simplified test suite with SQLite (faster)
+**`tests.yml`** - Test suite with SQLite database
+- **Fast execution** with minimal dependencies
+- **Reliable testing** environment
+- **Automatic setup** of Laravel and database
 
 #### Test Coverage
 
