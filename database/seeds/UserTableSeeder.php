@@ -19,7 +19,8 @@ class UserTableSeeder extends Seeder
             'name' => 'Test Client',
             'address' => '123 Test Street',
             'primary_color' => '#007bff',
-            'accent_color' => '#28a745'
+            'accent_color' => '#28a745',
+            'whitelabel' => false
         ]);
 
         // Create a test user
