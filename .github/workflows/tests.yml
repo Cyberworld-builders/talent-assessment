@@ -30,6 +30,9 @@ jobs:
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqlnd, zip, gd, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar, iconv, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar
         coverage: none
 
+    - name: Install MySQL Client
+      run: sudo apt-get update && sudo apt-get install -y mysql-client
+
     - name: Setup Testing Environment
       run: |
         cp .env.example .env.testing
@@ -55,6 +58,14 @@ jobs:
         php artisan route:clear
         php artisan view:clear
         composer dump-autoload
+
+    - name: Wait for MySQL
+      run: |
+        echo "Waiting for MySQL to be ready..."
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ppassword --silent; do
+          sleep 1
+        done
+        echo "MySQL is ready!"
 
     - name: Run Migrations
       run: APP_ENV=testing php artisan migrate --force
