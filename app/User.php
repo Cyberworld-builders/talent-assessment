@@ -31,7 +31,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['username', 'name', 'email', 'password', 'client_id', 'job_title', 'job_family'];
+    protected $fillable = ['username', 'name', 'email', 'password', 'client_id', 'job_title', 'job_family', 'industry_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -211,6 +211,16 @@ class User extends Model implements AuthenticatableContract,
     public function client()
     {
         return $this->belongsTo('App\Client');
+    }
+
+	/**
+     * Get the industry to which this user belongs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function industry()
+    {
+        return $this->belongsTo('App\Industry');
     }
 
 	/**
