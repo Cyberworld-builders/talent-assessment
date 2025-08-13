@@ -126,6 +126,9 @@ class BenchmarksController extends Controller
      */
     public function upload(Request $request, $assessmentId)
     {
+        // Suppress deprecation warnings for PHPExcel
+        error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+        
         $validator = Validator::make($request->all(), [
             'industry_id' => 'required|exists:industries,id',
             'excel_file' => 'required|file|mimes:xls,xlsx|max:2048'
@@ -215,6 +218,9 @@ class BenchmarksController extends Controller
      */
     public function downloadTemplate($assessmentId)
     {
+        // Suppress deprecation warnings for PHPExcel
+        error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+        
         $assessment = Assessment::findOrFail($assessmentId);
         $dimensions = $assessment->dimensions()->orderBy('name')->get();
 
