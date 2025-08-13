@@ -1,13 +1,17 @@
 <?php
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * The base URL to use while testing the application.
      *
      * @var string
      */
-    protected $baseUrl = 'http://localhost:8000';
+    protected $baseUrl = 'http://localhost';
 
     /**
      * Creates the application.
