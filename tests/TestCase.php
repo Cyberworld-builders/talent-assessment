@@ -22,4 +22,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    public function setUp()
+    {
+        parent::setUp();
+        
+        // Disable the SetDatabase middleware during tests
+        $this->withoutMiddleware(\App\Http\Middleware\SetDatabase::class);
+    }
 }
