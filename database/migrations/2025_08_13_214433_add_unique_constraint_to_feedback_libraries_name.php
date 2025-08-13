@@ -12,7 +12,9 @@ class AddUniqueConstraintToFeedbackLibrariesName extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('feedback_libraries', function (Blueprint $table) {
+            $table->unique('name');
+        });
     }
 
     /**
@@ -22,6 +24,8 @@ class AddUniqueConstraintToFeedbackLibrariesName extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('feedback_libraries', function (Blueprint $table) {
+            $table->dropUnique(['name']);
+        });
     }
 }
