@@ -81,6 +81,16 @@ class Client extends Model
 	}
 
 	/**
+	 * Get all feedback libraries belonging to this client.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function feedbackLibraries()
+	{
+		return $this->hasMany('App\FeedbackLibrary');
+	}
+
+	/**
 	 * Get a count of how many assessments the users of this client completed.
 	 *
 	 * @return bool|int

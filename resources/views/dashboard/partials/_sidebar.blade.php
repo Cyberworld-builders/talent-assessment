@@ -143,6 +143,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="{{ url('dashboard/feedback') }}">
+						<i class="fa-file-text-o"></i>
+						<span class="title">Feedback</span>
+					</a>
+				</li>
+				<li>
 					<a href="{{ url('dashboard/users') }}">
 						<i class="fa-user"></i>
 						<span class="title">Users</span>
