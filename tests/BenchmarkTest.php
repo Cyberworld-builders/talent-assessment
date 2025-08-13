@@ -33,12 +33,15 @@ class BenchmarkTest extends TestCase
             'items_per_page' => 10,
             'timed' => 0,
             'use_custom_fields' => 0,
-            'target' => 1
+            'target' => 1,
+            'last_modified' => \Carbon\Carbon::now()
         ]);
 
         // Create a dimension
         $dimension = $assessment->dimensions()->create([
-            'name' => 'Test Dimension'
+            'name' => 'Test Dimension',
+            'parent' => 0,
+            'code' => 'TEST'
         ]);
 
         // Create an industry
@@ -76,12 +79,22 @@ class BenchmarkTest extends TestCase
         // Create test data
         $assessment = $user->assessments()->create([
             'name' => 'Test Assessment',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
+            'logo' => '',
+            'background' => '',
+            'paginate' => 10,
+            'items_per_page' => 10,
+            'timed' => 0,
+            'use_custom_fields' => 0,
+            'target' => 1,
+            'last_modified' => \Carbon\Carbon::now()
         ]);
 
         $dimension = Dimension::create([
             'name' => 'Test Dimension',
-            'assessment_id' => $assessment->id
+            'assessment_id' => $assessment->id,
+            'parent' => 0,
+            'code' => 'TEST'
         ]);
 
         $industry = Industry::create([
@@ -126,15 +139,20 @@ class BenchmarkTest extends TestCase
             'items_per_page' => 10,
             'timed' => 0,
             'use_custom_fields' => 0,
-            'target' => 1
+            'target' => 1,
+            'last_modified' => \Carbon\Carbon::now()
         ]);
 
         $dimension1 = $assessment->dimensions()->create([
-            'name' => 'Dimension 1'
+            'name' => 'Dimension 1',
+            'parent' => 0,
+            'code' => 'DIM1'
         ]);
 
         $dimension2 = $assessment->dimensions()->create([
-            'name' => 'Dimension 2'
+            'name' => 'Dimension 2',
+            'parent' => 0,
+            'code' => 'DIM2'
         ]);
 
         $industry1 = Industry::create(['name' => 'Industry 1']);
@@ -195,11 +213,14 @@ class BenchmarkTest extends TestCase
             'items_per_page' => 10,
             'timed' => 0,
             'use_custom_fields' => 0,
-            'target' => 1
+            'target' => 1,
+            'last_modified' => \Carbon\Carbon::now()
         ]);
 
         $dimension = $assessment->dimensions()->create([
-            'name' => 'Test Dimension'
+            'name' => 'Test Dimension',
+            'parent' => 0,
+            'code' => 'TEST'
         ]);
 
         $industry = Industry::create([
