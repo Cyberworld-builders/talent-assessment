@@ -56,15 +56,6 @@
                     </div>
                     <div class="input-field">
                         {!! Form::label('industry_id', translate('Industry'), ['class' => 'control-label']) !!}
-                        @php
-                            $industries = App\Industry::orderBy('name')->get();
-                            $industryOptions = ['' => 'Select Industry'];
-                            if ($industries->count() > 0) {
-                                foreach($industries as $industry) {
-                                    $industryOptions[$industry->id] = $industry->name;
-                                }
-                            }
-                        @endphp
                         {!! Form::select('industry_id', $industryOptions, $user->industry_id, ['class' => 'form-control input-lg']) !!}
                     </div>
                 </div>

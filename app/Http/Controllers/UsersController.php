@@ -73,8 +73,17 @@ class UsersController extends Controller
         if ($user->completed_profile && $user->completed_research)
             return redirect('/assignments');
 
+        // Get industry options for the form
+        $industries = Industry::orderBy('name')->get();
+        $industryOptions = ['' => 'Select Industry'];
+        if ($industries->count() > 0) {
+            foreach($industries as $industry) {
+                $industryOptions[$industry->id] = $industry->name;
+            }
+        }
+
         if ($user->client && $user->client->require_profile && !$user->completed_profile)
-			return view('profile.index', compact('user', 'first_name', 'middle_name', 'last_name'));
+			return view('profile.index', compact('user', 'first_name', 'middle_name', 'last_name', 'industryOptions'));
 
         if ($user->client && $user->client->require_research && !$user->completed_research)
             return redirect('/profile/research');
@@ -98,7 +107,7 @@ class UsersController extends Controller
             'email' => 'required|email',
             //'organization_id' => 'required',
             'password' => 'required|min:6|confirmed',
-            'industry_id' => 'nullable|exists:industries,id'
+            'industry_id' => 'sometimes|exists:industries,id'
         ]);
 
         if ($validator->fails())
