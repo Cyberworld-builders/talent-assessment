@@ -31,7 +31,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['username', 'name', 'email', 'password', 'client_id', 'job_title', 'job_family', 'industry_id'];
+    protected $fillable = ['username', 'name', 'email', 'password', 'client_id', 'job_title', 'job_family', 'industry_id', 'language_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -349,13 +349,13 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * Get the research questions that this user filled out.
+     * Get the language that this user has selected.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function language()
     {
-        return Language::find($this->language_id);
+        return $this->belongsTo('App\Language');
     }
 
 	/**

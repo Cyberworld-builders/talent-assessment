@@ -73,8 +73,17 @@ class UsersController extends Controller
         if ($user->completed_profile && $user->completed_research)
             return redirect('/assignments');
 
+        // Get industry options for the form
+        $industries = Industry::orderBy('name')->get();
+        $industryOptions = ['' => 'Select Industry'];
+        if ($industries->count() > 0) {
+            foreach($industries as $industry) {
+                $industryOptions[$industry->id] = $industry->name;
+            }
+        }
+
         if ($user->client && $user->client->require_profile && !$user->completed_profile)
-			return view('profile.index', compact('user', 'first_name', 'middle_name', 'last_name'));
+			return view('profile.index', compact('user', 'first_name', 'middle_name', 'last_name', 'industryOptions'));
 
         if ($user->client && $user->client->require_research && !$user->completed_research)
             return redirect('/profile/research');
@@ -98,7 +107,7 @@ class UsersController extends Controller
             'email' => 'required|email',
             //'organization_id' => 'required',
             'password' => 'required|min:6|confirmed',
-            'industry_id' => 'nullable|exists:industries,id'
+            'industry_id' => 'sometimes|exists:industries,id'
         ]);
 
         if ($validator->fails())
@@ -106,19 +115,28 @@ class UsersController extends Controller
 
         $name = implode(' ', [$data['first_name'], $data['last_name']]);
 
-        if ($data['middle_name'])
-            $name = implode(' ', [$data['first_name'], $data['middle_name'], $data['last_name']]);
+        if (isset($data['middle_name']) && !empty(trim($data['middle_name'])))
+            $name = implode(' ', [$data['first_name'], trim($data['middle_name']), $data['last_name']]);
 
         $data['name'] = $name;
         $data['password'] = bcrypt($data['password']);
 
+        // Handle empty industry_id
+        if (isset($data['industry_id']) && empty($data['industry_id'])) {
+            $data['industry_id'] = null;
+        }
+
         $user = \Auth::user();
         $user->update($data);
-
         $user->completed_profile = true;
         $user->save();
 
-        return redirect('/profile/research');
+        // Check if client requires research
+        if ($user->client && $user->client->require_research) {
+            return redirect('/profile/research');
+        } else {
+            return redirect('/assignments');
+        }
     }
 
 	/**
