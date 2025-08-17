@@ -115,19 +115,28 @@ class UsersController extends Controller
 
         $name = implode(' ', [$data['first_name'], $data['last_name']]);
 
-        if ($data['middle_name'])
-            $name = implode(' ', [$data['first_name'], $data['middle_name'], $data['last_name']]);
+        if (isset($data['middle_name']) && !empty(trim($data['middle_name'])))
+            $name = implode(' ', [$data['first_name'], trim($data['middle_name']), $data['last_name']]);
 
         $data['name'] = $name;
         $data['password'] = bcrypt($data['password']);
 
+        // Handle empty industry_id
+        if (isset($data['industry_id']) && empty($data['industry_id'])) {
+            $data['industry_id'] = null;
+        }
+
         $user = \Auth::user();
         $user->update($data);
-
         $user->completed_profile = true;
         $user->save();
 
-        return redirect('/profile/research');
+        // Check if client requires research
+        if ($user->client && $user->client->require_research) {
+            return redirect('/profile/research');
+        } else {
+            return redirect('/assignments');
+        }
     }
 
 	/**

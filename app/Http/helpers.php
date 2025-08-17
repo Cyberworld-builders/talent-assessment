@@ -15,7 +15,7 @@ function translate($string)
 	if (! $user)
 		return $string;
 
-	$language = \Auth::user()->language();
+	$language = \Auth::user()->language;
 
 	if (! $language)
 		return $string;

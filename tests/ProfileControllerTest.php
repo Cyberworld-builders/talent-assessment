@@ -22,13 +22,23 @@ class ProfileControllerTest extends TestCase
     {
         parent::setUp();
         
-        // Find existing industry or create a new one with unique name
-        $this->industry = Industry::where('name', 'Test Technology Industry')->first();
-        if (!$this->industry) {
-            $this->industry = Industry::create([
-                'name' => 'Test Technology Industry'
+        // Disable CSRF protection for tests
+        $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
+        
+        // Ensure we have a language record
+        $language = \App\Language::first();
+        if (!$language) {
+            $language = \App\Language::create([
+                'name' => 'English',
+                'native_name' => 'English',
+                'code' => 'en'
             ]);
         }
+        
+        // Create test industry with unique name
+        $this->industry = Industry::create([
+            'name' => 'Test Technology Industry ' . uniqid()
+        ]);
 
         // Create test client with unique name
         $this->client = Client::create([
@@ -44,7 +54,7 @@ class ProfileControllerTest extends TestCase
             'email' => 'john_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
             'client_id' => $this->client->id,
-            'language_id' => 1,
+            'language_id' => $language->id, // Use the actual language ID
             'completed_profile' => false,
             'completed_research' => false
         ]);
@@ -126,6 +136,7 @@ class ProfileControllerTest extends TestCase
     public function testProfileMethodWithClientNotRequiringProfile()
     {
         $this->client->require_profile = false;
+        $this->client->require_research = false;
         $this->client->save();
 
         $this->actingAs($this->user);
@@ -233,11 +244,11 @@ class ProfileControllerTest extends TestCase
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $response);
         $this->assertContains('/profile/research', $response->getTargetUrl());
 
-        $this->user->refresh();
+        $this->user = User::find($this->user->id);
         $this->assertEquals('Jane Marie Smith', $this->user->name);
         $this->assertEquals('jane@example.com', $this->user->email);
         $this->assertEquals($this->industry->id, $this->user->industry_id);
-        $this->assertTrue($this->user->completed_profile);
+        $this->assertTrue((bool)$this->user->completed_profile);
     }
 
     /**
@@ -262,8 +273,8 @@ class ProfileControllerTest extends TestCase
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $response);
         $this->assertTrue($response->isRedirection());
 
-        $this->user->refresh();
-        $this->assertFalse($this->user->completed_profile);
+        $this->user = User::find($this->user->id);
+        $this->assertFalse((bool)$this->user->completed_profile);
     }
 
     /**
@@ -288,7 +299,7 @@ class ProfileControllerTest extends TestCase
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $response);
 
-        $this->user->refresh();
+        $this->user = User::find($this->user->id);
         $this->assertEquals('Alice Johnson', $this->user->name); // Should not include empty middle name
     }
 
@@ -313,9 +324,9 @@ class ProfileControllerTest extends TestCase
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $response);
 
-        $this->user->refresh();
+        $this->user = User::find($this->user->id);
         $this->assertNull($this->user->industry_id);
-        $this->assertTrue($this->user->completed_profile);
+        $this->assertTrue((bool)$this->user->completed_profile);
     }
 
     /**
@@ -409,7 +420,7 @@ class ProfileControllerTest extends TestCase
             'last_name' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:6|confirmed',
-            'industry_id' => 'nullable|exists:industries,id'
+            'industry_id' => 'sometimes|exists:industries,id'
         ];
 
         // Test empty data

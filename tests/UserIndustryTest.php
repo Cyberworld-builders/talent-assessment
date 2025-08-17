@@ -17,14 +17,14 @@ class UserIndustryTest extends TestCase
     {
         // Create an industry
         $industry = Industry::create([
-            'name' => 'Test Industry'
+            'name' => 'Test Industry ' . uniqid()
         ]);
 
         // Create a user with industry
         $user = User::create([
-            'username' => 'testuser',
+            'username' => 'testuser_' . uniqid(),
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
             'industry_id' => $industry->id
         ]);
@@ -41,9 +41,9 @@ class UserIndustryTest extends TestCase
     {
         // Create a user without industry
         $user = User::create([
-            'username' => 'testuser2',
+            'username' => 'testuser2_' . uniqid(),
             'name' => 'Test User 2',
-            'email' => 'test2@example.com',
+            'email' => 'test2_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
             'industry_id' => null
         ]);
@@ -60,14 +60,14 @@ class UserIndustryTest extends TestCase
     {
         // Create an industry
         $industry = Industry::create([
-            'name' => 'Technology Industry'
+            'name' => 'Technology Industry ' . uniqid()
         ]);
 
         // Create a user with industry
         $user = User::create([
-            'username' => 'techuser',
+            'username' => 'techuser_' . uniqid(),
             'name' => 'Tech User',
-            'email' => 'tech@example.com',
+            'email' => 'tech_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
             'industry_id' => $industry->id
         ]);
@@ -77,7 +77,7 @@ class UserIndustryTest extends TestCase
 
         // Assert the relationship data
         $this->assertInstanceOf('App\Industry', $user->industry);
-        $this->assertEquals('Technology Industry', $user->industry->name);
+        $this->assertContains('Technology Industry', $user->industry->name);
         $this->assertEquals($industry->id, $user->industry->id);
     }
 
@@ -87,14 +87,14 @@ class UserIndustryTest extends TestCase
     public function testUserCanBeUpdatedWithDifferentIndustry()
     {
         // Create industries
-        $industry1 = Industry::create(['name' => 'Industry 1']);
-        $industry2 = Industry::create(['name' => 'Industry 2']);
+        $industry1 = Industry::create(['name' => 'Industry 1 ' . uniqid()]);
+        $industry2 = Industry::create(['name' => 'Industry 2 ' . uniqid()]);
 
         // Create a user with first industry
         $user = User::create([
-            'username' => 'updateuser',
+            'username' => 'updateuser_' . uniqid(),
             'name' => 'Update User',
-            'email' => 'update@example.com',
+            'email' => 'update_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
             'industry_id' => $industry1->id
         ]);
@@ -107,6 +107,6 @@ class UserIndustryTest extends TestCase
 
         // Assert the industry was updated
         $this->assertEquals($industry2->id, $user->industry_id);
-        $this->assertEquals('Industry 2', $user->industry->name);
+        $this->assertContains('Industry 2', $user->industry->name);
     }
 }
