@@ -56,7 +56,7 @@
                     </div>
                     <div class="input-field">
                         {!! Form::label('industry_id', translate('Industry'), ['class' => 'control-label']) !!}
-                        {!! Form::select('industry_id', ['' => 'Select Industry'] + App\Industry::orderBy('name')->pluck('name', 'id')->toArray(), $user->industry_id, ['class' => 'form-control input-lg']) !!}
+                        {!! Form::select('industry_id', $industryOptions, $user->industry_id, ['class' => 'form-control input-lg']) !!}
                     </div>
                 </div>
             </div>

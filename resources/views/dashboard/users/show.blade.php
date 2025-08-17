@@ -26,7 +26,7 @@
                     @if (isset($reseller))
                         <span class="user-title">{{ $user->role_name }}</span>
                     @else
-                        <span class="user-title">{{ $user->roles->first()->name }}</span>
+                        <span class="user-title">{{ $user->roles->first() ? $user->roles->first()->name : 'No Role Assigned' }}</span>
                     @endif
                     <hr />
 
