@@ -92,7 +92,7 @@ resource "aws_security_group" "dev_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Temporarily open for AWS console access
+    cidr_blocks = ["0.0.0.0/0"]  # TODO: Restrict to specific IP ranges for production
   }
 
   ingress {
@@ -370,6 +370,155 @@ resource "aws_iam_role_policy" "s3_uploads_policy" {
         Resource = [
           aws_s3_bucket.uploads_bucket.arn,
           "${aws_s3_bucket.uploads_bucket.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+# ECR Repository for app images
+resource "aws_ecr_repository" "talent_app_repo" {
+  name                 = "talent-assessment-app"
+  image_tag_mutability = "MUTABLE"
+  
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+# ECR Lifecycle Policy to expire old images
+resource "aws_ecr_lifecycle_policy" "talent_app_lifecycle" {
+  repository = aws_ecr_repository.talent_app_repo.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Expire images older than 10"
+        selection = {
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
+          countNumber = 10
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+
+# Secrets Manager for Staging Environment
+resource "aws_secretsmanager_secret" "staging_secrets" {
+  name = "talent-assessment-staging-secrets"
+  
+  tags = {
+    Name = "${var.project_name}-staging-secrets"
+    Environment = "staging"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "staging_secrets_version" {
+  secret_id     = aws_secretsmanager_secret.staging_secrets.id
+  secret_string = jsonencode({
+    STAGING_DB_PASSWORD    = "strong_staging_db_pass_${random_string.secret_suffix.result}"
+    STAGING_REDIS_PASSWORD = "strong_staging_redis_pass_${random_string.secret_suffix.result}"
+    STAGING_S3_BUCKET      = aws_s3_bucket.staging_uploads_bucket.bucket
+    STAGING_DB_DATABASE    = "talent_assessment_staging"
+    STAGING_DB_USERNAME    = "talent_user_staging"
+    STAGING_DB_ROOT_PASSWORD = "strong_staging_root_pass_${random_string.secret_suffix.result}"
+  })
+}
+
+# Random string for unique secret values
+resource "random_string" "secret_suffix" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
+# Staging S3 Bucket for uploads
+resource "aws_s3_bucket" "staging_uploads_bucket" {
+  bucket = "${var.project_name}-staging-uploads-${random_string.bucket_suffix.result}"
+  
+  tags = {
+    Name = "${var.project_name}-staging-uploads"
+    Environment = "staging"
+  }
+}
+
+# S3 bucket versioning for staging
+resource "aws_s3_bucket_versioning" "staging_uploads_bucket_versioning" {
+  bucket = aws_s3_bucket.staging_uploads_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# S3 bucket public access block for staging
+resource "aws_s3_bucket_public_access_block" "staging_uploads_bucket_public_access" {
+  bucket = aws_s3_bucket.staging_uploads_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# S3 bucket policy for staging (CloudFront access only)
+resource "aws_s3_bucket_policy" "staging_uploads_bucket_policy" {
+  bucket = aws_s3_bucket.staging_uploads_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "CloudFrontAccess"
+        Effect    = "Allow"
+        Principal = {
+          AWS = aws_cloudfront_origin_access_identity.uploads_oai.iam_arn
+        }
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.staging_uploads_bucket.arn}/*"
+      }
+    ]
+  })
+}
+
+# Extended IAM Policy for EC2 (ECR and Secrets Manager access)
+resource "aws_iam_role_policy" "ec2_extended_policy" {
+  name = "${var.project_name}-ec2-ecr-secrets-policy"
+  role = aws_iam_role.dev_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = "secretsmanager:GetSecretValue"
+        Resource = aws_secretsmanager_secret.staging_secrets.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          aws_s3_bucket.staging_uploads_bucket.arn,
+          "${aws_s3_bucket.staging_uploads_bucket.arn}/*"
         ]
       }
     ]
