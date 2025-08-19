@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+  app-staging:
+    image: "${ECR_REGISTRY}/talent-assessment-app:${IMAGE_TAG}"
+    container_name: talent-assessment-app-staging
+    restart: unless-stopped
+    working_dir: /var/www
+    env_file:
+      - .env.staging
+    depends_on:
+      - mysql-staging
+      - redis-staging
+    networks:
+      - talent-network-staging
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.talent-staging.entrypoints=websecure"
+      - "traefik.http.routers.talent-staging.rule=Host(`talent-staging.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-staging.tls=true"
+      - "traefik.http.routers.talent-staging.tls.certresolver=letsencrypt"
+      - "traefik.http.services.talent-staging.loadbalancer.server.port=8000"
+      - "traefik.http.middlewares.talent-staging-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.talent-staging-http.entrypoints=web"
+      - "traefik.http.routers.talent-staging-http.rule=Host(`talent-staging.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-staging-http.middlewares=talent-staging-redirect"
+
+  mysql-staging:
+    image: mysql:8.0
+    container_name: talent-assessment-mysql-staging
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${STAGING_DB_DATABASE}
+      MYSQL_USER: ${STAGING_DB_USERNAME}
+      MYSQL_PASSWORD: ${STAGING_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${STAGING_DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data_staging:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - talent-network-staging
+    command: --default-authentication-plugin=mysql_native_password
+
+  redis-staging:
+    image: redis:7-alpine
+    container_name: talent-assessment-redis-staging
+    restart: unless-stopped
+    command: redis-server --requirepass ${STAGING_REDIS_PASSWORD}
+    volumes:
+      - redis_data_staging:/data
+    networks:
+      - talent-network-staging
+
+  # Optional: Add a backup service for staging
+  backup-staging:
+    image: alpine:latest
+    container_name: talent-assessment-backup-staging
+    restart: "no"
+    volumes:
+      - mysql_data_staging:/backup/mysql
+      - ./backups/staging:/backup/local
+    networks:
+      - talent-network-staging
+    command: |
+      sh -c "
+        apk add --no-cache mysql-client
+        mysqldump -h mysql-staging -u ${STAGING_DB_USERNAME} -p${STAGING_DB_PASSWORD} ${STAGING_DB_DATABASE} > /backup/local/mysql_backup_$(date +%Y%m%d_%H%M%S).sql
+        echo 'Staging backup completed at $(date)'
+      "
+
+volumes:
+  mysql_data_staging:
+  redis_data_staging:
+
+networks:
+  talent-network-staging:
+    driver: bridge
+  traefik-net:
+    external: true

@@ -60,6 +60,21 @@ output "cloudfront_distribution_id" {
   value       = aws_cloudfront_distribution.uploads_distribution.id
 }
 
+output "ecr_repository_url" {
+  description = "ECR repository URL"
+  value       = aws_ecr_repository.talent_app_repo.repository_url
+}
+
+output "staging_secrets_arn" {
+  description = "Staging secrets ARN"
+  value       = aws_secretsmanager_secret.staging_secrets.arn
+}
+
+output "staging_s3_bucket_name" {
+  description = "Staging S3 bucket name"
+  value       = aws_s3_bucket.staging_uploads_bucket.bucket
+}
+
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF
