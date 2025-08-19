@@ -138,7 +138,7 @@ jobs:
           
           # Fetch secrets and generate .env.staging
           echo "Fetching secrets from AWS Secrets Manager..."
-          aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --query SecretString --output text | jq -r > secrets.json
+          aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text | jq -r > secrets.json
           
           echo "Generating .env.staging file..."
           cat > .env.staging << EOF
@@ -182,7 +182,7 @@ jobs:
           
           # Authenticate with ECR
           echo "Authenticating with ECR..."
-          aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
           
           # Pull new image and restart services
           echo "Pulling new image and restarting staging services..."
