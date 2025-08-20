@@ -109,22 +109,7 @@ jobs:
     - name: Run Migrations
       run: php artisan migrate --force
 
-    - name: Store APP_KEY in Secrets Manager
-      run: |
-        # Get the generated APP_KEY from .env
-        APP_KEY=$(grep '^APP_KEY=' .env | cut -d'=' -f2)
-        
-        # Get existing secrets
-        aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > existing_secrets.json
-        
-        # Update secrets with new APP_KEY
-        jq --arg key "$APP_KEY" '.STAGING_APP_KEY = $key' existing_secrets.json > updated_secrets.json
-        
-        # Update the secret
-        aws secretsmanager update-secret --secret-id talent-assessment-staging-secrets --secret-string file://updated_secrets.json --region us-east-2
-        
-        # Clean up
-        rm existing_secrets.json updated_secrets.json
+
 
     - name: Execute tests (via phpunit)
       run: vendor/bin/phpunit --colors=never
