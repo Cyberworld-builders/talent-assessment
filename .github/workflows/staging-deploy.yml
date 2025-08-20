@@ -82,9 +82,9 @@ jobs:
           # Clean up secrets file
           rm secrets.json
           
-          # Update image in docker-compose.staging.yml
-          echo "Updating docker-compose.staging.yml with new image..."
-          sed -i "/build:/,/dockerfile:/c\    image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG" docker-compose.staging.yml
+          # Set image environment variable
+          echo "Setting image environment variable..."
+          export STAGING_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
           
           # Authenticate with ECR
           echo "Authenticating with ECR..."

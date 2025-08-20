@@ -113,20 +113,20 @@ set_server_environment() {
 
 
 
-# Function to update docker-compose.staging.yml with new image
-update_compose_file() {
+# Function to set image environment variable
+set_image_environment() {
     local image_tag="$1"
     local ecr_registry="$2"
     
     if [ -n "$image_tag" ] && [ -n "$ecr_registry" ]; then
-        print_status "Updating docker-compose.staging.yml with new image..."
+        print_status "Setting image environment variable..."
         
-        # Update image in docker-compose.staging.yml
-        sed -i "s|image:.*|image: $ecr_registry/talent-assessment-app:$image_tag|g" docker-compose.staging.yml
+        # Set the image environment variable for docker-compose
+        export STAGING_APP_IMAGE="$ecr_registry/talent-assessment-app:$image_tag"
         
-        print_success "Docker Compose file updated with image: $ecr_registry/talent-assessment-app:$image_tag"
+        print_success "Image environment variable set: $STAGING_APP_IMAGE"
     else
-        print_warning "No image tag or ECR registry provided, skipping compose file update."
+        print_warning "No image tag or ECR registry provided, using default image."
     fi
 }
 
@@ -247,8 +247,8 @@ main() {
     # Set server environment variables
     set_server_environment
     
-    # Update compose file if image tag provided
-    update_compose_file "$image_tag" "$ecr_registry"
+    # Set image environment variable if image tag provided
+    set_image_environment "$image_tag" "$ecr_registry"
     
     # Authenticate with ECR if registry provided
     authenticate_ecr "$ecr_registry"
