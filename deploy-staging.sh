@@ -87,56 +87,31 @@ fetch_secrets() {
     fi
 }
 
-# Function to generate .env.staging file
-generate_env_file() {
-    print_status "Generating .env.staging file..."
+# Function to set server environment variables
+set_server_environment() {
+    print_status "Setting server environment variables..."
     
     local secrets_file="secrets.json"
     
-    # Generate .env.staging
-    cat > .env.staging << EOF
-APP_ENV=staging
-APP_DEBUG=false
-APP_URL=https://talent-staging.cyberworldbuilders.dev
-APP_KEY=base64:$(openssl rand -base64 32)
-
-DB_CONNECTION=mysql
-DB_HOST=mysql-staging
-DB_PORT=3306
-DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' "$secrets_file")
-DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' "$secrets_file")
-DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' "$secrets_file")
-
-REDIS_HOST=redis-staging
-REDIS_PORT=6379
-REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
-
-CACHE_DRIVER=redis
-SESSION_DRIVER=redis
-QUEUE_CONNECTION=redis
-
-AWS_REGION=${AWS_DEFAULT_REGION:-us-east-1}
-AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
-EOF
-
-    print_success ".env.staging file generated."
-}
-
-# Function to set environment variables
-set_environment_variables() {
-    print_status "Setting environment variables..."
-    
-    local secrets_file="secrets.json"
-    
-    # Export environment variables for docker-compose
+    # Set server environment variables for docker-compose
     export STAGING_DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' "$secrets_file")
     export STAGING_DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' "$secrets_file")
     export STAGING_DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' "$secrets_file")
     export STAGING_DB_ROOT_PASSWORD=$(jq -r '.STAGING_DB_ROOT_PASSWORD' "$secrets_file")
     export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
+    export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
+    export STAGING_APP_KEY=$(jq -r '.STAGING_APP_KEY' "$secrets_file")
     
-    print_success "Environment variables set."
+    # Generate APP_KEY if not exists
+    if [ -z "$STAGING_APP_KEY" ] || [ "$STAGING_APP_KEY" = "null" ]; then
+        export STAGING_APP_KEY="base64:$(openssl rand -base64 32)"
+        print_warning "Generated new APP_KEY. Consider storing it in Secrets Manager."
+    fi
+    
+    print_success "Server environment variables set."
 }
+
+
 
 # Function to update docker-compose.staging.yml with new image
 update_compose_file() {
@@ -269,11 +244,8 @@ main() {
     # Fetch secrets
     fetch_secrets
     
-    # Generate environment file
-    generate_env_file
-    
-    # Set environment variables
-    set_environment_variables
+    # Set server environment variables
+    set_server_environment
     
     # Update compose file if image tag provided
     update_compose_file "$image_tag" "$ecr_registry"

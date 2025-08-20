@@ -24,6 +24,15 @@ class SetDatabase
 			\Config::set('database.connections.mysql.password', session('reseller')->getDbPass());
 			DB::reconnect('mysql');
 		}
+		else
+		{
+			// Use default database configuration when no reseller session exists
+			\Config::set('database.connections.mysql.host', env('DB_HOST', 'mysql-staging'));
+			\Config::set('database.connections.mysql.database', env('DB_DATABASE', 'talent_assessment_staging'));
+			\Config::set('database.connections.mysql.username', env('DB_USERNAME', 'talent_user_staging'));
+			\Config::set('database.connections.mysql.password', env('DB_PASSWORD', 'strong_staging_db_pass_ntcneex7'));
+			DB::reconnect('mysql');
+		}
 
         return $next($request);
     }

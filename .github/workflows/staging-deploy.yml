@@ -36,6 +36,10 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y mysql-client
 
     - name: Setup Staging Testing Environment
+      env:
+        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
+        STAGING_REDIS_PASSWORD: ${{ secrets.STAGING_REDIS_PASSWORD }}
+        STAGING_S3_BUCKET: ${{ secrets.STAGING_S3_BUCKET }}
       run: |
         cp .env.example .env.staging.testing
         echo "APP_ENV=staging" >> .env.staging.testing
@@ -46,14 +50,14 @@ jobs:
         echo "DB_PORT=3306" >> .env.staging.testing
         echo "DB_DATABASE=talent_assessment_staging" >> .env.staging.testing
         echo "DB_USERNAME=root" >> .env.staging.testing
-        echo "DB_PASSWORD=${{ secrets.STAGING_DB_ROOT_PASSWORD }}" >> .env.staging.testing
+        echo "DB_PASSWORD=$STAGING_DB_ROOT_PASSWORD" >> .env.staging.testing
         echo "REDIS_HOST=127.0.0.1" >> .env.staging.testing
         echo "REDIS_PORT=6379" >> .env.staging.testing
-        echo "REDIS_PASSWORD=${{ secrets.STAGING_REDIS_PASSWORD }}" >> .env.staging.testing
+        echo "REDIS_PASSWORD=$STAGING_REDIS_PASSWORD" >> .env.staging.testing
         echo "CACHE_DRIVER=file" >> .env.staging.testing
         echo "SESSION_DRIVER=file" >> .env.staging.testing
         echo "QUEUE_CONNECTION=sync" >> .env.staging.testing
-        echo "AWS_S3_BUCKET=${{ secrets.STAGING_S3_BUCKET }}" >> .env.staging.testing
+        echo "AWS_S3_BUCKET=$STAGING_S3_BUCKET" >> .env.staging.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -70,9 +74,11 @@ jobs:
         composer dump-autoload
 
     - name: Wait for MySQL
+      env:
+        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
       run: |
         echo "Waiting for MySQL to be ready..."
-        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -p${{ secrets.STAGING_DB_ROOT_PASSWORD }} --silent; do
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -p$STAGING_DB_ROOT_PASSWORD --silent; do
           sleep 1
         done
         echo "MySQL is ready!"
@@ -85,6 +91,23 @@ jobs:
 
     - name: Run Migrations
       run: php artisan migrate --force
+
+    - name: Store APP_KEY in Secrets Manager
+      run: |
+        # Get the generated APP_KEY from .env
+        APP_KEY=$(grep '^APP_KEY=' .env | cut -d'=' -f2)
+        
+        # Get existing secrets
+        aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > existing_secrets.json
+        
+        # Update secrets with new APP_KEY
+        jq --arg key "$APP_KEY" '.STAGING_APP_KEY = $key' existing_secrets.json > updated_secrets.json
+        
+        # Update the secret
+        aws secretsmanager update-secret --secret-id talent-assessment-staging-secrets --secret-string file://updated_secrets.json --region us-east-2
+        
+        # Clean up
+        rm existing_secrets.json updated_secrets.json
 
     - name: Execute tests (via phpunit)
       run: vendor/bin/phpunit --colors=never
@@ -145,7 +168,7 @@ jobs:
           APP_ENV=staging
           APP_DEBUG=false
           APP_URL=https://talent-staging.cyberworldbuilders.dev
-          APP_KEY=base64:$(openssl rand -base64 32)
+          APP_KEY=$(jq -r '.STAGING_APP_KEY' secrets.json)
           
           DB_CONNECTION=mysql
           DB_HOST=mysql-staging
@@ -196,6 +219,17 @@ jobs:
           # Check service status
           echo "Checking service status..."
           docker-compose -f docker-compose.staging.yml ps
+          
+          # Run migrations
+          echo "Running database migrations..."
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan migrate --force
+          
+          # Clear all caches
+          echo "Clearing all caches..."
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan cache:clear
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan config:clear
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan route:clear
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan view:clear
           
           echo "Staging deployment completed successfully!"
           echo "Application URL: https://talent-staging.cyberworldbuilders.dev"

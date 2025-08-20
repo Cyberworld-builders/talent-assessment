@@ -1,13 +1,56 @@
-version: "3.9"
-
 services:
   app-staging:
-    image: "${ECR_REGISTRY}/talent-assessment-app:${IMAGE_TAG}"
+    build:
+      context: .
+      dockerfile: Dockerfile.staging
     container_name: talent-assessment-app-staging
     restart: unless-stopped
     working_dir: /var/www
-    env_file:
-      - .env.staging
+    ports:
+      - "8003:8000"
+    environment:
+      # Application Configuration (hardcoded, version controlled)
+      - APP_NAME="Talent Assessment"
+      - APP_ENV=staging
+      - APP_DEBUG=false
+      - APP_URL=https://talent-staging.cyberworldbuilders.dev
+      - APP_LOG_LEVEL=debug
+      
+      # Database Configuration (from server environment variables)
+      - DB_CONNECTION=mysql
+      - DB_DATABASE=${STAGING_DB_DATABASE}
+      - DB_HOST=mysql-staging
+      - DB_PORT=3306
+      - DB_USERNAME=${STAGING_DB_USERNAME}
+      - DB_PASSWORD=${STAGING_DB_PASSWORD}
+      
+      # Cache and Session Configuration (hardcoded)
+      - BROADCAST_DRIVER=log
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=database
+      - QUEUE_DRIVER=redis
+      
+      # Redis Configuration (from server environment variables)
+      - REDIS_HOST=redis-staging
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${STAGING_REDIS_PASSWORD}
+      
+      # Mail Configuration (hardcoded)
+      - MAIL_DRIVER=smtp
+      - MAIL_HOST=smtp.mailtrap.io
+      - MAIL_PORT=2525
+      - MAIL_USERNAME=null
+      - MAIL_PASSWORD=null
+      - MAIL_ENCRYPTION=null
+      
+      # AWS Configuration (from server environment variables)
+      - AWS_REGION=us-east-2
+      - AWS_S3_BUCKET=${STAGING_S3_BUCKET}
+      - AWS_CLOUDFRONT_DOMAIN=dhbhjqoqdk3yk.cloudfront.net
+      - AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true
+      
+      # Application Key (from server environment variables)
+      - APP_KEY=${STAGING_APP_KEY}
     depends_on:
       - mysql-staging
       - redis-staging
@@ -17,15 +60,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-net"
-      - "traefik.http.routers.talent-staging.entrypoints=websecure"
-      - "traefik.http.routers.talent-staging.rule=Host(`talent-staging.cyberworldbuilders.dev`)"
-      - "traefik.http.routers.talent-staging.tls=true"
-      - "traefik.http.routers.talent-staging.tls.certresolver=letsencrypt"
-      - "traefik.http.services.talent-staging.loadbalancer.server.port=8000"
-      - "traefik.http.middlewares.talent-staging-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.talent-staging-http.entrypoints=web"
-      - "traefik.http.routers.talent-staging-http.rule=Host(`talent-staging.cyberworldbuilders.dev`)"
-      - "traefik.http.routers.talent-staging-http.middlewares=talent-staging-redirect"
+      - "traefik.http.routers.talent-staging-image.entrypoints=websecure"
+      - "traefik.http.routers.talent-staging-image.rule=Host(`talent-staging.cyberworldbuilders.dev`)"
+      - "traefik.http.routers.talent-staging-image.tls=true"
+      - "traefik.http.routers.talent-staging-image.tls.certresolver=letsencrypt"
+      - "traefik.http.services.talent-staging-image.loadbalancer.server.port=8000"
 
   mysql-staging:
     image: mysql:8.0
@@ -41,34 +80,15 @@ services:
       - ./database/migrations:/docker-entrypoint-initdb.d
     networks:
       - talent-network-staging
-    command: --default-authentication-plugin=mysql_native_password
 
   redis-staging:
     image: redis:7-alpine
     container_name: talent-assessment-redis-staging
     restart: unless-stopped
-    command: redis-server --requirepass ${STAGING_REDIS_PASSWORD}
     volumes:
       - redis_data_staging:/data
     networks:
       - talent-network-staging
-
-  # Optional: Add a backup service for staging
-  backup-staging:
-    image: alpine:latest
-    container_name: talent-assessment-backup-staging
-    restart: "no"
-    volumes:
-      - mysql_data_staging:/backup/mysql
-      - ./backups/staging:/backup/local
-    networks:
-      - talent-network-staging
-    command: |
-      sh -c "
-        apk add --no-cache mysql-client
-        mysqldump -h mysql-staging -u ${STAGING_DB_USERNAME} -p${STAGING_DB_PASSWORD} ${STAGING_DB_DATABASE} > /backup/local/mysql_backup_$(date +%Y%m%d_%H%M%S).sql
-        echo 'Staging backup completed at $(date)'
-      "
 
 volumes:
   mysql_data_staging:
