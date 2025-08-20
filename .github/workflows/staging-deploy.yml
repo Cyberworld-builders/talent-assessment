@@ -103,6 +103,13 @@ jobs:
     - name: Setup Environment for Artisan
       run: cp .env.staging.testing .env
 
+    - name: Update PHPUnit Configuration
+      env:
+        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
+      run: |
+        # Update phpunit.xml with correct database password
+        sed -i "s/value=\"password\"/value=\"$STAGING_DB_ROOT_PASSWORD\"/g" phpunit.xml
+
     - name: Generate key
       run: php artisan key:generate
 
