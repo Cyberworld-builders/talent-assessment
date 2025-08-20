@@ -14,10 +14,10 @@ jobs:
     
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
-          MYSQL_DATABASE: talent_assessment_staging
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -35,46 +35,14 @@ jobs:
     - name: Install MySQL Client
       run: sudo apt-get update && sudo apt-get install -y mysql-client
 
-    - name: Setup Staging Testing Environment
-      env:
-        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
-        STAGING_REDIS_PASSWORD: ${{ secrets.STAGING_REDIS_PASSWORD }}
-        STAGING_S3_BUCKET: ${{ secrets.STAGING_S3_BUCKET }}
+    - name: Setup Testing Environment
       run: |
-        # Create a clean .env file for testing (don't copy from .env.example)
-        echo 'APP_NAME="Talent Assessment"' > .env.staging.testing
-        echo 'APP_ENV=staging' >> .env.staging.testing
-        echo 'APP_DEBUG=true' >> .env.staging.testing
-        echo 'APP_URL=http://localhost:8000' >> .env.staging.testing
-        echo 'APP_LOG_LEVEL=debug' >> .env.staging.testing
-        echo '' >> .env.staging.testing
-        echo 'DB_CONNECTION=mysql' >> .env.staging.testing
-        echo 'DB_HOST=127.0.0.1' >> .env.staging.testing
-        echo 'DB_PORT=3306' >> .env.staging.testing
-        echo 'DB_DATABASE=talent_assessment_staging' >> .env.staging.testing
-        echo 'DB_USERNAME=root' >> .env.staging.testing
-        echo "DB_PASSWORD=$STAGING_DB_ROOT_PASSWORD" >> .env.staging.testing
-        echo '' >> .env.staging.testing
-        echo 'BROADCAST_DRIVER=log' >> .env.staging.testing
-        echo 'CACHE_DRIVER=file' >> .env.staging.testing
-        echo 'SESSION_DRIVER=file' >> .env.staging.testing
-        echo 'QUEUE_CONNECTION=sync' >> .env.staging.testing
-        echo '' >> .env.staging.testing
-        echo 'REDIS_HOST=127.0.0.1' >> .env.staging.testing
-        echo "REDIS_PASSWORD=$STAGING_REDIS_PASSWORD" >> .env.staging.testing
-        echo 'REDIS_PORT=6379' >> .env.staging.testing
-        echo '' >> .env.staging.testing
-        echo 'MAIL_DRIVER=smtp' >> .env.staging.testing
-        echo 'MAIL_HOST=smtp.mailtrap.io' >> .env.staging.testing
-        echo 'MAIL_PORT=2525' >> .env.staging.testing
-        echo 'MAIL_USERNAME=null' >> .env.staging.testing
-        echo 'MAIL_PASSWORD=null' >> .env.staging.testing
-        echo 'MAIL_ENCRYPTION=null' >> .env.staging.testing
-        echo '' >> .env.staging.testing
-        echo 'AWS_REGION=us-east-2' >> .env.staging.testing
-        echo "AWS_S3_BUCKET=$STAGING_S3_BUCKET" >> .env.staging.testing
-        echo 'AWS_CLOUDFRONT_DOMAIN=dhbhjqoqdk3yk.cloudfront.net' >> .env.staging.testing
-        echo 'AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true' >> .env.staging.testing
+        cp .env.example .env.testing
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
+        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -91,34 +59,18 @@ jobs:
         composer dump-autoload
 
     - name: Wait for MySQL
-      env:
-        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
       run: |
         echo "Waiting for MySQL to be ready..."
-        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -p$STAGING_DB_ROOT_PASSWORD --silent; do
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ppassword --silent; do
           sleep 1
         done
         echo "MySQL is ready!"
 
     - name: Setup Environment for Artisan
-      run: cp .env.staging.testing .env
-
-    - name: Update PHPUnit Configuration
-      env:
-        STAGING_DB_ROOT_PASSWORD: ${{ secrets.STAGING_DB_ROOT_PASSWORD }}
-      run: |
-        # Update phpunit.xml with correct database password
-        sed -i "s/value=\"password\"/value=\"$STAGING_DB_ROOT_PASSWORD\"/g" phpunit.xml
-        # Update phpunit.xml with correct APP_KEY (will be updated after key generation)
+      run: cp .env.testing .env
 
     - name: Generate key
       run: php artisan key:generate
-
-    - name: Update PHPUnit with Generated Key
-      run: |
-        # Get the generated APP_KEY from .env and update phpunit.xml
-        APP_KEY=$(grep '^APP_KEY=' .env | cut -d'=' -f2)
-        sed -i "s|value=\"base64:ZthTYciaT0ag0oQ2Q6Y00ZCpw2e9WDko\"|value=\"$APP_KEY\"|g" phpunit.xml
 
     - name: Run Migrations
       run: php artisan migrate --force
