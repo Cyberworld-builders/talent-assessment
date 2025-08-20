@@ -1,8 +1,6 @@
 services:
   app-staging:
-    build:
-      context: .
-      dockerfile: Dockerfile.staging
+    image: ${STAGING_APP_IMAGE:-068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:latest}
     container_name: talent-assessment-app-staging
     restart: unless-stopped
     working_dir: /var/www
