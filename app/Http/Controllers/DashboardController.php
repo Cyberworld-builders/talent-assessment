@@ -801,4 +801,31 @@ class DashboardController extends Controller
 
 		return \Response::json($user);
 	}
+
+	/**
+	 * Temporary staging migration method (REMOVE AFTER USE)
+	 */
+	public function stagingMigrate()
+	{
+		try {
+			// Run migrations
+			Artisan::call('migrate', ['--force' => true]);
+			$migrationOutput = Artisan::output();
+			
+			// Run seeders
+			Artisan::call('db:seed', ['--force' => true]);
+			$seederOutput = Artisan::output();
+			
+			return response()->json([
+				'success' => true,
+				'migration_output' => $migrationOutput,
+				'seeder_output' => $seederOutput
+			]);
+		} catch (Exception $e) {
+			return response()->json([
+				'success' => false,
+				'error' => $e->getMessage()
+			]);
+		}
+	}
 }
