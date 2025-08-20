@@ -41,23 +41,40 @@ jobs:
         STAGING_REDIS_PASSWORD: ${{ secrets.STAGING_REDIS_PASSWORD }}
         STAGING_S3_BUCKET: ${{ secrets.STAGING_S3_BUCKET }}
       run: |
-        cp .env.example .env.staging.testing
-        echo "APP_ENV=staging" >> .env.staging.testing
-        echo "APP_DEBUG=true" >> .env.staging.testing
-        echo "APP_URL=http://localhost:8000" >> .env.staging.testing
-        echo "DB_CONNECTION=mysql" >> .env.staging.testing
-        echo "DB_HOST=127.0.0.1" >> .env.staging.testing
-        echo "DB_PORT=3306" >> .env.staging.testing
-        echo "DB_DATABASE=talent_assessment_staging" >> .env.staging.testing
-        echo "DB_USERNAME=root" >> .env.staging.testing
+        # Create a clean .env file for testing (don't copy from .env.example)
+        echo 'APP_NAME="Talent Assessment"' > .env.staging.testing
+        echo 'APP_ENV=staging' >> .env.staging.testing
+        echo 'APP_DEBUG=true' >> .env.staging.testing
+        echo 'APP_URL=http://localhost:8000' >> .env.staging.testing
+        echo 'APP_LOG_LEVEL=debug' >> .env.staging.testing
+        echo '' >> .env.staging.testing
+        echo 'DB_CONNECTION=mysql' >> .env.staging.testing
+        echo 'DB_HOST=127.0.0.1' >> .env.staging.testing
+        echo 'DB_PORT=3306' >> .env.staging.testing
+        echo 'DB_DATABASE=talent_assessment_staging' >> .env.staging.testing
+        echo 'DB_USERNAME=root' >> .env.staging.testing
         echo "DB_PASSWORD=$STAGING_DB_ROOT_PASSWORD" >> .env.staging.testing
-        echo "REDIS_HOST=127.0.0.1" >> .env.staging.testing
-        echo "REDIS_PORT=6379" >> .env.staging.testing
+        echo '' >> .env.staging.testing
+        echo 'BROADCAST_DRIVER=log' >> .env.staging.testing
+        echo 'CACHE_DRIVER=file' >> .env.staging.testing
+        echo 'SESSION_DRIVER=file' >> .env.staging.testing
+        echo 'QUEUE_CONNECTION=sync' >> .env.staging.testing
+        echo '' >> .env.staging.testing
+        echo 'REDIS_HOST=127.0.0.1' >> .env.staging.testing
         echo "REDIS_PASSWORD=$STAGING_REDIS_PASSWORD" >> .env.staging.testing
-        echo "CACHE_DRIVER=file" >> .env.staging.testing
-        echo "SESSION_DRIVER=file" >> .env.staging.testing
-        echo "QUEUE_CONNECTION=sync" >> .env.staging.testing
+        echo 'REDIS_PORT=6379' >> .env.staging.testing
+        echo '' >> .env.staging.testing
+        echo 'MAIL_DRIVER=smtp' >> .env.staging.testing
+        echo 'MAIL_HOST=smtp.mailtrap.io' >> .env.staging.testing
+        echo 'MAIL_PORT=2525' >> .env.staging.testing
+        echo 'MAIL_USERNAME=null' >> .env.staging.testing
+        echo 'MAIL_PASSWORD=null' >> .env.staging.testing
+        echo 'MAIL_ENCRYPTION=null' >> .env.staging.testing
+        echo '' >> .env.staging.testing
+        echo 'AWS_REGION=us-east-2' >> .env.staging.testing
         echo "AWS_S3_BUCKET=$STAGING_S3_BUCKET" >> .env.staging.testing
+        echo 'AWS_CLOUDFRONT_DOMAIN=dhbhjqoqdk3yk.cloudfront.net' >> .env.staging.testing
+        echo 'AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true' >> .env.staging.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
