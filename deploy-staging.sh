@@ -183,6 +183,78 @@ wait_for_services() {
     print_success "Services are running."
 }
 
+# Function to clean up Docker resources
+cleanup_docker() {
+    print_status "Cleaning up Docker resources..."
+    
+    # Remove unused containers, networks, images, and build cache
+    if docker system prune -f; then
+        print_success "Docker system cleanup completed."
+    else
+        print_warning "Docker system cleanup failed, continuing..."
+    fi
+    
+    # Remove dangling images
+    if docker image prune -f; then
+        print_success "Docker image cleanup completed."
+    else
+        print_warning "Docker image cleanup failed, continuing..."
+    fi
+    
+    # Check disk usage after cleanup
+    local disk_usage=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
+    print_status "Disk usage after cleanup: ${disk_usage}%"
+    
+    if [ "$disk_usage" -gt 85 ]; then
+        print_warning "Disk usage is still high (${disk_usage}%). Consider manual cleanup or instance resize."
+    fi
+}
+
+# Function to check application health
+check_application_health() {
+    print_status "Checking application health..."
+    
+    local max_attempts=30
+    local attempt=1
+    local health_url="https://talent-staging.cyberworldbuilders.dev"
+    
+    print_status "Waiting for application to be healthy at: $health_url"
+    
+    while [ $attempt -le $max_attempts ]; do
+        print_status "Health check attempt $attempt/$max_attempts..."
+        
+        # Check if the application responds with HTTP 200
+        if curl -f -s -o /dev/null -w "%{http_code}" "$health_url" | grep -q "200"; then
+            print_success "Application is healthy! HTTP 200 received."
+            return 0
+        fi
+        
+        # Check if the application responds at all (even with error codes)
+        if curl -f -s -o /dev/null "$health_url" 2>/dev/null; then
+            local http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$health_url" 2>/dev/null)
+            print_warning "Application responded with HTTP $http_code, but not 200. Continuing to check..."
+        else
+            print_status "Application not responding yet, waiting..."
+        fi
+        
+        sleep 10
+        attempt=$((attempt + 1))
+    done
+    
+    print_error "Application health check failed after $max_attempts attempts."
+    print_error "Application may not be working properly."
+    
+    # Show service status for debugging
+    print_status "Current service status:"
+    docker-compose -f docker-compose.staging.yml ps
+    
+    # Show recent logs for debugging
+    print_status "Recent application logs:"
+    docker-compose -f docker-compose.staging.yml logs --tail=50 app-staging
+    
+    return 1
+}
+
 # Function to clean up
 cleanup() {
     print_status "Cleaning up temporary files..."
@@ -258,6 +330,12 @@ main() {
     
     # Wait for services to be healthy
     wait_for_services
+    
+    # Clean up Docker resources
+    cleanup_docker
+
+    # Check application health
+    check_application_health
     
     # Clean up
     cleanup
