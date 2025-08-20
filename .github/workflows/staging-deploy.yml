@@ -159,49 +159,32 @@ jobs:
           export IMAGE_TAG=${{ github.sha }}
           export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
           
-          # Fetch secrets and generate .env.staging
+          # Fetch secrets and set server environment variables
           echo "Fetching secrets from AWS Secrets Manager..."
-          aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text | jq -r > secrets.json
+          aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > secrets.json
           
-          echo "Generating .env.staging file..."
-          cat > .env.staging << EOF
-          APP_ENV=staging
-          APP_DEBUG=false
-          APP_URL=https://talent-staging.cyberworldbuilders.dev
-          APP_KEY=$(jq -r '.STAGING_APP_KEY' secrets.json)
-          
-          DB_CONNECTION=mysql
-          DB_HOST=mysql-staging
-          DB_PORT=3306
-          DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)
-          DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' secrets.json)
-          DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' secrets.json)
-          
-          REDIS_HOST=redis-staging
-          REDIS_PORT=6379
-          REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' secrets.json)
-          
-          CACHE_DRIVER=redis
-          SESSION_DRIVER=redis
-          QUEUE_CONNECTION=redis
-          
-          AWS_REGION=${{ vars.AWS_REGION }}
-          AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)
-          EOF
-          
-          # Set environment variables for docker-compose
+          # Set server environment variables for docker-compose
+          echo "Setting server environment variables..."
           export STAGING_DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)
           export STAGING_DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' secrets.json)
           export STAGING_DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' secrets.json)
           export STAGING_DB_ROOT_PASSWORD=$(jq -r '.STAGING_DB_ROOT_PASSWORD' secrets.json)
           export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' secrets.json)
+          export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)
+          export STAGING_APP_KEY=$(jq -r '.STAGING_APP_KEY' secrets.json)
+          
+          # Generate APP_KEY if not exists
+          if [ -z "$STAGING_APP_KEY" ] || [ "$STAGING_APP_KEY" = "null" ]; then
+            export STAGING_APP_KEY="base64:$(openssl rand -base64 32)"
+            echo "Generated new APP_KEY. Consider storing it in Secrets Manager."
+          fi
           
           # Clean up secrets file
           rm secrets.json
           
           # Update image in docker-compose.staging.yml
           echo "Updating docker-compose.staging.yml with new image..."
-          sed -i "s|image:.*|image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG|g" docker-compose.staging.yml
+          sed -i "/build:/,/dockerfile:/c\    image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG" docker-compose.staging.yml
           
           # Authenticate with ECR
           echo "Authenticating with ECR..."
