@@ -1,21 +1,5 @@
 <?php
 
-// Setup AWS Database Connection for staging environments
-if (env('APP_ENV') == 'staging')
-{
-    $db_host = $_SERVER['RDS_HOSTNAME'].':'.$_SERVER['RDS_PORT'];
-    $db_database = $_SERVER['RDS_DB_NAME'];
-    $db_username = $_SERVER['RDS_USERNAME'];
-    $db_password = $_SERVER['RDS_PASSWORD'];
-}
-else
-{
-    $db_host = env('DB_HOST', 'localhost');
-    $db_database = env('DB_DATABASE', 'forge');
-    $db_username = env('DB_USERNAME', 'forge');
-    $db_password = env('DB_PASSWORD', '');
-}
-
 return [
 
     /*
@@ -70,10 +54,10 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => $db_host,
-            'database'  => $db_database,
-            'username'  => $db_username,
-            'password'  => $db_password,
+            'host'      => env('DB_HOST', 'localhost'),
+            'database'  => env('DB_DATABASE', 'forge'),
+            'username'  => env('DB_USERNAME', 'forge'),
+            'password'  => env('DB_PASSWORD', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
@@ -144,11 +128,13 @@ return [
         'cluster' => false,
 
         'default' => [
-            'host'     => '127.0.0.1',
-            'port'     => 6379,
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'port'     => env('REDIS_PORT', 6379),
+            'password' => env('REDIS_PASSWORD', null),
             'database' => 0,
         ],
 
     ],
 
 ];
+

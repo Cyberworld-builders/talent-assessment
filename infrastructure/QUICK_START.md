@@ -92,7 +92,16 @@ After successful deployment, you'll see:
 
 ### SSH Access
 ```bash
-ssh -i ~/.ssh/dev-key ec2-user@<public-ip>
+ssh -i ~/.ssh/dev-key ubuntu@<public-ip>
+```
+
+### Verify Installation
+```bash
+# Copy verification script to instance
+scp -i ~/.ssh/dev-key verify-installation.sh ubuntu@<public-ip>:/tmp/
+
+# Run verification
+ssh -i ~/.ssh/dev-key ubuntu@<public-ip> "sudo /tmp/verify-installation.sh"
 ```
 
 ## 📦 Deploy Your Laravel Application
@@ -294,6 +303,7 @@ Your Laravel application is now running on AWS EC2 with:
 - ✅ Redis cache
 - ✅ SSL support (when configured)
 - ✅ Automatic health checks
+- ✅ AWS CLI and jq pre-installed for deployment automation
 
 **Next Steps:**
 1. Configure your domain DNS
