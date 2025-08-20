@@ -36,7 +36,8 @@ docker compose exec -d app php artisan serve --host=0.0.0.0 --port=8000
 ```
 
 ### Access the Application
-- **Local**: http://localhost:8001
+- **Local Development**: http://localhost:8001
+- **Staging**: https://talent-staging.cyberworldbuilders.dev
 - **Production**: https://talent-aws.cyberworldbuilders.dev
 
 ### Common Commands
@@ -61,6 +62,30 @@ docker compose exec app bash
 - **App**: PHP 7.4 Laravel application (port 8001)
 - **MySQL**: Database (port 3306)
 - **Redis**: Cache (port 6379)
+- **Traefik**: Reverse proxy with SSL termination
+
+## Environments
+
+### Development Environment
+- **Purpose**: Local development with hot reloading
+- **Deployment**: Manual via volume mounts
+- **Domain**: `talent-aws.cyberworldbuilders.dev`
+- **Resources**: Shared with staging on same EC2 instance
+
+### Staging Environment
+- **Purpose**: Pre-production testing and validation
+- **Deployment**: Automated via GitHub Actions
+- **Domain**: `talent-staging.cyberworldbuilders.dev`
+- **Resources**: Separate containers, databases, and S3 bucket
+- **CI/CD**: Tests on PR, deploys on merge to `staging` branch
+
+### Production Environment
+- **Purpose**: Live production environment
+- **Deployment**: Manual via SSH
+- **Domain**: `talent.cyberworldbuilders.dev`
+- **Resources**: Dedicated infrastructure
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Testing
 

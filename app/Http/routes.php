@@ -373,6 +373,37 @@ Route::get('r/{id}/assignments', 'AssignmentsController@indexResellers');
 
 Route::get('/', 'DashboardController@home');
 
+// Temporary staging migration route (REMOVE AFTER USE)
+Route::get('staging-migrate', function() {
+    try {
+        // Set database connection manually
+        \Config::set('database.connections.mysql.host', env('DB_HOST', 'mysql-staging'));
+        \Config::set('database.connections.mysql.database', env('DB_DATABASE', 'talent_assessment_staging'));
+        \Config::set('database.connections.mysql.username', env('DB_USERNAME', 'talent_user_staging'));
+        \Config::set('database.connections.mysql.password', env('DB_PASSWORD', 'strong_staging_db_pass_ntcneex7'));
+        DB::reconnect('mysql');
+        
+        // Run migrations
+        Artisan::call('migrate', ['--force' => true]);
+        $migrationOutput = Artisan::output();
+        
+        // Run seeders
+        Artisan::call('db:seed', ['--force' => true]);
+        $seederOutput = Artisan::output();
+        
+        return response()->json([
+            'success' => true,
+            'migration_output' => $migrationOutput,
+            'seeder_output' => $seederOutput
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+});
+
 // Sample Assessment
 Route::get('assessment/sample/{name}', 'AssignmentsController@stageWithoutAuth');
 Route::post('assessment/sample/{name}/complete', 'AssignmentsController@completeSample');
@@ -382,3 +413,5 @@ Route::post('assessment/sample/{name}/take/{code}', 'AssignmentsController@showW
 // Registration
 //Route::get('register', 'Auth\AuthController@getRegister');
 //Route::post('register', 'Auth\AuthController@postRegister');
+
+

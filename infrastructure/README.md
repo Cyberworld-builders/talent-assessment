@@ -88,7 +88,18 @@ ssh -i ~/.ssh/dev-key ec2-user@52.xx.xx.xx
 
 ### SSH Access
 ```bash
-ssh -i ~/.ssh/dev-key ec2-user@<public-ip>
+ssh -i ~/.ssh/dev-key ubuntu@<public-ip>
+```
+
+### Verify Installation
+After deployment, you can verify that all required packages are installed:
+
+```bash
+# Copy verification script to instance
+scp -i ~/.ssh/dev-key verify-installation.sh ubuntu@<public-ip>:/tmp/
+
+# Run verification
+ssh -i ~/.ssh/dev-key ubuntu@<public-ip> "sudo /tmp/verify-installation.sh"
 ```
 
 ## 📁 Infrastructure Components
@@ -100,7 +111,12 @@ ssh -i ~/.ssh/dev-key ec2-user@<public-ip>
 - **Security Group**: Allows HTTP (80), HTTPS (443), SSH (22)
 
 ### Compute
-- **EC2 Instance**: t3.small with Amazon Linux 2
+- **EC2 Instance**: Ubuntu 22.04 LTS with the following packages pre-installed:
+  - Docker & Docker Compose
+  - AWS CLI (for AWS service access)
+  - jq (for JSON processing)
+  - Standard Ubuntu packages (curl, gnupg, etc.)
+- **Instance Type**: t3.small
 - **Key Pair**: SSH access for administration
 - **IAM Role**: Permissions for AWS console access
 
