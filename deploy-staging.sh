@@ -226,16 +226,17 @@ check_application_health() {
     while [ $attempt -le $max_attempts ]; do
         print_status "Health check attempt $attempt/$max_attempts..."
         
-        # Check if the application responds with HTTP 200
-        if curl -f -s -o /dev/null -w "%{http_code}" "$health_url" | grep -q "200"; then
-            print_success "Application is healthy! HTTP 200 received."
+        # Check if the application responds with HTTP 200 or 302 (redirect is OK for Laravel apps)
+        if curl -f -s -o /dev/null -w "%{http_code}" "$health_url" | grep -q "200\|302"; then
+            local http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$health_url" 2>/dev/null)
+            print_success "Application is healthy! HTTP $http_code received."
             return 0
         fi
         
         # Check if the application responds at all (even with error codes)
         if curl -f -s -o /dev/null "$health_url" 2>/dev/null; then
             local http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$health_url" 2>/dev/null)
-            print_warning "Application responded with HTTP $http_code, but not 200. Continuing to check..."
+            print_warning "Application responded with HTTP $http_code, but not 200 or 302. Continuing to check..."
         else
             print_status "Application not responding yet, waiting..."
         fi

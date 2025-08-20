@@ -139,8 +139,9 @@ jobs:
           while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
             echo "Health check attempt $ATTEMPT/$MAX_ATTEMPTS..."
             
-            if curl -f -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" | grep -q "200"; then
-              echo "SUCCESS: Application is healthy! HTTP 200 received."
+            if curl -f -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" | grep -q "200\|302"; then
+              http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" 2>/dev/null || echo "000")
+              echo "SUCCESS: Application is healthy! HTTP $http_code received."
               break
             fi
             
