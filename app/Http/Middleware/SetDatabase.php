@@ -16,6 +16,11 @@ class SetDatabase
      */
     public function handle($request, Closure $next)
     {
+        // Skip database reconnection during testing to avoid PDO transaction issues
+        if (app()->environment('testing')) {
+            return $next($request);
+        }
+
 		if (session('reseller'))
 		{
 			\Config::set('database.connections.mysql.host', session('reseller')->getDbHost());
