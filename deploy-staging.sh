@@ -107,8 +107,8 @@ set_server_environment() {
     export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
     export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
     
-    # Generate APP_KEY properly (32-byte key encoded in base64)
-    export STAGING_APP_KEY=$(openssl rand -base64 32 | tr -d '\n')
+    # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
+    export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
     
     print_success "Server environment variables set."
     print_status "Generated APP_KEY: $STAGING_APP_KEY"
