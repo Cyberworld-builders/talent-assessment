@@ -78,6 +78,12 @@ fetch_secrets() {
     local secret_id="talent-assessment-staging-secrets"
     local secrets_file="secrets.json"
     
+    # Check if secrets file already exists and has content
+    if [ -f "$secrets_file" ] && [ -s "$secrets_file" ]; then
+        print_success "Using existing secrets file."
+        return 0
+    fi
+    
     # Fetch secrets
     if aws secretsmanager get-secret-value --secret-id "$secret_id" --query SecretString --output text > "$secrets_file" 2>/dev/null; then
         print_success "Secrets fetched successfully."
@@ -345,6 +351,31 @@ main() {
     
     # Configure Redis password
     configure_redis
+    
+    # Run database migrations
+    print_status "Running database migrations..."
+    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan migrate --force; then
+        print_success "Database migrations completed successfully."
+    else
+        print_error "Database migrations failed."
+        exit 1
+    fi
+    
+    # Run database seeders
+    print_status "Running database seeders..."
+    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan db:seed; then
+        print_success "Database seeders completed successfully."
+    else
+        print_warning "Database seeders failed, continuing..."
+    fi
+    
+    # Clear all caches
+    print_status "Clearing all caches..."
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan cache:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan config:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan route:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan view:clear
+    print_success "All caches cleared."
     
     # Clean up Docker resources
     cleanup_docker
