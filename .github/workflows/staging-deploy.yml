@@ -109,9 +109,16 @@ jobs:
       run: |
         # Update phpunit.xml with correct database password
         sed -i "s/value=\"password\"/value=\"$STAGING_DB_ROOT_PASSWORD\"/g" phpunit.xml
+        # Update phpunit.xml with correct APP_KEY (will be updated after key generation)
 
     - name: Generate key
       run: php artisan key:generate
+
+    - name: Update PHPUnit with Generated Key
+      run: |
+        # Get the generated APP_KEY from .env and update phpunit.xml
+        APP_KEY=$(grep '^APP_KEY=' .env | cut -d'=' -f2)
+        sed -i "s|value=\"base64:ZthTYciaT0ag0oQ2Q6Y00ZCpw2e9WDko\"|value=\"$APP_KEY\"|g" phpunit.xml
 
     - name: Run Migrations
       run: php artisan migrate --force
