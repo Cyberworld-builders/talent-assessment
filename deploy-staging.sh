@@ -100,15 +100,12 @@ set_server_environment() {
     export STAGING_DB_ROOT_PASSWORD=$(jq -r '.STAGING_DB_ROOT_PASSWORD' "$secrets_file")
     export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
     export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
-    export STAGING_APP_KEY=$(jq -r '.STAGING_APP_KEY' "$secrets_file")
     
-    # Generate APP_KEY if not exists
-    if [ -z "$STAGING_APP_KEY" ] || [ "$STAGING_APP_KEY" = "null" ]; then
-        export STAGING_APP_KEY="base64:$(openssl rand -base64 32)"
-        print_warning "Generated new APP_KEY. Consider storing it in Secrets Manager."
-    fi
+    # Generate APP_KEY properly (without base64: prefix for environment variables)
+    export STAGING_APP_KEY=$(openssl rand -base64 32 | tr -d '\n')
     
     print_success "Server environment variables set."
+    print_status "Generated APP_KEY: $STAGING_APP_KEY"
 }
 
 
@@ -280,6 +277,21 @@ show_usage() {
     echo "  $0 -t abc123 -r 123456789.dkr.ecr.us-east-1.amazonaws.com  # Deploy specific image"
 }
 
+# Function to configure Redis password
+configure_redis() {
+    print_status "Configuring Redis password..."
+    
+    # Wait for Redis to be ready
+    sleep 5
+    
+    # Set Redis password
+    if docker-compose -f docker-compose.staging.yml exec -T redis-staging redis-cli CONFIG SET requirepass "$STAGING_REDIS_PASSWORD"; then
+        print_success "Redis password configured successfully."
+    else
+        print_warning "Failed to configure Redis password, continuing..."
+    fi
+}
+
 # Main function
 main() {
     local image_tag=""
@@ -330,6 +342,9 @@ main() {
     
     # Wait for services to be healthy
     wait_for_services
+    
+    # Configure Redis password
+    configure_redis
     
     # Clean up Docker resources
     cleanup_docker

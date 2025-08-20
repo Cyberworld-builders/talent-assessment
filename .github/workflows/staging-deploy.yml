@@ -73,11 +73,9 @@ jobs:
           export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)
           export STAGING_APP_KEY=$(jq -r '.STAGING_APP_KEY' secrets.json)
           
-          # Generate APP_KEY if not exists
-          if [ -z "$STAGING_APP_KEY" ] || [ "$STAGING_APP_KEY" = "null" ]; then
-            export STAGING_APP_KEY="base64:$(openssl rand -base64 32)"
-            echo "Generated new APP_KEY. Consider storing it in Secrets Manager."
-          fi
+          # Generate APP_KEY properly (without base64: prefix for environment variables)
+          export STAGING_APP_KEY=$(openssl rand -base64 32 | tr -d '\n')
+          echo "Generated APP_KEY: $STAGING_APP_KEY"
           
           # Clean up secrets file
           rm secrets.json
@@ -115,6 +113,11 @@ jobs:
           if [ "$DISK_USAGE" -gt 85 ]; then
             echo "WARNING: Disk usage is still high (${DISK_USAGE}%). Consider manual cleanup or instance resize."
           fi
+          
+          # Configure Redis password
+          echo "Configuring Redis password..."
+          sleep 5
+          docker-compose -f docker-compose.staging.yml exec -T redis-staging redis-cli CONFIG SET requirepass "$STAGING_REDIS_PASSWORD" || echo "Failed to configure Redis password, continuing..."
           
           # Run migrations
           echo "Running database migrations..."
