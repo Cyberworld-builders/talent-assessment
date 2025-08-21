@@ -31,6 +31,7 @@
 	<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('assets/js/TweenMax.min.js') }}"></script>
 	<script src="{{ asset('assets/js/resizeable.js') }}"></script>
+	<script src="{{ asset('assets/js/perfect-scrollbar.jquery.min.js') }}"></script>
 	<script src="{{ asset('assets/js/xenon-api.js') }}"></script>
 	<script src="{{ asset('assets/js/xenon-api.js') }}"></script>
 	<script src="{{ asset('assets/js/xenon-toggles.js') }}"></script>
