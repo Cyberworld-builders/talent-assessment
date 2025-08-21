@@ -15,8 +15,6 @@ class ClientReport extends Model
 		'client_id',
 		'report_id',
 		'job_id',
-		'report',
-		'client',
 		'fields',
 		'enabled',
 		'visible'
