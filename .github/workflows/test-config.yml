@@ -12,7 +12,7 @@ on:
       mysql-version:
         description: 'MySQL version to use'
         required: false
-        default: '5.7'
+        default: '8.0'
         type: string
       database-name:
         description: 'Database name for testing'
@@ -91,6 +91,9 @@ jobs:
 
     - name: Run Migrations
       run: php artisan migrate --force
+
+    - name: Run Database Seeders
+      run: php artisan db:seed --force
 
     - name: Execute tests (via phpunit)
       run: vendor/bin/phpunit --colors=never

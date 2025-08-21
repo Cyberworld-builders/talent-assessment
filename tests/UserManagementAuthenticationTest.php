@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
 use App\Industry;
 use App\Client;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\Session;
 
 class UserManagementAuthenticationTest extends TestCase
 {
-    use DatabaseTransactions;
 
     protected $industry;
     protected $client;

@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Assessment;
 use App\Question;
 use App\Dimension;
@@ -13,9 +12,9 @@ use Bican\Roles\Models\Role;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
+
 class AssessmentManagementTest extends TestCase
 {
-    use DatabaseTransactions;
 
     protected $user;
     protected $client;
@@ -99,6 +98,8 @@ class AssessmentManagementTest extends TestCase
             Role::firstOrCreate(['slug' => $roleData['slug']], $roleData);
         }
     }
+    
+
 
     // ========================================
     // ASSESSMENT CREATION TESTS
