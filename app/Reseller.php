@@ -4,7 +4,7 @@ namespace App;
 
 use Artisan;
 use Aws\Rds\RdsClient;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;

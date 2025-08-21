@@ -15,7 +15,7 @@ use Artisan;
 use Auth;
 use Aws\Rds\RdsClient;
 use Aws\S3\S3Client;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;

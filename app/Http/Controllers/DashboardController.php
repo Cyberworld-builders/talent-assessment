@@ -16,7 +16,7 @@ use App\User;
 use Aws\AwsClient;
 use Aws\Rds\RdsClient;
 use Aws\S3\S3Client;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use CanGelis\PDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
@@ -43,7 +43,7 @@ class DashboardController extends Controller
 		Dimension::updateResellerDimensions();
 
 		// Client Dashboard
-		if ($user->is('client'))
+		if ($user->hasRole('Client Admin'))
 		{
 			$client = Client::findOrFail($user->client_id);
 			$client->home = true;
@@ -713,7 +713,7 @@ class DashboardController extends Controller
 		$user = Auth::user();
 
 		// Client Dashboard
-		if ($user->is('client'))
+		if ($user->hasRole('Client Admin'))
 		{
 			$client = Client::findOrFail($user->client_id);
 

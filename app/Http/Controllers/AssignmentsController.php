@@ -13,7 +13,7 @@ use App\User;
 use App\Answer;
 use App\Assessment;
 use App\Assignment;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -396,7 +396,7 @@ class AssignmentsController extends Controller {
         $clients = Client::all();
         $assessments = Assessment::all();
 
-        if (\Auth::user()->is('client'))
+        if (\Auth::user()->hasRole('Client Admin'))
         {
             $assessments = '';
             if (\Auth::user()->client->assessments)
@@ -572,7 +572,7 @@ class AssignmentsController extends Controller {
 		if (! key_exists('whitelabel', $data))
 		{
 			// If it's a client admin, set it to their whitelabel preferences
-			if (\Auth::user()->is('client'))
+			if (\Auth::user()->hasRole('Client Admin'))
 				$data['whitelabel'] = \Auth::user()->client->whitelabel;
 
 			// Otherwise, don't whitelabel
@@ -1247,7 +1247,7 @@ class AssignmentsController extends Controller {
     {
         $assignment = Assignment::findOrFail($id);
 
-        if (Auth::user()->is('client') && ($assignment->user->client != Auth::user()->client))
+        if (Auth::user()->hasRole('Client Admin') && ($assignment->user->client != Auth::user()->client))
         	abort('403', 'Error: Trying to delete non-existing assignment.');
 
         // Delete the assignment itself

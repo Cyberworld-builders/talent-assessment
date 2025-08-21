@@ -8,7 +8,7 @@ use App\Client;
 use App\Job;
 use App\Post;
 use App\User;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
