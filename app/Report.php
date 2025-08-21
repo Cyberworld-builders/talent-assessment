@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Report extends Model
 {
-	protected $table = 'new_reports';
+	protected $table = 'reports';
 
 	/**
 	 * The columns allowed to be filled.
@@ -18,19 +18,7 @@ class Report extends Model
 		'assessments',
 		'view',
 		'fields',
-		'name',
-		'job_id',
-		'client_id',
-		'score_method',
-		'weights',
-		'divisions',
-		'model',
-		'model_filename',
-		'model_factors',
-		'model_configured',
-		'scores',
-		'show_fit',
-		'show_item_data',
+		'name'
 	];
 
 	/**
@@ -40,13 +28,7 @@ class Report extends Model
 	*/
 	public $timestamps = false;
 
-	public function job()
-	{
-		if ($this->job_id)
-			return Job::find($this->job_id);
 
-		return false;
-	}
 
 	public function customized()
 	{
