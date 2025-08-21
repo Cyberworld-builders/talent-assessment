@@ -111,7 +111,7 @@
 				</a>
 			</li>
 
-			@role('admin')
+			@role('AOE Admin')
 				<li>
 					<a href="{{ url('dashboard/assessments') }}">
 						<i class="fa-list-alt"></i>
@@ -156,7 +156,7 @@
 				</li>
 			@endrole
 
-			@role('reseller')
+			@role('Reseller')
 			<li>
 				<a href="{{ url('dashboard/clients') }}">
 					<i class="fa-building-o"></i>
@@ -171,7 +171,7 @@
 			</li>
 			@endrole
 
-			@role('client')
+			@role('Client Admin')
 				<li>
 					{{-- Temporarily disabled
 					<a href="{{ url('dashboard/selection') }}">

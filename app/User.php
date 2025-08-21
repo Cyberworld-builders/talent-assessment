@@ -99,6 +99,78 @@ class User extends Model implements AuthenticatableContract,
         return $this->completedAssignments()->count() == $this->assignments->count();
     }
 
+    /**
+     * Compatibility method for old bican/roles is() method
+     * @param string $role
+     * @return bool
+     */
+    public function is($role)
+    {
+        // Handle pipe-separated roles (e.g., 'admin|reseller')
+        if (strpos($role, '|') !== false) {
+            $roles = explode('|', $role);
+            foreach ($roles as $r) {
+                if ($this->hasRole($r)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Map old role names to new ones
+        $roleMap = [
+            'admin' => 'AOE Admin',
+            'reseller' => 'Reseller',
+            'client' => 'Client Admin',
+            'user' => 'User'
+        ];
+
+        $newRole = $roleMap[$role] ?? $role;
+        return $this->hasRole($newRole);
+    }
+
+    /**
+     * Compatibility method for old bican/roles level() method
+     * @return int
+     */
+    public function level()
+    {
+        $role = $this->roles()->first();
+        if ($role) {
+            return $role->level ?? 1;
+        }
+        return 1;
+    }
+
+    /**
+     * Compatibility method for old bican/roles isReseller() method
+     * @return bool
+     */
+    public function isReseller()
+    {
+        return $this->hasRole('Reseller');
+    }
+
+    /**
+     * Compatibility method for old bican/roles isAdmin() method
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('AOE Admin');
+    }
+
+    /**
+     * Compatibility method for old bican/roles isClient() method
+     * @return bool
+     */
+    public function isClient()
+    {
+        return $this->hasRole('Client Admin');
+    }
+
+
+
 	/**
      * The number of assessments the user has completed for a specific job.
      *
@@ -498,6 +570,15 @@ class User extends Model implements AuthenticatableContract,
 
 	public function has($roleSlug)
 	{
-		return $this->hasRole($roleSlug);
+		// Map old role names to new ones
+		$roleMap = [
+			'admin' => 'AOE Admin',
+			'reseller' => 'Reseller',
+			'client' => 'Client Admin',
+			'user' => 'User'
+		];
+
+		$newRole = $roleMap[$roleSlug] ?? $roleSlug;
+		return $this->hasRole($newRole);
 	}
 }

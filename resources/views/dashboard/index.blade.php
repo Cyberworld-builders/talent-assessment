@@ -86,7 +86,7 @@
 							<i class="fa-asterisk text-info"></i>
 							<p>Installed SSL certificate on my.aoescience.com.</p>
 						</li>
-						@role('admin')
+						@role('AOE Admin')
 						<li>
 							<i class="fa-asterisk text-info"></i>
 							<p>Edit Assignment view updated to be the same as the Assign Assessments view.</p>

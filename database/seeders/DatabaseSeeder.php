@@ -14,8 +14,14 @@ class DatabaseSeeder extends Seeder
         // Disable foreign key checks during seeding
         \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Call other seeders
+        // Call other seeders in the correct order
         $this->call([
+            LanguageTableSeeder::class,
+            RoleTableSeeder::class,
+            UserTableSeeder::class,
+            ClientTableSeeder::class,
+            IndustriesTableSeeder::class,
+            FeedbackLibrariesTableSeeder::class,
             DimensionsTableSeeder::class,
         ]);
 

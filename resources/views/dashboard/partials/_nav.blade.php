@@ -5,15 +5,15 @@
 
 		<li class="current-time">
 			{{--<h3>{{ date("l, M. j, Y, g:i a") }}</h3>--}}
-			@role('admin')
+			@role('AOE Admin')
 				<h3><i class="linecons-user text-warning"></i> AOE Admin</h3>
 			@endrole
 
-			@role('reseller')
+			@role('Reseller')
 				<h3><i class="linecons-user text-muted"></i> Admin</h3>
 			@endrole
 
-			@role('client')
+			@role('Client Admin')
 				<h3><i class="linecons-user"></i> {{ \Auth::user()->client->name }}</h3>
 			@endrole
 		</li>

@@ -228,6 +228,16 @@ class AuthController extends Controller
     }
 
     /**
+     * Get the post-login redirect path.
+     *
+     * @return string
+     */
+    protected function redirectPath()
+    {
+        return '/dashboard';
+    }
+
+    /**
      * Send the response after the user was authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -244,13 +254,13 @@ class AuthController extends Controller
             return $this->authenticated($request, \Auth::user());
         }
 
-        if (\Auth::user()->is('admin'))
+        if (\Auth::user()->hasRole('AOE Admin'))
             return redirect()->intended($this->redirectPath());
 
-        if (\Auth::user()->is('reseller'))
+        if (\Auth::user()->hasRole('Reseller'))
         	return redirect('/dashboard');
 
-        if (\Auth::user()->is('client'))
+        if (\Auth::user()->hasRole('Client Admin'))
         	return redirect('/dashboard');
 
         if (\Auth::user()->completed_profile)
