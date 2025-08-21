@@ -1439,8 +1439,14 @@ class AssignmentsController extends Controller {
         $user = User::find($data['id']);
 
         $assessments = [];
-        foreach ($data['assessments'] as $assessmentId)
-            array_push($assessments, Assessment::find($assessmentId));
+        // Check if assessments is an array or string and handle accordingly
+        if (is_array($data['assessments'])) {
+            foreach ($data['assessments'] as $assessmentId)
+                array_push($assessments, Assessment::find($assessmentId));
+        } else {
+            // If it's a string, treat it as a single assessment ID
+            $assessments[] = Assessment::find($data['assessments']);
+        }
 
         return \Response::json([
             'user' => $user,
