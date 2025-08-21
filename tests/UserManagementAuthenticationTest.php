@@ -43,8 +43,44 @@ class UserManagementAuthenticationTest extends TestCase
             'require_research' => true
         ]);
         
+        // Ensure roles exist for testing
+        $this->createRolesIfNeeded();
+        
         // Debug: Check client settings
         echo "Debug: Client require_profile: " . ($this->client->require_profile ? 'true' : 'false') . "\n";
+    }
+    
+    /**
+     * Create roles if they don't exist (for CI environment)
+     */
+    private function createRolesIfNeeded()
+    {
+        $roles = [
+            [
+                'name' => 'AOE Admin',
+                'slug' => 'admin',
+                'level' => 4
+            ],
+            [
+                'name' => 'Reseller',
+                'slug' => 'reseller',
+                'level' => 3
+            ],
+            [
+                'name' => 'Client Admin',
+                'slug' => 'client',
+                'level' => 2
+            ],
+            [
+                'name' => 'User',
+                'slug' => 'user',
+                'level' => 1
+            ]
+        ];
+        
+        foreach ($roles as $roleData) {
+            Role::firstOrCreate(['slug' => $roleData['slug']], $roleData);
+        }
     }
 
     // ========================================
@@ -77,7 +113,8 @@ class UserManagementAuthenticationTest extends TestCase
         $this->assertFalse($user->completed_profile);
         
         // Test role assignment
-        $userRole = Role::find(4); // User role
+        $userRole = Role::where('slug', 'user')->first(); // User role
+        $this->assertNotNull($userRole, 'User role should exist in database');
         $user->attachRole($userRole);
         
         // Verify role was assigned
