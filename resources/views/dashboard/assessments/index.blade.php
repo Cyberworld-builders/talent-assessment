@@ -62,11 +62,11 @@
 						<!-- Body -->
 						<div class="body">
 							<h3>
-								@role('admin')
+								@role('AOE Admin')
 									<a href="{{ url('dashboard/assessments/'.$assessment->id.'/edit') }}">
 								@endrole
 										{{ $assessment->name }}
-								@role('admin')
+								@role('AOE Admin')
 									</a>
 								@endrole
 							</h3>
@@ -75,7 +75,7 @@
 
 						<!-- Controls -->
 						<div class="controls">
-							@role('admin')
+							@role('AOE Admin')
 								{!! Form::open(['method' => 'delete', 'action' => ['AssessmentsController@destroy', $assessment->id]]) !!}
 									<a class="control" href="{{ url('dashboard/assessments/'.$assessment->id) }}">
 										<i class="fa-eye"></i><br/>
@@ -95,7 +95,7 @@
 									</a>
 								{!! Form::close() !!}
 							@endrole
-							@role('client')
+							@role('Client Admin')
 								<a class="control" href="{{ url('dashboard/assign') }}">
 									<i class="fa-paper-plane-o"></i><br/>
 									<span>Assign</span>
@@ -136,7 +136,7 @@
 
 								{{--<!-- Controls -->--}}
 								{{--<div class="controls">--}}
-									{{--@role('admin')--}}
+									{{--@role('AOE Admin')--}}
 										{{--<a class="control" href="{{ url('dashboard/translations/'.$translation->id.'/edit') }}">--}}
 											{{--<i class="fa-edit"></i> <span>Edit</span>--}}
 										{{--</a>--}}

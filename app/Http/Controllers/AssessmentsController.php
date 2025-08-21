@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Assignment;
 use App\Client;
 use Aws\S3\S3Client;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 use App\Dimension;
@@ -31,7 +31,7 @@ class AssessmentsController extends Controller
 	{
 		$assessments = Assessment::all();
 
-		if (\Auth::user()->is('client'))
+		if (\Auth::user()->hasRole('Client Admin'))
 		{
 			$assessments = Assessment::all()->filter(function ($assessment) {
 				$clientAssessments = \Auth::user()->client->assessments;
