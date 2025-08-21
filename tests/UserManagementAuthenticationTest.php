@@ -108,11 +108,13 @@ class UserManagementAuthenticationTest extends TestCase
         $this->assertEquals($this->industry->id, $user->industry_id);
         $this->assertEquals($this->language->id, $user->language_id);
         $this->assertEquals($this->client->id, $user->client_id);
-        $this->assertFalse($user->completed_profile);
+        $this->assertFalse((bool)$user->completed_profile);
         
         // Test role assignment
-        $userRole = Role::where('slug', 'user')->first(); // User role
-        $this->assertNotNull($userRole, 'User role should exist in database');
+        $userRole = Role::updateOrCreate(
+            ['name' => 'User', 'guard_name' => 'web'],
+            ['slug' => 'user', 'description' => 'User role', 'level' => 1]
+        );
         $user->attachRole($userRole);
         
         // Verify role was assigned
@@ -141,7 +143,7 @@ class UserManagementAuthenticationTest extends TestCase
             $this->fail('Expected exception for duplicate username was not thrown');
         } catch (\Exception $e) {
             // This is expected - duplicate username should cause an exception
-            $this->assertContains('Duplicate', $e->getMessage());
+            $this->assertStringContainsString('Duplicate', $e->getMessage());
         }
 
         // Verify only one user exists with that username
@@ -228,10 +230,10 @@ class UserManagementAuthenticationTest extends TestCase
             'password' => 'password123'
         ];
 
-        $this->visit('/login')
-             ->type($loginData['username'], 'username')
-             ->type($loginData['password'], 'password')
-             ->press('Log In');
+        $this->post('/login', [
+            'username' => $loginData['username'],
+            'password' => $loginData['password']
+        ]);
 
         // Verify user is authenticated
         $this->assertTrue(Auth::check());
@@ -249,10 +251,10 @@ class UserManagementAuthenticationTest extends TestCase
             'language_id' => $this->language->id
         ]);
 
-        $this->visit('/login')
-             ->type($user->username, 'username')
-             ->type('wrongpassword', 'password')
-             ->press('Log In');
+        $this->post('/login', [
+            'username' => $user->username,
+            'password' => 'wrongpassword'
+        ]);
 
         // Verify user is not authenticated
         $this->assertFalse(Auth::check());
@@ -263,10 +265,10 @@ class UserManagementAuthenticationTest extends TestCase
      */
     public function testLoginWithNonExistentUsername()
     {
-        $this->visit('/login')
-             ->type('nonexistentuser', 'username')
-             ->type('password123', 'password')
-             ->press('Log In');
+        $this->post('/login', [
+            'username' => 'nonexistentuser',
+            'password' => 'password123'
+        ]);
 
         // Verify user is not authenticated
         $this->assertFalse(Auth::check());
@@ -287,7 +289,7 @@ class UserManagementAuthenticationTest extends TestCase
         // Verify user is authenticated
         $this->assertTrue(Auth::check());
 
-        $this->visit('/logout');
+        $this->post('/logout');
         
         // Verify user is no longer authenticated
         $this->assertFalse(Auth::check());
@@ -409,10 +411,10 @@ class UserManagementAuthenticationTest extends TestCase
         $this->assertFalse(Auth::check());
         
         // Try to access protected route - should redirect to login
-        $this->call('GET', '/profile');
+        $response = $this->call('GET', '/profile');
         
         // Verify we get a redirect response (to login)
-        $this->assertResponseStatus(302);
+        $this->assertTrue($response->getStatusCode() == 302);
     }
 
     /**
@@ -428,10 +430,10 @@ class UserManagementAuthenticationTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->visit('/profile');
+        $response = $this->get('/profile');
 
         // Should see profile form
-        $this->see('Profile');
+        $response->assertSee('Profile');
     }
 
     /**
@@ -448,9 +450,9 @@ class UserManagementAuthenticationTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->visit('/profile');
+        $response = $this->get('/profile');
 
         // Should redirect to assignments when profile is complete
-        $this->seePageIs('https://localhost/assignments');
+        $response->assertRedirect('/assignments');
     }
 }

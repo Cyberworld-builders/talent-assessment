@@ -43,6 +43,65 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Global factory() function for backward compatibility with Laravel 5.1 tests
+|--------------------------------------------------------------------------
+*/
+if (!function_exists('factory')) {
+    function factory($class, $attributes = [])
+    {
+        // Simple factory function for backward compatibility
+        if ($class === App\User::class || $class === 'App\User') {
+            return App\User::create(array_merge([
+                'username' => 'testuser_' . uniqid(),
+                'name' => 'Test User',
+                'email' => 'test_' . uniqid() . '@example.com',
+                'password' => bcrypt('password'),
+            ], $attributes));
+        }
+        
+        if ($class === App\Assessment::class || $class === 'App\Assessment') {
+            return App\Assessment::create(array_merge([
+                'name' => 'Test Assessment',
+                'description' => 'Test Description',
+                'logo' => '',
+                'background' => '',
+                'paginate' => 10,
+                'items_per_page' => 10,
+                'timed' => 0,
+                'use_custom_fields' => 0,
+                'target' => 1,
+                'last_modified' => \Carbon\Carbon::now(),
+                'user_id' => 1, // Default user_id (will be overridden if provided in attributes)
+            ], $attributes));
+        }
+        
+        if ($class === App\Dimension::class || $class === 'App\Dimension') {
+            return App\Dimension::create(array_merge([
+                'name' => 'Test Dimension',
+                'parent' => 0,
+                'code' => 'TST',
+            ], $attributes));
+        }
+        
+        if ($class === App\Industry::class || $class === 'App\Industry') {
+            return App\Industry::create(array_merge([
+                'name' => 'Test Industry',
+            ], $attributes));
+        }
+        
+        if ($class === App\Benchmark::class || $class === 'App\Benchmark') {
+            return App\Benchmark::create(array_merge([
+                'value' => 75,
+            ], $attributes));
+        }
+        
+        // Default fallback
+        return new $class($attributes);
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |

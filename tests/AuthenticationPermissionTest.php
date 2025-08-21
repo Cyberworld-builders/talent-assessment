@@ -216,7 +216,7 @@ class AuthenticationPermissionTest extends TestCase
         
         // If it's a redirect, check the location
         if ($response->getStatusCode() == 302) {
-            $this->assertStringContains('login', $response->headers->get('Location'));
+            $this->assertStringContainsString('login', $response->headers->get('Location'));
         }
     }
 
@@ -242,7 +242,7 @@ class AuthenticationPermissionTest extends TestCase
         
         // If it's a redirect, check the location
         if ($response->getStatusCode() == 302) {
-            $this->assertStringContains('login', $response->headers->get('Location'));
+            $this->assertStringContainsString('login', $response->headers->get('Location'));
         }
     }
 }

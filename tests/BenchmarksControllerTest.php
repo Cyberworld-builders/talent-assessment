@@ -24,10 +24,11 @@ class BenchmarksControllerTest extends TestCase
         $user = factory(App\User::class)->create();
 
         // Assign admin role to user (level 4)
-        $adminRole = \Bican\Roles\Models\Role::firstOrCreate(
-            ['slug' => 'admin'],
+        $adminRole = \Spatie\Permission\Models\Role::updateOrCreate(
+            ['name' => 'AOE Admin', 'guard_name' => 'web'],
             [
-                'name' => 'Admin',
+                'slug' => 'aoe-admin',
+                'description' => 'AOE Admin role',
                 'level' => 4,
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()

@@ -14,10 +14,19 @@ class ViewPermissionTest extends TestCase
     {
         parent::setUp();
         
-        // Create roles
-        $adminRole = Role::firstOrCreate(['name' => 'AOE Admin', 'guard_name' => 'web']);
-        $resellerRole = Role::firstOrCreate(['name' => 'Reseller', 'guard_name' => 'web']);
-        $clientRole = Role::firstOrCreate(['name' => 'Client Admin', 'guard_name' => 'web']);
+        // Create roles with proper attributes
+        $adminRole = Role::updateOrCreate(
+            ['name' => 'AOE Admin', 'guard_name' => 'web'],
+            ['slug' => 'aoe-admin', 'description' => 'AOE Admin role', 'level' => 4]
+        );
+        $resellerRole = Role::updateOrCreate(
+            ['name' => 'Reseller', 'guard_name' => 'web'],
+            ['slug' => 'reseller', 'description' => 'Reseller role', 'level' => 3]
+        );
+        $clientRole = Role::updateOrCreate(
+            ['name' => 'Client Admin', 'guard_name' => 'web'],
+            ['slug' => 'client-admin', 'description' => 'Client Admin role', 'level' => 2]
+        );
 
         // Create users with unique emails
         $this->adminUser = User::create([
@@ -27,6 +36,7 @@ class ViewPermissionTest extends TestCase
             'password' => bcrypt('password'),
         ]);
         $this->adminUser->assignRole($adminRole);
+        $this->adminUser->refresh(); // Refresh to load relationships
 
         $this->resellerUser = User::create([
             'username' => 'reseller_' . uniqid(),
@@ -35,6 +45,7 @@ class ViewPermissionTest extends TestCase
             'password' => bcrypt('password'),
         ]);
         $this->resellerUser->assignRole($resellerRole);
+        $this->resellerUser->refresh(); // Refresh to load relationships
 
         $this->clientUser = User::create([
             'username' => 'client_' . uniqid(),
@@ -43,6 +54,7 @@ class ViewPermissionTest extends TestCase
             'password' => bcrypt('password'),
         ]);
         $this->clientUser->assignRole($clientRole);
+        $this->clientUser->refresh(); // Refresh to load relationships
     }
 
     /**
@@ -241,8 +253,11 @@ class ViewPermissionTest extends TestCase
      */
     public function testOldRoleNamesDontWork()
     {
-        // Create a user with old role name to test
-        $oldAdminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        // Create a user with old role name to test (but give them level 2 so they can access dashboard)
+        $oldAdminRole = Role::updateOrCreate(
+            ['name' => 'admin', 'guard_name' => 'web'],
+            ['slug' => 'admin', 'description' => 'Old admin role', 'level' => 2]
+        );
         $oldAdminUser = User::create([
             'username' => 'oldadmin',
             'name' => 'Old Admin User',

@@ -134,7 +134,7 @@ class User extends Model implements AuthenticatableContract,
             'user' => 'User'
         ];
 
-        $newRole = $roleMap[$role] ?? $role;
+        $newRole = $roleMap[(string)$role] ?? $role;
         return $this->hasRole($newRole);
     }
 
@@ -144,7 +144,12 @@ class User extends Model implements AuthenticatableContract,
      */
     public function level()
     {
-        $role = $this->roles()->first();
+        // Ensure roles are loaded
+        if (!$this->relationLoaded('roles')) {
+            $this->load('roles');
+        }
+        
+        $role = $this->roles->first();
         if ($role) {
             return $role->level ?? 1;
         }
@@ -176,6 +181,47 @@ class User extends Model implements AuthenticatableContract,
     public function isClient()
     {
         return $this->hasRole('Client Admin');
+    }
+
+    /**
+     * Compatibility method for old bican/roles attachRole() method
+     * @param mixed $role
+     * @return $this
+     */
+    public function attachRole($role)
+    {
+        if (is_string($role)) {
+            $role = \Spatie\Permission\Models\Role::where('name', $role)->first();
+        }
+        if ($role) {
+            $this->assignRole($role);
+        }
+        return $this;
+    }
+
+    /**
+     * Compatibility method for old bican/roles detachAllRoles() method
+     * @return $this
+     */
+    public function detachAllRoles()
+    {
+        $this->syncRoles([]);
+        return $this;
+    }
+
+    /**
+     * Compatibility method for old Laravel 5.1 factory() function
+     * @param string $class
+     * @return \Illuminate\Database\Eloquent\FactoryBuilder
+     */
+    public static function factory($class = null)
+    {
+        if ($class === null) {
+            $class = static::class;
+        }
+        
+        // Use the old factory format for backward compatibility
+        return app('Illuminate\Database\Eloquent\FactoryBuilder')->of($class);
     }
 
 

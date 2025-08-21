@@ -17,7 +17,9 @@ class LevelMiddleware
      */
     public function handle(Request $request, Closure $next, $level)
     {
-        if (!$request->user() || $request->user()->level() < $level) {
+        $user = $request->user();
+        
+        if (!$user || $user->level() < $level) {
             \Auth::logout();
             return redirect('/login');
         }

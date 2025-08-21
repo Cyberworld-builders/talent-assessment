@@ -39,8 +39,12 @@ class DashboardController extends Controller
 	public function index(Request $request)
     {
 		$user = Auth::user();
-		Assessment::updateResellerAssessments();
-		Dimension::updateResellerDimensions();
+		
+		// Only update reseller data if user is a reseller
+		if ($user->hasRole('Reseller')) {
+			Assessment::updateResellerAssessments();
+			Dimension::updateResellerDimensions();
+		}
 
 		// Client Dashboard
 		if ($user->hasRole('Client Admin'))
