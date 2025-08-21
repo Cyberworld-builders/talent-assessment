@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Question;
 use App\Assessment;
 use App\Dimension;
@@ -13,7 +12,6 @@ use Bican\Roles\Models\Role;
 
 class QuestionManagementTest extends TestCase
 {
-    use DatabaseTransactions;
 
     protected $user;
     protected $client;
