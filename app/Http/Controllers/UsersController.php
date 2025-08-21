@@ -7,7 +7,7 @@ use App\Language;
 use App\Research;
 use App\User;
 use App\Industry;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -289,15 +289,19 @@ class UsersController extends Controller
 
 		// If Reseller, don't include AOE Admin role
 		if (Auth::user()->isReseller())
-			$roles = Role::all()->except(1);
+			$roles = Role::where('name', '!=', 'AOE Admin')->get();
 
         $rolesArray = [];
         foreach ($roles as $role)
             $rolesArray[$role->id] = $role->name;
 
 		// If Reseller, make reseller role the admin role
-		if (Auth::user()->isReseller())
-			$rolesArray[2] = 'Administrator';
+		if (Auth::user()->isReseller()) {
+			$resellerRole = Role::where('name', 'Reseller')->first();
+			if ($resellerRole) {
+				$rolesArray[$resellerRole->id] = 'Administrator';
+			}
+		}
 
         $clientsArray = [null => '---'];
         foreach ($clients as $client)
@@ -364,7 +368,7 @@ class UsersController extends Controller
         $user->save();
 
         $role = Role::find($data['role']);
-        $user->attachRole($role);
+        $user->assignRole($role);
 
         return redirect()->back()->with('success', 'User '.$user->name.' created successfully!');
     }
@@ -394,19 +398,22 @@ class UsersController extends Controller
         $clients = Client::all();
         $industries = Industry::orderBy('name')->get();
 
-		$rolesArray = [
-			1 => 'AOE Admin',
-			3 => 'Client Admin',
-			4 => 'User'
-		];
+		// Build roles array dynamically
+		$rolesArray = [];
+		$roles = Role::all();
+		
+		foreach ($roles as $role) {
+			$rolesArray[$role->id] = $role->name;
+		}
 
-		// If Reseller, don't include AOE Admin role
-		if (Auth::user()->isReseller())
-			$rolesArray = [
-				2 => 'Administrator',
-				3 => 'Client Admin',
-				4 => 'User'
-			];
+		// If Reseller, don't include AOE Admin role and rename Reseller to Administrator
+		if (Auth::user()->isReseller()) {
+			unset($rolesArray[1]); // Remove AOE Admin
+			$resellerRole = Role::where('name', 'Reseller')->first();
+			if ($resellerRole) {
+				$rolesArray[$resellerRole->id] = 'Administrator';
+			}
+		}
 
 		// If self, don't allow role change at all
 		if (Auth::user()->id == $user->id)
@@ -468,8 +475,7 @@ class UsersController extends Controller
         $user->update($data);
 
         $role = Role::find($data['role']);
-        $user->detachAllRoles();
-        $user->attachRole($role);
+        $user->syncRoles([$role]);  // This replaces detachAllRoles + attachRole
 
         return redirect()->back()->with('success', 'User updated successfully!');
     }
@@ -487,7 +493,7 @@ class UsersController extends Controller
 		if ($user->id == \Auth::user()->id)
 			return redirect()->back()->with('error', 'Cannot delete self.');
 
-        $user->detachAllRoles();
+        $user->syncRoles([]);  // Remove all roles
         $user->delete();
 
         return redirect()->back()->with('success', 'User '.$user->name.' deleted successfully!');
@@ -572,7 +578,7 @@ class UsersController extends Controller
             try {
                 $user->save();
                 $role = Role::find(4);
-                $user->attachRole($role);
+                $user->assignRole($role);
                 $count += 1;
 
                 // Add as applicant of job, if set
@@ -644,7 +650,7 @@ class UsersController extends Controller
 			try {
 				$user->save();
 				$role = Role::find(4);
-				$user->attachRole($role);
+				$user->assignRole($role);
 			}
 
 			// If can't save, must be a duplicate entry

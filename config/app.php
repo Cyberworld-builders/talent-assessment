@@ -160,6 +160,7 @@ return [
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
 		Aws\Laravel\AwsServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -212,6 +213,8 @@ return [
 
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
 		'AWS'       => Aws\Laravel\AwsFacade::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
 
     ],
 

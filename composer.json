@@ -16,7 +16,8 @@
 
         "league/flysystem": "^3.0",
         "mathjax/mathjax": "^2.7",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "laravelcollective/html": "^6.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.20",
