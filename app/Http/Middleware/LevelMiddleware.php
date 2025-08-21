@@ -11,11 +11,17 @@ class LevelMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure  $next
+     * @param  int  $level
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $level)
     {
+        if (!$request->user() || $request->user()->level() < $level) {
+            \Auth::logout();
+            return redirect('/login');
+        }
+
         return $next($request);
     }
 }
