@@ -109,8 +109,17 @@ class User extends Model implements AuthenticatableContract,
         // Handle pipe-separated roles (e.g., 'admin|reseller')
         if (strpos($role, '|') !== false) {
             $roles = explode('|', $role);
+            $roleMap = [
+                'admin' => 'AOE Admin',
+                'reseller' => 'Reseller',
+                'client' => 'Client Admin',
+                'user' => 'User'
+            ];
+            
             foreach ($roles as $r) {
-                if ($this->hasRole($r)) {
+                $r = trim($r);
+                $mappedRole = $roleMap[$r] ?? $r;
+                if ($this->hasRole($mappedRole)) {
                     return true;
                 }
             }
