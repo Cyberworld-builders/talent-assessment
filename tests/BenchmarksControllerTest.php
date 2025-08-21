@@ -24,16 +24,15 @@ class BenchmarksControllerTest extends TestCase
         $user = factory(App\User::class)->create();
 
         // Assign admin role to user (level 4)
-        $adminRole = \Bican\Roles\Models\Role::where('level', 4)->first();
-        if (!$adminRole) {
-            $adminRole = \Bican\Roles\Models\Role::create([
+        $adminRole = \Bican\Roles\Models\Role::firstOrCreate(
+            ['slug' => 'admin'],
+            [
                 'name' => 'Admin',
-                'slug' => 'admin',
                 'level' => 4,
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
-            ]);
-        }
+            ]
+        );
         $user->attachRole($adminRole);
 
         // Create a test assessment
