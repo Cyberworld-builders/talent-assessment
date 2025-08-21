@@ -19,7 +19,7 @@ class ProfileSetupComprehensiveTest extends TestCase
     protected $client;
     protected $language;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

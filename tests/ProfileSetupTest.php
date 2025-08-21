@@ -16,7 +16,7 @@ class ProfileSetupTest extends TestCase
     protected $industry;
     protected $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

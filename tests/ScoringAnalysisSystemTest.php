@@ -15,7 +15,7 @@ use App\Weight;
 use App\Benchmark;
 use App\Industry;
 use App\Http\Controllers\ScoringController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +32,7 @@ class ScoringAnalysisSystemTest extends TestCase
     protected $dimensions;
     protected $industry;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

@@ -18,7 +18,7 @@ use App\Report;
 use App\ClientReport;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ScoringController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -39,7 +39,7 @@ class ReportingSystemTest extends TestCase
     protected $industry;
     protected $report;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

@@ -86,7 +86,7 @@ class FeedbackLibraryTest extends TestCase
         ]);
 
         // Try to create second library with same name - should fail
-        $this->setExpectedException(\Illuminate\Database\QueryException::class);
+        $this->expectException(\Illuminate\Database\QueryException::class);
         
         FeedbackLibrary::create([
             'name' => 'Unique Test Library',

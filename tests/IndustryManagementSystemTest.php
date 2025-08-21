@@ -12,7 +12,7 @@ use App\Benchmark;
 use App\Language;
 use App\Job;
 use App\Http\Controllers\IndustriesController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +26,7 @@ class IndustryManagementSystemTest extends TestCase
     protected $dimensions;
     protected $industriesController;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         
@@ -204,7 +204,7 @@ class IndustryManagementSystemTest extends TestCase
         Industry::create(['name' => 'Unique Industry Test']);
 
         // Try to create duplicate - should fail
-        $this->setExpectedException('Illuminate\Database\QueryException');
+        $this->expectException('Illuminate\Database\QueryException');
         
         Industry::create(['name' => 'Unique Industry Test']);
     }
@@ -803,7 +803,7 @@ class IndustryManagementSystemTest extends TestCase
         $benchmarkId = $benchmark->id;
 
         // Test that we cannot delete industry with associated users (foreign key constraint)
-        $this->setExpectedException('Illuminate\Database\QueryException');
+        $this->expectException('Illuminate\Database\QueryException');
         $industry->delete();
 
         // Verify industry still exists

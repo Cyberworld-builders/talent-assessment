@@ -10,7 +10,7 @@ use App\User;
 use App\Client;
 use App\Language;
 use App\Job;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 
 class AssignmentAssessmentTakingTest extends TestCase
@@ -22,7 +22,7 @@ class AssignmentAssessmentTakingTest extends TestCase
     protected $assessment;
     protected $job;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

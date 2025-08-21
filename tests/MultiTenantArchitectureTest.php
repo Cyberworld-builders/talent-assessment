@@ -22,7 +22,7 @@ use App\Analysis;
 use App\Reseller;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ResellersController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +43,7 @@ class MultiTenantArchitectureTest extends TestCase
     protected $industry;
     protected $clientsController;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

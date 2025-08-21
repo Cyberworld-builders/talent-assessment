@@ -18,7 +18,7 @@ class ProfileControllerTest extends TestCase
     protected $client;
     protected $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

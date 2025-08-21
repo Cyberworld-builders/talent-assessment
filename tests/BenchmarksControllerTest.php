@@ -6,7 +6,7 @@ class BenchmarksControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Disable middleware that might interfere with testing

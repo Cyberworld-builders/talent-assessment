@@ -14,7 +14,7 @@ class ProfileFormViewTest extends TestCase
     protected $user;
     protected $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

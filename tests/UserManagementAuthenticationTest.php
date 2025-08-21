@@ -6,7 +6,7 @@ use App\User;
 use App\Industry;
 use App\Client;
 use App\Language;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -17,7 +17,7 @@ class UserManagementAuthenticationTest extends TestCase
     protected $client;
     protected $language;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

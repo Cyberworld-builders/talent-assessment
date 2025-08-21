@@ -8,7 +8,7 @@ use App\Dimension;
 use App\User;
 use App\Client;
 use App\Language;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 
 class QuestionManagementTest extends TestCase
 {
@@ -19,7 +19,7 @@ class QuestionManagementTest extends TestCase
     protected $dimension;
     protected $assessment;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         

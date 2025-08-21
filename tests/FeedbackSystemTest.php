@@ -14,7 +14,7 @@ use App\Assignment;
 use App\Language;
 use App\Job;
 use App\Http\Controllers\FeedbackController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class FeedbackSystemTest extends TestCase
     protected $dimensions;
     protected $feedbackController;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         
@@ -337,7 +337,7 @@ class FeedbackSystemTest extends TestCase
             'feedback' => ['test' => 'value1']
         ]);
 
-        $this->setExpectedException('Illuminate\Database\QueryException');
+        $this->expectException('Illuminate\Database\QueryException');
         
         FeedbackLibrary::create([
             'name' => 'Unique Name Test',

@@ -15,7 +15,7 @@ use App\Language;
 use App\Job;
 use App\Http\Controllers\BenchmarksController;
 use App\Http\Controllers\ScoringController;
-use Bican\Roles\Models\Role;
+use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,7 +34,7 @@ class BenchmarkSystemTest extends TestCase
     protected $benchmarksController;
     protected $scoringController;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         
@@ -251,7 +251,7 @@ class BenchmarkSystemTest extends TestCase
         ]);
 
         // Try to create duplicate - should fail
-        $this->setExpectedException('Illuminate\Database\QueryException');
+        $this->expectException('Illuminate\Database\QueryException');
         
         Benchmark::create([
             'dimension_id' => $this->dimensions['leadership']->id,
