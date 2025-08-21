@@ -32,8 +32,8 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         //'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-        'role' => \Bican\Roles\Middleware\VerifyRole::class,
-        'permission' => \Bican\Roles\Middleware\VerifyPermission::class,
-        'level' => \Bican\Roles\Middleware\VerifyLevel::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }

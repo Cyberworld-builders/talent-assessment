@@ -11,9 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // Disable foreign key checks during seeding
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         // Call other seeders
         $this->call([
             DimensionsTableSeeder::class,
         ]);
+
+        // Re-enable foreign key checks
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

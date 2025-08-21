@@ -12,7 +12,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
 
 class AuthController extends Controller
 {
@@ -27,7 +27,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
 
     protected $redirectTo = '/dashboard';
     protected $loginPath = '/login';
@@ -122,6 +122,109 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
             'industry_id' => $data['industry_id'] ?? null,
         ]);
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        Auth::login($this->create($request->all()));
+
+        return redirect($this->redirectPath());
+    }
+
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required', 'password' => 'required',
+        ]);
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials, $request->has('remember'))) {
+            return $this->handleUserWasAuthenticated($request, $this->hasTooManyLoginAttempts($request));
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  bool  $throttles
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        return redirect()->back()
+            ->withInput($request->only('username', 'remember'))
+            ->withErrors([
+                'username' => trans('auth.failed'),
+            ]);
+    }
+
+    /**
+     * Determine if the user has too many failed login attempts.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function hasTooManyLoginAttempts(Request $request)
+    {
+        return app('cache')->has(
+            $this->getLoginLockoutKey($request)
+        );
+    }
+
+    /**
+     * Clear the login locks for the given user credentials.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function clearLoginAttempts(Request $request)
+    {
+        app('cache')->forget($this->getLoginLockoutKey($request));
+    }
+
+    /**
+     * Get the login lockout error message key for the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    protected function getLoginLockoutKey(Request $request)
+    {
+        return 'login:'.sha1($request->input('username').$request->ip());
     }
 
     /**

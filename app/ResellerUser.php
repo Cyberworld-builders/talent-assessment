@@ -2,22 +2,19 @@
 
 namespace App;
 
-use Bican\Roles\Models\Role;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Bican\Roles\Traits\HasRoleAndPermission;
-use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\DB;
 use Route;
 
 class ResellerUser extends Model implements AuthenticatableContract,
-	CanResetPasswordContract,
-	HasRoleAndPermissionContract
+	CanResetPasswordContract
 {
-	use Authenticatable, CanResetPassword, HasRoleAndPermission;
+	use Authenticatable, CanResetPassword, HasRoles;
 
 //	public function __construct(array $attributes = array())
 //	{
@@ -198,13 +195,7 @@ class ResellerUser extends Model implements AuthenticatableContract,
 	 */
 	public function role()
 	{
-		$roles = Role::all();
-
-		foreach ($roles as $role)
-		{
-			if ($this->is($role->slug))
-				return $role;
-		}
+		return $this->roles()->first();
 	}
 
 	/**
@@ -446,19 +437,6 @@ class ResellerUser extends Model implements AuthenticatableContract,
 
 	public function has($roleSlug)
 	{
-		$role = Role::where('slug', $roleSlug);
-
-		if (! $role)
-			return false;
-
-		$userRole = DB::table('role_user')->where([
-			'user_id' => $this->id,
-			'role_id' => $role->id
-		])->first();
-
-		if ($userRole)
-			return true;
-
-		return false;
+		return $this->hasRole($roleSlug);
 	}
 }

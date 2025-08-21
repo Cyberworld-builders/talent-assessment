@@ -56,9 +56,9 @@ class Handler extends ExceptionHandler
 //        }
 
         // If you don't have sufficient permissions to view route
-        if ($e instanceof \Bican\Roles\Exceptions\LevelDeniedException)
+        if ($e instanceof \Spatie\Permission\Exceptions\UnauthorizedException)
         {
-            if (\Auth::user()->level() < 2)
+            if (!\Auth::user()->hasRole('admin'))
                 return redirect('/assignments');
 
             return redirect()->back();
