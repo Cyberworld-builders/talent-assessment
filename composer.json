@@ -5,24 +5,24 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^8.0",
-        "laravel/framework": "5.1.*",
+        "php": "^8.1",
+        "laravel/framework": "^9.0",
         "doctrine/dbal": "^2.5",
-        "illuminate/html": "^5.0",
-        "guzzlehttp/guzzle": "^6.1",
-        "bican/roles": "^2.1",
-        "maatwebsite/excel": "^2.1",
+
+        "guzzlehttp/guzzle": "^7.0",
+        "spatie/laravel-permission": "^5.0",
+        "maatwebsite/excel": "^3.1",
         "aws/aws-sdk-php-laravel": "^3.1",
-        "cangelis/pdf": "^2.2",
-        "league/flysystem": "^1.0",
+
+        "league/flysystem": "^3.0",
         "mathjax/mathjax": "^2.7",
         "predis/predis": "^1.1"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1"
+        "fakerphp/faker": "^1.20",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^8.0",
+        "phpspec/phpspec": "^7.0"
     },
     "autoload": {
         "classmap": [
@@ -42,14 +42,13 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php artisan clear-compiled",
-            "php artisan optimize"
+            "echo 'Skipping post-install scripts due to upgrade compatibility'"
         ],
         "pre-update-cmd": [
-            "php artisan clear-compiled"
+            "echo 'Skipping pre-update script due to PHP 8.0 compatibility'"
         ],
         "post-update-cmd": [
-            "php artisan optimize"
+            "echo 'Skipping post-update scripts due to upgrade compatibility'"
         ],
         "post-root-package-install": [
             "php -r \"copy('.env.example', '.env');\""

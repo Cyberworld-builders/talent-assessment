@@ -157,7 +157,7 @@ return [
         /*
          * Third Party Service Providers...
          */
-        Bican\Roles\RolesServiceProvider::class,
+
         Maatwebsite\Excel\ExcelServiceProvider::class,
 		Aws\Laravel\AwsServiceProvider::class,
 
