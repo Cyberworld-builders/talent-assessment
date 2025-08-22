@@ -162,10 +162,10 @@ class BenchmarksControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         
         // Should have CSV content type
-        $this->assertContains('text/csv', $response->headers->get('Content-Type'));
+        $this->assertStringContainsString('text/csv', $response->headers->get('Content-Type'));
         
         // Should have attachment disposition
-        $this->assertContains('attachment', $response->headers->get('Content-Disposition'));
+        $this->assertStringContainsString('attachment', $response->headers->get('Content-Disposition'));
     }
 
     /**
@@ -212,7 +212,7 @@ class BenchmarksControllerTest extends TestCase
         $response = $this->call('POST', "/dashboard/benchmarks/{$assessment->id}/upload", [
             'industry_id' => $industry->id
         ], [], [
-            'excel_file' => new \Symfony\Component\HttpFoundation\File\UploadedFile($tempFile, 'test.csv', 'text/csv', null, null, true)
+            'excel_file' => new \Symfony\Component\HttpFoundation\File\UploadedFile($tempFile, 'test.csv', 'text/csv', null, true)
         ]);
 
         // Should redirect back with success message

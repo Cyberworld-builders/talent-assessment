@@ -36,16 +36,16 @@ class DimensionsTableSeeder extends Seeder
         switch ($assessmentName) {
             case 'personality assessment':
                 $dimensions = [
-                    ['name' => 'Extraversion', 'description' => 'Outgoing, energetic, and sociable behavior'],
-                    ['name' => 'Agreeableness', 'description' => 'Cooperative, trusting, and compassionate nature'],
-                    ['name' => 'Conscientiousness', 'description' => 'Organized, responsible, and goal-directed behavior'],
-                    ['name' => 'Neuroticism', 'description' => 'Emotional stability and stress management'],
-                    ['name' => 'Openness', 'description' => 'Creativity, curiosity, and openness to new experiences'],
-                    ['name' => 'Emotional Intelligence', 'description' => 'Ability to understand and manage emotions'],
-                    ['name' => 'Adaptability', 'description' => 'Flexibility and ability to adjust to change'],
-                    ['name' => 'Team Collaboration', 'description' => 'Ability to work effectively in teams'],
-                    ['name' => 'Communication Style', 'description' => 'Verbal and non-verbal communication effectiveness'],
-                    ['name' => 'Leadership Potential', 'description' => 'Natural leadership qualities and influence']
+                    ['name' => 'Extraversion'],
+                    ['name' => 'Agreeableness'],
+                    ['name' => 'Conscientiousness'],
+                    ['name' => 'Neuroticism'],
+                    ['name' => 'Openness'],
+                    ['name' => 'Emotional Intelligence'],
+                    ['name' => 'Adaptability'],
+                    ['name' => 'Team Collaboration'],
+                    ['name' => 'Communication Style'],
+                    ['name' => 'Leadership Potential']
                 ];
                 break;
 

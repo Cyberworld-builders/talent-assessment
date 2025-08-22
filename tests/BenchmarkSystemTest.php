@@ -726,7 +726,7 @@ class BenchmarkSystemTest extends TestCase
         $tempFile = tempnam(sys_get_temp_dir(), 'benchmark_test');
         file_put_contents($tempFile, $csvContent);
 
-        $uploadedFile = new UploadedFile($tempFile, 'benchmarks.csv', 'text/csv', null, null, true);
+        $uploadedFile = new UploadedFile($tempFile, 'benchmarks.csv', 'text/csv', null, true);
 
         $response = $this->call('POST', "/dashboard/benchmarks/{$this->assessment->id}/upload", [
             'industry_id' => $this->industries['technology']->id

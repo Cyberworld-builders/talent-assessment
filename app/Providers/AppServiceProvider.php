@@ -14,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    	URL::forceScheme('https');
+        // Only force HTTPS in non-local environments
+        if (env('APP_ENV') !== 'local') {
+            URL::forceScheme('https');
+        }
         view()->composer('*', 'App\Http\ViewComposers\DashboardComposer');
     }
 

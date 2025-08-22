@@ -60,7 +60,23 @@ if (!function_exists('factory')) {
         }
         
         if ($class === App\Assessment::class || $class === 'App\Assessment') {
-            return App\Assessment::create(array_merge([
+            // Ensure we have a valid user_id
+            if (!isset($attributes['user_id'])) {
+                // Try to find an existing user first
+                $existingUser = App\User::first();
+                if (!$existingUser) {
+                    // Create a default user if none exists
+                    $existingUser = App\User::create([
+                        'username' => 'testuser_' . uniqid(),
+                        'name' => 'Test User',
+                        'email' => 'test_' . uniqid() . '@example.com',
+                        'password' => bcrypt('password'),
+                    ]);
+                }
+                $attributes['user_id'] = $existingUser->id;
+            }
+            
+            $data = array_merge([
                 'name' => 'Test Assessment',
                 'description' => 'Test Description',
                 'logo' => '',
@@ -71,11 +87,46 @@ if (!function_exists('factory')) {
                 'use_custom_fields' => 0,
                 'target' => 1,
                 'last_modified' => \Carbon\Carbon::now(),
-                'user_id' => 1, // Default user_id (will be overridden if provided in attributes)
-            ], $attributes));
+            ], $attributes);
+            
+
+            
+            return App\Assessment::create($data);
         }
         
         if ($class === App\Dimension::class || $class === 'App\Dimension') {
+            // Ensure we have a valid assessment_id
+            if (!isset($attributes['assessment_id'])) {
+                // Find an existing assessment or create one directly
+                $existingAssessment = App\Assessment::first();
+                if (!$existingAssessment) {
+                    // Create a default assessment directly without using factory
+                    $existingUser = App\User::first();
+                    if (!$existingUser) {
+                        $existingUser = App\User::create([
+                            'username' => 'testuser_' . uniqid(),
+                            'name' => 'Test User',
+                            'email' => 'test_' . uniqid() . '@example.com',
+                            'password' => bcrypt('password'),
+                        ]);
+                    }
+                    $existingAssessment = App\Assessment::create([
+                        'name' => 'Test Assessment',
+                        'description' => 'Test Description',
+                        'user_id' => $existingUser->id,
+                        'logo' => '',
+                        'background' => '',
+                        'paginate' => 10,
+                        'items_per_page' => 10,
+                        'timed' => 0,
+                        'use_custom_fields' => 0,
+                        'target' => 1,
+                        'last_modified' => \Carbon\Carbon::now(),
+                    ]);
+                }
+                $attributes['assessment_id'] = $existingAssessment->id;
+            }
+            
             return App\Dimension::create(array_merge([
                 'name' => 'Test Dimension',
                 'parent' => 0,
@@ -84,12 +135,30 @@ if (!function_exists('factory')) {
         }
         
         if ($class === App\Industry::class || $class === 'App\Industry') {
-            return App\Industry::create(array_merge([
-                'name' => 'Test Industry',
-            ], $attributes));
+            // Use firstOrCreate to avoid duplicate entries
+            $name = $attributes['name'] ?? 'Test Industry';
+            return App\Industry::firstOrCreate(
+                ['name' => $name],
+                array_merge([
+                    'name' => $name,
+                ], $attributes)
+            );
         }
         
         if ($class === App\Benchmark::class || $class === 'App\Benchmark') {
+            // Ensure we have a valid industry_id
+            if (!isset($attributes['industry_id'])) {
+                // Find an existing industry or create one
+                $existingIndustry = App\Industry::first();
+                if (!$existingIndustry) {
+                    $existingIndustry = App\Industry::firstOrCreate(
+                        ['name' => 'Test Industry'],
+                        ['name' => 'Test Industry']
+                    );
+                }
+                $attributes['industry_id'] = $existingIndustry->id;
+            }
+            
             return App\Benchmark::create(array_merge([
                 'value' => 75,
             ], $attributes));

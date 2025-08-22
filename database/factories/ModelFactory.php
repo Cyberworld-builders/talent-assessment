@@ -53,5 +53,11 @@ $factory->define(App\Dimension::class, function (Faker\Generator $faker) {
 $factory->define(App\Benchmark::class, function (Faker\Generator $faker) {
     return [
         'value' => $faker->numberBetween(50, 100),
+        'dimension_id' => function () {
+            return factory(App\Dimension::class)->create()->id;
+        },
+        'industry_id' => function () {
+            return factory(App\Industry::class)->create()->id;
+        },
     ];
 });
