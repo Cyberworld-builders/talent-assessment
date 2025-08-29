@@ -114,8 +114,6 @@ set_server_environment() {
     print_status "Generated APP_KEY: $STAGING_APP_KEY"
 }
 
-
-
 # Function to set image environment variable
 set_image_environment() {
     local image_tag="$1"

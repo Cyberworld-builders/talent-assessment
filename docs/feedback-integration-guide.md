@@ -944,14 +944,3 @@ php artisan tinker
 ```
 
 This comprehensive integration guide provides everything needed to successfully integrate the feedback system with assessment reports and other parts of your talent assessment platform.
-
-
-
-
-
-
-
-
-
-
-
