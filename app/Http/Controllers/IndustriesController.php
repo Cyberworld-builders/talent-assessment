@@ -64,3 +64,4 @@ class IndustriesController extends Controller
             ->with('success', 'Industry '.$industry->name.' deleted successfully!');
     }
 }
+
