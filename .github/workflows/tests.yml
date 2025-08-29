@@ -41,6 +41,13 @@ jobs:
         sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
         sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
         sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
+        # Configure email for testing (using environment variables or defaults)
+        sed -i 's/MAIL_DRIVER=.*/MAIL_DRIVER=smtp/' .env.testing
+        sed -i 's/MAIL_HOST=.*/MAIL_HOST=sandbox.smtp.mailtrap.io/' .env.testing
+        sed -i 's/MAIL_PORT=.*/MAIL_PORT=2525/' .env.testing
+        sed -i 's/MAIL_USERNAME=.*/MAIL_USERNAME=${MAILTRAP_USERNAME:-test_username}/' .env.testing
+        sed -i 's/MAIL_PASSWORD=.*/MAIL_PASSWORD=${MAILTRAP_PASSWORD:-test_password}/' .env.testing
+        sed -i 's/MAIL_ENCRYPTION=.*/MAIL_ENCRYPTION=tls/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
