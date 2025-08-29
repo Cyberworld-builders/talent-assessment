@@ -35,3 +35,4 @@ class IndustriesTableSeeder extends Seeder
         }
     }
 }
+

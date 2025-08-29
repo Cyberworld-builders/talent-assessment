@@ -1,10 +1,29 @@
-name: Tests
+name: Test Configuration
 
+# This is a reusable workflow - not meant to be run directly
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call:
+    inputs:
+      php-version:
+        description: 'PHP version to use'
+        required: false
+        default: '7.4'
+        type: string
+      mysql-version:
+        description: 'MySQL version to use'
+        required: false
+        default: '8.0'
+        type: string
+      database-name:
+        description: 'Database name for testing'
+        required: false
+        default: 'testing'
+        type: string
+      database-password:
+        description: 'Database password for testing'
+        required: false
+        default: 'password'
+        type: string
 
 jobs:
   test:
@@ -12,10 +31,10 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:${{ inputs.mysql-version }}
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: ${{ inputs.database-password }}
+          MYSQL_DATABASE: ${{ inputs.database-name }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -26,7 +45,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '${{ inputs.php-version }}'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqlnd, zip, gd, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar, iconv, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar
         coverage: none
 
@@ -38,9 +57,9 @@ jobs:
         cp .env.example .env.testing
         sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
         sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=${{ inputs.database-name }}/' .env.testing
         sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=${{ inputs.database-password }}/' .env.testing
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -59,7 +78,7 @@ jobs:
     - name: Wait for MySQL
       run: |
         echo "Waiting for MySQL to be ready..."
-        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ppassword --silent; do
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -p${{ inputs.database-password }} --silent; do
           sleep 1
         done
         echo "MySQL is ready!"
