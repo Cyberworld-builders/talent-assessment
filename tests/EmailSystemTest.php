@@ -51,8 +51,15 @@ class EmailSystemTest extends TestCase
         $this->assertEquals('sandbox.smtp.mailtrap.io', config('mail.host'));
         $this->assertEquals(2525, config('mail.port'));
         $this->assertEquals('tls', config('mail.encryption'));
-        $this->assertEquals('cd877c53a7d010', config('mail.username'));
-        $this->assertEquals('718d08c34c9cba', config('mail.password'));
+        
+        // Test that username and password are configured (may be masked in CI)
+        $username = config('mail.username');
+        $password = config('mail.password');
+        
+        $this->assertNotEmpty($username, 'Mail username should be configured');
+        $this->assertNotEmpty($password, 'Mail password should be configured');
+        $this->assertNotEquals('null', $username, 'Mail username should not be null');
+        $this->assertNotEquals('null', $password, 'Mail password should not be null');
     }
 
     /**

@@ -68,8 +68,8 @@ jobs:
         sed -i 's/MAIL_DRIVER=.*/MAIL_DRIVER=smtp/' .env.testing
         sed -i 's/MAIL_HOST=.*/MAIL_HOST=sandbox.smtp.mailtrap.io/' .env.testing
         sed -i 's/MAIL_PORT=.*/MAIL_PORT=2525/' .env.testing
-        sed -i 's/MAIL_USERNAME=.*/MAIL_USERNAME=${MAILTRAP_USERNAME:-test_username}/' .env.testing
-        sed -i 's/MAIL_PASSWORD=.*/MAIL_PASSWORD=${MAILTRAP_PASSWORD:-test_password}/' .env.testing
+        sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=$MAILTRAP_USERNAME/" .env.testing
+        sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=$MAILTRAP_PASSWORD/" .env.testing
         sed -i 's/MAIL_ENCRYPTION=.*/MAIL_ENCRYPTION=tls/' .env.testing
 
     - name: Install Dependencies
