@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      MAILTRAP_USERNAME: ${{ secrets.MAILTRAP_USERNAME }}
+      MAILTRAP_PASSWORD: ${{ secrets.MAILTRAP_PASSWORD }}
+
     services:
       mysql:
         image: mysql:8.0
