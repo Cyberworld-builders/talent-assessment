@@ -562,6 +562,16 @@ resource "aws_eip" "dev_eip" {
   }
 }
 
+# Elastic IP
+resource "aws_eip" "dev_eip" {
+  domain = "vpc"
+  
+  tags = {
+    Name = "${var.project_name}-${var.environment}-eip"
+    Environment = var.environment
+  }
+}
+
 # EC2 Instance
 resource "aws_instance" "dev_instance" {
   ami                    = "ami-08a98e6d1b5aa6099"  # Pinned to current AMI to prevent replacement

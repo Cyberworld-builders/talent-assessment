@@ -127,9 +127,6 @@ output "ses_deliveries_topic_arn" {
   description = "SNS topic ARN for SES deliveries"
   value       = aws_sns_topic.ses_deliveries.arn
 }
-
-
-
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF
