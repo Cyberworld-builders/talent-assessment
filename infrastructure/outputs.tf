@@ -75,6 +75,58 @@ output "staging_s3_bucket_name" {
   value       = aws_s3_bucket.staging_uploads_bucket.bucket
 }
 
+# SES Outputs
+output "ses_domain_identity" {
+  description = "SES domain identity"
+  value       = aws_ses_domain_identity.main.domain
+}
+
+output "ses_verification_token" {
+  description = "SES domain verification token"
+  value       = aws_ses_domain_identity.main.verification_token
+}
+
+output "ses_dkim_tokens" {
+  description = "SES DKIM tokens"
+  value       = aws_ses_domain_dkim.main.dkim_tokens
+}
+
+output "ses_mail_from_domain" {
+  description = "SES mail from domain"
+  value       = aws_ses_domain_mail_from.main.mail_from_domain
+}
+
+output "ses_user_access_key" {
+  description = "SES user access key"
+  value       = aws_iam_access_key.ses_user.id
+  sensitive   = true
+}
+
+output "ses_user_secret_key" {
+  description = "SES user secret key"
+  value       = aws_iam_access_key.ses_user.secret
+  sensitive   = true
+}
+
+output "ses_configuration_set" {
+  description = "SES configuration set name"
+  value       = aws_ses_configuration_set.main.name
+}
+
+output "ses_bounces_topic_arn" {
+  description = "SNS topic ARN for SES bounces"
+  value       = aws_sns_topic.ses_bounces.arn
+}
+
+output "ses_complaints_topic_arn" {
+  description = "SNS topic ARN for SES complaints"
+  value       = aws_sns_topic.ses_complaints.arn
+}
+
+output "ses_deliveries_topic_arn" {
+  description = "SNS topic ARN for SES deliveries"
+  value       = aws_sns_topic.ses_deliveries.arn
+}
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF
@@ -101,6 +153,15 @@ output "deployment_summary" {
     🔑 SSH Access:
     ssh -i ~/.ssh/dev-key ubuntu@${aws_instance.dev_instance.public_ip}
     
+    📧 Email Service (SES):
+    - Domain: ${aws_ses_domain_identity.main.domain}
+    - Mail From: ${aws_ses_domain_mail_from.main.mail_from_domain}
+    - Configuration Set: ${aws_ses_configuration_set.main.name}
+    - Bounces Topic: ${aws_sns_topic.ses_bounces.arn}
+    - Complaints Topic: ${aws_sns_topic.ses_complaints.arn}
+    
+
+    
     📋 Next Steps:
     1. Update your domain DNS to point to: ${aws_instance.dev_instance.public_ip}
     2. Upload your Laravel application files to the server
@@ -108,6 +169,7 @@ output "deployment_summary" {
     4. Set up environment variables for production
     5. Update S3 bucket name in Laravel configuration
     6. Set AWS_CLOUDFRONT_DOMAIN environment variable with CloudFront domain
+
 
     
     ⚠️  Security Note: SSH is currently open to 0.0.0.0/0 for AWS console access.
