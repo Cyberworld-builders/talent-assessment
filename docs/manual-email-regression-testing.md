@@ -110,6 +110,7 @@ This guide provides step-by-step instructions for manually testing email-related
    - Find "Assign Users" or "Send Assignment" option
    - Select user: `user@example.com`
    - Set expiration date (e.g., 7 days from now)
+   - **IMPORTANT**: Set "Email Notification" to "Yes" (defaults to "No")
    - Click "Send Assignment" or "Assign"
 
 5. **Verify Assignment Email**
@@ -328,7 +329,13 @@ This guide provides step-by-step instructions for manually testing email-related
 ## Troubleshooting Common Issues
 
 ### Email Not Appearing in Mailtrap
-1. **Check Mailtrap Configuration**
+1. **Check Email Notification Setting**
+   - Verify "Email Notification" was set to "Yes" during assignment
+   - **CRITICAL**: Default setting is "No" - emails won't be sent unless explicitly enabled
+   - **IMPORTANT**: When "Email Notification" is set to "No", assignments may not be created in the database
+   - Reassign with email notification enabled if needed
+
+2. **Check Mailtrap Configuration**
    - Verify credentials in `.env.dev`
    - Check Mailtrap inbox settings
    - Ensure inbox is active
