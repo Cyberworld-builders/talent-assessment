@@ -31,7 +31,7 @@ class ClientTableSeeder extends Seeder
     }
     
     /**
-     * Create sample assessments
+     * Create assessments from dump data
      */
     private function createAssessments()
     {
@@ -40,51 +40,149 @@ class ClientTableSeeder extends Seeder
         // Get the admin user for assessments
         $adminUser = User::where('email', 'admin@example.com')->first();
         
-        // Create personality assessment using relationship method
-        $personality = $adminUser->assessments()->create([
-            'name' => 'Personality Assessment',
-            'description' => 'Comprehensive personality evaluation for workplace compatibility',
-            'logo' => '',
+        // Create Involved-360 assessment
+        $involved360 = $adminUser->assessments()->create([
+            'id' => 1,
+            'name' => 'Involved-360',
+            'description' => 'A competency based 360-evaluation that provides an analytically robust picture of strengths and improvement opportunities.',
+            'logo' => 'https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-360.png',
             'background' => '',
-            'paginate' => 10,
-            'items_per_page' => 10,
-            'timed' => false,
-            'use_custom_fields' => false,
+            'paginate' => 1,
+            'items_per_page' => 4,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 1,
+            'custom_fields' => 'a:2:{s:3:"tag";a:2:{i:0;s:4:"name";i:1;s:5:"email";}s:7:"default";a:2:{i:0;s:0:"";i:1;s:0:"";}}',
             'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
+            'created_at' => '2020-01-27 02:23:14',
+            'updated_at' => '2021-02-12 19:34:53',
+            'last_modified' => '0000-00-00 00:00:00'
         ]);
-        $assessments['personality'] = $personality;
+        $assessments['involved360'] = $involved360;
         
-        // Create cognitive assessment using relationship method
-        $cognitive = $adminUser->assessments()->create([
-            'name' => 'Cognitive Ability Test',
-            'description' => 'Problem-solving and analytical thinking assessment',
-            'logo' => '',
+        // Create Involved-Leader assessment
+        $involvedLeader = $adminUser->assessments()->create([
+            'id' => 3,
+            'name' => 'Involved-Leader',
+            'description' => 'A multi-rater diagnostic inventory that dives deep into scientifically grounded and analytically proven drivers of leadership effectiveness.',
+            'logo' => 'https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-Leader.png',
             'background' => '',
-            'paginate' => 15,
-            'items_per_page' => 15,
-            'timed' => true,
-            'time_limit' => 45,
-            'use_custom_fields' => false,
-            'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
-        ]);
-        $assessments['cognitive'] = $cognitive;
-        
-        // Create leadership assessment using relationship method
-        $leadership = $adminUser->assessments()->create([
-            'name' => 'Leadership Potential',
-            'description' => 'Assessment of leadership skills and potential',
-            'logo' => '',
-            'background' => '',
-            'paginate' => 12,
+            'paginate' => 1,
             'items_per_page' => 12,
-            'timed' => false,
-            'use_custom_fields' => true,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 1,
+            'custom_fields' => 'a:2:{s:3:"tag";a:2:{i:0;s:4:"name";i:1;s:5:"email";}s:7:"default";a:2:{i:0;s:0:"";i:1;s:0:"";}}',
             'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
+            'created_at' => '2020-04-02 07:48:24',
+            'updated_at' => '2021-05-06 15:08:29',
+            'last_modified' => '0000-00-00 00:00:00'
         ]);
-        $assessments['leadership'] = $leadership;
+        $assessments['involvedLeader'] = $involvedLeader;
+        
+        // Create Involved-Blockers assessment
+        $involvedBlockers = $adminUser->assessments()->create([
+            'id' => 4,
+            'name' => 'Involved-Blockers',
+            'description' => 'Identifies personality attributes that are preventing you from realizing your full involvement and leadership potential.',
+            'logo' => 'https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-Blockers.png',
+            'background' => '',
+            'paginate' => 1,
+            'items_per_page' => 10,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 0,
+            'custom_fields' => 'N;',
+            'target' => 0,
+            'created_at' => '2020-04-11 10:34:35',
+            'updated_at' => '2020-12-11 20:17:18',
+            'last_modified' => '0000-00-00 00:00:00'
+        ]);
+        $assessments['involvedBlockers'] = $involvedBlockers;
+        
+        // Create Involved-Me assessment
+        $involvedMe = $adminUser->assessments()->create([
+            'id' => 5,
+            'name' => 'Involved-Me',
+            'description' => 'A self-report version of the Involved-Leader, providing great insight into scientifically grounded, yet analytically proven drivers of leadership effectiveness.',
+            'logo' => 'https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-Me.png',
+            'background' => '',
+            'paginate' => 1,
+            'items_per_page' => 12,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 0,
+            'custom_fields' => 'N;',
+            'target' => 0,
+            'created_at' => '2020-06-13 16:14:27',
+            'updated_at' => '2020-06-26 20:59:36',
+            'last_modified' => '0000-00-00 00:00:00'
+        ]);
+        $assessments['involvedMe'] = $involvedMe;
+        
+        // Create Involved-Me Peak Week assessment
+        $involvedMePeak = $adminUser->assessments()->create([
+            'id' => 6,
+            'name' => 'Involved-Me Peak Week',
+            'description' => 'A self-report version of the Involved-Leader, providing great insight into scientifically grounded, yet analytically proven drivers of leadership effectiveness.',
+            'logo' => 'https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-Me.png',
+            'background' => '',
+            'paginate' => 1,
+            'items_per_page' => 12,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 0,
+            'custom_fields' => 'N;',
+            'target' => 0,
+            'created_at' => '2020-06-13 16:14:27',
+            'updated_at' => '2020-08-27 13:12:28',
+            'last_modified' => '2020-06-26 20:59:36'
+        ]);
+        $assessments['involvedMePeak'] = $involvedMePeak;
+        
+        // Create David Codes assessment
+        $davidCodes = $adminUser->assessments()->create([
+            'id' => 7,
+            'name' => 'David Codes',
+            'description' => 'noob',
+            'logo' => '',
+            'background' => '',
+            'paginate' => 0,
+            'items_per_page' => 0,
+            'translation' => null,
+            'language' => null,
+            'whitelabel' => null,
+            'company_labeled_for' => null,
+            'timed' => '0',
+            'time_limit' => 10,
+            'use_custom_fields' => 0,
+            'custom_fields' => 'N;',
+            'target' => 0,
+            'created_at' => '2025-07-31 19:19:23',
+            'updated_at' => '2025-07-31 19:19:23',
+            'last_modified' => '2025-07-31 19:19:23'
+        ]);
+        $assessments['davidCodes'] = $davidCodes;
         
         return $assessments;
     }
@@ -100,7 +198,7 @@ class ClientTableSeeder extends Seeder
             'address' => '123 Innovation Drive, Silicon Valley, CA 94025',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['personality']->id, $assessments['cognitive']->id],
+            'assessments' => [$assessments['involved360']->id, $assessments['involvedLeader']->id],
             'require_profile' => true,
             'require_research' => false,
             'whitelabel' => false,
@@ -127,18 +225,18 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for TechCorp
         $this->createJob($techClient, 'Software Engineer', 'software-engineer', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($techClient, 'Product Manager', 'product-manager', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedBlockers']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($techClient, 'Data Scientist', 'data-scientist', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], false); // Closed job
         
         // Create some applicant users
@@ -156,7 +254,7 @@ class ClientTableSeeder extends Seeder
             'address' => '456 Industrial Blvd, Detroit, MI 48201',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['personality']->id, $assessments['leadership']->id],
+            'assessments' => [$assessments['involved360']->id, $assessments['involvedBlockers']->id],
             'require_profile' => true,
             'require_research' => true,
             'whitelabel' => false,
@@ -183,17 +281,17 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for Manufacturing Inc
         $this->createJob($mfgClient, 'Production Supervisor', 'production-supervisor', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedBlockers']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($mfgClient, 'Quality Control Specialist', 'quality-control', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($mfgClient, 'Maintenance Technician', 'maintenance-tech', [
-            $assessments['cognitive']->id
+            $assessments['involvedLeader']->id
         ], true);
         
         // Create some applicant users
@@ -211,7 +309,7 @@ class ClientTableSeeder extends Seeder
             'address' => '789 Business Center, New York, NY 10001',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['leadership']->id, $assessments['personality']->id, $assessments['cognitive']->id],
+            'assessments' => [$assessments['involvedBlockers']->id, $assessments['involved360']->id, $assessments['involvedLeader']->id],
             'require_profile' => true,
             'require_research' => true,
             'whitelabel' => false,
@@ -238,19 +336,19 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for Consulting Partners
         $this->createJob($consultClient, 'Senior Consultant', 'senior-consultant', [
-            $assessments['leadership']->id,
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedBlockers']->id,
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($consultClient, 'Business Analyst', 'business-analyst', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($consultClient, 'Project Manager', 'project-manager', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedBlockers']->id,
+            $assessments['involved360']->id
         ], false); // Closed job
         
         // Create some applicant users

@@ -119,12 +119,13 @@
 					<!-- Anchoring -->
 					<div class="anchors-column col-sm-4" <?php if ($type != 1) echo ' style="display:none;"'; ?>>
 						<div id="anchors">
+
 							@if (is_array($anchors) && !empty($anchors))
 								@foreach ($anchors as $i => $anchor)
-									@if (array_key_exists('value', $anchor) && array_key_exists('tag', $anchor))
+									@if (is_array($anchor) && array_key_exists('value', $anchor) && array_key_exists('tag', $anchor))
 										<div class="anchor" data-value="{{ $anchor['value'] }}">{{ $anchor['tag'] }}</div>
 									@else
-										<div class="alert alert-danger">Non-existing key</div>
+										<div class="alert alert-danger">Invalid anchor structure (type: {{ gettype($anchor) }})</div>
 									@endif
 								@endforeach
 							@else

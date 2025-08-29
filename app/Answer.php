@@ -32,8 +32,11 @@ class Answer extends Model
 	{
 		if ($this->question->type == 1)
 		{
-			$anchors = $this->question->anchors;
-			return $anchors[$this->value]['tag'];
+					$anchors = $this->question->anchors;
+			
+			if (is_array($anchors) && isset($anchors[$this->value]) && isset($anchors[$this->value]['tag'])) {
+				return $anchors[$this->value]['tag'];
+			}
 		}
 
 		return false;
@@ -49,7 +52,9 @@ class Answer extends Model
 		if ($this->question->type == 1)
 		{
 			$anchors = $this->question->anchors;
-			return $anchors[$this->value]['value'];
+			if (is_array($anchors) && isset($anchors[$this->value]) && isset($anchors[$this->value]['value'])) {
+				return $anchors[$this->value]['value'];
+			}
 		}
 
 		// WM question type
@@ -67,7 +72,7 @@ class Answer extends Model
 	{
 		$anchors = $this->question->anchors;
 
-		if (array_key_exists($this->value, $anchors))
+		if (is_array($anchors) && array_key_exists($this->value, $anchors) && isset($anchors[$this->value]['value']))
 			return $anchors[$this->value]['value'];
 
 		return false;

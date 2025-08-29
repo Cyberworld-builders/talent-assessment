@@ -13,7 +13,8 @@ class Question extends Model
 		'type',
 		'dimension_id',
 		'anchors',
-		'practice'
+		'practice',
+		'assessment_id'
 	];
 
 	/**
@@ -23,7 +24,12 @@ class Question extends Model
 	 */
 	public function setAnchorsAttribute($value)
 	{
-		$this->attributes['anchors'] = serialize($value);
+		// If it's already a serialized string, don't serialize again
+		if (is_string($value) && (strpos($value, 'a:') === 0 || strpos($value, 's:') === 0)) {
+			$this->attributes['anchors'] = $value;
+		} else {
+			$this->attributes['anchors'] = serialize($value);
+		}
 	}
 
 	/**
@@ -33,7 +39,23 @@ class Question extends Model
 	 */
 	public function getAnchorsAttribute()
 	{
-		return unserialize(clean_non_ascii_characters($this->attributes['anchors']));
+		if (empty($this->attributes['anchors'])) {
+			return [];
+		}
+		
+		// If it's already an array, return it as is
+		if (is_array($this->attributes['anchors'])) {
+			return $this->attributes['anchors'];
+		}
+		
+		$unserialized = unserialize(clean_non_ascii_characters($this->attributes['anchors']));
+		
+		// If unserialization fails, return empty array
+		if ($unserialized === false) {
+			return [];
+		}
+		
+		return $unserialized;
 	}
 
 	/**
@@ -115,7 +137,11 @@ class Question extends Model
 //		if (empty($i))
 //			return 'No Answer Given';
 
-		return $anchors[$i];
+		if (is_array($anchors) && isset($anchors[$i])) {
+			return $anchors[$i];
+		}
+
+		return null;
 	}
 
 	/**

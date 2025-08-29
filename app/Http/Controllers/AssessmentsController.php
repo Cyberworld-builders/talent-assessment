@@ -183,7 +183,44 @@ class AssessmentsController extends Controller
 //		}
 //		ksort($questions);
 
-		$questions = $assessment->questions()->orderBy('number', 'asc')->get()->toArray();
+		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
+		$questions_array = [];
+		foreach ($questions as $question) {
+			$question_data = $question->toArray();
+			$anchors = $question->anchors; // Ensure anchors are properly unserialized
+			
+			// Sanitize anchors data to ensure each anchor is an array with tag and value
+			if (is_array($anchors)) {
+				$sanitized_anchors = [];
+				foreach ($anchors as $i => $anchor) {
+					if (is_array($anchor) && isset($anchor['tag']) && isset($anchor['value'])) {
+						$sanitized_anchors[$i] = $anchor;
+					} else {
+						// If anchor is not properly structured, create a default one
+						$sanitized_anchors[$i] = [
+							'tag' => is_string($anchor) ? $anchor : 'Option ' . ($i + 1),
+							'value' => (string)($i + 1)
+						];
+					}
+				}
+				$question_data['anchors'] = $sanitized_anchors;
+			} else {
+				$question_data['anchors'] = [];
+			}
+			
+			$questions_array[] = $question_data;
+		}
+		$questions = $questions_array;
+
+		// Debug: Dump all data before passing to view
+		dd([
+			'assessment' => $assessment,
+			'dimensions' => $dimensions,
+			'questions' => $questions,
+			'questions_count' => count($questions),
+			'first_question_anchors' => isset($questions[0]) ? $questions[0]['anchors'] : 'No questions',
+			'second_question_anchors' => isset($questions[1]) ? $questions[1]['anchors'] : 'No second question'
+		]);
 
     	return view('dashboard.assessments.edit', compact('assessment', 'dimensions', 'questions'));
     }

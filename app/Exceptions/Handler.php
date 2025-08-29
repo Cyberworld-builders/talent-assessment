@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,10 +26,10 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         return parent::report($e);
     }

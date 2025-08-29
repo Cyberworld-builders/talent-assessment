@@ -133,7 +133,13 @@
                                 @foreach ($question->anchors as $i => $anchor)
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="alert alert-default anchor-original" style="margin-bottom: 3px;">{!! $anchor['tag'] !!}</div>
+                                            <div class="alert alert-default anchor-original" style="margin-bottom: 3px;">
+                                                @if (is_array($anchor) && isset($anchor['tag']))
+                                                    {!! $anchor['tag'] !!}
+                                                @else
+                                                    <span class="text-danger">Invalid anchor data</span>
+                                                @endif
+                                            </div>
                                         </div>
                                         <div class="col-sm-6">
                                             @if ($edit)

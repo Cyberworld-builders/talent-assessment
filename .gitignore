@@ -163,6 +163,11 @@ bootstrap/cache/*
 /public/build
 /storage/pail
 /auth.json
+
+#################################
+# Database Configuration
+#################################
+db_config.json
 #################################
 # Docker Specific
 #################################
