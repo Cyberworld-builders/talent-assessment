@@ -49,6 +49,11 @@ class UsersController extends Controller
     {
         $user = \Auth::user();
 
+        // Check if user is authenticated
+        if (!$user) {
+            return redirect('/login');
+        }
+
 		$name = explode(' ', $user->name);
 
 		$first_name = $name[0];

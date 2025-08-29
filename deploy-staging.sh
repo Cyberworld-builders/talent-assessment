@@ -78,6 +78,12 @@ fetch_secrets() {
     local secret_id="talent-assessment-staging-secrets"
     local secrets_file="secrets.json"
     
+    # Check if secrets file already exists and has content
+    if [ -f "$secrets_file" ] && [ -s "$secrets_file" ]; then
+        print_success "Using existing secrets file."
+        return 0
+    fi
+    
     # Fetch secrets
     if aws secretsmanager get-secret-value --secret-id "$secret_id" --query SecretString --output text > "$secrets_file" 2>/dev/null; then
         print_success "Secrets fetched successfully."
@@ -87,71 +93,41 @@ fetch_secrets() {
     fi
 }
 
-# Function to generate .env.staging file
-generate_env_file() {
-    print_status "Generating .env.staging file..."
+# Function to set server environment variables
+set_server_environment() {
+    print_status "Setting server environment variables..."
     
     local secrets_file="secrets.json"
     
-    # Generate .env.staging
-    cat > .env.staging << EOF
-APP_ENV=staging
-APP_DEBUG=false
-APP_URL=https://talent-staging.cyberworldbuilders.dev
-APP_KEY=base64:$(openssl rand -base64 32)
-
-DB_CONNECTION=mysql
-DB_HOST=mysql-staging
-DB_PORT=3306
-DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' "$secrets_file")
-DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' "$secrets_file")
-DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' "$secrets_file")
-
-REDIS_HOST=redis-staging
-REDIS_PORT=6379
-REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
-
-CACHE_DRIVER=redis
-SESSION_DRIVER=redis
-QUEUE_CONNECTION=redis
-
-AWS_REGION=${AWS_DEFAULT_REGION:-us-east-1}
-AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
-EOF
-
-    print_success ".env.staging file generated."
-}
-
-# Function to set environment variables
-set_environment_variables() {
-    print_status "Setting environment variables..."
-    
-    local secrets_file="secrets.json"
-    
-    # Export environment variables for docker-compose
+    # Set server environment variables for docker-compose
     export STAGING_DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' "$secrets_file")
     export STAGING_DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' "$secrets_file")
     export STAGING_DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' "$secrets_file")
     export STAGING_DB_ROOT_PASSWORD=$(jq -r '.STAGING_DB_ROOT_PASSWORD' "$secrets_file")
     export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
+    export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
     
-    print_success "Environment variables set."
+    # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
+    export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
+    
+    print_success "Server environment variables set."
+    print_status "Generated APP_KEY: $STAGING_APP_KEY"
 }
 
-# Function to update docker-compose.staging.yml with new image
-update_compose_file() {
+# Function to set image environment variable
+set_image_environment() {
     local image_tag="$1"
     local ecr_registry="$2"
     
     if [ -n "$image_tag" ] && [ -n "$ecr_registry" ]; then
-        print_status "Updating docker-compose.staging.yml with new image..."
+        print_status "Setting image environment variable..."
         
-        # Update image in docker-compose.staging.yml
-        sed -i "s|image:.*|image: $ecr_registry/talent-assessment-app:$image_tag|g" docker-compose.staging.yml
+        # Set the image environment variable for docker-compose
+        export STAGING_APP_IMAGE="$ecr_registry/talent-assessment-app:$image_tag"
         
-        print_success "Docker Compose file updated with image: $ecr_registry/talent-assessment-app:$image_tag"
+        print_success "Image environment variable set: $STAGING_APP_IMAGE"
     else
-        print_warning "No image tag or ECR registry provided, skipping compose file update."
+        print_warning "No image tag or ECR registry provided, using default image."
     fi
 }
 
@@ -208,6 +184,79 @@ wait_for_services() {
     print_success "Services are running."
 }
 
+# Function to clean up Docker resources
+cleanup_docker() {
+    print_status "Cleaning up Docker resources..."
+    
+    # Remove unused containers, networks, images, and build cache
+    if docker system prune -f; then
+        print_success "Docker system cleanup completed."
+    else
+        print_warning "Docker system cleanup failed, continuing..."
+    fi
+    
+    # Remove dangling images
+    if docker image prune -f; then
+        print_success "Docker image cleanup completed."
+    else
+        print_warning "Docker image cleanup failed, continuing..."
+    fi
+    
+    # Check disk usage after cleanup
+    local disk_usage=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
+    print_status "Disk usage after cleanup: ${disk_usage}%"
+    
+    if [ "$disk_usage" -gt 85 ]; then
+        print_warning "Disk usage is still high (${disk_usage}%). Consider manual cleanup or instance resize."
+    fi
+}
+
+# Function to check application health
+check_application_health() {
+    print_status "Checking application health..."
+    
+    local max_attempts=30
+    local attempt=1
+    local health_url="https://talent-staging.cyberworldbuilders.dev"
+    
+    print_status "Waiting for application to be healthy at: $health_url"
+    
+    while [ $attempt -le $max_attempts ]; do
+        print_status "Health check attempt $attempt/$max_attempts..."
+        
+        # Check if the application responds with HTTP 200 or 302 (redirect is OK for Laravel apps)
+        if curl -f -s -o /dev/null -w "%{http_code}" "$health_url" | grep -q "200\|302"; then
+            local http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$health_url" 2>/dev/null)
+            print_success "Application is healthy! HTTP $http_code received."
+            return 0
+        fi
+        
+        # Check if the application responds at all (even with error codes)
+        if curl -f -s -o /dev/null "$health_url" 2>/dev/null; then
+            local http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$health_url" 2>/dev/null)
+            print_warning "Application responded with HTTP $http_code, but not 200 or 302. Continuing to check..."
+        else
+            print_status "Application not responding yet, waiting..."
+        fi
+        
+        sleep 10
+        attempt=$((attempt + 1))
+    done
+    
+    print_error "Application health check failed after $max_attempts attempts."
+    print_error "Application may not be working properly."
+    
+    # Show service status for debugging
+    print_status "Current service status:"
+    docker-compose -f docker-compose.staging.yml ps
+    
+    # Show recent logs for debugging
+    print_status "Recent application logs:"
+    docker-compose -f docker-compose.staging.yml logs --tail=50 app-staging
+    
+    return 1
+}
+
 # Function to clean up
 cleanup() {
     print_status "Cleaning up temporary files..."
@@ -231,6 +280,21 @@ show_usage() {
     echo "Examples:"
     echo "  $0                                    # Deploy with current image"
     echo "  $0 -t abc123 -r 123456789.dkr.ecr.us-east-1.amazonaws.com  # Deploy specific image"
+}
+
+# Function to configure Redis password
+configure_redis() {
+    print_status "Configuring Redis password..."
+    
+    # Wait for Redis to be ready
+    sleep 5
+    
+    # Set Redis password
+    if docker-compose -f docker-compose.staging.yml exec -T redis-staging redis-cli CONFIG SET requirepass "$STAGING_REDIS_PASSWORD"; then
+        print_success "Redis password configured successfully."
+    else
+        print_warning "Failed to configure Redis password, continuing..."
+    fi
 }
 
 # Main function
@@ -269,14 +333,11 @@ main() {
     # Fetch secrets
     fetch_secrets
     
-    # Generate environment file
-    generate_env_file
+    # Set server environment variables
+    set_server_environment
     
-    # Set environment variables
-    set_environment_variables
-    
-    # Update compose file if image tag provided
-    update_compose_file "$image_tag" "$ecr_registry"
+    # Set image environment variable if image tag provided
+    set_image_environment "$image_tag" "$ecr_registry"
     
     # Authenticate with ECR if registry provided
     authenticate_ecr "$ecr_registry"
@@ -286,6 +347,40 @@ main() {
     
     # Wait for services to be healthy
     wait_for_services
+    
+    # Configure Redis password
+    configure_redis
+    
+    # Run database migrations
+    print_status "Running database migrations..."
+    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan migrate --force; then
+        print_success "Database migrations completed successfully."
+    else
+        print_error "Database migrations failed."
+        exit 1
+    fi
+    
+    # Run database seeders
+    print_status "Running database seeders..."
+    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan db:seed; then
+        print_success "Database seeders completed successfully."
+    else
+        print_warning "Database seeders failed, continuing..."
+    fi
+    
+    # Clear all caches
+    print_status "Clearing all caches..."
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan cache:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan config:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan route:clear
+    docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan view:clear
+    print_success "All caches cleared."
+    
+    # Clean up Docker resources
+    cleanup_docker
+
+    # Check application health
+    check_application_health
     
     # Clean up
     cleanup

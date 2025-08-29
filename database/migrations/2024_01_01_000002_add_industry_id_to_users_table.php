@@ -34,3 +34,4 @@ class AddIndustryIdToUsersTable extends Migration
         });
     }
 }
+

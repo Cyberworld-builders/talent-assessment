@@ -29,3 +29,4 @@ class CreateIndustriesTable extends Migration
         Schema::drop('industries');
     }
 }
+

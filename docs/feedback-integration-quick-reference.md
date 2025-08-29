@@ -316,10 +316,3 @@ php artisan tinker
 >>> $scores = ['leadership' => 85, 'communication' => 72];
 >>> $level = ($scores['leadership'] >= 80) ? 'high' : 'medium';
 >>> echo $library->feedback['dimensions']['leadership'][$level];
-```
-
-
-
-
-
-
