@@ -25,6 +25,9 @@ class EmailSystemTest extends TestCase
     {
         parent::setUp();
         
+        // Fake the mail system to prevent actual email sending
+        Mail::fake();
+        
         // Use existing user instead of creating new one
         $this->user = User::where('email', 'admin@example.com')->first();
         
@@ -67,14 +70,17 @@ class EmailSystemTest extends TestCase
      */
     public function testSendSimpleEmail()
     {
-        $result = Mail::raw('This is a test email from the Talent Assessment application.', function($message) {
+        Mail::raw('This is a test email from the Talent Assessment application.', function($message) {
             $message->from('test@talent-assessment.com', 'Talent Assessment Test')
                     ->to('test@mailtrap.io')
                     ->subject('Test Email - Talent Assessment System');
         });
 
-        // If no exception is thrown, the email was sent successfully
-        $this->assertTrue(true);
+        // Assert that the email was "sent" (but actually faked)
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test@mailtrap.io') &&
+                   $mail->subject === 'Test Email - Talent Assessment System';
+        });
     }
 
     /**
@@ -82,7 +88,7 @@ class EmailSystemTest extends TestCase
      */
     public function testSendHtmlEmail()
     {
-        $result = Mail::send('emails.assignments', [
+        Mail::send('emails.assignments', [
             'body' => '<h2>Test HTML Email</h2><p>This is a test HTML email from the Talent Assessment system.</p>'
         ], function($message) {
             $message->from('test@talent-assessment.com', 'Talent Assessment Test')
@@ -90,8 +96,11 @@ class EmailSystemTest extends TestCase
                     ->subject('HTML Test Email - Talent Assessment System');
         });
 
-        // If no exception is thrown, the email was sent successfully
-        $this->assertTrue(true);
+        // Assert that the email was "sent" (but actually faked)
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test@mailtrap.io') &&
+                   $mail->subject === 'HTML Test Email - Talent Assessment System';
+        });
     }
 
     /**
@@ -111,7 +120,11 @@ class EmailSystemTest extends TestCase
 
         try {
             $this->mailer->send_assignments($this->user, $assignmentIds, $expiration, $subject, $body);
-            $this->assertTrue(true);
+            
+            // Assert that an email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) use ($subject) {
+                return $mail->subject === $subject;
+            });
         } catch (Exception $e) {
             // If there's an exception, it might be due to missing data, but the email system should work
             $this->assertTrue(true);
@@ -130,7 +143,11 @@ class EmailSystemTest extends TestCase
 
         try {
             $this->mailer->send_assignment($this->user, $this->assignment->id);
-            $this->assertTrue(true);
+            
+            // Assert that an email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) {
+                return $mail->hasTo($this->user->email);
+            });
         } catch (Exception $e) {
             // If there's an exception, it might be due to missing data, but the email system should work
             $this->assertTrue(true);
@@ -149,7 +166,11 @@ class EmailSystemTest extends TestCase
 
         try {
             $this->mailer->send_completed($this->user, $this->assignment->id);
-            $this->assertTrue(true);
+            
+            // Assert that an email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) {
+                return $mail->hasTo($this->user->email);
+            });
         } catch (Exception $e) {
             // If there's an exception, it might be due to missing data, but the email system should work
             $this->assertTrue(true);
@@ -181,6 +202,11 @@ class EmailSystemTest extends TestCase
         try {
             $result = $this->mailer->send_questionnaire($this->user, $jaq->id, $subject, $body);
             $this->assertTrue($result);
+            
+            // Assert that an email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) use ($subject) {
+                return $mail->subject === $subject;
+            });
         } catch (Exception $e) {
             // If there's an exception, it might be due to missing data, but the email system should work
             $this->assertTrue(true);
@@ -260,31 +286,33 @@ class EmailSystemTest extends TestCase
         // Test with admin user
         $adminUser = User::where('email', 'admin@example.com')->first();
         if ($adminUser) {
-            try {
-                Mail::raw('Test email for admin user.', function($message) use ($adminUser) {
-                    $message->from('test@talent-assessment.com', 'Talent Assessment Test')
-                            ->to($adminUser->email)
-                            ->subject('Admin Test Email');
-                });
-                $this->assertTrue(true);
-            } catch (Exception $e) {
-                $this->assertTrue(true);
-            }
+            Mail::raw('Test email for admin user.', function($message) use ($adminUser) {
+                $message->from('test@talent-assessment.com', 'Talent Assessment Test')
+                        ->to($adminUser->email)
+                        ->subject('Admin Test Email');
+            });
+            
+            // Assert that the email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) use ($adminUser) {
+                return $mail->hasTo($adminUser->email) &&
+                       $mail->subject === 'Admin Test Email';
+            });
         }
 
         // Test with regular user
         $regularUser = User::where('email', 'user@example.com')->first();
         if ($regularUser) {
-            try {
-                Mail::raw('Test email for regular user.', function($message) use ($regularUser) {
-                    $message->from('test@talent-assessment.com', 'Talent Assessment Test')
-                            ->to($regularUser->email)
-                            ->subject('User Test Email');
-                });
-                $this->assertTrue(true);
-            } catch (Exception $e) {
-                $this->assertTrue(true);
-            }
+            Mail::raw('Test email for regular user.', function($message) use ($regularUser) {
+                $message->from('test@talent-assessment.com', 'Talent Assessment Test')
+                        ->to($regularUser->email)
+                        ->subject('User Test Email');
+            });
+            
+            // Assert that the email was "sent" (but actually faked)
+            Mail::assertSent(function ($mail) use ($regularUser) {
+                return $mail->hasTo($regularUser->email) &&
+                       $mail->subject === 'User Test Email';
+            });
         }
     }
 
@@ -293,18 +321,17 @@ class EmailSystemTest extends TestCase
      */
     public function testEmailErrorHandling()
     {
-        // Test with invalid email address
-        try {
-            Mail::raw('Test email with invalid address.', function($message) {
-                $message->from('test@talent-assessment.com', 'Talent Assessment Test')
-                        ->to('invalid-email-address')
-                        ->subject('Invalid Email Test');
-            });
-            $this->assertTrue(true);
-        } catch (Exception $e) {
-            // Expected to fail with invalid email
-            $this->assertTrue(true);
-        }
+        // Test with invalid email address - this should still work with Mail::fake()
+        Mail::raw('Test email with invalid address.', function($message) {
+            $message->from('test@talent-assessment.com', 'Talent Assessment Test')
+                    ->to('invalid-email-address')
+                    ->subject('Invalid Email Test');
+        });
+        
+        // Even with invalid email, Mail::fake() should still "send" it
+        Mail::assertSent(function ($mail) {
+            return $mail->subject === 'Invalid Email Test';
+        });
     }
 
     /**
@@ -352,20 +379,20 @@ class EmailSystemTest extends TestCase
      */
     public function testEmailWithAttachments()
     {
-        try {
-            Mail::send('emails.assignments', [
-                'body' => '<h2>Test Email with Attachment</h2><p>This email includes an attachment.</p>'
-            ], function($message) {
-                $message->from('test@talent-assessment.com', 'Talent Assessment Test')
-                        ->to('test@mailtrap.io')
-                        ->subject('Email with Attachment Test')
-                        ->attach(__FILE__, ['as' => 'test-file.php']);
-            });
-            $this->assertTrue(true);
-        } catch (Exception $e) {
-            // Attachment might not be supported in all environments
-            $this->assertTrue(true);
-        }
+        Mail::send('emails.assignments', [
+            'body' => '<h2>Test Email with Attachment</h2><p>This email includes an attachment.</p>'
+        ], function($message) {
+            $message->from('test@talent-assessment.com', 'Talent Assessment Test')
+                    ->to('test@mailtrap.io')
+                    ->subject('Email with Attachment Test')
+                    ->attach(__FILE__, ['as' => 'test-file.php']);
+        });
+        
+        // Assert that the email was "sent" (but actually faked)
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test@mailtrap.io') &&
+                   $mail->subject === 'Email with Attachment Test';
+        });
     }
 
     /**
@@ -380,18 +407,25 @@ class EmailSystemTest extends TestCase
         ];
 
         foreach ($emails as $email) {
-            try {
-                Mail::raw('This is test email ' . $email['subject'], function($message) use ($email) {
-                    $message->from('test@talent-assessment.com', 'Talent Assessment Test')
-                            ->to($email['to'])
-                            ->subject($email['subject']);
-                });
-            } catch (Exception $e) {
-                // Continue with next email
-            }
+            Mail::raw('This is test email ' . $email['subject'], function($message) use ($email) {
+                $message->from('test@talent-assessment.com', 'Talent Assessment Test')
+                        ->to($email['to'])
+                        ->subject($email['subject']);
+            });
         }
 
-        $this->assertTrue(true);
+        // Assert that all emails were "sent" (but actually faked)
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test1@mailtrap.io') && $mail->subject === 'Test Email 1';
+        });
+        
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test2@mailtrap.io') && $mail->subject === 'Test Email 2';
+        });
+        
+        Mail::assertSent(function ($mail) {
+            return $mail->hasTo('test3@mailtrap.io') && $mail->subject === 'Test Email 3';
+        });
     }
 
     /**
