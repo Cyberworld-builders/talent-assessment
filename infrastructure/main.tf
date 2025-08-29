@@ -545,6 +545,11 @@ data "aws_ami" "ubuntu" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+  
+  # Use specific AMI to prevent instance replacement
+  # Current instance uses: ami-08a98e6d1b5aa6099
+  # Uncomment the line below to pin to a specific AMI
+  # ami_ids = ["ami-08a98e6d1b5aa6099"]
 }
 
 # Elastic IP
@@ -559,7 +564,7 @@ resource "aws_eip" "dev_eip" {
 
 # EC2 Instance
 resource "aws_instance" "dev_instance" {
-  ami                    = data.aws_ami.ubuntu.id
+  ami                    = "ami-08a98e6d1b5aa6099"  # Pinned to current AMI to prevent replacement
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.dev_subnet.id
   vpc_security_group_ids = [aws_security_group.dev_sg.id]
