@@ -160,3 +160,18 @@ resource "aws_iam_role_policy" "github_actions_ses" {
     ]
   })
 }
+
+# Email Address Verification for Testing
+# These email addresses will be verified programmatically for testing purposes
+resource "aws_ses_email_identity" "test_emails" {
+  for_each = toset(var.test_email_addresses)
+  email     = each.value
+}
+
+# Variable for test email addresses
+# Add this to your variables.tf file
+# variable "test_email_addresses" {
+#   description = "List of email addresses to verify for testing"
+#   type        = list(string)
+#   default     = ["your-email@example.com", "admin@cyberworldbuilders.dev"]
+# }

@@ -23,28 +23,28 @@ class UserTableSeeder extends Seeder
             'whitelabel' => false
         ]);
 
-        // Create a test user
-        $user = User::create([
-            'username' => 'admin',
-            'name' => 'Test Admin',
-            'email' => 'admin@example.com',
+        // Create admin user with verified email address
+        $adminUser = User::create([
+            'username' => 'admin-goreman',
+            'name' => 'Admin Goreman',
+            'email' => 'admin-goreman@cyberworldbuilders.com',
             'password' => bcrypt('password'),
             'client_id' => $client->id,
-            'job_title' => 'Administrator',
+            'job_title' => 'System Administrator',
             'job_family' => 'Management'
         ]);
 
         // Assign admin role to the user
         $adminRole = Role::where('slug', 'admin')->first();
         if ($adminRole) {
-            $user->attachRole($adminRole);
+            $adminUser->attachRole($adminRole);
         }
 
-        // Create a regular user for testing
+        // Create regular user with verified email address
         $regularUser = User::create([
-            'username' => 'user',
-            'name' => 'Test User',
-            'email' => 'user@example.com',
+            'username' => 'user-apone',
+            'name' => 'User Apone',
+            'email' => 'user-apone@cyberworldbuilders.com',
             'password' => bcrypt('password'),
             'client_id' => $client->id,
             'job_title' => 'Employee',
@@ -57,8 +57,40 @@ class UserTableSeeder extends Seeder
             $regularUser->attachRole($userRole);
         }
 
-        echo "Created test users:\n";
-        echo "- Admin: admin@example.com / password\n";
-        echo "- User: user@example.com / password\n";
+        // Create additional test users for development
+        $testAdmin = User::create([
+            'username' => 'admin',
+            'name' => 'Test Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'client_id' => $client->id,
+            'job_title' => 'Test Administrator',
+            'job_family' => 'Management'
+        ]);
+
+        if ($adminRole) {
+            $testAdmin->attachRole($adminRole);
+        }
+
+        $testUser = User::create([
+            'username' => 'user',
+            'name' => 'Test User',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+            'client_id' => $client->id,
+            'job_title' => 'Test Employee',
+            'job_family' => 'General'
+        ]);
+
+        if ($userRole) {
+            $testUser->attachRole($userRole);
+        }
+
+        echo "Created users with verified email addresses:\n";
+        echo "- Admin Goreman: admin-goreman@cyberworldbuilders.com / password (Admin Role)\n";
+        echo "- User Apone: user-apone@cyberworldbuilders.com / password (User Role)\n";
+        echo "\nAdditional test users:\n";
+        echo "- Test Admin: admin@example.com / password (Admin Role)\n";
+        echo "- Test User: user@example.com / password (User Role)\n";
     }
 } 
