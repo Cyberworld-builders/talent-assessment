@@ -177,10 +177,20 @@ jobs:
           echo "Checking service status..."
           docker-compose -f docker-compose.staging.yml ps
           
-          # Clean up Docker resources
+          # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."
-          docker system prune -f || echo "Docker cleanup failed, continuing..."
-          docker image prune -f || echo "Docker image cleanup failed, continuing..."
+          docker system prune -a -f || echo "Docker cleanup failed, continuing..."
+          docker image prune -a -f || echo "Docker image cleanup failed, continuing..."
+          docker volume prune -f || echo "Docker volume cleanup failed, continuing..."
+          
+          # Clean up system resources
+          echo "Cleaning up system resources..."
+          sudo apt-get clean || echo "APT cleanup failed, continuing..."
+          sudo journalctl --vacuum-time=7d || echo "Journal cleanup failed, continuing..."
+          
+          # Truncate large log files if they exist
+          echo "Cleaning up large log files..."
+          sudo truncate -s 0 /var/log/health-check.log 2>/dev/null || echo "Health check log cleanup failed, continuing..."
           
           # Check disk usage
           DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
