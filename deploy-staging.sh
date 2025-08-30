@@ -2,6 +2,15 @@
 
 # 🚀 Staging Deployment Script
 # This script deploys the staging environment by fetching secrets and updating services
+# This script performs the following steps:
+# 1. Checks prerequisites (AWS CLI, Docker, Docker Compose)
+# 2. Fetches secrets and environment variables from AWS Parameter Store
+# 3. Updates environment variables for staging environment
+# 4. Takes down existing staging containers
+# 5. Rebuilds and deploys staging containers with new configuration
+# 6. Runs database migrations
+# 7. Verifies deployment status
+
 
 set -e  # Exit on any error
 
@@ -127,7 +136,10 @@ set_image_environment() {
         
         print_success "Image environment variable set: $STAGING_APP_IMAGE"
     else
-        print_warning "No image tag or ECR registry provided, using default image."
+        print_warning "No image tag or ECR registry provided, using local image for testing."
+        # TEMPORARY: Use local image for testing
+        export STAGING_APP_IMAGE="talent-assessment-app:staging-new"
+        print_success "Using local image: $STAGING_APP_IMAGE"
     fi
 }
 
@@ -153,12 +165,16 @@ authenticate_ecr() {
 deploy_services() {
     print_status "Deploying staging services..."
     
-    # Pull new images
-    if docker-compose -f docker-compose.staging.yml pull; then
-        print_success "Images pulled successfully."
+    # Pull new images (skip if using local image)
+    if [[ "$STAGING_APP_IMAGE" == *"talent-assessment-app:staging-new"* ]]; then
+        print_warning "Using local image, skipping pull."
     else
-        print_error "Failed to pull images."
-        exit 1
+        if docker-compose -f docker-compose.staging.yml pull; then
+            print_success "Images pulled successfully."
+        else
+            print_error "Failed to pull images."
+            exit 1
+        fi
     fi
     
     # Start services

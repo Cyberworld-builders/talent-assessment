@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app-staging:
-    image: ${STAGING_APP_IMAGE:-068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:latest}
+    image: ${STAGING_APP_IMAGE}
     container_name: talent-assessment-app-staging
     restart: unless-stopped
     working_dir: /var/www
@@ -44,7 +44,7 @@ services:
       - AWS_DEFAULT_REGION=${STAGING_SES_REGION}
       
       # AWS Configuration (from server environment variables)
-      - AWS_REGION=us-east-2
+      - AWS_REGION=${STAGING_SES_REGION}
       - AWS_S3_BUCKET=${STAGING_S3_BUCKET}
       - AWS_CLOUDFRONT_DOMAIN=dhbhjqoqdk3yk.cloudfront.net
       - AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true
