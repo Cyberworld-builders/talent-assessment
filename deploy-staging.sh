@@ -297,6 +297,29 @@ configure_redis() {
     fi
 }
 
+# Function to test SES email functionality
+test_ses_email() {
+    print_status "Testing SES email functionality..."
+    
+    # Copy test script to container
+    if docker cp test-ses-email.php talent-assessment-app-staging:/var/www/html/; then
+        print_success "Test script copied to container."
+    else
+        print_warning "Failed to copy test script, continuing..."
+        return 0
+    fi
+    
+    # Run SES test
+    if docker-compose -f docker-compose.staging.yml exec -T app-staging php /var/www/html/test-ses-email.php; then
+        print_success "SES email test completed successfully."
+    else
+        print_warning "SES email test failed, but continuing with deployment..."
+    fi
+    
+    # Clean up test script from container
+    docker-compose -f docker-compose.staging.yml exec -T app-staging rm -f /var/www/html/test-ses-email.php || true
+}
+
 # Main function
 main() {
     local image_tag=""
@@ -378,6 +401,9 @@ main() {
     
     # Clean up Docker resources
     cleanup_docker
+
+    # Test SES email functionality
+    test_ses_email
 
     # Check application health
     check_application_health

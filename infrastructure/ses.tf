@@ -114,31 +114,8 @@ resource "aws_iam_policy" "ses_config_policy" {
   })
 }
 
-# IAM User for SES API access
-resource "aws_iam_user" "ses_user" {
-  name = "${var.project_name}-ses-user"
-  
-  tags = {
-    Name = "${var.project_name}-ses-user"
-    Environment = var.environment
-  }
-}
-
-# IAM Access Key for SES User
-resource "aws_iam_access_key" "ses_user" {
-  user = aws_iam_user.ses_user.name
-}
-
-# Attach SES policies to user
-resource "aws_iam_user_policy_attachment" "ses_user_send" {
-  user       = aws_iam_user.ses_user.name
-  policy_arn = aws_iam_policy.ses_send_policy.arn
-}
-
-resource "aws_iam_user_policy_attachment" "ses_user_config" {
-  user       = aws_iam_user.ses_user.name
-  policy_arn = aws_iam_policy.ses_config_policy.arn
-}
+# Note: SES permissions are now handled via IAM roles attached to EC2 instances and GitHub Actions
+# No IAM users or access keys are needed for SES authentication
 
 # Add SES permissions to existing EC2 role
 resource "aws_iam_role_policy" "ec2_ses_policy" {
