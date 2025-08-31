@@ -80,6 +80,28 @@ check_prerequisites() {
     print_success "All prerequisites are met."
 }
 
+# Function to verify SES configuration
+verify_ses_configuration() {
+    print_status "Verifying SES configuration..."
+    
+    # Check if required SES environment variables are set
+    if [ -z "$STAGING_SES_REGION" ] || [ -z "$STAGING_SES_FROM_ADDRESS" ]; then
+        print_error "Missing required SES configuration variables"
+        print_error "SES_REGION: $STAGING_SES_REGION"
+        print_error "SES_FROM_ADDRESS: $STAGING_SES_FROM_ADDRESS"
+        exit 1
+    fi
+    
+    # Verify AWS credentials have SES permissions by testing a simple SES call
+    if aws ses get-send-quota --region "$STAGING_SES_REGION" >/dev/null 2>&1; then
+        print_success "SES configuration verified successfully"
+        print_status "Using IAM role-based authentication for SES"
+    else
+        print_warning "Could not verify SES permissions, but continuing with deployment"
+        print_status "SES will use IAM role-based authentication"
+    fi
+}
+
 # Function to fetch secrets from AWS Secrets Manager
 fetch_secrets() {
     print_status "Fetching secrets from AWS Secrets Manager..."
@@ -116,11 +138,19 @@ set_server_environment() {
     export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' "$secrets_file")
     export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' "$secrets_file")
     
+    # Set SES configuration for email functionality
+    export STAGING_SES_REGION=$(jq -r '.STAGING_SES_REGION' "$secrets_file")
+    export STAGING_SES_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' "$secrets_file")
+    export STAGING_MAIL_FROM_ADDRESS=$STAGING_SES_FROM_ADDRESS
+    export STAGING_MAIL_FROM_NAME="Talent Assessment Staging"
+    
     # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
     export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
     
     print_success "Server environment variables set."
     print_status "Generated APP_KEY: $STAGING_APP_KEY"
+    print_status "SES Region: $STAGING_SES_REGION"
+    print_status "SES From Address: $STAGING_SES_FROM_ADDRESS"
 }
 
 # Function to set image environment variable
@@ -347,6 +377,9 @@ main() {
     
     # Set server environment variables
     set_server_environment
+    
+    # Verify SES configuration
+    verify_ses_configuration
     
     # Set image environment variable if image tag provided
     set_image_environment "$image_tag" "$ecr_registry"
