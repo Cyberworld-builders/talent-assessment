@@ -136,10 +136,9 @@ set_image_environment() {
         
         print_success "Image environment variable set: $STAGING_APP_IMAGE"
     else
-        print_warning "No image tag or ECR registry provided, using local image for testing."
-        # TEMPORARY: Use local image for testing
-        export STAGING_APP_IMAGE="talent-assessment-app:staging-new"
-        print_success "Using local image: $STAGING_APP_IMAGE"
+        print_error "Image tag and ECR registry are required for staging deployment."
+        print_error "Usage: $0 -t IMAGE_TAG -r ECR_REGISTRY"
+        exit 1
     fi
 }
 
@@ -165,16 +164,12 @@ authenticate_ecr() {
 deploy_services() {
     print_status "Deploying staging services..."
     
-    # Pull new images (skip if using local image)
-    if [[ "$STAGING_APP_IMAGE" == *"talent-assessment-app:staging-new"* ]]; then
-        print_warning "Using local image, skipping pull."
+    # Pull new images
+    if docker-compose -f docker-compose.staging.yml pull; then
+        print_success "Images pulled successfully."
     else
-        if docker-compose -f docker-compose.staging.yml pull; then
-            print_success "Images pulled successfully."
-        else
-            print_error "Failed to pull images."
-            exit 1
-        fi
+        print_error "Failed to pull images."
+        exit 1
     fi
     
     # Start services
@@ -294,7 +289,6 @@ show_usage() {
     echo "  -h, --help               Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0                                    # Deploy with current image"
     echo "  $0 -t abc123 -r 123456789.dkr.ecr.us-east-1.amazonaws.com  # Deploy specific image"
 }
 
@@ -313,28 +307,7 @@ configure_redis() {
     fi
 }
 
-# Function to test SES email functionality
-test_ses_email() {
-    print_status "Testing SES email functionality..."
-    
-    # Copy test script to container
-    if docker cp test-ses-email.php talent-assessment-app-staging:/var/www/html/; then
-        print_success "Test script copied to container."
-    else
-        print_warning "Failed to copy test script, continuing..."
-        return 0
-    fi
-    
-    # Run SES test
-    if docker-compose -f docker-compose.staging.yml exec -T app-staging php /var/www/html/test-ses-email.php; then
-        print_success "SES email test completed successfully."
-    else
-        print_warning "SES email test failed, but continuing with deployment..."
-    fi
-    
-    # Clean up test script from container
-    docker-compose -f docker-compose.staging.yml exec -T app-staging rm -f /var/www/html/test-ses-email.php || true
-}
+
 
 # Main function
 main() {
@@ -399,14 +372,6 @@ main() {
         exit 1
     fi
     
-    # Run database seeders
-    print_status "Running database seeders..."
-    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan db:seed; then
-        print_success "Database seeders completed successfully."
-    else
-        print_warning "Database seeders failed, continuing..."
-    fi
-    
     # Clear all caches
     print_status "Clearing all caches..."
     docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan cache:clear
@@ -417,9 +382,6 @@ main() {
     
     # Clean up Docker resources
     cleanup_docker
-
-    # Test SES email functionality
-    test_ses_email
 
     # Check application health
     check_application_health

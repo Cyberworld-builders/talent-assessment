@@ -22,7 +22,7 @@ try {
     echo "Attempting to send test email...\n";
     
     Mail::raw('This is a test email from the staging environment to verify SES configuration is working properly.', function($message) {
-        $message->to('test@example.com')
+        $message->to('admin-goreman@cyberworldbuilders.com')
                 ->subject('SES Test - Staging Environment')
                 ->from(Config::get('mail.from.address'), Config::get('mail.from.name'));
     });

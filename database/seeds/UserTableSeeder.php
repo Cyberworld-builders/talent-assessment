@@ -16,7 +16,7 @@ class UserTableSeeder extends Seeder
     {
         // Create a test client first
         $client = Client::create([
-            'name' => 'Test Client',
+            'name' => 'Weyland Yutani',
             'address' => '123 Test Street',
             'primary_color' => '#007bff',
             'accent_color' => '#28a745',
@@ -28,7 +28,7 @@ class UserTableSeeder extends Seeder
             'username' => 'admin-goreman',
             'name' => 'Admin Goreman',
             'email' => 'admin-goreman@cyberworldbuilders.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('nobugs123$'),
             'client_id' => $client->id,
             'job_title' => 'System Administrator',
             'job_family' => 'Management'
@@ -45,7 +45,7 @@ class UserTableSeeder extends Seeder
             'username' => 'user-apone',
             'name' => 'User Apone',
             'email' => 'user-apone@cyberworldbuilders.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('nobugs123$'),
             'client_id' => $client->id,
             'job_title' => 'Employee',
             'job_family' => 'General'
@@ -60,9 +60,9 @@ class UserTableSeeder extends Seeder
         // Create additional test users for development
         $testAdmin = User::create([
             'username' => 'admin',
-            'name' => 'Test Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
+            'name' => 'Admin Ripley',
+            'email' => 'admin-ripley@cyberworldbuilders.com',
+            'password' => bcrypt('nobugs123$'),
             'client_id' => $client->id,
             'job_title' => 'Test Administrator',
             'job_family' => 'Management'
@@ -74,9 +74,9 @@ class UserTableSeeder extends Seeder
 
         $testUser = User::create([
             'username' => 'user',
-            'name' => 'Test User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
+            'name' => 'User Bishop',
+            'email' => 'user-bishop@cyberworldbuilders.com',
+            'password' => bcrypt('nobugs123$'),
             'client_id' => $client->id,
             'job_title' => 'Test Employee',
             'job_family' => 'General'
@@ -90,7 +90,7 @@ class UserTableSeeder extends Seeder
         echo "- Admin Goreman: admin-goreman@cyberworldbuilders.com / password (Admin Role)\n";
         echo "- User Apone: user-apone@cyberworldbuilders.com / password (User Role)\n";
         echo "\nAdditional test users:\n";
-        echo "- Test Admin: admin@example.com / password (Admin Role)\n";
-        echo "- Test User: user@example.com / password (User Role)\n";
+        echo "- Test Admin: admin-ripley@cyberworldbuilders.com / password (Admin Role)\n";
+        echo "- Test User: user-bishop@cyberworldbuilders.com / password (User Role)\n";
     }
 } 
