@@ -87,10 +87,10 @@ class UserTableSeeder extends Seeder
         }
 
         echo "Created users with verified email addresses:\n";
-        echo "- Admin Goreman: admin-goreman@cyberworldbuilders.com / password (Admin Role)\n";
-        echo "- User Apone: user-apone@cyberworldbuilders.com / password (User Role)\n";
+        echo "- Admin Goreman: admin-goreman@cyberworldbuilders.com / nobugs123$ (Admin Role)\n";
+        echo "- User Apone: user-apone@cyberworldbuilders.com / nobugs123$ (User Role)\n";
         echo "\nAdditional test users:\n";
-        echo "- Test Admin: admin-ripley@cyberworldbuilders.com / password (Admin Role)\n";
-        echo "- Test User: user-bishop@cyberworldbuilders.com / password (User Role)\n";
+        echo "- Admin Ripley: admin-ripley@cyberworldbuilders.com / nobugs123$ (Admin Role)\n";
+        echo "- User Bishop: user-bishop@cyberworldbuilders.com / nobugs123$ (User Role)\n";
     }
 } 

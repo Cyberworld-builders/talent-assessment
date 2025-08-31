@@ -38,7 +38,7 @@ class ClientTableSeeder extends Seeder
         $assessments = [];
         
         // Get the admin user for assessments
-        $adminUser = User::where('email', 'admin@example.com')->first();
+        $adminUser = User::where('email', 'admin-goreman@cyberworldbuilders.com')->first();
         
         // Create personality assessment using relationship method
         $personality = $adminUser->assessments()->create([
