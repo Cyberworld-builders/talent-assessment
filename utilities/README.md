@@ -1,49 +1,79 @@
-# Utilities Directory
+# SES Testing Utilities
 
-This directory contains various utility scripts and tools for the Talent Assessment project.
+This folder contains utilities for testing and debugging AWS SES (Simple Email Service) configuration in the Talent Assessment application.
 
-## Directory Structure
+## Files
 
-### `/domain-checking/`
-Domain availability checking utilities and results.
-
-**Files:**
-- `check_domains_dns.py` - Python script to check domain availability using DNS lookups
-- `check_domains_bulk.sh` - Bash script for bulk domain checking using AWS CLI
-- `check_domains_public.py` - Python script using public APIs for domain checking
-- `check_domain_availability.py` - Original AWS SES domain checking script
-- `domain_availability_results.json` - Results from domain availability checks
-- `available-domains-summary.md` - Summary of available domains for staging
+### `test-ses-config.php`
+A simple configuration test script that displays the current mail configuration and environment variables.
 
 **Usage:**
 ```bash
-cd utilities/domain-checking/
-python3 check_domains_dns.py
+# From the project root
+docker exec talent-assessment-app php utilities/test-ses-config.php
+
+# Or from within a container
+php utilities/test-ses-config.php
 ```
 
-### `/email-testing/`
-Email functionality testing utilities.
+**What it tests:**
+- Mail driver configuration
+- Mail from address and name
+- SES region configuration
+- Environment variable loading
 
-**Files:**
-- `test_send_assignment_email.php` - Test script for sending assignment emails
-- `create_assignment_manually.php` - Script to manually create assignments and send emails
-- `test_email_send.php` - Basic email sending test script
+### `test-ses-email.php`
+A comprehensive email test script that attempts to send a test email through SES.
 
 **Usage:**
 ```bash
-cd utilities/email-testing/
-docker-compose exec app php test_send_assignment_email.php
+# From the project root
+docker exec talent-assessment-app php utilities/test-ses-email.php
+
+# Or from within a container
+php utilities/test-ses-email.php
 ```
 
-## Purpose
+**What it tests:**
+- Full SES email sending functionality
+- IAM role authentication
+- Mail configuration
+- Error handling
 
-These utilities help with:
-1. **Domain Management**: Finding available domains for staging/production
-2. **Email Testing**: Testing email functionality before production deployment
-3. **Development**: Quick testing and validation of features
+### `debug-mail-config.php`
+A detailed debugging script for investigating mail configuration issues.
+
+**Usage:**
+```bash
+# From the project root
+docker exec talent-assessment-app php utilities/debug-mail-config.php
+
+# Or from within a container
+php utilities/debug-mail-config.php
+```
+
+**What it investigates:**
+- Environment variable loading
+- Laravel configuration values
+- Config cache status
+- .env file contents and status
+
+## When to Use
+
+- **`test-ses-config.php`**: Quick check of mail configuration
+- **`test-ses-email.php`**: Verify SES email functionality is working
+- **`debug-mail-config.php`**: Troubleshoot configuration issues
+
+## Prerequisites
+
+- Laravel application must be running in a container
+- AWS SES must be configured
+- IAM roles must have proper SES permissions
+- Email addresses must be verified in SES (for actual sending)
 
 ## Notes
 
-- All utilities are designed to work with the current development environment
-- Results and outputs are saved in their respective directories
-- Scripts include error handling and logging for debugging
+- These scripts are designed for development and staging environments
+- They require Laravel to be properly bootstrapped
+- Environment variables must be set correctly
+- For production, use the integrated SES test in the deployment script

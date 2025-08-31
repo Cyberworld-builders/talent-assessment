@@ -96,17 +96,18 @@ output "ses_mail_from_domain" {
   value       = aws_ses_domain_mail_from.main.mail_from_domain
 }
 
-output "ses_user_access_key" {
-  description = "SES user access key"
-  value       = aws_iam_access_key.ses_user.id
-  sensitive   = true
-}
+# Note: SES user access keys removed - using IAM role-based authentication instead
+# output "ses_user_access_key" {
+#   description = "SES user access key"
+#   value       = aws_iam_access_key.ses_user.id
+#   sensitive   = true
+# }
 
-output "ses_user_secret_key" {
-  description = "SES user secret key"
-  value       = aws_iam_access_key.ses_user.secret
-  sensitive   = true
-}
+# output "ses_user_secret_key" {
+#   description = "SES user secret key"
+#   value       = aws_iam_access_key.ses_user.secret
+#   sensitive   = true
+# }
 
 output "ses_configuration_set" {
   description = "SES configuration set name"
@@ -127,6 +128,12 @@ output "ses_deliveries_topic_arn" {
   description = "SNS topic ARN for SES deliveries"
   value       = aws_sns_topic.ses_deliveries.arn
 }
+
+output "test_email_addresses" {
+  description = "List of verified test email addresses"
+  value       = [for email in aws_ses_email_identity.test_emails : email.email]
+}
+
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF

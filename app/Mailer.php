@@ -9,18 +9,27 @@ use Mail;
 class Mailer {
 
 	/**
-	 * Mailgun domain from which to send emails.
+	 * Email domain from which to send emails.
 	 *
 	 * @var string
 	 */
-	protected $domain = 'postmaster@mg.aoescience.com';
+	protected $domain;
 
 	/**
 	 * Global from name.
 	 *
 	 * @var string
 	 */
-	protected $from = 'AOE Science';
+	protected $from;
+
+	/**
+	 * Constructor to set up email configuration from environment variables.
+	 */
+	public function __construct()
+	{
+		$this->domain = env('MAIL_FROM_ADDRESS', 'postmaster@mg.aoescience.com');
+		$this->from = env('MAIL_FROM_NAME', 'AOE Science');
+	}
 
 	/**
 	 * Global blind carbon copy email.

@@ -65,3 +65,12 @@ variable "project_name" {
   type        = string
   default     = "talent-assessment"
 }
+
+variable "test_email_addresses" {
+  description = "List of email addresses to verify for testing"
+  type        = list(string)
+  default     = [
+    "admin-goreman@cyberworldbuilders.com",
+    "user-apone@cyberworldbuilders.com",
+  ]
+}

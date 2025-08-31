@@ -2,6 +2,15 @@
 
 # 🚀 Staging Deployment Script
 # This script deploys the staging environment by fetching secrets and updating services
+# This script performs the following steps:
+# 1. Checks prerequisites (AWS CLI, Docker, Docker Compose)
+# 2. Fetches secrets and environment variables from AWS Parameter Store
+# 3. Updates environment variables for staging environment
+# 4. Takes down existing staging containers
+# 5. Rebuilds and deploys staging containers with new configuration
+# 6. Runs database migrations
+# 7. Verifies deployment status
+
 
 set -e  # Exit on any error
 
@@ -127,7 +136,9 @@ set_image_environment() {
         
         print_success "Image environment variable set: $STAGING_APP_IMAGE"
     else
-        print_warning "No image tag or ECR registry provided, using default image."
+        print_error "Image tag and ECR registry are required for staging deployment."
+        print_error "Usage: $0 -t IMAGE_TAG -r ECR_REGISTRY"
+        exit 1
     fi
 }
 
@@ -278,7 +289,6 @@ show_usage() {
     echo "  -h, --help               Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0                                    # Deploy with current image"
     echo "  $0 -t abc123 -r 123456789.dkr.ecr.us-east-1.amazonaws.com  # Deploy specific image"
 }
 
@@ -296,6 +306,8 @@ configure_redis() {
         print_warning "Failed to configure Redis password, continuing..."
     fi
 }
+
+
 
 # Main function
 main() {
@@ -358,14 +370,6 @@ main() {
     else
         print_error "Database migrations failed."
         exit 1
-    fi
-    
-    # Run database seeders
-    print_status "Running database seeders..."
-    if docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan db:seed; then
-        print_success "Database seeders completed successfully."
-    else
-        print_warning "Database seeders failed, continuing..."
     fi
     
     # Clear all caches

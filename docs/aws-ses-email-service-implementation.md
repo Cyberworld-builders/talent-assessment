@@ -248,29 +248,86 @@ resource "aws_iam_role_policy_attachment" "ses_config" {
   policy_arn = aws_iam_policy.ses_config_policy.arn
 }
 
-# IAM User for SES API access
+# Note: IAM users and access keys are deprecated in favor of IAM roles
+# The following resources are kept for reference but should not be used in production
+
+# IAM User for SES API access (DEPRECATED)
 resource "aws_iam_user" "ses_user" {
   name = "${var.project_name}-ses-user"
+  count = 0  # Disabled - use IAM roles instead
 }
 
-# IAM Access Key for SES User
+# IAM Access Key for SES User (DEPRECATED)
 resource "aws_iam_access_key" "ses_user" {
-  user = aws_iam_user.ses_user.name
+  user = aws_iam_user.ses_user[0].name
+  count = 0  # Disabled - use IAM roles instead
 }
 
-# Attach SES policies to user
+# Attach SES policies to user (DEPRECATED)
 resource "aws_iam_user_policy_attachment" "ses_user_send" {
-  user       = aws_iam_user.ses_user.name
+  user       = aws_iam_user.ses_user[0].name
   policy_arn = aws_iam_policy.ses_send_policy.arn
+  count = 0  # Disabled - use IAM roles instead
 }
 
 resource "aws_iam_user_policy_attachment" "ses_user_config" {
-  user       = aws_iam_user.ses_user.name
+  user       = aws_iam_user.ses_user[0].name
   policy_arn = aws_iam_policy.ses_config_policy.arn
+  count = 0  # Disabled - use IAM roles instead
 }
 ```
 
-### 4. Lambda Functions for Bounce/Complaint Handling
+### 4. IAM Role-Based Authentication (Recommended Approach)
+
+**Note**: This approach eliminates the need for long-lived AWS access keys. The EC2 instance and GitHub Actions will authenticate with AWS using their respective IAM roles.
+
+```hcl
+# Attach SES policy to EC2 instance role
+resource "aws_iam_role_policy" "ec2_ses_policy" {
+  name = "${var.project_name}-ec2-ses-policy"
+  role = aws_iam_role.ec2_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail",
+          "ses:GetSendQuota",
+          "ses:GetSendStatistics"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach SES policy to GitHub Actions role
+resource "aws_iam_role_policy" "github_actions_ses" {
+  name = "${var.project_name}-github-actions-ses-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail",
+          "ses:GetSendQuota",
+          "ses:GetSendStatistics"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+```
+
+### 5. Lambda Functions for Bounce/Complaint Handling
 
 ```hcl
 # lambda.tf
@@ -434,6 +491,31 @@ return [
 
 ### 2. Update Environment Variables
 
+#### Option A: IAM Role-Based Authentication (Recommended)
+
+```bash
+# .env.production
+
+# Mail Configuration
+MAIL_MAILER=ses
+MAIL_FROM_ADDRESS=noreply@yourdomain.com
+MAIL_FROM_NAME=Talent Assessment
+
+# AWS Configuration (only region needed - authentication via IAM role)
+AWS_DEFAULT_REGION=us-east-1
+
+# SES Configuration
+SES_CONFIGURATION_SET=talent-assessment-ses-config
+
+# Remove Mailtrap configuration
+# MAIL_HOST=sandbox.smtp.mailtrap.io
+# MAIL_USERNAME=cd877c53a7d010
+# MAIL_PASSWORD=718d08c34c9cba
+# MAIL_ENCRYPTION=tls
+```
+
+#### Option B: Access Key Authentication (Legacy - Not Recommended)
+
 ```bash
 # .env.production
 
@@ -447,13 +529,9 @@ MAIL_MAILER=ses
 SES_CONFIGURATION_SET=talent-assessment-ses-config
 MAIL_FROM_ADDRESS=noreply@yourdomain.com
 MAIL_FROM_NAME=Talent Assessment
-
-# Remove Mailtrap configuration
-# MAIL_HOST=sandbox.smtp.mailtrap.io
-# MAIL_USERNAME=cd877c53a7d010
-# MAIL_PASSWORD=718d08c34c9cba
-# MAIL_ENCRYPTION=tls
 ```
+
+**Note**: Option A is preferred as it eliminates the need for long-lived access keys and leverages AWS IAM roles for secure authentication.
 
 ### 3. Update Mailer Class
 
@@ -473,10 +551,7 @@ class Mailer
         $this->sesClient = new SesClient([
             'version' => 'latest',
             'region'  => config('mail.mailers.ses.region'),
-            'credentials' => [
-                'key'    => config('mail.mailers.ses.key'),
-                'secret' => config('mail.mailers.ses.secret'),
-            ],
+            // No credentials needed - AWS SDK will use IAM role automatically
         ]);
         
         $this->configurationSet = config('mail.mailers.ses.options.ConfigurationSetName');
@@ -815,6 +890,65 @@ resource "aws_cloudwatch_metric_alarm" "complaint_rate" {
 ### 3. Load Testing
 - Test with high email volumes
 - Monitor performance and costs
+
+### 4. IAM Role-Based Authentication Testing
+
+#### Testing SES Configuration
+```bash
+# Create a test script to verify SES functionality
+cat > test-ses-email.php << 'EOF'
+<?php
+require_once 'vendor/autoload.php';
+
+// Bootstrap Laravel
+$app = require_once 'bootstrap/app.php';
+$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
+
+echo "Starting SES email test...\n";
+
+try {
+    // Display current mail configuration
+    echo "Mail driver: " . Config::get('mail.default') . "\n";
+    echo "Mail from address: " . Config::get('mail.from.address') . "\n";
+    echo "Mail from name: " . Config::get('mail.from.name') . "\n";
+    echo "SES region: " . Config::get('services.ses.region') . "\n";
+    
+    // Test sending a simple email
+    echo "Attempting to send test email...\n";
+    
+    Mail::raw('This is a test email from the staging environment to verify SES configuration is working properly.', function($message) {
+        $message->to('test@example.com')
+                ->subject('SES Test - Staging Environment')
+                ->from(Config::get('mail.from.address'), Config::get('mail.from.name'));
+    });
+    
+    echo "SUCCESS: Test email sent successfully!\n";
+    echo "SES configuration is working properly.\n";
+    
+} catch (Exception $e) {
+    echo "ERROR: Failed to send test email\n";
+    echo "Error message: " . $e->getMessage() . "\n";
+    echo "Error code: " . $e->getCode() . "\n";
+    exit(1);
+}
+
+echo "SES email test completed successfully!\n";
+EOF
+
+# Run the test
+php test-ses-email.php
+```
+
+#### Integration with Deployment Scripts
+The SES test is now integrated into the deployment script (`deploy-staging.sh`) and will run automatically after deployment to verify email functionality.
+
+#### Testing in CI/CD
+- SES testing is removed from GitHub Actions workflows
+- Tests run locally on the server after deployment
+- No need for AWS credentials in CI/CD environment
 
 ## Migration Plan
 

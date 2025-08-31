@@ -114,31 +114,8 @@ resource "aws_iam_policy" "ses_config_policy" {
   })
 }
 
-# IAM User for SES API access
-resource "aws_iam_user" "ses_user" {
-  name = "${var.project_name}-ses-user"
-  
-  tags = {
-    Name = "${var.project_name}-ses-user"
-    Environment = var.environment
-  }
-}
-
-# IAM Access Key for SES User
-resource "aws_iam_access_key" "ses_user" {
-  user = aws_iam_user.ses_user.name
-}
-
-# Attach SES policies to user
-resource "aws_iam_user_policy_attachment" "ses_user_send" {
-  user       = aws_iam_user.ses_user.name
-  policy_arn = aws_iam_policy.ses_send_policy.arn
-}
-
-resource "aws_iam_user_policy_attachment" "ses_user_config" {
-  user       = aws_iam_user.ses_user.name
-  policy_arn = aws_iam_policy.ses_config_policy.arn
-}
+# Note: SES permissions are now handled via IAM roles attached to EC2 instances and GitHub Actions
+# No IAM users or access keys are needed for SES authentication
 
 # Add SES permissions to existing EC2 role
 resource "aws_iam_role_policy" "ec2_ses_policy" {
@@ -183,3 +160,18 @@ resource "aws_iam_role_policy" "github_actions_ses" {
     ]
   })
 }
+
+# Email Address Verification for Testing
+# These email addresses will be verified programmatically for testing purposes
+resource "aws_ses_email_identity" "test_emails" {
+  for_each = toset(var.test_email_addresses)
+  email     = each.value
+}
+
+# Variable for test email addresses
+# Add this to your variables.tf file
+# variable "test_email_addresses" {
+#   description = "List of email addresses to verify for testing"
+#   type        = list(string)
+#   default     = ["your-email@example.com", "admin@cyberworldbuilders.dev"]
+# }
