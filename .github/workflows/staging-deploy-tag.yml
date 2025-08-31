@@ -165,15 +165,21 @@ jobs:
           
           # Verify SES configuration
           echo "Verifying SES configuration..."
-          if [ -z "$STAGING_SES_ACCESS_KEY_ID" ] || [ -z "$STAGING_SES_SECRET_ACCESS_KEY" ] || [ -z "$STAGING_SES_REGION" ] || [ -z "$STAGING_SES_FROM_ADDRESS" ]; then
+          if [ -z "$STAGING_SES_REGION" ] || [ -z "$STAGING_SES_FROM_ADDRESS" ]; then
             echo "ERROR: Missing required SES configuration variables"
-            echo "SES_ACCESS_KEY_ID: $STAGING_SES_ACCESS_KEY_ID"
-            echo "SES_SECRET_ACCESS_KEY: [HIDDEN]"
             echo "SES_REGION: $STAGING_SES_REGION"
             echo "SES_FROM_ADDRESS: $STAGING_SES_FROM_ADDRESS"
             exit 1
           fi
-          echo "SES configuration verified successfully"
+          
+          # Verify AWS credentials have SES permissions by testing a simple SES call
+          if aws ses get-send-quota --region "$STAGING_SES_REGION" >/dev/null 2>&1; then
+            echo "SES configuration verified successfully"
+            echo "Using IAM role-based authentication for SES"
+          else
+            echo "WARNING: Could not verify SES permissions, but continuing with deployment"
+            echo "SES will use IAM role-based authentication"
+          fi
           
           # Set image environment variable
           echo "Setting image environment variable..."
