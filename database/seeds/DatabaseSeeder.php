@@ -18,7 +18,11 @@ class DatabaseSeeder extends Seeder
 		$this->call(RoleTableSeeder::class);
 		$this->call(UserTableSeeder::class);
 		$this->call(IndustriesTableSeeder::class);
-		$this->call(Involved360AssessmentSeeder::class);
+		
+		// Only run Involved360AssessmentSeeder in non-testing environments
+		if (app()->environment() !== 'testing') {
+			$this->call(Involved360AssessmentSeeder::class);
+		}
 
         Model::reguard();
     }
