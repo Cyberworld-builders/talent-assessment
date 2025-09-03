@@ -20,7 +20,13 @@ class DatabaseSeeder extends Seeder
 		$this->call(IndustriesTableSeeder::class);
 		
 		// Only run Involved360AssessmentSeeder in non-testing environments
-		if (app()->environment() !== 'testing') {
+		// Check multiple ways to detect testing environment
+		$isTesting = app()->environment() === 'testing' || 
+					 env('APP_ENV') === 'testing' || 
+					 config('database.default') === 'sqlite' ||
+					 config('database.connections.mysql.database') === 'testing';
+		
+		if (!$isTesting) {
 			$this->call(Involved360AssessmentSeeder::class);
 		}
 
