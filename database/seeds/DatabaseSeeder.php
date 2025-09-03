@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(IndustriesTableSeeder::class);
 		$this->call(FeedbackLibrariesTableSeeder::class);
 		$this->call(DimensionsTableSeeder::class);
+		$this->call(Involved360AssessmentSeeder::class);
 
         Model::reguard();
     }
