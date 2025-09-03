@@ -299,7 +299,7 @@ class Involved360AssessmentSeeder extends Seeder
 
         // Add more questions for remaining dimensions (simplified for brevity)
         $dimensionNames = ['Self-Development', 'Performance Management', 'Business Mindset', 'Customer Focus', 'Communication', 'Ethics & Integrity'];
-        $dimensionIds = [4, 5, 6, 11, 12, 13];
+        $dimensionIds = [4, 5, 6, 7, 8, 9];
         
         for ($i = 0; $i < count($dimensionNames); $i++) {
             $questionNumber = 6 + ($i * 4);
@@ -423,25 +423,25 @@ class Involved360AssessmentSeeder extends Seeder
             ['industry_id' => 5, 'dimension_id' => 6, 'value' => 3.84],
             
             // Customer Focus benchmarks
-            ['industry_id' => 1, 'dimension_id' => 11, 'value' => 4.15],
-            ['industry_id' => 2, 'dimension_id' => 11, 'value' => 4.21],
-            ['industry_id' => 3, 'dimension_id' => 11, 'value' => 4.08],
-            ['industry_id' => 4, 'dimension_id' => 11, 'value' => 4.18],
-            ['industry_id' => 5, 'dimension_id' => 11, 'value' => 4.25],
+            ['industry_id' => 1, 'dimension_id' => 7, 'value' => 4.15],
+            ['industry_id' => 2, 'dimension_id' => 7, 'value' => 4.21],
+            ['industry_id' => 3, 'dimension_id' => 7, 'value' => 4.08],
+            ['industry_id' => 4, 'dimension_id' => 7, 'value' => 4.18],
+            ['industry_id' => 5, 'dimension_id' => 7, 'value' => 4.25],
             
             // Communication benchmarks
-            ['industry_id' => 1, 'dimension_id' => 12, 'value' => 3.94],
-            ['industry_id' => 2, 'dimension_id' => 12, 'value' => 4.01],
-            ['industry_id' => 3, 'dimension_id' => 12, 'value' => 3.88],
-            ['industry_id' => 4, 'dimension_id' => 12, 'value' => 3.97],
-            ['industry_id' => 5, 'dimension_id' => 12, 'value' => 4.04],
+            ['industry_id' => 1, 'dimension_id' => 8, 'value' => 3.94],
+            ['industry_id' => 2, 'dimension_id' => 8, 'value' => 4.01],
+            ['industry_id' => 3, 'dimension_id' => 8, 'value' => 3.88],
+            ['industry_id' => 4, 'dimension_id' => 8, 'value' => 3.97],
+            ['industry_id' => 5, 'dimension_id' => 8, 'value' => 4.04],
             
             // Ethics & Integrity benchmarks
-            ['industry_id' => 1, 'dimension_id' => 13, 'value' => 4.32],
-            ['industry_id' => 2, 'dimension_id' => 13, 'value' => 4.38],
-            ['industry_id' => 3, 'dimension_id' => 13, 'value' => 4.25],
-            ['industry_id' => 4, 'dimension_id' => 13, 'value' => 4.35],
-            ['industry_id' => 5, 'dimension_id' => 13, 'value' => 4.42]
+            ['industry_id' => 1, 'dimension_id' => 9, 'value' => 4.32],
+            ['industry_id' => 2, 'dimension_id' => 9, 'value' => 4.38],
+            ['industry_id' => 3, 'dimension_id' => 9, 'value' => 4.25],
+            ['industry_id' => 4, 'dimension_id' => 9, 'value' => 4.35],
+            ['industry_id' => 5, 'dimension_id' => 9, 'value' => 4.42]
         ];
 
         foreach ($benchmarks as $benchmark) {
