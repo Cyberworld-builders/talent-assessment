@@ -17,10 +17,20 @@ class DatabaseSeeder extends Seeder
 		$this->call(LanguageTableSeeder::class);
 		$this->call(RoleTableSeeder::class);
 		$this->call(UserTableSeeder::class);
-		$this->call(ClientTableSeeder::class);
 		$this->call(IndustriesTableSeeder::class);
-		$this->call(FeedbackLibrariesTableSeeder::class);
-		$this->call(DimensionsTableSeeder::class);
+		
+		// Only run assessment seeders in non-testing environments
+		// Check multiple ways to detect testing environment
+		$isTesting = app()->environment() === 'testing' || 
+					 env('APP_ENV') === 'testing' || 
+					 config('database.default') === 'sqlite' ||
+					 config('database.connections.mysql.database') === 'testing';
+		
+		if (!$isTesting) {
+			$this->call(Involved360AssessmentSeeder::class);
+			$this->call(InvolvedLeaderAssessmentSeeder::class);
+			$this->call(InvolvedBlockersAssessmentSeeder::class);
+		}
 
         Model::reguard();
     }
