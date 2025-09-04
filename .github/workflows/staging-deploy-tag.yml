@@ -163,17 +163,8 @@ jobs:
           # Clean up secrets file
           rm secrets.json
           
-          # Verify SES configuration
-          echo "Verifying SES configuration..."
-          if [ -z "$STAGING_SES_ACCESS_KEY_ID" ] || [ -z "$STAGING_SES_SECRET_ACCESS_KEY" ] || [ -z "$STAGING_SES_REGION" ] || [ -z "$STAGING_SES_FROM_ADDRESS" ]; then
-            echo "ERROR: Missing required SES configuration variables"
-            echo "SES_ACCESS_KEY_ID: $STAGING_SES_ACCESS_KEY_ID"
-            echo "SES_SECRET_ACCESS_KEY: [HIDDEN]"
-            echo "SES_REGION: $STAGING_SES_REGION"
-            echo "SES_FROM_ADDRESS: $STAGING_SES_FROM_ADDRESS"
-            exit 1
-          fi
-          echo "SES configuration verified successfully"
+          # SES configuration uses IAM role-based authentication (OIDC)
+          echo "SES configuration will use IAM role-based authentication"
           
           # Set image environment variable
           echo "Setting image environment variable..."
