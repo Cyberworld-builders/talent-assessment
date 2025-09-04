@@ -1,0 +1,2693 @@
+{
+    "assessment": {
+        "id": 4,
+        "name": "Involved-Blockers",
+        "description": "Identifies personality attributes that are preventing you from realizing your full involvement and leadership potential.",
+        "instructions": "<h2 style=\"font-style:italic;\">Instructions:</h2><hr><p><big>In responding to each statement, think about a typical work day or work week, and rate your agreement with each statement. Please respond honestly to each question and please note, that some items might be similar to other items, this is intentional.</big></p><hr><p><br></p>",
+        "logo": "https://involved.sfo2.digitaloceanspaces.com/uploads/Involved-Blockers.png",
+        "background": "",
+        "paginate": 1,
+        "items_per_page": 10,
+        "translation": null,
+        "language": null,
+        "whitelabel": null,
+        "company_labeled_for": null,
+        "timed": "0",
+        "time_limit": 10,
+        "use_custom_fields": 0,
+        "custom_fields": null,
+        "target": 0,
+        "last_modified": "-000001-11-30T00:00:00.000000Z",
+        "created_at": "2020-04-11T10:34:35.000000Z",
+        "updated_at": "2020-12-11T20:17:18.000000Z",
+        "user": {
+            "id": 1,
+            "name": "Craig Wallace",
+            "email": "jcraigwallace@gmail.com"
+        }
+    },
+    "dimensions": [
+        {
+            "id": 42,
+            "name": "Fear",
+            "parent": 0,
+            "code": "Fear",
+            "assessment_id": 4,
+            "created_at": "2020-04-11T10:34:47.000000Z",
+            "updated_at": "2020-04-11T10:34:47.000000Z"
+        },
+        {
+            "id": 43,
+            "name": "Willfulness",
+            "parent": 0,
+            "code": "Will",
+            "assessment_id": 4,
+            "created_at": "2020-04-11T10:34:59.000000Z",
+            "updated_at": "2020-04-11T10:34:59.000000Z"
+        },
+        {
+            "id": 44,
+            "name": "Justification",
+            "parent": 0,
+            "code": "Just",
+            "assessment_id": 4,
+            "created_at": "2020-04-11T10:35:09.000000Z",
+            "updated_at": "2020-04-11T10:35:09.000000Z"
+        },
+        {
+            "id": 45,
+            "name": "Victimization",
+            "parent": 0,
+            "code": "Vict",
+            "assessment_id": 4,
+            "created_at": "2020-04-11T10:35:22.000000Z",
+            "updated_at": "2020-04-11T10:35:22.000000Z"
+        },
+        {
+            "id": 46,
+            "name": "Entitlement",
+            "parent": 0,
+            "code": "Ent",
+            "assessment_id": 4,
+            "created_at": "2020-04-11T10:35:32.000000Z",
+            "updated_at": "2020-04-11T10:35:32.000000Z"
+        }
+    ],
+    "questions": [
+        {
+            "id": 158,
+            "content": "\n\t\t\t\t\t\t\tI worry about unknown situations or tasks\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 1,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:34:35.000000Z",
+            "updated_at": "2020-12-11T20:17:18.000000Z"
+        },
+        {
+            "id": 159,
+            "content": "\n\t\t\t\t\t\t\tI worry that I will do the wrong things at work.\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 2,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:37:02.000000Z",
+            "updated_at": "2020-12-11T20:17:18.000000Z"
+        },
+        {
+            "id": 160,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am afraid that people will find fault with my work\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 3,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:37:02.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 161,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMy friends have told me that I let fear get in my way sometimes\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 4,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:37:02.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 162,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI avoid situations where I might perform poorly\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 5,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:37:02.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 163,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am afraid that people will find fault with my  performance\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 6,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:37:21.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 164,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tFear can sometimes slow me down\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 7,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:39:16.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 165,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI rarely worry about what kind of impression I make at work\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 8,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "5"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "1"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:39:16.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 166,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am generally courageous and comfortable when facing obstacles\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 9,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "5"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "1"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:39:16.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 167,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI prefer to learn from new work tasks than let fear of failure slow me down\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 10,
+            "type": 1,
+            "dimension_id": 42,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "5"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "1"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:39:16.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 168,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI usually know more than other people in the room\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 11,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 169,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tGiven my background, I have more expertise than others I work with\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 12,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 170,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMy knowledge and expertise exceeds most other people I know\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 13,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 171,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMy friends tell me I am headstrong\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 14,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 172,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tOver the years, people have told me I am 'thick-headed'\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 15,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 173,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI have been known to plow ahead with plans, not taking into account other people's ideas/suggestions\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 16,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 174,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMore often than not, I am usually correct, and I let people know it\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 17,
+            "type": 1,
+            "dimension_id": 43,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:45:59.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 175,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMost things that go wrong are easily justifiable\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 18,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:48:43.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 176,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI quickly rationalize negative events to make myself look/feel better\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 19,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:48:43.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 177,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMore often than not, I can easily pinpoint the reason something went wrong\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 20,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:50:44.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 178,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tWhen someone messes up, they usually justify their actions to save face\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 21,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:50:44.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 179,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tWhen bad things happen, it is because someone else messed up\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 22,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:50:44.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 180,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tMost people blame others when things go bad\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 23,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:50:44.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 181,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI try to find the real reason for someone's success or failure\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 24,
+            "type": 1,
+            "dimension_id": 44,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "5"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "1"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:51:05.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 182,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am often blamed by others at work when things wrong\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 25,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:53:35.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 183,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tWhere I work, it is usually the messenger who is blamed, not the real culprit\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 26,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:53:35.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 184,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI have been the victim of too many issues at work\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 27,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:53:35.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 185,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am often the victim, not the victorious, regardless of my role in a situation\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 28,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:53:35.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 186,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI feel that I am blamed when things go wrong, regardless of what I actually did\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 29,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T10:53:35.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 194,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tThere is always someone else to blame with things go wrong\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 30,
+            "type": 1,
+            "dimension_id": 45,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "5"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "1"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-12T14:57:01.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 187,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tGenerally speaking, I’m more deserving of good things\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 31,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:05:06.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 188,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI feel more entitled than most people\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 32,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:05:06.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 189,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tIf I were on a sinking ship, I should be one of the first people on a life boat\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 33,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:05:06.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 190,
+            "content": "\n\t\t\t\t\t\t\tSince I am worth it, I usually prefer the finer things in life\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 34,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:07:00.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 191,
+            "content": "\n\t\t\t\t\t\t\tI deserve the best\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 35,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:10:38.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 192,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tPeople similar to me deserve special breaks\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 36,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:10:38.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        },
+        {
+            "id": 193,
+            "content": "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tI am more deserving of everything good in life\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t",
+            "assessment_id": 4,
+            "number": 37,
+            "type": 1,
+            "dimension_id": 46,
+            "anchors": [
+                {
+                    "tag": "Strongly Disagree",
+                    "value": "1"
+                },
+                {
+                    "tag": "Disagree",
+                    "value": "2"
+                },
+                {
+                    "tag": "Neither Agree Nor Disagree",
+                    "value": "3"
+                },
+                {
+                    "tag": "Agree",
+                    "value": "4"
+                },
+                {
+                    "tag": "Strongly Agree",
+                    "value": "5"
+                }
+            ],
+            "practice": 0,
+            "created_at": "2020-04-11T11:10:38.000000Z",
+            "updated_at": "2020-12-11T20:17:19.000000Z"
+        }
+    ],
+    "translations": [],
+    "weights": [],
+    "benchmarks": [
+        {
+            "id": 531,
+            "industry_id": 1,
+            "dimension_id": 42,
+            "value": "1.55",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 1,
+                "name": "Hotel & Food Services"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 532,
+            "industry_id": 2,
+            "dimension_id": 42,
+            "value": "1.35",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 2,
+                "name": "Adminstrative & Support Services"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 533,
+            "industry_id": 3,
+            "dimension_id": 42,
+            "value": "0.97",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 3,
+                "name": "Agriculture, Forestry, Outdoors"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 534,
+            "industry_id": 4,
+            "dimension_id": 42,
+            "value": "1.36",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 4,
+                "name": "Arts, Entertainment, and Recreation"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 535,
+            "industry_id": 5,
+            "dimension_id": 42,
+            "value": "1.57",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 5,
+                "name": "Healthcare"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 536,
+            "industry_id": 6,
+            "dimension_id": 42,
+            "value": "1.44",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 6,
+                "name": "Pharmaceuticals"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 537,
+            "industry_id": 7,
+            "dimension_id": 42,
+            "value": "1.36",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 7,
+                "name": "Construction & Real Estate"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 538,
+            "industry_id": 8,
+            "dimension_id": 42,
+            "value": "1.54",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 8,
+                "name": "Education"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 539,
+            "industry_id": 9,
+            "dimension_id": 42,
+            "value": "1.32",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 9,
+                "name": "Energy, Oil, Gas, Mining"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 540,
+            "industry_id": 10,
+            "dimension_id": 42,
+            "value": "1.6",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 10,
+                "name": "Government"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 541,
+            "industry_id": 11,
+            "dimension_id": 42,
+            "value": "1.35",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 11,
+                "name": "Corporate/Executive Managers"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 542,
+            "industry_id": 12,
+            "dimension_id": 42,
+            "value": "1.33",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 12,
+                "name": "Manufacturing"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 543,
+            "industry_id": 13,
+            "dimension_id": 42,
+            "value": "1.66",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 13,
+                "name": "Professional Services"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 544,
+            "industry_id": 14,
+            "dimension_id": 42,
+            "value": "1.5",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 14,
+                "name": "Retail/Wholesale"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 545,
+            "industry_id": 15,
+            "dimension_id": 42,
+            "value": "1.35",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 15,
+                "name": "Utilities"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 546,
+            "industry_id": 16,
+            "dimension_id": 42,
+            "value": "1.39",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 16,
+                "name": "Transportation & Warehouse"
+            },
+            "dimension": {
+                "id": 42,
+                "name": "Fear",
+                "code": "Fear"
+            }
+        },
+        {
+            "id": 579,
+            "industry_id": 1,
+            "dimension_id": 43,
+            "value": "1.26",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 1,
+                "name": "Hotel & Food Services"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 580,
+            "industry_id": 2,
+            "dimension_id": 43,
+            "value": "1.25",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 2,
+                "name": "Adminstrative & Support Services"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 581,
+            "industry_id": 3,
+            "dimension_id": 43,
+            "value": "1.13",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 3,
+                "name": "Agriculture, Forestry, Outdoors"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 582,
+            "industry_id": 4,
+            "dimension_id": 43,
+            "value": "1.33",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 4,
+                "name": "Arts, Entertainment, and Recreation"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 583,
+            "industry_id": 5,
+            "dimension_id": 43,
+            "value": "1.3",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 5,
+                "name": "Healthcare"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 584,
+            "industry_id": 6,
+            "dimension_id": 43,
+            "value": "1.2",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 6,
+                "name": "Pharmaceuticals"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 585,
+            "industry_id": 7,
+            "dimension_id": 43,
+            "value": "1.88",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 7,
+                "name": "Construction & Real Estate"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 586,
+            "industry_id": 8,
+            "dimension_id": 43,
+            "value": "1.64",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 8,
+                "name": "Education"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 587,
+            "industry_id": 9,
+            "dimension_id": 43,
+            "value": "1.37",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 9,
+                "name": "Energy, Oil, Gas, Mining"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 588,
+            "industry_id": 10,
+            "dimension_id": 43,
+            "value": "1.71",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 10,
+                "name": "Government"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 589,
+            "industry_id": 11,
+            "dimension_id": 43,
+            "value": "1.24",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 11,
+                "name": "Corporate/Executive Managers"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 590,
+            "industry_id": 12,
+            "dimension_id": 43,
+            "value": "1.3",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 12,
+                "name": "Manufacturing"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 591,
+            "industry_id": 13,
+            "dimension_id": 43,
+            "value": "1.67",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 13,
+                "name": "Professional Services"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 592,
+            "industry_id": 14,
+            "dimension_id": 43,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 14,
+                "name": "Retail/Wholesale"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 593,
+            "industry_id": 15,
+            "dimension_id": 43,
+            "value": "1.29",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 15,
+                "name": "Utilities"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 594,
+            "industry_id": 16,
+            "dimension_id": 43,
+            "value": "1.45",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 16,
+                "name": "Transportation & Warehouse"
+            },
+            "dimension": {
+                "id": 43,
+                "name": "Willfulness",
+                "code": "Will"
+            }
+        },
+        {
+            "id": 547,
+            "industry_id": 1,
+            "dimension_id": 44,
+            "value": "1.25",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 1,
+                "name": "Hotel & Food Services"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 548,
+            "industry_id": 2,
+            "dimension_id": 44,
+            "value": "1.47",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 2,
+                "name": "Adminstrative & Support Services"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 549,
+            "industry_id": 3,
+            "dimension_id": 44,
+            "value": "1.66",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 3,
+                "name": "Agriculture, Forestry, Outdoors"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 550,
+            "industry_id": 4,
+            "dimension_id": 44,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 4,
+                "name": "Arts, Entertainment, and Recreation"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 551,
+            "industry_id": 5,
+            "dimension_id": 44,
+            "value": "1.32",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 5,
+                "name": "Healthcare"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 552,
+            "industry_id": 6,
+            "dimension_id": 44,
+            "value": "1.3",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 6,
+                "name": "Pharmaceuticals"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 553,
+            "industry_id": 7,
+            "dimension_id": 44,
+            "value": "1.31",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 7,
+                "name": "Construction & Real Estate"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 554,
+            "industry_id": 8,
+            "dimension_id": 44,
+            "value": "1.62",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 8,
+                "name": "Education"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 555,
+            "industry_id": 9,
+            "dimension_id": 44,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 9,
+                "name": "Energy, Oil, Gas, Mining"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 556,
+            "industry_id": 10,
+            "dimension_id": 44,
+            "value": "1.47",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 10,
+                "name": "Government"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 557,
+            "industry_id": 11,
+            "dimension_id": 44,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 11,
+                "name": "Corporate/Executive Managers"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 558,
+            "industry_id": 12,
+            "dimension_id": 44,
+            "value": "1.81",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 12,
+                "name": "Manufacturing"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 559,
+            "industry_id": 13,
+            "dimension_id": 44,
+            "value": "1.42",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 13,
+                "name": "Professional Services"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 560,
+            "industry_id": 14,
+            "dimension_id": 44,
+            "value": "1.35",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 14,
+                "name": "Retail/Wholesale"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 561,
+            "industry_id": 15,
+            "dimension_id": 44,
+            "value": "1.64",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 15,
+                "name": "Utilities"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 562,
+            "industry_id": 16,
+            "dimension_id": 44,
+            "value": "1.61",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 16,
+                "name": "Transportation & Warehouse"
+            },
+            "dimension": {
+                "id": 44,
+                "name": "Justification",
+                "code": "Just"
+            }
+        },
+        {
+            "id": 563,
+            "industry_id": 1,
+            "dimension_id": 45,
+            "value": "1.52",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 1,
+                "name": "Hotel & Food Services"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 564,
+            "industry_id": 2,
+            "dimension_id": 45,
+            "value": "1.39",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 2,
+                "name": "Adminstrative & Support Services"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 565,
+            "industry_id": 3,
+            "dimension_id": 45,
+            "value": "1.3",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 3,
+                "name": "Agriculture, Forestry, Outdoors"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 566,
+            "industry_id": 4,
+            "dimension_id": 45,
+            "value": "1.19",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 4,
+                "name": "Arts, Entertainment, and Recreation"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 567,
+            "industry_id": 5,
+            "dimension_id": 45,
+            "value": "1.23",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 5,
+                "name": "Healthcare"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 568,
+            "industry_id": 6,
+            "dimension_id": 45,
+            "value": "1.51",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 6,
+                "name": "Pharmaceuticals"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 569,
+            "industry_id": 7,
+            "dimension_id": 45,
+            "value": "1.46",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 7,
+                "name": "Construction & Real Estate"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 570,
+            "industry_id": 8,
+            "dimension_id": 45,
+            "value": "1.44",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 8,
+                "name": "Education"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 571,
+            "industry_id": 9,
+            "dimension_id": 45,
+            "value": "1.54",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 9,
+                "name": "Energy, Oil, Gas, Mining"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 572,
+            "industry_id": 10,
+            "dimension_id": 45,
+            "value": "1.53",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 10,
+                "name": "Government"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 573,
+            "industry_id": 11,
+            "dimension_id": 45,
+            "value": "2",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 11,
+                "name": "Corporate/Executive Managers"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 574,
+            "industry_id": 12,
+            "dimension_id": 45,
+            "value": "1.46",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 12,
+                "name": "Manufacturing"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 575,
+            "industry_id": 13,
+            "dimension_id": 45,
+            "value": "1.29",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 13,
+                "name": "Professional Services"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 576,
+            "industry_id": 14,
+            "dimension_id": 45,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 14,
+                "name": "Retail/Wholesale"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 577,
+            "industry_id": 15,
+            "dimension_id": 45,
+            "value": "1.81",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 15,
+                "name": "Utilities"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 578,
+            "industry_id": 16,
+            "dimension_id": 45,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 16,
+                "name": "Transportation & Warehouse"
+            },
+            "dimension": {
+                "id": 45,
+                "name": "Victimization",
+                "code": "Vict"
+            }
+        },
+        {
+            "id": 515,
+            "industry_id": 1,
+            "dimension_id": 46,
+            "value": "1.43",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 1,
+                "name": "Hotel & Food Services"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 516,
+            "industry_id": 2,
+            "dimension_id": 46,
+            "value": "1.78",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 2,
+                "name": "Adminstrative & Support Services"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 517,
+            "industry_id": 3,
+            "dimension_id": 46,
+            "value": "1.53",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 3,
+                "name": "Agriculture, Forestry, Outdoors"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 518,
+            "industry_id": 4,
+            "dimension_id": 46,
+            "value": "1.17",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 4,
+                "name": "Arts, Entertainment, and Recreation"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 519,
+            "industry_id": 5,
+            "dimension_id": 46,
+            "value": "1.39",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 5,
+                "name": "Healthcare"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 520,
+            "industry_id": 6,
+            "dimension_id": 46,
+            "value": "1.27",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 6,
+                "name": "Pharmaceuticals"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 521,
+            "industry_id": 7,
+            "dimension_id": 46,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 7,
+                "name": "Construction & Real Estate"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 522,
+            "industry_id": 8,
+            "dimension_id": 46,
+            "value": "1.32",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 8,
+                "name": "Education"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 523,
+            "industry_id": 9,
+            "dimension_id": 46,
+            "value": "1.26",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 9,
+                "name": "Energy, Oil, Gas, Mining"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 524,
+            "industry_id": 10,
+            "dimension_id": 46,
+            "value": "1.29",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 10,
+                "name": "Government"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 525,
+            "industry_id": 11,
+            "dimension_id": 46,
+            "value": "1.78",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 11,
+                "name": "Corporate/Executive Managers"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 526,
+            "industry_id": 12,
+            "dimension_id": 46,
+            "value": "1.4",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 12,
+                "name": "Manufacturing"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 527,
+            "industry_id": 13,
+            "dimension_id": 46,
+            "value": "1.49",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 13,
+                "name": "Professional Services"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 528,
+            "industry_id": 14,
+            "dimension_id": 46,
+            "value": "1.5",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 14,
+                "name": "Retail/Wholesale"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 529,
+            "industry_id": 15,
+            "dimension_id": 46,
+            "value": "1.46",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 15,
+                "name": "Utilities"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        },
+        {
+            "id": 530,
+            "industry_id": 16,
+            "dimension_id": 46,
+            "value": "1.69",
+            "created_at": "2021-07-07T13:46:05.000000Z",
+            "updated_at": "2021-07-07T15:33:53.000000Z",
+            "industry": {
+                "id": 16,
+                "name": "Transportation & Warehouse"
+            },
+            "dimension": {
+                "id": 46,
+                "name": "Entitlement",
+                "code": "Ent"
+            }
+        }
+    ],
+    "metadata": {
+        "export_version": "1.0",
+        "exported_at": "2025-09-04T22:57:19+00:00",
+        "system_version": "Laravel 5.1.46 (LTS)",
+        "total_questions": 37,
+        "total_dimensions": 5,
+        "total_translations": 0,
+        "total_weights": 0,
+        "total_benchmarks": 80,
+        "question_types": [
+            1
+        ],
+        "supported_languages": [],
+        "export_utility": "Assessment Export Utility v1.0",
+        "source_assessment_id": 4,
+        "source_assessment_name": "Involved-Blockers",
+        "question_type_mapping": {
+            "multiple_choice": 1,
+            "description": 2,
+            "text_input": 3,
+            "letter_sequence": 4,
+            "math_equation": 5,
+            "math_and_letters": 6,
+            "square_sequence": 7,
+            "symmetry": 8,
+            "symmetry_squares": 9,
+            "instructions": 10,
+            "slider": 11
+        }
+    }
+}

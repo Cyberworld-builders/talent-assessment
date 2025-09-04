@@ -6,6 +6,7 @@ This document provides a comprehensive understanding of the Talent Assessment Sy
 
 ## Core Assessment Data Model
 
+
 ### 1. Assessment Entity
 
 The `Assessment` is the central entity that represents a complete psychological assessment or test battery.
