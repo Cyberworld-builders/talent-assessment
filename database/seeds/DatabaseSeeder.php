@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(UserTableSeeder::class);
 		$this->call(IndustriesTableSeeder::class);
 		
-		// Only run Involved360AssessmentSeeder in non-testing environments
+		// Only run assessment seeders in non-testing environments
 		// Check multiple ways to detect testing environment
 		$isTesting = app()->environment() === 'testing' || 
 					 env('APP_ENV') === 'testing' || 
@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
 		
 		if (!$isTesting) {
 			$this->call(Involved360AssessmentSeeder::class);
+			$this->call(InvolvedLeaderAssessmentSeeder::class);
+			$this->call(InvolvedBlockersAssessmentSeeder::class);
 		}
 
         Model::reguard();
