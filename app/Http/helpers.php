@@ -383,10 +383,11 @@ function get_global($name)
 	// Retrieve master credentials
 	if (env('APP_ENV') == 'staging')
 	{
-		$db_host = $_SERVER['RDS_HOSTNAME'].':'.$_SERVER['RDS_PORT'];
-		$db_database = $_SERVER['RDS_DB_NAME'];
-		$db_username = $_SERVER['RDS_USERNAME'];
-		$db_password = $_SERVER['RDS_PASSWORD'];
+		// Staging uses local MySQL container, not RDS
+		$db_host = env('DB_HOST', 'mysql-staging');
+		$db_database = env('DB_DATABASE', 'talent_assessment_staging');
+		$db_username = env('DB_USERNAME', 'talent_user_staging');
+		$db_password = env('DB_PASSWORD', '');
 	}
 	else
 	{
