@@ -144,7 +144,7 @@ class InvolvedBlockersAssessmentSeeder extends Seeder
                 'number' => $question['number'],
                 'type' => 1, // Multiple choice
                 'dimension_id' => $dimensionMap[$question['dimension']],
-                'anchors' => json_encode($anchors),
+                'anchors' => serialize($anchors),
                 'practice' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
