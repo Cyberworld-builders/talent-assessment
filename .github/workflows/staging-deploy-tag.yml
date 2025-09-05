@@ -144,10 +144,10 @@ jobs:
           sed -i "s/DB_DATABASE=.*/DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)/" .env.staging
           sed -i "s/DB_USERNAME=.*/DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' secrets.json)/" .env.staging
           sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' secrets.json)/" .env.staging
+          sed -i "s/REDIS_PASSWORD=.*/REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' secrets.json)/" .env.staging
           sed -i "s/AWS_S3_BUCKET=.*/AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)/" .env.staging
           sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)/" .env.staging
           sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)/" .env.staging
-          
           
           # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
           STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
@@ -203,8 +203,10 @@ jobs:
             echo "WARNING: Disk usage is still high (${DISK_USAGE}%). Consider manual cleanup or instance resize."
           fi
           
-          # Redis is running without password protection for simplicity
-          echo "Redis running without password protection..."
+          # Configure Redis password
+          echo "Configuring Redis password..."
+          sleep 5
+          docker-compose -f docker-compose.staging.yml exec -T redis-staging redis-cli CONFIG SET requirepass "$STAGING_REDIS_PASSWORD" || echo "Failed to configure Redis password, continuing..."
           
           # Run migrations
           echo "Running database migrations..."
