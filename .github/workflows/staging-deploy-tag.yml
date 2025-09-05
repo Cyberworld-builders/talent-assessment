@@ -139,36 +139,29 @@ jobs:
           echo "Fetching secrets from AWS Secrets Manager..."
           aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > secrets.json
           
-          # Set server environment variables for docker-compose
-          echo "Setting server environment variables..."
-          export STAGING_DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)
-          export STAGING_DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' secrets.json)
-          export STAGING_DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' secrets.json)
-          export STAGING_DB_ROOT_PASSWORD=$(jq -r '.STAGING_DB_ROOT_PASSWORD' secrets.json)
-          export STAGING_REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' secrets.json)
-          export STAGING_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)
-          export STAGING_APP_KEY=$(jq -r '.STAGING_APP_KEY' secrets.json)
-          
-          # Set mail configuration for email functionality
-          echo "Setting mail configuration for email..."
-          export STAGING_SES_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)
-          export STAGING_SES_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)
-          export STAGING_MAIL_FROM_ADDRESS=$STAGING_SES_FROM_ADDRESS
-          export STAGING_MAIL_FROM_NAME="Talent Assessment Staging"
+          # Update .env.staging file with secrets
+          echo "Updating .env.staging file with secrets..."
+          sed -i "s/DB_DATABASE=.*/DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)/" .env.staging
+          sed -i "s/DB_USERNAME=.*/DB_USERNAME=$(jq -r '.STAGING_DB_USERNAME' secrets.json)/" .env.staging
+          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$(jq -r '.STAGING_DB_PASSWORD' secrets.json)/" .env.staging
+          sed -i "s/REDIS_PASSWORD=.*/REDIS_PASSWORD=$(jq -r '.STAGING_REDIS_PASSWORD' secrets.json)/" .env.staging
+          sed -i "s/AWS_S3_BUCKET=.*/AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)/" .env.staging
+          sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)/" .env.staging
+          sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)/" .env.staging
           
           # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
-          export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
+          STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
+          sed -i "s/APP_KEY=.*/APP_KEY=$STAGING_APP_KEY/" .env.staging
           echo "Generated APP_KEY: $STAGING_APP_KEY"
+          
+          # Set environment variable for docker-compose image reference
+          export STAGING_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
           
           # Clean up secrets file
           rm secrets.json
           
           # SES configuration uses IAM role-based authentication (OIDC)
           echo "SES configuration will use IAM role-based authentication"
-          
-          # Set image environment variable
-          echo "Setting image environment variable..."
-          export STAGING_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
           
           # Authenticate with ECR
           echo "Authenticating with ECR..."
