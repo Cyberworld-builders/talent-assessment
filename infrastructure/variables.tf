@@ -74,3 +74,13 @@ variable "test_email_addresses" {
     "user-apone@cyberworldbuilders.com",
   ]
 }
+
+variable "production_test_email_addresses" {
+  description = "List of email addresses to verify for production testing"
+  type        = list(string)
+  default     = [
+    "admin@involvedtalent.com",
+    "support@involvedtalent.com",
+    "noreply@involvedtalent.com"
+  ]
+}

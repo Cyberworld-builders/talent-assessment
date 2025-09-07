@@ -134,6 +134,52 @@ output "test_email_addresses" {
   value       = [for email in aws_ses_email_identity.test_emails : email.email]
 }
 
+# Production SES Outputs
+output "ses_production_domain_identity" {
+  description = "Production SES domain identity"
+  value       = aws_ses_domain_identity.production.domain
+}
+
+output "ses_production_verification_token" {
+  description = "Production SES domain verification token"
+  value       = aws_ses_domain_identity.production.verification_token
+}
+
+output "ses_production_dkim_tokens" {
+  description = "Production SES DKIM tokens"
+  value       = aws_ses_domain_dkim.production.dkim_tokens
+}
+
+output "ses_production_mail_from_domain" {
+  description = "Production SES mail from domain"
+  value       = aws_ses_domain_mail_from.production.mail_from_domain
+}
+
+output "ses_production_configuration_set" {
+  description = "Production SES configuration set name"
+  value       = aws_ses_configuration_set.production.name
+}
+
+output "ses_production_bounces_topic_arn" {
+  description = "SNS topic ARN for production SES bounces"
+  value       = aws_sns_topic.ses_production_bounces.arn
+}
+
+output "ses_production_complaints_topic_arn" {
+  description = "SNS topic ARN for production SES complaints"
+  value       = aws_sns_topic.ses_production_complaints.arn
+}
+
+output "ses_production_deliveries_topic_arn" {
+  description = "SNS topic ARN for production SES deliveries"
+  value       = aws_sns_topic.ses_production_deliveries.arn
+}
+
+output "production_test_email_addresses" {
+  description = "List of verified production test email addresses"
+  value       = [for email in aws_ses_email_identity.production_test_emails : email.email]
+}
+
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF
@@ -166,6 +212,13 @@ output "deployment_summary" {
     - Configuration Set: ${aws_ses_configuration_set.main.name}
     - Bounces Topic: ${aws_sns_topic.ses_bounces.arn}
     - Complaints Topic: ${aws_sns_topic.ses_complaints.arn}
+    
+    📧 Production Email Service (SES):
+    - Domain: ${aws_ses_domain_identity.production.domain}
+    - Mail From: ${aws_ses_domain_mail_from.production.mail_from_domain}
+    - Configuration Set: ${aws_ses_configuration_set.production.name}
+    - Bounces Topic: ${aws_sns_topic.ses_production_bounces.arn}
+    - Complaints Topic: ${aws_sns_topic.ses_production_complaints.arn}
     
 
     
