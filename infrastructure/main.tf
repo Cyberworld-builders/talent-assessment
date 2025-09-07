@@ -430,6 +430,38 @@ resource "aws_secretsmanager_secret_version" "staging_secrets_version" {
   })
 }
 
+# Secrets Manager for Production Environment
+resource "aws_secretsmanager_secret" "production_secrets" {
+  name = "talent-assessment-production-secrets"
+  
+  tags = {
+    Name = "${var.project_name}-production-secrets"
+    Environment = "production"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "production_secrets_version" {
+  secret_id     = aws_secretsmanager_secret.production_secrets.id
+  secret_string = jsonencode({
+    PRODUCTION_DB_PASSWORD    = "strong_production_db_pass_${random_string.secret_suffix.result}"
+    PRODUCTION_REDIS_PASSWORD = "strong_production_redis_pass_${random_string.secret_suffix.result}"
+    PRODUCTION_S3_BUCKET      = aws_s3_bucket.uploads_bucket.bucket
+    PRODUCTION_DB_DATABASE    = "talent_assessment_production"
+    PRODUCTION_DB_USERNAME    = "talent_user_production"
+    PRODUCTION_DB_ROOT_PASSWORD = "strong_production_root_pass_${random_string.secret_suffix.result}"
+    PRODUCTION_APP_KEY        = "base64:${base64encode(random_string.app_key.result)}"
+    PRODUCTION_SES_CONFIG_SET = aws_ses_configuration_set.production.name
+    PRODUCTION_SES_REGION     = "us-east-2"
+  })
+}
+
+# Random string for Laravel APP_KEY
+resource "random_string" "app_key" {
+  length  = 32
+  special = false
+  upper   = false
+}
+
 # Random string for unique secret values
 resource "random_string" "secret_suffix" {
   length  = 8
@@ -506,7 +538,10 @@ resource "aws_iam_role_policy" "ec2_extended_policy" {
       {
         Effect = "Allow"
         Action = "secretsmanager:GetSecretValue"
-        Resource = aws_secretsmanager_secret.staging_secrets.arn
+        Resource = [
+          aws_secretsmanager_secret.staging_secrets.arn,
+          aws_secretsmanager_secret.production_secrets.arn
+        ]
       },
       {
         Effect = "Allow"

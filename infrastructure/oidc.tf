@@ -88,7 +88,8 @@ resource "aws_iam_role_policy" "github_actions_secrets" {
           "secretsmanager:GetSecretValue"
         ]
         Resource = [
-          aws_secretsmanager_secret.staging_secrets.arn
+          aws_secretsmanager_secret.staging_secrets.arn,
+          aws_secretsmanager_secret.production_secrets.arn
         ]
       }
     ]

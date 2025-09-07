@@ -70,6 +70,11 @@ output "staging_secrets_arn" {
   value       = aws_secretsmanager_secret.staging_secrets.arn
 }
 
+output "production_secrets_arn" {
+  description = "Production secrets ARN"
+  value       = aws_secretsmanager_secret.production_secrets.arn
+}
+
 output "staging_s3_bucket_name" {
   description = "Staging S3 bucket name"
   value       = aws_s3_bucket.staging_uploads_bucket.bucket
@@ -219,6 +224,10 @@ output "deployment_summary" {
     - Configuration Set: ${aws_ses_configuration_set.production.name}
     - Bounces Topic: ${aws_sns_topic.ses_production_bounces.arn}
     - Complaints Topic: ${aws_sns_topic.ses_production_complaints.arn}
+    
+    🔐 Secrets Management:
+    - Staging Secrets: ${aws_secretsmanager_secret.staging_secrets.arn}
+    - Production Secrets: ${aws_secretsmanager_secret.production_secrets.arn}
     
 
     
