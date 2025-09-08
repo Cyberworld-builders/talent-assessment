@@ -1,0 +1,255 @@
+name: Production Deploy (Tag-based)
+
+on:
+  push:
+    tags:
+      - '*-release'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    env:
+      MAILTRAP_USERNAME: ${{ secrets.MAILTRAP_USERNAME }}
+      MAILTRAP_PASSWORD: ${{ secrets.MAILTRAP_PASSWORD }}
+      
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqlnd, zip, gd, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar
+        coverage: none
+
+    - name: Install MySQL Client
+      run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+    - name: Setup Testing Environment
+      run: |
+        cp .env.example .env.testing
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
+        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
+        # Configure email for testing (using environment variables or defaults)
+        sed -i 's/MAIL_DRIVER=.*/MAIL_DRIVER=smtp/' .env.testing
+        sed -i 's/MAIL_HOST=.*/MAIL_HOST=sandbox.smtp.mailtrap.io/' .env.testing
+        sed -i 's/MAIL_PORT=.*/MAIL_PORT=2525/' .env.testing
+        sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=$MAILTRAP_USERNAME/" .env.testing
+        sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=$MAILTRAP_PASSWORD/" .env.testing
+        sed -i 's/MAIL_ENCRYPTION=.*/MAIL_ENCRYPTION=tls/' .env.testing
+
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
+
+    - name: Clear All Caches
+      run: |
+        php artisan cache:clear
+        php artisan config:clear
+        php artisan route:clear
+        php artisan view:clear
+        composer dump-autoload
+
+    - name: Wait for MySQL
+      run: |
+        echo "Waiting for MySQL to be ready..."
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ppassword --silent; do
+          sleep 1
+        done
+        echo "MySQL is ready!"
+
+    - name: Setup Environment for Artisan
+      run: cp .env.testing .env
+
+    - name: Generate key
+      run: php artisan key:generate
+
+    - name: Run Migrations
+      run: php artisan migrate --force
+
+    - name: Run Database Seeders
+      run: php artisan db:seed --force
+
+    - name: Execute tests (via phpunit)
+      run: vendor/bin/phpunit --colors=never
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build and Push Image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.ref_name }}
+      run: |
+        docker build -f Dockerfile -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
+        echo "Image pushed: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          set -e
+          cd /opt/talent-assessment
+          
+          echo "Starting production deployment for tag: ${{ github.ref_name }}"
+          
+          # Export environment variables
+          export AWS_DEFAULT_REGION=${{ vars.AWS_REGION }}
+          export IMAGE_TAG=${{ github.ref_name }}
+          export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          
+          # Fetch secrets and set server environment variables
+          echo "Fetching secrets from AWS Secrets Manager..."
+          aws secretsmanager get-secret-value --secret-id talent-assessment-production-secrets --region us-east-2 --query SecretString --output text > secrets.json
+          
+          # Update .env.production file with secrets
+          echo "Updating .env.production file with secrets..."
+          sed -i "s/DB_DATABASE=.*/DB_DATABASE=$(jq -r '.PRODUCTION_DB_DATABASE' secrets.json)/" .env.production
+          sed -i "s/DB_USERNAME=.*/DB_USERNAME=$(jq -r '.PRODUCTION_DB_USERNAME' secrets.json)/" .env.production
+          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$(jq -r '.PRODUCTION_DB_PASSWORD' secrets.json)/" .env.production
+          sed -i "s/REDIS_PASSWORD=.*/REDIS_PASSWORD=$(jq -r '.PRODUCTION_REDIS_PASSWORD' secrets.json)/" .env.production
+          sed -i "s/AWS_S3_BUCKET=.*/AWS_S3_BUCKET=$(jq -r '.PRODUCTION_S3_BUCKET' secrets.json)/" .env.production
+          sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)/" .env.production
+          sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.PRODUCTION_SES_FROM_ADDRESS' secrets.json)/" .env.production
+          
+          # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
+          PRODUCTION_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
+          sed -i "s/APP_KEY=.*/APP_KEY=$PRODUCTION_APP_KEY/" .env.production
+          echo "Generated APP_KEY: $PRODUCTION_APP_KEY"
+          
+          # Set environment variable for docker-compose image reference
+          export PRODUCTION_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+          
+          # Clean up secrets file
+          rm secrets.json
+          
+          # SES configuration uses IAM role-based authentication (OIDC)
+          echo "SES configuration will use IAM role-based authentication"
+          
+          # Authenticate with ECR
+          echo "Authenticating with ECR..."
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
+          
+          # Pull new image and restart services
+          echo "Pulling new image and restarting production services..."
+          docker-compose -f docker-compose.production.yml pull
+          docker-compose -f docker-compose.production.yml down
+          docker-compose -f docker-compose.production.yml up -d
+          
+          # Wait for services to be healthy
+          echo "Waiting for services to be healthy..."
+          sleep 30
+          
+          # Check service status
+          echo "Checking service status..."
+          docker-compose -f docker-compose.production.yml ps
+          
+          # Clean up Docker resources aggressively
+          echo "Cleaning up Docker resources..."
+          docker system prune -a -f || echo "Docker cleanup failed, continuing..."
+          docker image prune -a -f || echo "Docker image cleanup failed, continuing..."
+          docker volume prune -f || echo "Docker volume cleanup failed, continuing..."
+          
+          # Clean up system resources
+          echo "Cleaning up system resources..."
+          sudo apt-get clean || echo "APT cleanup failed, continuing..."
+          sudo journalctl --vacuum-time=7d || echo "Journal cleanup failed, continuing..."
+          
+          # Truncate large log files if they exist
+          echo "Cleaning up large log files..."
+          sudo truncate -s 0 /var/log/health-check.log 2>/dev/null || echo "Health check log cleanup failed, continuing..."
+          
+          # Check disk usage
+          DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
+          echo "Disk usage after cleanup: ${DISK_USAGE}%"
+          
+          if [ "$DISK_USAGE" -gt 85 ]; then
+            echo "WARNING: Disk usage is still high (${DISK_USAGE}%). Consider manual cleanup or instance resize."
+          fi
+          
+          # Configure Redis password
+          echo "Configuring Redis password..."
+          sleep 5
+          docker-compose -f docker-compose.production.yml exec -T redis-production redis-cli CONFIG SET requirepass "$PRODUCTION_REDIS_PASSWORD" || echo "Failed to configure Redis password, continuing..."
+          
+          # Run migrations
+          echo "Running database migrations..."
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan migrate --force
+          
+          # Clear all caches
+          echo "Clearing all caches..."
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan cache:clear
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan config:clear
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan route:clear
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan view:clear
+          
+
+          
+          # Health check
+          echo "Performing health check..."
+          HEALTH_URL="https://talent.cyberworldbuilders.dev"
+          MAX_ATTEMPTS=30
+          ATTEMPT=1
+          
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "Health check attempt $ATTEMPT/$MAX_ATTEMPTS..."
+            
+            if curl -f -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" | grep -q "200\|302"; then
+              http_code=$(curl -f -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" 2>/dev/null || echo "000")
+              echo "SUCCESS: Application is healthy! HTTP $http_code received."
+              break
+            fi
+            
+            if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+              echo "ERROR: Application health check failed after $MAX_ATTEMPTS attempts."
+              echo "Current service status:"
+              docker-compose -f docker-compose.production.yml ps
+              echo "Recent application logs:"
+              docker-compose -f docker-compose.production.yml logs --tail=50 app-production
+              exit 1
+            fi
+            
+            sleep 10
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+          
+          echo "Production deployment completed successfully!"
+          echo "Application URL: https://talent.cyberworldbuilders.dev"
+          echo "Deployed version: ${{ github.ref_name }}"

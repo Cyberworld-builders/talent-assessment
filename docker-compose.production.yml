@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  app-production:
+    image: ${PRODUCTION_APP_IMAGE}
+    container_name: talent-assessment-app-production
+    restart: unless-stopped
+    working_dir: /var/www
+    ports:
+      - "8004:8000"
+    env_file:
+      - .env.production
+    depends_on:
+      - mysql-production
+      - redis-production
+    networks:
+      - talent-network-production
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.talent-production.entrypoints=websecure"
+      - "traefik.http.routers.talent-production.rule=Host(`my.involvedtalent.com`)"
+      - "traefik.http.routers.talent-production.tls=true"
+      - "traefik.http.routers.talent-production.tls.certresolver=letsencrypt"
+      - "traefik.http.services.talent-production.loadbalancer.server.port=8000"
+
+  mysql-production:
+    image: mysql:8.0
+    container_name: talent-assessment-mysql-production
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data_production:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - talent-network-production
+
+  redis-production:
+    image: redis:7-alpine
+    container_name: talent-assessment-redis-production
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    volumes:
+      - redis_data_production:/data
+    networks:
+      - talent-network-production
+
+volumes:
+  mysql_data_production:
+  redis_data_production:
+
+networks:
+  talent-network-production:
+    driver: bridge
+  traefik-net:
+    external: true
+
