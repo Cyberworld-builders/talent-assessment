@@ -141,17 +141,17 @@ jobs:
           
           # Update .env.production file with secrets
           echo "Updating .env.production file with secrets..."
-          sed -i "s/DB_DATABASE=.*/DB_DATABASE=$(jq -r '.PRODUCTION_DB_DATABASE' secrets.json)/" .env.production
-          sed -i "s/DB_USERNAME=.*/DB_USERNAME=$(jq -r '.PRODUCTION_DB_USERNAME' secrets.json)/" .env.production
-          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$(jq -r '.PRODUCTION_DB_PASSWORD' secrets.json)/" .env.production
-          sed -i "s/REDIS_PASSWORD=.*/REDIS_PASSWORD=$(jq -r '.PRODUCTION_REDIS_PASSWORD' secrets.json)/" .env.production
-          sed -i "s/AWS_S3_BUCKET=.*/AWS_S3_BUCKET=$(jq -r '.PRODUCTION_S3_BUCKET' secrets.json)/" .env.production
-          sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)/" .env.production
-          sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.PRODUCTION_SES_FROM_ADDRESS' secrets.json)/" .env.production
+          sed -i "s|DB_DATABASE=.*|DB_DATABASE=$(jq -r '.PRODUCTION_DB_DATABASE' secrets.json)|" .env.production
+          sed -i "s|DB_USERNAME=.*|DB_USERNAME=$(jq -r '.PRODUCTION_DB_USERNAME' secrets.json)|" .env.production
+          sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=$(jq -r '.PRODUCTION_DB_PASSWORD' secrets.json)|" .env.production
+          sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=$(jq -r '.PRODUCTION_REDIS_PASSWORD' secrets.json)|" .env.production
+          sed -i "s|AWS_S3_BUCKET=.*|AWS_S3_BUCKET=$(jq -r '.PRODUCTION_S3_BUCKET' secrets.json)|" .env.production
+          sed -i "s|AWS_DEFAULT_REGION=.*|AWS_DEFAULT_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)|" .env.production
+          sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=$(jq -r '.PRODUCTION_SES_FROM_ADDRESS' secrets.json)|" .env.production
           
           # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
           PRODUCTION_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
-          sed -i "s/APP_KEY=.*/APP_KEY=$PRODUCTION_APP_KEY/" .env.production
+          sed -i "s|APP_KEY=.*|APP_KEY=$PRODUCTION_APP_KEY|" .env.production
           echo "Generated APP_KEY: $PRODUCTION_APP_KEY"
           
           # Set environment variable for docker-compose image reference
@@ -224,7 +224,7 @@ jobs:
           
           # Health check
           echo "Performing health check..."
-          HEALTH_URL="https://talent.cyberworldbuilders.dev"
+          HEALTH_URL="https://my.involvedtalent.com"
           MAX_ATTEMPTS=30
           ATTEMPT=1
           
@@ -251,5 +251,5 @@ jobs:
           done
           
           echo "Production deployment completed successfully!"
-          echo "Application URL: https://talent.cyberworldbuilders.dev"
+          echo "Application URL: https://my.involvedtalent.com"
           echo "Deployed version: ${{ github.ref_name }}"
