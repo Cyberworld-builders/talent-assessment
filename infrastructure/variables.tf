@@ -81,6 +81,7 @@ variable "production_test_email_addresses" {
   default     = [
     "admin@involvedtalent.com",
     "support@involvedtalent.com",
-    "noreply@involvedtalent.com"
+    "noreply@involvedtalent.com",
+    "assessment@involvedtalent.com"
   ]
 }
