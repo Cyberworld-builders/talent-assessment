@@ -155,13 +155,11 @@ jobs:
             echo "AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true" >> .env.staging
           fi
           
-          # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
-          STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
-          sed -i "s/APP_KEY=.*/APP_KEY=$STAGING_APP_KEY/" .env.staging
-          echo "Generated APP_KEY: $STAGING_APP_KEY"
-          
           # Set environment variable for docker-compose image reference
           export STAGING_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+          
+          # Update .env.staging with the new image tag
+          sed -i "s|STAGING_APP_IMAGE=.*|STAGING_APP_IMAGE=$STAGING_APP_IMAGE|" .env.staging
           
           # Clean up secrets file
           rm secrets.json
@@ -185,6 +183,10 @@ jobs:
           # Check service status
           echo "Checking service status..."
           docker-compose -f docker-compose.staging.yml ps
+          
+          # Generate APP_KEY using Laravel artisan command
+          echo "Generating APP_KEY using Laravel artisan..."
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate
           
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."
