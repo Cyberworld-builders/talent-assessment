@@ -155,10 +155,9 @@ jobs:
             echo "AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true" >> .env.production
           fi
           
-          # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
-          PRODUCTION_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
-          sed -i "s|APP_KEY=.*|APP_KEY=$PRODUCTION_APP_KEY|" .env.production
-          echo "Generated APP_KEY: $PRODUCTION_APP_KEY"
+          # Generate APP_KEY using Laravel artisan command
+          echo "Generating APP_KEY using Laravel artisan..."
+          docker-compose -f docker-compose.production.yml exec -T app-production php artisan key:generate --force
           
           # Set environment variable for docker-compose image reference
           export PRODUCTION_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
