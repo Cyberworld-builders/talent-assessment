@@ -155,10 +155,6 @@ jobs:
             echo "AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true" >> .env.staging
           fi
           
-          # Generate APP_KEY using Laravel artisan command
-          echo "Generating APP_KEY using Laravel artisan..."
-          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate --force
-          
           # Set environment variable for docker-compose image reference
           export STAGING_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
           
@@ -187,6 +183,10 @@ jobs:
           # Check service status
           echo "Checking service status..."
           docker-compose -f docker-compose.staging.yml ps
+          
+          # Generate APP_KEY using Laravel artisan command
+          echo "Generating APP_KEY using Laravel artisan..."
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate --force
           
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."
