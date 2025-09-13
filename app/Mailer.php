@@ -69,7 +69,7 @@ class Mailer {
 		$assessmentsList .= '</ul>';
 
 		// Piece together assignments link
-		$server = $_SERVER['SERVER_NAME'];
+		$server = $_SERVER['SERVER_NAME'] ?? parse_url(env('APP_URL'), PHP_URL_HOST);
 		if ($server == 'localhost')
 			$server .= ':8000';
 		if (session('reseller'))
@@ -123,10 +123,10 @@ class Mailer {
 		$assessment = Assessment::findOrFail($assignment->assessment_id);
 
 		// Piece together assignments link
-		$server = $_SERVER['SERVER_NAME'];
+		$server = $_SERVER['SERVER_NAME'] ?? parse_url(env('APP_URL'), PHP_URL_HOST);
 		if ($server == 'localhost')
 			$server .= ':8000';
-		$assignments_link = 'http://'.$server.'/assignments';
+		$assignments_link = 'https://'.$server.'/assignments';
 
 		$view = 'emails.assignment';
 		$view_data = [
@@ -193,10 +193,10 @@ class Mailer {
 			return false;
 
 		// Piece together assignments link
-		$server = $_SERVER['SERVER_NAME'];
+		$server = $_SERVER['SERVER_NAME'] ?? parse_url(env('APP_URL'), PHP_URL_HOST);
 		if ($server == 'localhost')
 			$server .= ':8000';
-		$assignments_link = 'http://'.$server.'/assignments';
+		$assignments_link = 'https://'.$server.'/assignments';
 
 		$body = do_shortcodes([
 			'name'             => $user->name,

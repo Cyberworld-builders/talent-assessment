@@ -1,5 +1,8 @@
 <?php
 
+// Suppress AWS SDK deprecation warning
+putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

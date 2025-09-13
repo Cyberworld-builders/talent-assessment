@@ -135,7 +135,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('APP_ENV') === 'production' ? 'my.involvedtalent.com' : null,
 
     /*
     |--------------------------------------------------------------------------
@@ -148,6 +148,6 @@ return [
     |
     */
 
-    'secure' => false,
+    'secure' => env('APP_ENV') === 'production',
 
 ];

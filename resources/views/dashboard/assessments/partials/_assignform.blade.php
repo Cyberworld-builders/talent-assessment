@@ -447,6 +447,18 @@
             }
         });
 
+        // Ensure form submission includes CSRF token
+        $('form').on('submit', function(e) {
+            // Make sure CSRF token is present
+            if (!$('input[name="_token"]').length) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: '_token',
+                    value: $('meta[name="csrf_token"]').attr('content')
+                }).appendTo(this);
+            }
+        });
+
         // Convert shortcodes
         var content = $('input[name="email-body"]').val();
         var preview_content = do_shortcodes(content);
@@ -477,37 +489,50 @@
 
         // Edit email body with wysiwyg
         $('.edit-email-body').on('click', function(){
-            var current_content = $('input[name="email-body"]').val();
+            try {
+                var current_content = $('input[name="email-body"]').val();
 
-            $edit_field = $('input[name="email-body"]');
-            $preview_field = $('.email-body-preview');
+                $edit_field = $('input[name="email-body"]');
+                $preview_field = $('.email-body-preview');
 
-            $modal = $('#modal-wysiwyg');
-            $modal.find('.modal-title').html('Email Body');
-            $modal.find('.save-button').attr('id', 'save-email-body');
+                $modal = $('#modal-wysiwyg');
+                $modal.find('.modal-title').html('Email Body');
+                $modal.find('.save-button').attr('id', 'save-email-body');
 
-            $textarea = $modal.find('textarea').html(current_content);
-            if (! CKEDITOR.instances.Editor)
-                $editor = $textarea.ckeditor();
-            else
-                CKEDITOR.instances.Editor.setData(current_content);
-            $modal.modal('show');
+                $textarea = $modal.find('textarea').html(current_content);
+                if (! CKEDITOR.instances.Editor)
+                    $editor = $textarea.ckeditor();
+                else
+                    CKEDITOR.instances.Editor.setData(current_content);
+                $modal.modal('show');
 
-            $modal.on('click', '#save-email-body', function(){
+                $modal.on('click', '#save-email-body', function(){
+                    try {
+                        // Destroy existing CKEditor instance to prevent conflicts
+                        if (CKEDITOR.instances.Editor) {
+                            CKEDITOR.instances.Editor.destroy();
+                        }
 
-                var new_content = CKEDITOR.instances.Editor.document.getBody().getHtml();
+                        var new_content = CKEDITOR.instances.Editor ? CKEDITOR.instances.Editor.document.getBody().getHtml() : $textarea.val();
 
-                if (new_content.trim() == '')
-                    new_content = '';
+                        if (new_content.trim() == '')
+                            new_content = '';
 
-                // Replace shortcodes just for preview
-                preview_content = do_shortcodes(new_content);
+                        // Replace shortcodes just for preview
+                        preview_content = do_shortcodes(new_content);
 
-                $edit_field.val(new_content);
-                $preview_field.html(preview_content);
+                        $edit_field.val(new_content);
+                        $preview_field.html(preview_content);
 
-                $modal.modal('hide');
-            });
+                        $modal.modal('hide');
+                    } catch (e) {
+                        console.error('Error saving email body:', e);
+                        $modal.modal('hide');
+                    }
+                });
+            } catch (e) {
+                console.error('Error opening email editor:', e);
+            }
         });
 
         function do_shortcodes(content)

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app-production:
     image: ${PRODUCTION_APP_IMAGE}
