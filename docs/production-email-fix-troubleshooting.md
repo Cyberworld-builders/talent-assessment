@@ -136,12 +136,18 @@ AWS_REGION=us-east-2
 - Verify AWS region consistency across all services
 - Use consistent domain naming conventions
 
-### 2. Error Handling
+### 2. Image Tag Management
+- Always verify which Docker image tag is being used in production
+- Update `.env` files with correct image tags after deployments
+- Use the provided script to update image tags: `./scripts/update-image-tags.sh <environment> <tag>`
+- CI/CD workflows automatically update image tags during deployment
+
+### 3. Error Handling
 - Implement proper error handling for email operations
 - Add fallbacks for missing environment variables
 - Use try-catch blocks around critical operations
 
-### 3. Testing
+### 4. Testing
 - Test email functionality in all environments
 - Verify form submissions with all options enabled
 - Test both authenticated and unauthenticated flows
@@ -209,6 +215,36 @@ docker-compose -f docker-compose.production.yml ps
 docker-compose -f docker-compose.production.yml logs app-production --tail=50
 ```
 
+## Additional Fix: Login Redirect Issue
+
+### Problem
+After fixing the email issues, users were experiencing login redirect loops where:
+1. User submits login form
+2. System redirects to dashboard
+3. System immediately redirects back to login page
+
+### Root Cause
+The session configuration changes made to `config/session.php` were not reflected in the running production container. The container was still using the old configuration:
+- `'domain' => null` (should be `'my.involvedtalent.com'` for production)
+- `'secure' => false` (should be `true` for production)
+
+### Solution
+1. **Copy updated files to container**:
+   ```bash
+   docker cp config/session.php talent-assessment-app-production:/var/www/config/session.php
+   docker cp bootstrap/app.php talent-assessment-app-production:/var/www/bootstrap/app.php
+   ```
+
+2. **Clear caches and restart**:
+   ```bash
+   dcprod exec app-production php artisan config:clear
+   dcprod exec app-production php artisan cache:clear
+   dcprod down && dcprod up -d
+   ```
+
+### Key Learning
+When making configuration changes, always ensure the changes are reflected in the running container. Docker containers don't automatically pick up file changes from the host system.
+
 ## Troubleshooting Checklist
 
 When encountering similar issues:
@@ -220,6 +256,7 @@ When encountering similar issues:
 5. **Test Redis connectivity** - Verify no password conflicts
 6. **Clear all caches** - Application, config, and framework caches
 7. **Restart services** - Full container restart may be required
+8. **Verify container file updates** - Ensure configuration changes are in the running container
 
 ## Related Issues
 
