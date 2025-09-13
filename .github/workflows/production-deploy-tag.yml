@@ -163,6 +163,9 @@ jobs:
           # Set environment variable for docker-compose image reference
           export PRODUCTION_APP_IMAGE="$ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
           
+          # Update .env.production with the new image tag
+          sed -i "s|PRODUCTION_APP_IMAGE=.*|PRODUCTION_APP_IMAGE=$PRODUCTION_APP_IMAGE|" .env.production
+          
           # Clean up secrets file
           rm secrets.json
           

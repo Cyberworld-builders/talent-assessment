@@ -3,16 +3,42 @@
 ## Pre-Deployment Checklist
 
 - [ ] All required files are in the repository:
-  - `docker-compose.yml`
+  - `docker-compose.production.yml` / `docker-compose.staging.yml`
   - `Dockerfile`
   - `docker/apache.conf`
-  - `.env`
+  - `.env.production` / `.env.staging`
   - `composer.json`
-- [ ] User data script has been updated (remove `cloud-init status --wait`)
+- [ ] GitHub Actions workflows are configured
+- [ ] AWS Secrets Manager contains required secrets
 - [ ] Domain DNS is configured to point to the server
 - [ ] Security groups allow ports 80, 443, 8080
+- [ ] ECR repository is accessible
+- [ ] Image tags are correctly set in environment files
 
-## Manual Deployment Steps (if user data fails)
+## Current Deployment Process
+
+### Production Deployment
+1. **Create Release Tag**: `git tag v1.x.x-release && git push origin v1.x.x-release`
+2. **GitHub Actions**: Automatically builds, tests, and deploys
+3. **Image Management**: Uses ECR images with specific tags
+4. **Environment**: `my.involvedtalent.com`
+
+### Staging Deployment
+1. **Create Staging Tag**: `git tag v1.x.x-staging && git push origin v1.x.x-staging`
+2. **GitHub Actions**: Automatically builds, tests, and deploys
+3. **Environment**: `talent-staging.cyberworldbuilders.dev`
+
+### Image Tag Management
+```bash
+# Check current image tags
+grep -E "(PRODUCTION_APP_IMAGE|STAGING_APP_IMAGE)" .env.production .env.staging
+
+# Update image tags
+./scripts/update-image-tags.sh production v1.3.6-release
+./scripts/update-image-tags.sh staging v1.3.6-staging
+```
+
+## Manual Deployment Steps (if CI/CD fails)
 
 ### 1. Install Docker
 ```bash
@@ -113,6 +139,19 @@ sudo docker exec -i talent-assessment-app bash -c \
 
 ## Common Issues and Solutions
 
+### Issue: Wrong Docker Image Tag
+**Symptoms**: Missing recent fixes, unexpected behavior
+**Solution**: Update to correct image tag
+```bash
+# Check current image
+docker-compose -f docker-compose.production.yml exec app-production env | grep PRODUCTION_APP_IMAGE
+
+# Update image tag
+./scripts/update-image-tags.sh production v1.3.5-release
+docker-compose -f docker-compose.production.yml down
+docker-compose -f docker-compose.production.yml up -d
+```
+
 ### Issue: 500 Error from Laravel
 **Solution**: Check APP_KEY and permissions
 ```bash
@@ -143,11 +182,28 @@ ls -la docker/apache.conf
 
 ## Environment Variables
 
+### Production Environment
 | Variable | Value | Purpose |
 |----------|-------|---------|
-| `APP_URL` | `talent-aws.cyberworldbuilders.dev` | Domain for Traefik routing |
+| `PRODUCTION_APP_IMAGE` | `068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:v1.x.x-release` | Docker image tag |
+| `APP_URL` | `https://my.involvedtalent.com` | Production domain |
+| `AWS_REGION` | `us-east-2` | AWS region for SES |
+| `MAIL_FROM_ADDRESS` | `assessment@involvedtalent.com` | Email sender address |
+
+### Staging Environment
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `STAGING_APP_IMAGE` | `068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:v1.x.x-staging` | Docker image tag |
+| `APP_URL` | `https://talent-staging.cyberworldbuilders.dev` | Staging domain |
+| `AWS_REGION` | `us-east-2` | AWS region for SES |
+| `MAIL_FROM_ADDRESS` | `noreply@cyberworldbuilders.dev` | Email sender address |
+
+### Common Variables
+| Variable | Value | Purpose |
+|----------|-------|---------|
 | `COMPOSER_ALLOW_SUPERUSER` | `1` | Allow Composer as root |
 | `COMPOSER_NO_PLUGINS` | `1` | Disable Composer plugins |
+| `AWS_SUPPRESS_PHP_DEPRECATION_WARNING` | `true` | Suppress AWS SDK warnings |
 
 ## Ports Used
 

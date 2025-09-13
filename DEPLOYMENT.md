@@ -27,10 +27,10 @@ This document provides comprehensive instructions for deploying the Talent Asses
 - **Resources**: Separate containers, databases, and S3 bucket
 
 ### Production Environment
-- **Domain**: `talent.cyberworldbuilders.dev`
+- **Domain**: `my.involvedtalent.com`
 - **Purpose**: Live production environment
-- **Deployment**: Manual via SSH
-- **Resources**: Dedicated infrastructure
+- **Deployment**: Automated via GitHub Actions (tag-based)
+- **Resources**: Dedicated infrastructure with ECR images
 
 ## Prerequisites
 
@@ -47,21 +47,24 @@ This document provides comprehensive instructions for deploying the Talent Asses
 - S3 buckets for file uploads
 - CloudFront distributions for CDN
 
-### GitHub Secrets
-The following secrets must be configured in your GitHub repository:
+### GitHub Secrets & Variables
+The following secrets and variables must be configured in your GitHub repository:
 
-#### For Staging Deployment
-- `AWS_ACCESS_KEY_ID`: AWS access key for ECR and Secrets Manager
-- `AWS_SECRET_ACCESS_KEY`: AWS secret key
+#### GitHub Variables
+- `AWS_ROLE_ARN`: IAM role ARN for OIDC authentication
+- `AWS_REGION`: AWS region (e.g., `us-east-2`)
+
+#### GitHub Secrets
 - `EC2_HOST`: EC2 instance public IP or domain
 - `EC2_USER`: SSH username (usually `ubuntu`)
 - `EC2_SSH_KEY`: Private SSH key for EC2 access
-- `STAGING_DB_ROOT_PASSWORD`: Root password for staging MySQL
-- `STAGING_REDIS_PASSWORD`: Password for staging Redis
-- `STAGING_S3_BUCKET`: S3 bucket name for staging uploads
+- `MAILTRAP_USERNAME`: Mailtrap username for testing
+- `MAILTRAP_PASSWORD`: Mailtrap password for testing
 
-#### GitHub Variables
-- `AWS_REGION`: AWS region (e.g., `us-east-1`)
+#### AWS Secrets Manager
+All environment-specific secrets are stored in AWS Secrets Manager:
+- **Staging**: `talent-assessment-staging-secrets`
+- **Production**: `talent-assessment-production-secrets`
 
 ## Development Environment
 
@@ -105,10 +108,12 @@ Configure all required secrets in your GitHub repository settings.
 #### Automatic Deployment (Recommended)
 1. Create a feature branch from `main`
 2. Make your changes and commit
-3. Create a pull request to the `staging` branch
+3. Create a pull request to the `main` branch
 4. GitHub Actions will run tests on the PR
-5. Merge the PR to trigger deployment
-6. Monitor the deployment in GitHub Actions
+5. Merge the PR to `main`
+6. Create a staging tag: `git tag v1.x.x-staging && git push origin v1.x.x-staging`
+7. GitHub Actions will automatically deploy to staging
+8. Monitor the deployment in GitHub Actions
 
 #### Manual Deployment
 ```bash
@@ -195,9 +200,18 @@ docker-compose -f docker-compose.staging.yml up -d --scale app-staging=2
 
 ## Production Environment
 
-### Production Deployment
-Production uses the same infrastructure as staging but with different configuration:
+### Production Deployment Process
 
+#### Automatic Deployment (Recommended)
+1. Ensure all changes are merged to `main` branch
+2. Create a production release tag: `git tag v1.x.x-release && git push origin v1.x.x-release`
+3. GitHub Actions will automatically:
+   - Run tests
+   - Build and push Docker image to ECR
+   - Deploy to production with the new image
+4. Monitor the deployment in GitHub Actions
+
+#### Manual Deployment
 ```bash
 # SSH to EC2 instance
 ssh -i ~/.ssh/dev-key ubuntu@<EC2_IP>
@@ -205,9 +219,37 @@ ssh -i ~/.ssh/dev-key ubuntu@<EC2_IP>
 # Navigate to project directory
 cd /opt/talent-assessment
 
+# Update image tag (if needed)
+export PRODUCTION_APP_IMAGE=068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:v1.x.x-release
+
 # Deploy production
-docker-compose -f infrastructure/docker-compose.prod.yml up -d
+docker-compose -f docker-compose.production.yml down
+docker-compose -f docker-compose.production.yml up -d
 ```
+
+### Image Tag Management
+Production uses Docker images from ECR with specific tags:
+- **Image Format**: `068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:v1.x.x-release`
+- **Environment Variable**: `PRODUCTION_APP_IMAGE`
+- **Update Script**: `./scripts/update-image-tags.sh production v1.x.x-release`
+
+#### Managing Docker Images
+```bash
+# Update production image tag
+./scripts/update-image-tags.sh production v1.3.6-release
+
+# Update staging image tag
+./scripts/update-image-tags.sh staging v1.3.6-staging
+
+# Check current image tags
+grep -E "(PRODUCTION_APP_IMAGE|STAGING_APP_IMAGE)" .env.production .env.staging
+```
+
+#### Image Tag Workflow
+1. **Development**: Code changes are made and tested locally
+2. **CI/CD**: GitHub Actions builds and pushes images with specific tags
+3. **Deployment**: Workflows automatically update environment files with new image tags
+4. **Verification**: Containers use the correct image with all fixes included
 
 ## Secret Management
 
@@ -280,12 +322,25 @@ docker-compose -f infrastructure/docker-compose.prod.yml up -d
 
 ### Common Issues
 
+#### Wrong Docker Image Tag
+**Symptoms**: Application behaves unexpectedly, missing recent fixes
+**Solution**:
+```bash
+# Check current image tag
+docker-compose -f docker-compose.production.yml exec app-production env | grep PRODUCTION_APP_IMAGE
+
+# Update to correct image tag
+./scripts/update-image-tags.sh production v1.3.5-release
+docker-compose -f docker-compose.production.yml down
+docker-compose -f docker-compose.production.yml up -d
+```
+
 #### ECR Authentication Issues
 **Symptoms**: Docker pull fails with authentication error
 **Solution**:
 ```bash
 # Re-authenticate with ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account-id>.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 068732175988.dkr.ecr.us-east-2.amazonaws.com
 ```
 
 #### Secrets Manager Access Issues
@@ -335,6 +390,40 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
    docker system prune -a
    ```
 
+#### Session/Login Issues
+**Symptoms**: Users redirected to login page repeatedly, session not persisting
+**Solution**:
+1. Check session configuration in container:
+   ```bash
+   docker-compose -f docker-compose.production.yml exec app-production cat /var/www/config/session.php | grep -A 2 -B 2 "domain\|secure"
+   ```
+2. Verify correct image is being used:
+   ```bash
+   docker-compose -f docker-compose.production.yml exec app-production env | grep PRODUCTION_APP_IMAGE
+   ```
+3. Copy updated config files to container:
+   ```bash
+   docker cp config/session.php talent-assessment-app-production:/var/www/config/session.php
+   docker cp bootstrap/app.php talent-assessment-app-production:/var/www/bootstrap/app.php
+   docker-compose -f docker-compose.production.yml exec app-production php artisan config:clear
+   ```
+
+#### Email Sending Issues
+**Symptoms**: "Whoops" error when sending emails, email notifications not working
+**Solution**:
+1. Check AWS region configuration:
+   ```bash
+   docker-compose -f docker-compose.production.yml exec app-production env | grep AWS_REGION
+   ```
+2. Verify MAIL_FROM_ADDRESS is set:
+   ```bash
+   docker-compose -f docker-compose.production.yml exec app-production env | grep MAIL_FROM_ADDRESS
+   ```
+3. Check AWS deprecation warning suppression:
+   ```bash
+   docker-compose -f docker-compose.production.yml exec app-production grep -n "AWS_SUPPRESS_PHP_DEPRECATION_WARNING" /var/www/bootstrap/app.php
+   ```
+
 ### Debugging Commands
 
 #### Check Service Status
@@ -377,12 +466,22 @@ ssh -i ~/.ssh/dev-key ubuntu@<EC2_IP>
 # Navigate to project
 cd /opt/talent-assessment
 
-# Update image tag to previous commit
-export IMAGE_TAG=<previous-commit-sha>
-sed -i "s|image:.*|image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG|g" docker-compose.staging.yml
+# Update image tag to previous version
+./scripts/update-image-tags.sh production v1.3.4-release  # or previous working version
 
 # Redeploy
-docker-compose -f docker-compose.staging.yml up -d --force-recreate
+docker-compose -f docker-compose.production.yml down
+docker-compose -f docker-compose.production.yml up -d
+```
+
+#### Quick Rollback (Emergency)
+```bash
+# Stop services immediately
+docker-compose -f docker-compose.production.yml down
+
+# Start with previous image tag
+export PRODUCTION_APP_IMAGE=068732175988.dkr.ecr.us-east-2.amazonaws.com/talent-assessment-app:v1.3.4-release
+docker-compose -f docker-compose.production.yml up -d
 ```
 
 #### Emergency Rollback
