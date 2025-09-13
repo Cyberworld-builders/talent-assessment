@@ -186,7 +186,7 @@ jobs:
           
           # Generate APP_KEY using Laravel artisan command
           echo "Generating APP_KEY using Laravel artisan..."
-          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate --force
+          docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate
           
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."
