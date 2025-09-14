@@ -412,7 +412,7 @@ class FeedbackSystemTest extends TestCase
             ])
         ];
 
-        $response = $this->call('POST', 'dashboard/feedback', $requestData);
+        $response = $this->call('POST', 'dashboard/feedback', $requestData, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
         // Should return JSON response
         $this->assertEquals(200, $response->getStatusCode());
@@ -423,7 +423,7 @@ class FeedbackSystemTest extends TestCase
         // Verify library was created
         $library = FeedbackLibrary::where('name', 'Controller Test Library')->first();
         $this->assertNotNull($library);
-        $this->assertEquals($requestData['feedback'], $library->feedback);
+        $this->assertEquals(json_decode($requestData['feedback'], true), $library->feedback);
     }
 
     /**
@@ -436,7 +436,7 @@ class FeedbackSystemTest extends TestCase
         // Test missing name
         $response = $this->call('POST', 'dashboard/feedback', [
             'feedback' => json_encode(['test' => 'value'])
-        ]);
+        ], [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
         $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
@@ -445,7 +445,7 @@ class FeedbackSystemTest extends TestCase
         // Test missing feedback
         $response = $this->call('POST', 'dashboard/feedback', [
             'name' => 'Test Library'
-        ]);
+        ], [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
         $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);

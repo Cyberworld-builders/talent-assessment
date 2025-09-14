@@ -84,13 +84,13 @@ Route::group(['middleware' => ['auth']], function()
 		Route::patch('account', 'ClientDashboardController@updateAccount');
 
 		// Feedback Libraries
-		Route::get('dashboard/feedback', 'FeedbackController@index');
-		Route::get('dashboard/feedback/create', 'FeedbackController@create');
-		Route::post('dashboard/feedback', 'FeedbackController@store');
-		Route::get('dashboard/feedback/{id}', 'FeedbackController@show');
-		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit');
-		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update');
-		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy');
+		Route::get('dashboard/feedback', 'FeedbackController@index')->name('feedback.index');
+		Route::get('dashboard/feedback/create', 'FeedbackController@create')->name('feedback.create');
+		Route::post('dashboard/feedback', 'FeedbackController@store')->name('feedback.store');
+		Route::get('dashboard/feedback/{id}', 'FeedbackController@show')->name('feedback.show');
+		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit')->name('feedback.edit');
+		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update')->name('feedback.update');
+		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy')->name('feedback.destroy');
 		Route::get('api/feedback', 'FeedbackController@apiIndex');
 		Route::post('api/feedback/generate', 'FeedbackController@generateFeedback');
 		
@@ -311,12 +311,12 @@ Route::post('dashboard/benchmarks', 'BenchmarksController@store');
 Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@upload');
 
 		// Feedback
-		Route::get('dashboard/feedback', 'FeedbackController@index');
-		Route::get('dashboard/feedback/create', 'FeedbackController@create');
-		Route::post('dashboard/feedback', 'FeedbackController@store');
-		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit');
-		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update');
-		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy');
+		Route::get('dashboard/feedback', 'FeedbackController@index')->name('feedback.index');
+		Route::get('dashboard/feedback/create', 'FeedbackController@create')->name('feedback.create');
+		Route::post('dashboard/feedback', 'FeedbackController@store')->name('feedback.store');
+		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit')->name('feedback.edit');
+		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update')->name('feedback.update');
+		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy')->name('feedback.destroy');
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');

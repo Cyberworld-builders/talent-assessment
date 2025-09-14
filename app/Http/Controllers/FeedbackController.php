@@ -334,10 +334,26 @@ class FeedbackController extends Controller
         }
 
         // Find or create the library
-        $library = FeedbackLibrary::where('name', 'like', '%' . $request->library_type . '%')
-            ->orWhere('name', $request->name)
-            ->first();
+        // First try to find by exact name match
+        $library = FeedbackLibrary::where('name', $request->name)->first();
         
+        // If not found, try to find by library_type in feedback data (compatible approach)
+        if (!$library) {
+            $libraries = FeedbackLibrary::all();
+            foreach ($libraries as $lib) {
+                if (isset($lib->feedback['library_type']) && $lib->feedback['library_type'] === $request->library_type) {
+                    $library = $lib;
+                    break;
+                }
+            }
+        }
+        
+        // If still not found, try pattern matching
+        if (!$library) {
+            $library = FeedbackLibrary::where('name', 'like', '%' . $request->library_type . '%')->first();
+        }
+        
+        // If still not found, create new library
         if (!$library) {
             $library = new FeedbackLibrary();
         }
