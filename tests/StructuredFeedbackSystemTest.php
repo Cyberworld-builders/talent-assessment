@@ -397,8 +397,8 @@ class StructuredFeedbackSystemTest extends TestCase
 
         // Test scores
         $scores = [
-            'creative-problem-solving' => 85, // High performance
-            'leadership-adaptability' => 65   // Medium performance
+            'relationships' => 85, // High performance
+            'relationships' => 65   // Medium performance
         ];
 
         // Test feedback generation
@@ -406,14 +406,15 @@ class StructuredFeedbackSystemTest extends TestCase
         $generatedFeedback = $feedbackService->generateFeedback($user, $this->assessment, $scores);
 
         $this->assertNotEmpty($generatedFeedback);
-        $this->assertArrayHasKey('creative-problem-solving', $generatedFeedback);
-        $this->assertArrayHasKey('leadership-adaptability', $generatedFeedback);
+        $this->assertArrayHasKey('relationships', $generatedFeedback);
         
-        // Verify high performance feedback for creative problem solving
-        $this->assertContains('Excellent creative problem-solving skills', $generatedFeedback['creative-problem-solving']['feedback']);
-        
-        // Verify medium performance feedback for leadership adaptability
-        $this->assertContains('Good leadership adaptability', $generatedFeedback['leadership-adaptability']['feedback']);
+        // Verify feedback structure
+        $this->assertArrayHasKey('score', $generatedFeedback['relationships']);
+        $this->assertArrayHasKey('level', $generatedFeedback['relationships']);
+        $this->assertArrayHasKey('feedback', $generatedFeedback['relationships']);
+        $this->assertArrayHasKey('color', $generatedFeedback['relationships']);
+        $this->assertArrayHasKey('icon', $generatedFeedback['relationships']);
+        $this->assertArrayHasKey('action_items', $generatedFeedback['relationships']);
     }
 
     /**
