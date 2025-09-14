@@ -13,7 +13,7 @@ class AddDefinitionToDimensionsTable extends Migration
     public function up()
     {
         Schema::table('dimensions', function (Blueprint $table) {
-            //
+            $table->text('definition')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddDefinitionToDimensionsTable extends Migration
     public function down()
     {
         Schema::table('dimensions', function (Blueprint $table) {
-            //
+            $table->dropColumn('definition');
         });
     }
 }
