@@ -10,6 +10,7 @@ class Dimension extends Model
 		'name',
 		'parent',
 		'code',
+		'definition',
 		'assessment_id'
 	];
 
