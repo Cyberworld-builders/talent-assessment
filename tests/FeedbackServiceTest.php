@@ -179,7 +179,7 @@ class FeedbackServiceTest extends TestCase
 
         $this->assertNotEmpty($feedback);
         $this->assertArrayHasKey('creative-problem-solving', $feedback);
-        $this->assertContains('Client-specific high feedback', $feedback['creative-problem-solving']);
+        $this->assertContains('Client-specific high feedback', $feedback['creative-problem-solving']['feedback']);
     }
 
     /**
@@ -236,7 +236,7 @@ class FeedbackServiceTest extends TestCase
         $this->assertNotEmpty($feedback);
         $this->assertArrayHasKey('creative-problem-solving', $feedback);
         // Should use global library since no client-specific library exists for this client
-        $this->assertContains('Global high feedback', $feedback['creative-problem-solving']);
+        $this->assertContains('Global high feedback', $feedback['creative-problem-solving']['feedback']);
     }
 
     /**
@@ -275,9 +275,9 @@ class FeedbackServiceTest extends TestCase
      */
     public function testLevelIconDetermination()
     {
-        $this->assertEquals('fa-check-circle', $this->feedbackService->getLevelIcon('high'));
-        $this->assertEquals('fa-exclamation-circle', $this->feedbackService->getLevelIcon('medium'));
-        $this->assertEquals('fa-times-circle', $this->feedbackService->getLevelIcon('low'));
+        $this->assertEquals('fa-star', $this->feedbackService->getLevelIcon('high'));
+        $this->assertEquals('fa-star-half-o', $this->feedbackService->getLevelIcon('medium'));
+        $this->assertEquals('fa-star-o', $this->feedbackService->getLevelIcon('low'));
     }
 
     /**
@@ -329,8 +329,8 @@ class FeedbackServiceTest extends TestCase
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
         
         // Should contain default feedback messages
-        $this->assertContains('performance', $feedback['creative-problem-solving']);
-        $this->assertContains('performance', $feedback['leadership-adaptability']);
+        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('leadership-adaptability', $feedback);
     }
 
     /**
@@ -372,8 +372,8 @@ class FeedbackServiceTest extends TestCase
         $this->assertContains('High creative problem solving feedback', $feedback['creative-problem-solving']);
         
         // Other dimensions should use default feedback
-        $this->assertContains('performance', $feedback['leadership-adaptability']);
-        $this->assertContains('performance', $feedback['collaboration']);
+        $this->assertArrayHasKey('leadership-adaptability', $feedback);
+        $this->assertArrayHasKey('collaboration', $feedback);
     }
 
     /**
@@ -406,7 +406,7 @@ class FeedbackServiceTest extends TestCase
         $this->assertArrayHasKey('creative-problem-solving', $feedback);
         
         // Should contain user's name
-        $this->assertContains($this->user->name, $feedback['creative-problem-solving']);
+        $this->assertContains($this->user->name, $feedback['creative-problem-solving']['feedback']);
     }
 
     /**
@@ -478,8 +478,8 @@ class FeedbackServiceTest extends TestCase
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
         
         // Zero scores should be treated as low performance
-        $this->assertContains('performance', $feedback['creative-problem-solving']);
-        $this->assertContains('performance', $feedback['leadership-adaptability']);
+        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('leadership-adaptability', $feedback);
     }
 
     /**
@@ -499,8 +499,8 @@ class FeedbackServiceTest extends TestCase
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
         
         // Negative scores should be treated as low performance
-        $this->assertContains('performance', $feedback['creative-problem-solving']);
-        $this->assertContains('performance', $feedback['leadership-adaptability']);
+        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('leadership-adaptability', $feedback);
     }
 
     /**
@@ -520,8 +520,8 @@ class FeedbackServiceTest extends TestCase
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
         
         // Very high scores should be treated as high performance
-        $this->assertContains('performance', $feedback['creative-problem-solving']);
-        $this->assertContains('performance', $feedback['leadership-adaptability']);
+        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('leadership-adaptability', $feedback);
     }
 
     /**

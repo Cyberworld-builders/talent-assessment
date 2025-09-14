@@ -78,10 +78,12 @@ class FeedbackService
                 }
             }
             
-            // Look for any library with the new structured format
-            $structuredLibrary = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') IS NOT NULL")->first();
-            if ($structuredLibrary) {
-                return $structuredLibrary;
+            // Look for any library with the new structured format (check if feedback contains library_type)
+            $libraries = FeedbackLibrary::where('client_id', null)->get();
+            foreach ($libraries as $lib) {
+                if (isset($lib->feedback['library_type'])) {
+                    return $lib;
+                }
             }
             
             // Fall back to global library

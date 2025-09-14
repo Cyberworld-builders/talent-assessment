@@ -296,7 +296,7 @@ class FeedbackController extends Controller
      */
     public function getByType($type)
     {
-        $library = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') = ?", [$type])->first();
+        $library = FeedbackLibrary::where('name', 'like', '%' . $type . '%')->first();
         
         if (!$library) {
             return response()->json([
@@ -334,7 +334,7 @@ class FeedbackController extends Controller
         }
 
         // Find or create the library
-        $library = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') = ?", [$request->library_type])->first();
+        $library = FeedbackLibrary::where('name', 'like', '%' . $request->library_type . '%')->first();
         
         if (!$library) {
             $library = new FeedbackLibrary();
