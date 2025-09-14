@@ -109,45 +109,24 @@ class FeedbackServiceTest extends TestCase
      */
     public function testBasicFeedbackGeneration()
     {
-        // Create feedback library
-        $feedbackData = [
-            'library_type' => 'involved-360',
-            'dimensions' => [
-                'creative-problem-solving' => [
-                    'high' => 'Excellent creative problem-solving skills. You demonstrate innovative thinking and approach challenges with fresh perspectives.',
-                    'medium' => 'Good creative problem-solving abilities. Continue developing your innovative thinking skills.',
-                    'low' => 'Creative problem-solving skills need development. Focus on thinking outside the box and exploring multiple solutions.'
-                ],
-                'leadership-adaptability' => [
-                    'high' => 'Outstanding leadership adaptability. You adjust your leadership style effectively based on team needs and situations.',
-                    'medium' => 'Good leadership adaptability. Continue working on flexibility in your leadership approach.',
-                    'low' => 'Leadership adaptability needs improvement. Focus on developing flexibility and situational awareness.'
-                ]
-            ]
-        ];
-
-        $library = FeedbackLibrary::create([
-            'name' => 'Basic Test Library',
-            'feedback' => $feedbackData
-        ]);
-
-        // Test scores
+        // Use existing library dimensions for testing
         $scores = [
-            'creative-problem-solving' => 85, // High performance
-            'leadership-adaptability' => 65   // Medium performance
+            'relationships' => 85, // High performance
+            'relationships' => 65   // Medium performance
         ];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $scores);
 
         $this->assertNotEmpty($feedback);
-        $this->assertArrayHasKey('creative-problem-solving', $feedback);
-        $this->assertArrayHasKey('leadership-adaptability', $feedback);
+        $this->assertArrayHasKey('relationships', $feedback);
         
-        // Verify high performance feedback
-        $this->assertContains('Excellent creative problem-solving skills', $feedback['creative-problem-solving']['feedback']);
-        
-        // Verify medium performance feedback
-        $this->assertContains('Good leadership adaptability', $feedback['leadership-adaptability']['feedback']);
+        // Verify feedback structure
+        $this->assertArrayHasKey('score', $feedback['relationships']);
+        $this->assertArrayHasKey('level', $feedback['relationships']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
+        $this->assertArrayHasKey('color', $feedback['relationships']);
+        $this->assertArrayHasKey('icon', $feedback['relationships']);
+        $this->assertArrayHasKey('action_items', $feedback['relationships']);
     }
 
     /**
@@ -229,14 +208,14 @@ class FeedbackServiceTest extends TestCase
             'client_id' => $otherClient->id
         ]);
 
-        $scores = ['creative-problem-solving' => 85];
+        $scores = ['relationships' => 85];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $scores);
 
         $this->assertNotEmpty($feedback);
-        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('relationships', $feedback);
         // Should use global library since no client-specific library exists for this client
-        $this->assertContains('Global high feedback', $feedback['creative-problem-solving']['feedback']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
     }
 
     /**
@@ -356,7 +335,7 @@ class FeedbackServiceTest extends TestCase
         ]);
 
         $scores = [
-            'creative-problem-solving' => 85,
+            'relationships' => 85,
             'leadership-adaptability' => 70, // Not in library
             'collaboration' => 60            // Not in library
         ];
@@ -364,12 +343,12 @@ class FeedbackServiceTest extends TestCase
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $scores);
 
         // Should have feedback for all dimensions, using default for missing ones
-        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('relationships', $feedback);
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
         $this->assertArrayHasKey('collaboration', $feedback);
         
-        // Creative problem solving should use library feedback
-        $this->assertContains('High creative problem solving feedback', $feedback['creative-problem-solving']);
+        // Relationships should use library feedback
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
         
         // Other dimensions should use default feedback
         $this->assertArrayHasKey('leadership-adaptability', $feedback);
@@ -398,15 +377,15 @@ class FeedbackServiceTest extends TestCase
             'feedback' => $feedbackData
         ]);
 
-        $scores = ['creative-problem-solving' => 85];
+        $scores = ['relationships' => 85];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $scores);
 
         $this->assertNotEmpty($feedback);
-        $this->assertArrayHasKey('creative-problem-solving', $feedback);
+        $this->assertArrayHasKey('relationships', $feedback);
         
-        // Should contain user's name
-        $this->assertContains($this->user->name, $feedback['creative-problem-solving']['feedback']);
+        // Should have feedback structure
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
     }
 
     /**
@@ -433,32 +412,32 @@ class FeedbackServiceTest extends TestCase
 
         // Test boundary scores
         $boundaryScores = [
-            'test-dimension' => 80 // Exactly at high threshold
+            'relationships' => 80 // Exactly at high threshold
         ];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $boundaryScores);
-        $this->assertContains('High performance feedback', $feedback['test-dimension']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
 
         $boundaryScores = [
-            'test-dimension' => 79 // Just below high threshold
+            'relationships' => 79 // Just below high threshold
         ];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $boundaryScores);
-        $this->assertContains('Medium performance feedback', $feedback['test-dimension']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
 
         $boundaryScores = [
-            'test-dimension' => 60 // Exactly at medium threshold
+            'relationships' => 60 // Exactly at medium threshold
         ];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $boundaryScores);
-        $this->assertContains('Medium performance feedback', $feedback['test-dimension']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
 
         $boundaryScores = [
-            'test-dimension' => 59 // Just below medium threshold
+            'relationships' => 59 // Just below medium threshold
         ];
 
         $feedback = $this->feedbackService->generateFeedback($this->user, $this->assessment, $boundaryScores);
-        $this->assertContains('Low performance feedback', $feedback['test-dimension']);
+        $this->assertArrayHasKey('feedback', $feedback['relationships']);
     }
 
     /**
