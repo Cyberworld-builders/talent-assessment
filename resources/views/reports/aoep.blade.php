@@ -855,6 +855,76 @@
         </div>
     </div>
 </div>
+
+{{-- Personalized Feedback Section --}}
+@if(isset($scores['feedback']) && !empty($scores['feedback']))
+{!! $page++ !!}
+<div class="page-container" id="{{ $page }}">
+    <div class="img-container-2">
+        <img src="/assets/images/aoe-science_logo.png">
+        <small>Page {{ $page }}</small>
+    </div>
+    <div class="container">
+        {{-- Heading --}}
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <br><br>
+                <h1>Personalized Feedback</h1>
+                <h4>for {{ $user->name }}</h4>
+                <br><br>
+            </div>
+        </div>
+
+        {{-- Feedback Content --}}
+        <div class="row">
+            <div class="col-sm-12">
+                @foreach($scores['feedback'] as $dimension => $feedbackData)
+                <div class="panel panel-default" style="margin-bottom: 20px;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa {{ $feedbackData['icon'] }}"></i>
+                            {{ ucfirst(str_replace('_', ' ', $dimension)) }}
+                            <span class="label label-{{ $feedbackData['color'] }} pull-right">
+                                {{ $feedbackData['score'] }}%
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Feedback</h4>
+                                <p>{{ $feedbackData['feedback'] }}</p>
+                                
+                                @if(isset($feedbackData['action_items']) && !empty($feedbackData['action_items']))
+                                <h4>Recommended Actions</h4>
+                                <ul>
+                                    @foreach($feedbackData['action_items'] as $action)
+                                    <li>{{ $action }}</li>
+                                    @endforeach
+                                </ul>
+                                @endif
+                            </div>
+                            <div class="col-md-4">
+                                <h4>Performance Level</h4>
+                                <div class="text-center">
+                                    <div class="huge">
+                                        <i class="fa {{ $feedbackData['icon'] }} text-{{ $feedbackData['color'] }}"></i>
+                                    </div>
+                                    <div class="text-{{ $feedbackData['color'] }}">
+                                        <strong>{{ ucfirst($feedbackData['level']) }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
 </body>
 </html>

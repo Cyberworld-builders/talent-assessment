@@ -82,6 +82,17 @@ Route::group(['middleware' => ['auth']], function()
 		// My Account
 		Route::get('account', 'DashboardController@account');
 		Route::patch('account', 'ClientDashboardController@updateAccount');
+
+		// Feedback Libraries
+		Route::get('dashboard/feedback', 'FeedbackController@index');
+		Route::get('dashboard/feedback/create', 'FeedbackController@create');
+		Route::post('dashboard/feedback', 'FeedbackController@store');
+		Route::get('dashboard/feedback/{id}', 'FeedbackController@show');
+		Route::get('dashboard/feedback/{id}/edit', 'FeedbackController@edit');
+		Route::patch('dashboard/feedback/{id}', 'FeedbackController@update');
+		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy');
+		Route::get('api/feedback', 'FeedbackController@apiIndex');
+		Route::post('api/feedback/generate', 'FeedbackController@generateFeedback');
 	});
 
 	// Must Be Reseller Role or Higher

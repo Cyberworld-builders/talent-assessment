@@ -14,6 +14,7 @@ use App\Report;
 use App\Question;
 use App\User;
 use App\Weight;
+use App\Services\FeedbackService;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SessionCookieJar;
 use GuzzleHttp\Cookie\SetCookie;
@@ -1733,6 +1734,10 @@ class ReportsController extends Controller
 				'Division' => $s->getScoreDivision($personality->id, $job->id, $personalityScore)
 			],
 		];
+
+		// Generate personalized feedback
+		$feedback = $this->generateFeedbackForReport($user, $job, $scores);
+		$scores = $this->addFeedbackToScores($scores, $feedback);
 
 		return view('reports.aoep', compact('job', 'user', 'scores'));
     }
@@ -4686,4 +4691,56 @@ class ReportsController extends Controller
 
 		return $scores;
     }
+
+	/**
+	 * Generate personalized feedback for a user based on assessment scores.
+	 *
+	 * @param User $user
+	 * @param Job $job
+	 * @param array $scores
+	 * @return array
+	 */
+	public function generateFeedbackForReport($user, $job, $scores)
+	{
+		$feedbackService = app(FeedbackService::class);
+		
+		// Convert scores to the format expected by FeedbackService
+		$feedbackScores = [];
+		foreach ($scores as $assessmentName => $assessmentScores) {
+			if (is_array($assessmentScores)) {
+				foreach ($assessmentScores as $dimensionName => $score) {
+					// Skip non-numeric scores and special keys
+					if (is_numeric($score) && !in_array($dimensionName, ['Overall', 'Division', 'Total'])) {
+						$feedbackScores[strtolower(str_replace(' ', '_', $dimensionName))] = (float)$score;
+					}
+				}
+			}
+		}
+		
+		// Get the first assessment to determine the assessment type
+		$firstAssessment = null;
+		if (!empty($job->assessments)) {
+			$firstAssessmentId = $job->assessments[0];
+			$firstAssessment = Assessment::find($firstAssessmentId);
+		}
+		
+		if (!$firstAssessment) {
+			return [];
+		}
+		
+		return $feedbackService->generateFeedback($user, $firstAssessment, $feedbackScores);
+	}
+
+	/**
+	 * Add feedback to existing scores array.
+	 *
+	 * @param array $scores
+	 * @param array $feedback
+	 * @return array
+	 */
+	public function addFeedbackToScores($scores, $feedback)
+	{
+		$scores['feedback'] = $feedback;
+		return $scores;
+	}
 }
