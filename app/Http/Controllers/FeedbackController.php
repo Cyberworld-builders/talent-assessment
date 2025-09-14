@@ -296,7 +296,7 @@ class FeedbackController extends Controller
      */
     public function getByType($type)
     {
-        $library = FeedbackLibrary::where('feedback->library_type', $type)->first();
+        $library = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') = ?", [$type])->first();
         
         if (!$library) {
             return response()->json([
@@ -319,14 +319,22 @@ class FeedbackController extends Controller
      */
     public function saveFeedback(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'library_type' => 'required|string',
             'name' => 'required|string|max:255',
             'dimensions' => 'required|array'
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         // Find or create the library
-        $library = FeedbackLibrary::where('feedback->library_type', $request->library_type)->first();
+        $library = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') = ?", [$request->library_type])->first();
         
         if (!$library) {
             $library = new FeedbackLibrary();

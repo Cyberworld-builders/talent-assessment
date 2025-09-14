@@ -20,6 +20,10 @@ class FeedbackService
      */
     public function generateFeedback(User $user, Assessment $assessment, $scores)
     {
+        if (empty($scores) || !is_array($scores)) {
+            return [];
+        }
+        
         $library = $this->getBestFeedbackLibrary($user, $assessment);
         
         if (!$library) {
@@ -74,6 +78,12 @@ class FeedbackService
                 }
             }
             
+            // Look for any library with the new structured format
+            $structuredLibrary = FeedbackLibrary::whereRaw("JSON_EXTRACT(feedback, '$.library_type') IS NOT NULL")->first();
+            if ($structuredLibrary) {
+                return $structuredLibrary;
+            }
+            
             // Fall back to global library
             return FeedbackLibrary::where('name', 'General Assessment Feedback')
                 ->where('client_id', null)
@@ -93,13 +103,27 @@ class FeedbackService
         $feedback = [];
         $feedbackData = $library->feedback;
         
+        // Handle both old and new format
+        $dimensions = isset($feedbackData['dimensions']) ? $feedbackData['dimensions'] : $feedbackData;
+        
         foreach ($scores as $dimension => $score) {
-            if (isset($feedbackData['dimensions'][$dimension])) {
+            if (isset($dimensions[$dimension])) {
                 $level = $this->getPerformanceLevel($score);
                 $feedback[$dimension] = [
                     'score' => $score,
                     'level' => $level,
-                    'feedback' => $feedbackData['dimensions'][$dimension][$level] ?? '',
+                    'feedback' => $dimensions[$dimension][$level] ?? '',
+                    'color' => $this->getLevelColor($level),
+                    'icon' => $this->getLevelIcon($level),
+                    'action_items' => $this->generateActionItems($level, $dimension)
+                ];
+            } else {
+                // Generate default feedback for missing dimensions
+                $level = $this->getPerformanceLevel($score);
+                $feedback[$dimension] = [
+                    'score' => $score,
+                    'level' => $level,
+                    'feedback' => $this->getDefaultFeedbackMessage($level, $dimension),
                     'color' => $this->getLevelColor($level),
                     'icon' => $this->getLevelIcon($level),
                     'action_items' => $this->generateActionItems($level, $dimension)
@@ -116,7 +140,7 @@ class FeedbackService
      * @param int $score
      * @return string
      */
-    private function getPerformanceLevel($score)
+    public function getPerformanceLevel($score)
     {
         if ($score >= 80) return 'high';
         if ($score >= 60) return 'medium';
@@ -129,7 +153,7 @@ class FeedbackService
      * @param string $level
      * @return string
      */
-    private function getLevelColor($level)
+    public function getLevelColor($level)
     {
         switch ($level) {
             case 'high': return 'success';
@@ -145,7 +169,7 @@ class FeedbackService
      * @param string $level
      * @return string
      */
-    private function getLevelIcon($level)
+    public function getLevelIcon($level)
     {
         switch ($level) {
             case 'high': return 'fa-star';
@@ -162,7 +186,7 @@ class FeedbackService
      * @param string $dimension
      * @return array
      */
-    private function generateActionItems($level, $dimension)
+    public function generateActionItems($level, $dimension)
     {
         $actions = [];
         
