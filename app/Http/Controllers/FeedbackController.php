@@ -334,7 +334,9 @@ class FeedbackController extends Controller
         }
 
         // Find or create the library
-        $library = FeedbackLibrary::where('name', 'like', '%' . $request->library_type . '%')->first();
+        $library = FeedbackLibrary::where('name', 'like', '%' . $request->library_type . '%')
+            ->orWhere('name', $request->name)
+            ->first();
         
         if (!$library) {
             $library = new FeedbackLibrary();

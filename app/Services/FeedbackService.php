@@ -30,7 +30,7 @@ class FeedbackService
             return $this->generateDefaultFeedback($scores);
         }
         
-        return $this->buildPersonalizedFeedback($scores, $library);
+        return $this->buildPersonalizedFeedback($scores, $library, $user);
     }
 
     /**
@@ -100,7 +100,7 @@ class FeedbackService
      * @param FeedbackLibrary $library
      * @return array
      */
-    private function buildPersonalizedFeedback($scores, FeedbackLibrary $library)
+    private function buildPersonalizedFeedback($scores, FeedbackLibrary $library, $user = null)
     {
         $feedback = [];
         $feedbackData = $library->feedback;
@@ -111,10 +111,16 @@ class FeedbackService
         foreach ($scores as $dimension => $score) {
             if (isset($dimensions[$dimension])) {
                 $level = $this->getPerformanceLevel($score);
+                $feedbackText = $dimensions[$dimension][$level] ?? '';
+                // Replace user name placeholder if present
+                if (strpos($feedbackText, '{user_name}') !== false) {
+                    $feedbackText = str_replace('{user_name}', $user->name ?? 'User', $feedbackText);
+                }
+                
                 $feedback[$dimension] = [
                     'score' => $score,
                     'level' => $level,
-                    'feedback' => $dimensions[$dimension][$level] ?? '',
+                    'feedback' => $feedbackText,
                     'color' => $this->getLevelColor($level),
                     'icon' => $this->getLevelIcon($level),
                     'action_items' => $this->generateActionItems($level, $dimension)

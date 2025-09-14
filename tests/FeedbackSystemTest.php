@@ -401,7 +401,7 @@ class FeedbackSystemTest extends TestCase
 
         $requestData = [
             'name' => 'Controller Test Library',
-            'feedback' => [
+            'feedback' => json_encode([
                 'dimensions' => [
                     'leadership' => [
                         'high' => 'Controller test high feedback',
@@ -409,7 +409,7 @@ class FeedbackSystemTest extends TestCase
                         'low' => 'Controller test low feedback'
                     ]
                 ]
-            ]
+            ])
         ];
 
         $response = $this->call('POST', 'dashboard/feedback', $requestData);
@@ -435,10 +435,10 @@ class FeedbackSystemTest extends TestCase
 
         // Test missing name
         $response = $this->call('POST', 'dashboard/feedback', [
-            'feedback' => ['test' => 'value']
+            'feedback' => json_encode(['test' => 'value'])
         ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('errors', $responseData);
 
@@ -447,7 +447,7 @@ class FeedbackSystemTest extends TestCase
             'name' => 'Test Library'
         ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('errors', $responseData);
     }
