@@ -93,6 +93,10 @@ Route::group(['middleware' => ['auth']], function()
 		Route::delete('dashboard/feedback/{id}', 'FeedbackController@destroy');
 		Route::get('api/feedback', 'FeedbackController@apiIndex');
 		Route::post('api/feedback/generate', 'FeedbackController@generateFeedback');
+		
+		// New structured feedback routes
+		Route::get('dashboard/feedback/type/{type}', 'FeedbackController@getByType');
+		Route::post('dashboard/feedback/save', 'FeedbackController@saveFeedback');
 	});
 
 	// Must Be Reseller Role or Higher

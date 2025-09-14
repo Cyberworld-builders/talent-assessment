@@ -287,4 +287,64 @@ class FeedbackController extends Controller
             'generated_at' => now()->toISOString()
         ]);
     }
+
+    /**
+     * Get feedback library by type
+     *
+     * @param string $type
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByType($type)
+    {
+        $library = FeedbackLibrary::where('feedback->library_type', $type)->first();
+        
+        if (!$library) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Library not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'library' => $library
+        ]);
+    }
+
+    /**
+     * Save feedback data for a specific library type
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveFeedback(Request $request)
+    {
+        $request->validate([
+            'library_type' => 'required|string',
+            'name' => 'required|string|max:255',
+            'dimensions' => 'required|array'
+        ]);
+
+        // Find or create the library
+        $library = FeedbackLibrary::where('feedback->library_type', $request->library_type)->first();
+        
+        if (!$library) {
+            $library = new FeedbackLibrary();
+        }
+
+        $feedbackData = [
+            'library_type' => $request->library_type,
+            'dimensions' => $request->dimensions
+        ];
+
+        $library->name = $request->name;
+        $library->feedback = $feedbackData;
+        $library->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Feedback saved successfully.',
+            'library' => $library
+        ]);
+    }
 }
