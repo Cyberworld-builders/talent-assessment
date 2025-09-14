@@ -322,7 +322,7 @@ $(document).ready(function() {
             url: '/dashboard/feedback/save',
             method: 'POST',
             data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
+                _token: $('meta[name="csrf_token"]').attr('content'),
                 library_type: libraryType,
                 name: libraryName,
                 dimensions: dimensions
