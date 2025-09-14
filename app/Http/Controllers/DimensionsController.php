@@ -66,7 +66,7 @@ class DimensionsController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required',
             'code' => 'required|min:1',
-            'definition' => 'nullable|string'
+            'definition' => 'string'
         ]);
 
         if ($validator->fails())
@@ -137,7 +137,7 @@ class DimensionsController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required',
             'code' => 'required|min:1',
-            'definition' => 'nullable|string'
+            'definition' => 'string'
         ]);
 
         if ($validator->fails())
