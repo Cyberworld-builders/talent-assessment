@@ -9,27 +9,17 @@
             </div>
             <div class="panel-body" style="padding: 0;">
                 <div class="list-group" style="margin-bottom: 0;">
-                    <a href="#" class="list-group-item active" data-library="involved-360">
-                        <i class="fa fa-circle-o"></i> Involved-360
-                    </a>
-                    <a href="#" class="list-group-item" data-library="involved-leader">
-                        <i class="fa fa-circle-o"></i> Involved-Leader
-                    </a>
-                    <a href="#" class="list-group-item" data-library="involved-blockers">
-                        <i class="fa fa-circle-o"></i> Involved-Blockers
-                    </a>
-                    <a href="#" class="list-group-item" data-library="involved-me">
-                        <i class="fa fa-circle-o"></i> Involved-Me
-                    </a>
-                    <a href="#" class="list-group-item" data-library="involved-me-peak">
-                        <i class="fa fa-circle-o"></i> Involved-Me Peak Week
-                    </a>
-                    <a href="#" class="list-group-item" data-library="david-codes">
-                        <i class="fa fa-circle-o"></i> David Codes
-                    </a>
-                    <a href="#" class="list-group-item" data-library="custom">
-                        <i class="fa fa-circle-o"></i> Custom
-                    </a>
+                    @if($assessments->count() > 0)
+                        @foreach($assessments as $index => $assessment)
+                            <a href="#" class="list-group-item {{ $index === 0 ? 'active' : '' }}" data-library="{{ strtolower(str_replace(' ', '-', $assessment->name)) }}">
+                                <i class="fa fa-circle-o"></i> {{ $assessment->name }}
+                            </a>
+                        @endforeach
+                    @else
+                        <a href="#" class="list-group-item active" data-library="default">
+                            <i class="fa fa-circle-o"></i> Default
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -55,72 +45,37 @@
                 </div>
             </div>
             <div class="panel-body">
-                <!-- Involved-360 Content -->
-                <div id="involved-360-content" class="library-content">
-                    <h3>Involved-360</h3>
-                    <p class="text-muted">Feedback for Involved-360 dimensions.</p>
-                    
-                    <!-- Creative Problem Solving Dimension -->
-                    <div class="dimension-section">
-                        <h4>Creative Problem Solving</h4>
-                        <div class="feedback-entries">
-                            <div class="feedback-entry">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Performance Level</label>
-                                        <select class="form-control performance-level">
-                                            <option value="overall">Overall</option>
-                                            <option value="high">High</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="low">Low</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <label>Feedback</label>
-                                        <textarea class="form-control feedback-text" rows="3" placeholder="Enter feedback for this performance level"></textarea>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label>&nbsp;</label>
-                                        <button class="btn btn-danger btn-sm remove-feedback" title="Remove">
-                                            <i class="fa fa-trash"></i>
+                @if($assessments->count() > 0)
+                    @foreach($assessments as $index => $assessment)
+                        <div id="{{ strtolower(str_replace(' ', '-', $assessment->name)) }}-content" class="library-content" style="{{ $index === 0 ? '' : 'display: none;' }}">
+                            <h3>{{ $assessment->name }}</h3>
+                            <p class="text-muted">Feedback for {{ $assessment->name }} dimensions.</p>
+                            
+                            @if($assessment->dimensions->count() > 0)
+                                @foreach($assessment->dimensions as $dimension)
+                                    <div class="dimension-section">
+                                        <h4>{{ $dimension->name }}</h4>
+                                        <div class="feedback-entries">
+                                            <!-- No feedback entries yet -->
+                                        </div>
+                                        <button class="btn btn-primary btn-sm add-feedback" data-dimension="{{ strtolower(str_replace(' ', '-', $dimension->name)) }}">
+                                            <i class="fa fa-plus"></i> Add Feedback
                                         </button>
                                     </div>
+                                @endforeach
+                            @else
+                                <div class="alert alert-info">
+                                    <i class="fa fa-info-circle"></i> No dimensions found for this assessment.
                                 </div>
-                            </div>
+                            @endif
                         </div>
-                        <button class="btn btn-primary btn-sm add-feedback" data-dimension="creative-problem-solving">
-                            <i class="fa fa-plus"></i> Add Feedback
-                        </button>
+                    @endforeach
+                @else
+                    <div id="default-content" class="library-content">
+                        <h3>Default</h3>
+                        <p class="text-muted">No assessments found. Please create an assessment first.</p>
                     </div>
-                    
-                    <!-- Leadership Adaptability Dimension -->
-                    <div class="dimension-section">
-                        <h4>Leadership Adaptability</h4>
-                        <div class="feedback-entries">
-                            <!-- No feedback entries yet -->
-                        </div>
-                        <button class="btn btn-primary btn-sm add-feedback" data-dimension="leadership-adaptability">
-                            <i class="fa fa-plus"></i> Add Feedback
-                        </button>
-                    </div>
-                    
-                    <!-- Collaboration Dimension -->
-                    <div class="dimension-section">
-                        <h4>Collaboration</h4>
-                        <div class="feedback-entries">
-                            <!-- No feedback entries yet -->
-                        </div>
-                        <button class="btn btn-primary btn-sm add-feedback" data-dimension="collaboration">
-                            <i class="fa fa-plus"></i> Add Feedback
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Other library content will be loaded dynamically -->
-                <div id="other-content" class="library-content" style="display: none;">
-                    <h3 id="current-library-name">Select a library</h3>
-                    <p class="text-muted">Choose a feedback library from the sidebar to manage its content.</p>
-                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -210,12 +165,8 @@ $(document).ready(function() {
         var library = $(this).data('library');
         $('.library-content').removeClass('active').hide();
         
-        if (library === 'involved-360') {
-            $('#involved-360-content').addClass('active').show();
-        } else {
-            $('#other-content').addClass('active').show();
-            $('#current-library-name').text($(this).text().trim());
-        }
+        // Show the corresponding content section
+        $('#' + library + '-content').addClass('active').show();
     });
     
     // Handle add feedback button
@@ -285,7 +236,7 @@ $(document).ready(function() {
     }
     
     // Show the first library by default
-    $('#involved-360-content').addClass('active').show();
+    $('.library-content').first().addClass('active').show();
     
     // Handle save button (you can add this button to the UI)
     $('#save-feedback-btn').on('click', function() {

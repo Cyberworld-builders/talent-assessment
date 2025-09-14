@@ -23,7 +23,10 @@ class FeedbackController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('dashboard.feedback.index', compact('libraries'));
+        // Get all assessments with their dimensions to populate the sidebar tabs
+        $assessments = Assessment::with('dimensions')->orderBy('name')->get();
+
+        return view('dashboard.feedback.index', compact('libraries', 'assessments'));
     }
 
     /**
