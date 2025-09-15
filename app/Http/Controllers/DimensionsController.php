@@ -44,6 +44,8 @@ class DimensionsController extends Controller
         ])->get();
 
         $dimensionsArray = [];
+        // Add "No Parent" option at the top
+        $dimensionsArray[0] = '---';
         foreach ($dimensions as $dim)
             $dimensionsArray = array_add($dimensionsArray, $dim->id, $dim->name);
 
@@ -63,13 +65,14 @@ class DimensionsController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'required',
-            'code' => 'required|min:1'
+            'code' => 'required|min:1',
+            'definition' => 'string'
         ]);
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator->errors());
 
-        if (! $data['is_sub'])
+        if (! $data['is_sub'] || $data['parent'] == 0)
             $data['parent'] = 0;
 
         $dimension = new Dimension($data);
@@ -109,6 +112,8 @@ class DimensionsController extends Controller
         ])->get();
 
         $dimensionsArray = [];
+        // Add "No Parent" option at the top
+        $dimensionsArray[0] = '---';
         foreach ($dimensions as $dim)
             if ($dim->id != $dimension->id)
                 $dimensionsArray = array_add($dimensionsArray, $dim->id, $dim->name);
@@ -131,13 +136,14 @@ class DimensionsController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'required',
-            'code' => 'required|min:1'
+            'code' => 'required|min:1',
+            'definition' => 'string'
         ]);
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator->errors());
 
-        if (! $data['is_sub'])
+        if (! $data['is_sub'] || $data['parent'] == 0)
             $data['parent'] = 0;
 
         if ($dimension->isParent() and $data['is_sub'] and $dimension->hasChildren())

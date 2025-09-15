@@ -31,60 +31,26 @@ class ClientTableSeeder extends Seeder
     }
     
     /**
-     * Create sample assessments
+     * Get existing assessments (created by other seeders)
      */
     private function createAssessments()
     {
         $assessments = [];
         
-        // Get the admin user for assessments
-        $adminUser = User::where('email', 'admin-goreman@cyberworldbuilders.com')->first();
+        // Get the existing assessments created by other seeders
+        $involved360 = Assessment::where('name', 'Involved-360')->first();
+        $involvedLeader = Assessment::where('name', 'Involved-Leader')->first();
+        $involvedBlockers = Assessment::where('name', 'Involved-Blockers')->first();
         
-        // Create personality assessment using relationship method
-        $personality = $adminUser->assessments()->create([
-            'name' => 'Personality Assessment',
-            'description' => 'Comprehensive personality evaluation for workplace compatibility',
-            'logo' => '',
-            'background' => '',
-            'paginate' => 10,
-            'items_per_page' => 10,
-            'timed' => false,
-            'use_custom_fields' => false,
-            'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
-        ]);
-        $assessments['personality'] = $personality;
-        
-        // Create cognitive assessment using relationship method
-        $cognitive = $adminUser->assessments()->create([
-            'name' => 'Cognitive Ability Test',
-            'description' => 'Problem-solving and analytical thinking assessment',
-            'logo' => '',
-            'background' => '',
-            'paginate' => 15,
-            'items_per_page' => 15,
-            'timed' => true,
-            'time_limit' => 45,
-            'use_custom_fields' => false,
-            'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
-        ]);
-        $assessments['cognitive'] = $cognitive;
-        
-        // Create leadership assessment using relationship method
-        $leadership = $adminUser->assessments()->create([
-            'name' => 'Leadership Potential',
-            'description' => 'Assessment of leadership skills and potential',
-            'logo' => '',
-            'background' => '',
-            'paginate' => 12,
-            'items_per_page' => 12,
-            'timed' => false,
-            'use_custom_fields' => true,
-            'target' => 1,
-            'last_modified' => \Carbon\Carbon::now()
-        ]);
-        $assessments['leadership'] = $leadership;
+        if ($involved360) {
+            $assessments['involved360'] = $involved360;
+        }
+        if ($involvedLeader) {
+            $assessments['involvedLeader'] = $involvedLeader;
+        }
+        if ($involvedBlockers) {
+            $assessments['involvedBlockers'] = $involvedBlockers;
+        }
         
         return $assessments;
     }
@@ -100,7 +66,7 @@ class ClientTableSeeder extends Seeder
             'address' => '123 Innovation Drive, Silicon Valley, CA 94025',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['personality']->id, $assessments['cognitive']->id],
+            'assessments' => [$assessments['involved360']->id, $assessments['involvedLeader']->id],
             'require_profile' => true,
             'require_research' => false,
             'whitelabel' => false,
@@ -127,18 +93,18 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for TechCorp
         $this->createJob($techClient, 'Software Engineer', 'software-engineer', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involved360']->id,
+            $assessments['involvedBlockers']->id
         ], true);
         
         $this->createJob($techClient, 'Product Manager', 'product-manager', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($techClient, 'Data Scientist', 'data-scientist', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involved360']->id,
+            $assessments['involvedBlockers']->id
         ], false); // Closed job
         
         // Create some applicant users
@@ -156,7 +122,7 @@ class ClientTableSeeder extends Seeder
             'address' => '456 Industrial Blvd, Detroit, MI 48201',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['personality']->id, $assessments['leadership']->id],
+            'assessments' => [$assessments['involved360']->id, $assessments['involvedLeader']->id],
             'require_profile' => true,
             'require_research' => true,
             'whitelabel' => false,
@@ -183,17 +149,17 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for Manufacturing Inc
         $this->createJob($mfgClient, 'Production Supervisor', 'production-supervisor', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], true);
         
         $this->createJob($mfgClient, 'Quality Control Specialist', 'quality-control', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involved360']->id,
+            $assessments['involvedBlockers']->id
         ], true);
         
         $this->createJob($mfgClient, 'Maintenance Technician', 'maintenance-tech', [
-            $assessments['cognitive']->id
+            $assessments['involved360']->id
         ], true);
         
         // Create some applicant users
@@ -211,7 +177,7 @@ class ClientTableSeeder extends Seeder
             'address' => '789 Business Center, New York, NY 10001',
             'logo' => null,
             'background' => null,
-            'assessments' => [$assessments['leadership']->id, $assessments['personality']->id, $assessments['cognitive']->id],
+            'assessments' => [$assessments['involvedLeader']->id, $assessments['involved360']->id, $assessments['involvedBlockers']->id],
             'require_profile' => true,
             'require_research' => true,
             'whitelabel' => false,
@@ -238,19 +204,19 @@ class ClientTableSeeder extends Seeder
         
         // Create jobs for Consulting Partners
         $this->createJob($consultClient, 'Senior Consultant', 'senior-consultant', [
-            $assessments['leadership']->id,
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id,
+            $assessments['involvedBlockers']->id
         ], true);
         
         $this->createJob($consultClient, 'Business Analyst', 'business-analyst', [
-            $assessments['cognitive']->id,
-            $assessments['personality']->id
+            $assessments['involved360']->id,
+            $assessments['involvedBlockers']->id
         ], true);
         
         $this->createJob($consultClient, 'Project Manager', 'project-manager', [
-            $assessments['leadership']->id,
-            $assessments['personality']->id
+            $assessments['involvedLeader']->id,
+            $assessments['involved360']->id
         ], false); // Closed job
         
         // Create some applicant users

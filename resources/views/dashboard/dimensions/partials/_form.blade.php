@@ -35,6 +35,19 @@
                 </div>
             </div>
 
+            <!-- Definition Field -->
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4">
+                        {!! Form::label('definition', 'Definition', ['class' => 'control-label']) !!}
+                        <p class="small text-muted">A detailed description of what this dimension measures and how it should be interpreted.</p>
+                    </div>
+                    <div class="col-sm-8">
+                        {!! Form::textarea('definition', null, ['class' => 'form-control input-lg', 'rows' => 4]) !!}
+                    </div>
+                </div>
+            </div>
+
             <!-- Parent Field -->
             <div class="form-group">
                 <div class="row">

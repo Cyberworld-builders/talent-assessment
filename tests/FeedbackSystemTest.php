@@ -401,7 +401,7 @@ class FeedbackSystemTest extends TestCase
 
         $requestData = [
             'name' => 'Controller Test Library',
-            'feedback' => [
+            'feedback' => json_encode([
                 'dimensions' => [
                     'leadership' => [
                         'high' => 'Controller test high feedback',
@@ -409,10 +409,10 @@ class FeedbackSystemTest extends TestCase
                         'low' => 'Controller test low feedback'
                     ]
                 ]
-            ]
+            ])
         ];
 
-        $response = $this->call('POST', 'dashboard/feedback', $requestData);
+        $response = $this->call('POST', 'dashboard/feedback', $requestData, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
         // Should return JSON response
         $this->assertEquals(200, $response->getStatusCode());
@@ -423,7 +423,7 @@ class FeedbackSystemTest extends TestCase
         // Verify library was created
         $library = FeedbackLibrary::where('name', 'Controller Test Library')->first();
         $this->assertNotNull($library);
-        $this->assertEquals($requestData['feedback'], $library->feedback);
+        $this->assertEquals(json_decode($requestData['feedback'], true), $library->feedback);
     }
 
     /**
@@ -435,19 +435,19 @@ class FeedbackSystemTest extends TestCase
 
         // Test missing name
         $response = $this->call('POST', 'dashboard/feedback', [
-            'feedback' => ['test' => 'value']
-        ]);
+            'feedback' => json_encode(['test' => 'value'])
+        ], [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('errors', $responseData);
 
         // Test missing feedback
         $response = $this->call('POST', 'dashboard/feedback', [
             'name' => 'Test Library'
-        ]);
+        ], [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(422, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('errors', $responseData);
     }

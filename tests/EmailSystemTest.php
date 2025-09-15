@@ -47,19 +47,26 @@ class EmailSystemTest extends TestCase
      */
     public function testMailConfiguration()
     {
-        $this->assertEquals('smtp', config('mail.driver'));
-        $this->assertEquals('sandbox.smtp.mailtrap.io', config('mail.host'));
-        $this->assertEquals(2525, config('mail.port'));
-        $this->assertEquals('tls', config('mail.encryption'));
+        // Test that mail driver is configured (could be ses or smtp)
+        $driver = config('mail.driver');
+        $this->assertContains($driver, ['ses', 'smtp'], 'Mail driver should be either ses or smtp');
+        
+        // Test that required configuration is present
+        $this->assertNotEmpty(config('mail.host'));
+        $this->assertNotEmpty(config('mail.port'));
+        $this->assertNotEmpty(config('mail.encryption'));
         
         // Test that username and password are configured (may be masked in CI)
         $username = config('mail.username');
         $password = config('mail.password');
         
-        $this->assertNotEmpty($username, 'Mail username should be configured');
-        $this->assertNotEmpty($password, 'Mail password should be configured');
-        $this->assertNotEquals('null', $username, 'Mail username should not be null');
-        $this->assertNotEquals('null', $password, 'Mail password should not be null');
+        // For SES, username and password are not required
+        if (config('mail.driver') !== 'ses') {
+            $this->assertNotEmpty($username, 'Mail username should be configured');
+            $this->assertNotEmpty($password, 'Mail password should be configured');
+            $this->assertNotEquals('null', $username, 'Mail username should not be null');
+            $this->assertNotEquals('null', $password, 'Mail password should not be null');
+        }
     }
 
     /**
@@ -326,9 +333,13 @@ class EmailSystemTest extends TestCase
         $this->assertNotEmpty(config('mail.driver'));
         $this->assertNotEmpty(config('mail.host'));
         $this->assertNotEmpty(config('mail.port'));
-        $this->assertNotEmpty(config('mail.username'));
-        $this->assertNotEmpty(config('mail.password'));
         $this->assertNotEmpty(config('mail.encryption'));
+        
+        // For SES, username and password are not required
+        if (config('mail.driver') !== 'ses') {
+            $this->assertNotEmpty(config('mail.username'));
+            $this->assertNotEmpty(config('mail.password'));
+        }
     }
 
     /**

@@ -461,7 +461,7 @@ class ProfileControllerTest extends TestCase
 
         // Test non-existent industry
         $invalidData = $validData;
-        $invalidData['industry_id'] = 999;
+        $invalidData['industry_id'] = 9999; // Use a much higher ID that doesn't exist
         $validator = Validator::make($invalidData, $rules);
         $this->assertTrue($validator->fails());
     }
