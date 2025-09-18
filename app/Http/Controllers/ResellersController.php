@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Assessment;
 use App\Client;
 use App\DBConnection;
+use App\Industry;
 use App\Job;
 use App\PredictiveModel;
 use App\Reseller;
@@ -248,14 +249,23 @@ class ResellersController extends Controller
 		// Otherwise, we're on Localhost
 		else
 		{
-			// Create the database
-			DB::connection()->statement('CREATE DATABASE ' . $data['db_name']);
+			try {
+				// Create the database
+				DB::connection()->statement('CREATE DATABASE ' . $data['db_name']);
 
-			// Migrate the tables into the new database
-			$db = new DBConnection(['database' => $data['db_name']]);
-			Artisan::call('migrate', [
-				'--database' => $db->getConnection()->getName()
-			]);
+				// Migrate the tables into the new database
+				$db = new DBConnection(['database' => $data['db_name']]);
+				Artisan::call('migrate', [
+					'--database' => $db->getConnection()->getName()
+				]);
+			} catch (\Exception $e) {
+				// Check if it's a permission error
+				if (strpos($e->getMessage(), 'Access denied') !== false || strpos($e->getMessage(), 'CREATE') !== false) {
+					return redirect()->back()->withInput()->with('error', 'Database creation failed: The current database user does not have permission to create new databases. Please contact your system administrator to grant CREATE privileges to the database user.');
+				}
+				// Re-throw other exceptions
+				throw $e;
+			}
 
 			// Seed the database
 			Artisan::call('db:seed', [
@@ -519,6 +529,7 @@ class ResellersController extends Controller
 		$reseller->db_status = $reseller->checkDbStatus();
 		$clients = $reseller->clients();
 		$roles = Role::all()->except(1);
+		$industries = Industry::orderBy('name')->get();
 
 		$rolesArray = [];
 		foreach ($roles as $i => $role)
@@ -528,7 +539,11 @@ class ResellersController extends Controller
 		foreach ($clients as $client)
 			$clientsArray[$client->id] = $client->name;
 
-		return view('dashboard.users.create', compact('reseller', 'rolesArray', 'clientsArray'));
+		$industriesArray = ['' => 'Please select an industry'];
+		foreach ($industries as $industry)
+			$industriesArray[$industry->id] = $industry->name;
+
+		return view('dashboard.users.create', compact('reseller', 'rolesArray', 'clientsArray', 'industriesArray'));
 	}
 
 	/**
@@ -553,7 +568,8 @@ class ResellersController extends Controller
 		$validator = Validator::make($data, [
 			'name' => 'required',
 			'username' => 'required|unique:'.$reseller->db_name.'.users',
-			'password' => 'required|min:4'
+			'password' => 'required|min:4',
+			'industry_id' => 'required|exists:industries,id'
 		]);
 
 		if ($validator->fails())

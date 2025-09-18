@@ -80,7 +80,7 @@ class UsersController extends Controller
 
         // Get industry options for the form
         $industries = Industry::orderBy('name')->get();
-        $industryOptions = ['' => 'Select Industry'];
+        $industryOptions = ['' => 'Please select an industry'];
         if ($industries->count() > 0) {
             foreach($industries as $industry) {
                 $industryOptions[$industry->id] = $industry->name;
@@ -303,7 +303,7 @@ class UsersController extends Controller
         foreach ($clients as $client)
             $clientsArray[$client->id] = $client->name;
 
-        $industriesArray = [null => 'Select Industry'];
+        $industriesArray = [null => 'Please select an industry'];
         foreach ($industries as $industry)
             $industriesArray[$industry->id] = $industry->name;
 
@@ -346,7 +346,8 @@ class UsersController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required',
             'username' => 'required|unique:users',
-            'password' => 'required|min:4'
+            'password' => 'required|min:4',
+            'industry_id' => 'required|exists:industries,id'
         ]);
 
         if ($validator->fails())
@@ -419,7 +420,7 @@ class UsersController extends Controller
         foreach ($clients as $client)
             $clientsArray[$client->id] = $client->name;
 
-        $industriesArray = [null => 'Select Industry'];
+        $industriesArray = [null => 'Please select an industry'];
         foreach ($industries as $industry)
             $industriesArray[$industry->id] = $industry->name;
 

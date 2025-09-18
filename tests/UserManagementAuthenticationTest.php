@@ -453,4 +453,77 @@ class UserManagementAuthenticationTest extends TestCase
         // Should redirect to assignments when profile is complete
         $this->seePageIs('https://localhost/assignments');
     }
+
+    /**
+     * Test that industry is required when creating a user
+     */
+    public function testUserCreationRequiresIndustry()
+    {
+        // Create an admin user to access user creation
+        $admin = factory(User::class)->create([
+            'client_id' => $this->client->id,
+            'language_id' => $this->language->id
+        ]);
+        $admin->attachRole(Role::find(1)); // AOE Admin role
+
+        $this->actingAs($admin);
+
+        // Try to create a user without industry_id
+        $userData = [
+            'name' => 'Test User',
+            'username' => 'testuser',
+            'password' => 'password123',
+            'role' => 4, // User role
+            'client_id' => $this->client->id,
+            // industry_id is missing
+        ];
+
+        $response = $this->call('POST', '/dashboard/users', $userData);
+
+        // Should redirect back with validation errors
+        $this->assertEquals(302, $response->getStatusCode());
+        
+        // Check that user was not created
+        $userCount = User::where('username', 'testuser')->count();
+        $this->assertEquals(0, $userCount);
+    }
+
+    /**
+     * Test that user creation succeeds with valid industry_id
+     */
+    public function testUserCreationSucceedsWithIndustry()
+    {
+        // Create an admin user to access user creation
+        $admin = factory(User::class)->create([
+            'client_id' => $this->client->id,
+            'language_id' => $this->language->id
+        ]);
+        $admin->attachRole(Role::find(1)); // AOE Admin role
+
+        $this->actingAs($admin);
+
+        // Get a valid industry
+        $industry = Industry::first();
+        $this->assertNotNull($industry, 'No industries found in database');
+
+        // Create a user with valid industry_id
+        $userData = [
+            'name' => 'Test User',
+            'username' => 'testuser',
+            'password' => 'password123',
+            'role' => 4, // User role
+            'client_id' => $this->client->id,
+            'industry_id' => $industry->id,
+        ];
+
+        $response = $this->call('POST', '/dashboard/users', $userData);
+
+        // Should redirect back with success message
+        $this->assertEquals(302, $response->getStatusCode());
+        
+        // Check that user was created with correct industry
+        $user = User::where('username', 'testuser')->first();
+        $this->assertNotNull($user);
+        $this->assertEquals($industry->id, $user->industry_id);
+    }
 }

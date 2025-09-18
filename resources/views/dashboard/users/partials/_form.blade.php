@@ -139,7 +139,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     {!! Form::label('industry_id', 'Industry', ['class' => 'control-label']) !!}
-                    <p class="small text-muted">The industry to which this user belongs.</p>
+                    <p class="small text-muted">The industry to which this user belongs. <span class="text-danger">*Required</span></p>
                 </div>
                 <div class="col-sm-9">
                     @if ($edit)
