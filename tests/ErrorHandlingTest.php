@@ -76,7 +76,7 @@ class ErrorHandlingTest extends TestCase
         
         // Should redirect to login
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', $response->getTargetUrl());
+        $this->assertContains('/login', $response->getTargetUrl());
     }
 
     /**
@@ -95,7 +95,7 @@ class ErrorHandlingTest extends TestCase
         
         // Should redirect to login
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', $response->getTargetUrl());
+        $this->assertContains('/login', $response->getTargetUrl());
     }
 
     /**
@@ -116,7 +116,7 @@ class ErrorHandlingTest extends TestCase
         
         // Should redirect to login
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', $response->getTargetUrl());
+        $this->assertContains('/login', $response->getTargetUrl());
     }
 
     /**
@@ -153,6 +153,6 @@ class ErrorHandlingTest extends TestCase
         
         // Should redirect to login
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', $response->getTargetUrl());
+        $this->assertContains('/login', $response->getTargetUrl());
     }
 }
