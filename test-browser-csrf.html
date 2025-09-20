@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Error Handling Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .code { background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🧪 CSRF Error Handling Test</h1>
+    
+    <div class="test info">
+        <h3>Test Instructions</h3>
+        <p>This page helps you test the CSRF error handling functionality manually.</p>
+    </div>
+
+    <div class="test">
+        <h3>Test 1: Login with Invalid CSRF Token</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Open your application in another tab</li>
+            <li>Go to the login page</li>
+            <li>Open browser developer tools (F12)</li>
+            <li>Go to Application/Storage tab and clear all cookies</li>
+            <li>Try to log in with valid credentials</li>
+        </ol>
+        <p><strong>Expected Result:</strong></p>
+        <ul>
+            <li>Should redirect back to login page</li>
+            <li>Should display error message: "Your session has expired. Please log in again."</li>
+            <li>Should preserve username in the form field</li>
+            <li>Should NOT show a 500 error page</li>
+        </ul>
+    </div>
+
+    <div class="test">
+        <h3>Test 2: Form Submission with Invalid CSRF Token</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Log in successfully to the application</li>
+            <li>Navigate to any form (e.g., user creation, assessment creation)</li>
+            <li>Open browser developer tools</li>
+            <li>In the Console, run: <code>document.querySelector('input[name="_token"]').value = 'invalid-token'</code></li>
+            <li>Submit the form</li>
+        </ol>
+        <p><strong>Expected Result:</strong></p>
+        <ul>
+            <li>Should redirect to login page</li>
+            <li>Should display error message: "Your session has expired. Please log in again."</li>
+            <li>Should preserve form input data (except password and _token)</li>
+            <li>Should NOT show a 500 error page</li>
+        </ul>
+    </div>
+
+    <div class="test">
+        <h3>Test 3: AJAX Request with Invalid CSRF Token</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Log in successfully to the application</li>
+            <li>Navigate to a page with AJAX functionality (e.g., feedback submission)</li>
+            <li>Open browser developer tools</li>
+            <li>In the Console, run: <code>document.querySelector('meta[name="csrf-token"]').setAttribute('content', 'invalid-token')</code></li>
+            <li>Trigger an AJAX request</li>
+        </ol>
+        <p><strong>Expected Result:</strong></p>
+        <ul>
+            <li>Should handle the error gracefully</li>
+            <li>Should NOT show a 500 error in the console</li>
+            <li>Should display appropriate error message to user</li>
+        </ul>
+    </div>
+
+    <div class="test">
+        <h3>Test 4: Password Validation Field Preservation</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Go to user creation form</li>
+            <li>Fill in all fields including username, email, industry</li>
+            <li>Leave password field empty</li>
+            <li>Submit the form</li>
+        </ol>
+        <p><strong>Expected Result:</strong></p>
+        <ul>
+            <li>Should show validation error for password</li>
+            <li>Should preserve username, email, and industry fields</li>
+            <li>Should clear password fields for security</li>
+        </ul>
+    </div>
+
+    <div class="test">
+        <h3>Quick Test Buttons</h3>
+        <p>Use these buttons to quickly test CSRF token manipulation:</p>
+        
+        <button onclick="testCSRFTokenManipulation()">Test CSRF Token Manipulation</button>
+        <button onclick="clearCookies()">Clear All Cookies</button>
+        <button onclick="openLoginPage()">Open Login Page</button>
+        
+        <div id="test-results" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        function testCSRFTokenManipulation() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<div class="code">Testing CSRF token manipulation...<br>';
+            
+            // Test if we can find CSRF token elements
+            const tokenInput = document.querySelector('input[name="_token"]');
+            const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            
+            if (tokenInput) {
+                results.innerHTML += '✅ Found CSRF token input: ' + tokenInput.value + '<br>';
+            } else {
+                results.innerHTML += '❌ No CSRF token input found<br>';
+            }
+            
+            if (tokenMeta) {
+                results.innerHTML += '✅ Found CSRF token meta: ' + tokenMeta.getAttribute('content') + '<br>';
+            } else {
+                results.innerHTML += '❌ No CSRF token meta found<br>';
+            }
+            
+            results.innerHTML += '</div>';
+        }
+        
+        function clearCookies() {
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            alert('Cookies cleared!');
+        }
+        
+        function openLoginPage() {
+            window.open('/login', '_blank');
+        }
+    </script>
+</body>
+</html>
+
+
+

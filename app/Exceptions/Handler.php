@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
@@ -22,7 +22,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
-        AuthenticationException::class,
+        UnauthorizedException::class,
         ValidationException::class,
     ];
 
@@ -60,31 +60,29 @@ class Handler extends ExceptionHandler
 //            ], 500);
 //        }
 
-        // Handle CSRF token mismatch gracefully - redirect to login instead of 500 error
+        // Handle CSRF token mismatch gracefully - always redirect to login for security
         if ($e instanceof TokenMismatchException) {
             // Log the CSRF issue for debugging (but don't report as error)
             \Log::info('CSRF token mismatch', [
                 'url' => $request->fullUrl(),
                 'method' => $request->method(),
                 'ip' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'user_agent' => $request->header('User-Agent', 'Unknown')
             ]);
             
-            // If we can't go back (e.g., direct POST to login), redirect to login page
-            if ($request->is('login') || !$request->hasSession() || !$request->session()->has('_previous')) {
-                return redirect()->route('login')
-                    ->withInput($request->except('_token'))
-                    ->withErrors(['_token' => 'Your session has expired. Please try again.']);
-            }
+            // Invalidate the session to force re-authentication
+            \Session::flush();
+            \Auth::logout();
             
-            return redirect()->back()
-                ->withInput($request->except('_token'))
-                ->withErrors(['_token' => 'Your session has expired. Please try again.']);
+            // Always redirect to login for CSRF token mismatches to force re-authentication
+            return redirect()->to('/login')
+                ->withInput($request->except('_token', 'password', 'password_confirmation'))
+                ->withErrors(['_token' => 'Your session has expired. Please log in again.']);
         }
 
         // Handle authentication exceptions gracefully
-        if ($e instanceof AuthenticationException) {
-            return redirect()->route('login')
+        if ($e instanceof UnauthorizedException) {
+            return redirect()->to('/login')
                 ->withErrors(['auth' => 'Please log in to continue.']);
         }
 

@@ -553,18 +553,24 @@ class ResellersController extends Controller
 		$validator = Validator::make($data, [
 			'name' => 'required',
 			'username' => 'required|unique:'.$reseller->db_name.'.users',
-			'password' => 'required|min:4'
+			'password' => 'required|min:4',
+			'industry_id' => 'required|exists:industries,id'
 		]);
 
 		if ($validator->fails())
-			return redirect()->back()->withErrors($validator->errors());
+			return redirect()->back()->withErrors($validator->errors())->withInput($request->except('password', 'password_confirmation'));
 
 		if (! array_key_exists('client_id', $data))
 			$data['client_id'] = false;
 
-		if (! $data['client_id']) {
-			unset($data['client_id']);
-		}
+        if (! $data['client_id']) {
+            unset($data['client_id']);
+        }
+
+        // Ensure industry_id is properly set
+        if (empty($data['industry_id'])) {
+            return redirect()->back()->withErrors(['industry_id' => 'The industry field is required.'])->withInput($request->except('password', 'password_confirmation'));
+        }
 
 		$data['password'] = bcrypt($data['password']);
 		$role = Role::find($data['role']);
