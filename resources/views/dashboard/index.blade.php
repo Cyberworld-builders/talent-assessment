@@ -40,12 +40,14 @@
 			<div class="chart-item-bg">
 				<div class="chart-label">
 
+					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
+
 					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update {{ Config::get('app.version') }}</div>
-					<span class="text-small text-muted text-upper">Changelog</span>
+					{{-- <div class="h1 text-warning text-bold">Update {{ Config::get('app.version') }}</div>
+					<span class="text-small text-muted text-upper">Changelog</span> --}}
 
 					{{-- Changelog --}}
-					<ul class="list-unstyled changelog">
+					{{-- <ul class="list-unstyled changelog">
 						<li>
 							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.3.11 - Feedback System Integration:</strong> Complete feedback management system with dynamic assessment-based tabs and enhanced UX.</p>
@@ -132,7 +134,7 @@
 							<i class="fa-asterisk text-info"></i>
 							<p>Comprehensive bug fixes and performance improvements throughout the application.</p>
 						</li>
-					</ul>
+					</ul> --}}
 				</div>
 			</div>
 		</div>
