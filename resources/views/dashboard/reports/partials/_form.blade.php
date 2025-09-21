@@ -186,7 +186,7 @@
                                 <div class="row no-border">
                                     <div class="col-sm-6">
                                         <div class="report-page-wrapper">
-                                            <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                                            <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
                                             @if ($assessments)
                                                 <ul id="sortable1" class="connectedSortable report-page reports">
                                                     @if ($edit && $report->assessments)

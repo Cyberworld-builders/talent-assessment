@@ -93,7 +93,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
             </div>
         </div>
         <!--Candidate-->
@@ -123,8 +123,8 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <small>
-                    The AOE Group, LLC offers the most scientifically valid candidate assessments.
-                    AOE uses the latest Talent Evidence from the scientific literature, their own research, and the
+                    Involved Talent offers the most scientifically valid candidate assessments.
+                    We use the latest Talent Evidence from the scientific literature, our own research, and the
                     needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </small>
             </div>
@@ -142,7 +142,7 @@
     <!--Page 2-->
     <div class="page-container" id="2">
         <div class="img-container-1">
-            <img src="/assets/images/aoe-science_logo.png">
+            <img src="/assets/images/involved-talent-logo.png">
             <small>Page {{ $page }}</small>
         </div>
         <div class="container">
@@ -230,7 +230,7 @@
         <!--Page 3-->
         <div class="page-container" id="3">
             <div class="img-container-1">
-                <img src="/assets/images/aoe-science_logo.png">
+                <img src="/assets/images/involved-talent-logo.png">
                 <small>Page {{ $page }}</small>
             </div>
             <div class="container">
@@ -267,7 +267,7 @@
                                     <!--Page 3-->
                                     <div class="page-container" id="3">
                                         <div class="img-container-1">
-                                            <img src="/assets/images/aoe-science_logo.png">
+                                            <img src="/assets/images/involved-talent-logo.png">
                                             <?php $page++; ?>
                                             <small>Page {{ $page }}</small>
                                         </div>
@@ -300,7 +300,7 @@
 
 @endforeach
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 {{--<script src="aoe-360_files/charts.html"></script>--}}
 
 </body></html>

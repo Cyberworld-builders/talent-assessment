@@ -27,8 +27,8 @@ class Mailer {
 	 */
 	public function __construct()
 	{
-		$this->domain = env('MAIL_FROM_ADDRESS', 'postmaster@mg.aoescience.com');
-		$this->from = env('MAIL_FROM_NAME', 'AOE Science');
+		$this->domain = env('MAIL_FROM_ADDRESS', 'postmaster@mg.involvedtalent.com');
+		$this->from = env('MAIL_FROM_NAME', 'Involved Talent');
 	}
 
 	/**

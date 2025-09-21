@@ -6,7 +6,7 @@
 		<li class="current-time">
 			{{--<h3>{{ date("l, M. j, Y, g:i a") }}</h3>--}}
 			@role('admin')
-				<h3><i class="linecons-user text-warning"></i> AOE Admin</h3>
+				<h3><i class="linecons-user text-warning"></i> Involved Talent Admin</h3>
 			@endrole
 
 			@role('reseller')

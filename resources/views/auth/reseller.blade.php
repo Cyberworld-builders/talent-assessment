@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-    AOE : Login
+    Involved Talent : Login
 @stop
 
 @section('styles')

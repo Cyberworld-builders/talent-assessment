@@ -69,7 +69,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <p class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </p>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
@@ -123,7 +123,7 @@
 <!--Page 3-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -155,7 +155,7 @@
 <!--Page 4-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -255,7 +255,7 @@
 <!--Page 5-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -283,7 +283,7 @@
 <!--Page 6-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -315,7 +315,7 @@
 @if (! empty($opportunities['Power']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -355,7 +355,7 @@
 <!--Page 8-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -387,7 +387,7 @@
 @if (! empty($opportunities['Information']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -428,7 +428,7 @@
 @if (count($opportunities['Information']) > 2)
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -463,7 +463,7 @@
 <!--Page 11-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -509,7 +509,7 @@
 <!--Page 12-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -541,7 +541,7 @@
 @if (! empty($opportunities['Knowledge']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -582,7 +582,7 @@
 @if (count($opportunities['Knowledge']) > 2)
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -617,7 +617,7 @@
 <!--Page 15-->
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -647,7 +647,7 @@
 @if (! empty($opportunities['Relationships']))
     <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -688,7 +688,7 @@
 @if (count($opportunities['Relationships']) > 2)
     <div class="page-container" id="{{ $page }}">
         <div class="img-container-1">
-            <img src="/assets/images/aoe-science_logo.png">
+            <img src="/assets/images/involved-talent-logo.png">
             <?php $page++; ?>
             <small>Page {{ $page }}</small>
         </div>
@@ -720,7 +720,7 @@
     </div>
 @endif
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 
 <script>
     $(function () {

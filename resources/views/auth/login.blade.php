@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-    AOE : Login
+    Involved Talent : Login
 @stop
 
 @section('styles')
@@ -150,7 +150,7 @@
                 <div class="login-header">
                     <img src="https://s3-us-west-2.amazonaws.com/aoe-uploads/images/aoe-logo-black.png" /><br/><br/>
 
-                    <h4>Welcome To AOE Science</h4>
+                    <h4>Welcome To Involved Talent</h4>
                     <p>Please enter your user information below to login</p>
                 </div>
 

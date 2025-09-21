@@ -282,7 +282,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. We use the latest Talent Evidence from the scientific literature, our own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -361,16 +361,16 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
                 <h1>Personality Report</h1>
             </div>
             <div class="col-sm-12 text-justify">
                 <h5>Introduction</h5>
-                <p>The AOE-P is based on the HEXACO model of personality, which is the latest scientifically valid model of individual personality.
+                <p>The Involved Talent Assessment is based on the HEXACO model of personality, which is the latest scientifically valid model of individual personality.
                     The HEXACO model is valid across many different cultures and incorporates the most up-to-date and accurate framework for assessing personality.</p>
-                <p>Personality is a very good indicator of what people will do on a typical day of work. The AOE-P is the first HEXACO-based assessment
+                <p>Personality is a very good indicator of what people will do on a typical day of work. The Involved Talent Assessment is the first HEXACO-based assessment
                     for application to organizations. The theoretical and empirical evidence shows that there are six major dimensions to personality. These are described as:</p>
             </div>
         </div>
@@ -445,17 +445,17 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
                 <h1>Scoring and Importance</h1>
-                <h5>of the AOE-P for {{ $job->name }}</h5>
+                <h5>of the Involved Talent Assessment for {{ $job->name }}</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 text-justify">
-                <p>AOE's vast experience in research, predictive analytics, and content validation reveals that for
-                    {{ $job->name }}s all six dimensions of AOE-P are desired. Of these, Conscientiousness is a strongly
+                <p>Our vast experience in research, predictive analytics, and content validation reveals that for
+                    {{ $job->name }}s all six dimensions of the Involved Talent Assessment are desired. Of these, Conscientiousness is a strongly
                     desired characteristic that connects to performance. Conscientiousness encompasses prudence, organization,
                     detail orientation, and achievement. Honesty and Humility is also strongly desired - encompassing fairness,
                     sincerity, modesty, and greed avoidance. Emotional Control is also strongly desired for {{ $job->name }} positions.
@@ -472,7 +472,7 @@
                 <p>For each of the major 6 dimensions there are 4 sub-factors totalling 24 unique indicators of personality.
                     The sub-factor dimensions are described below with the candidate's score for each. Of particular importance
                     for {{ $job->name }} positions, factors of Conscientiousness, Emotional Control, and Honesty-Humility are weighted
-                    heavily in the AOE-P evaluation for {{ $job->name }}s. AOE's proprietary algorithms take such differences into account
+                    heavily in the Involved Talent Assessment evaluation for {{ $job->name }}s. Our proprietary algorithms take such differences into account
                     to arrive at an overall Job-Fit Recommendation, which is presented below after the sub-factor scores.</p>
             </div>
         </div>
@@ -892,7 +892,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <p>Given these AOE-P results, in conjunction with job and industry profiles for {{ $job->name }}s, the potential fit for {{ $user->name }} is:</p>
+                <p>Given these Involved Talent Assessment results, in conjunction with job and industry profiles for {{ $job->name }}s, the potential fit for {{ $user->name }} is:</p>
                 <br><br>
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8">
@@ -926,14 +926,14 @@
                 <div class="row">
                     <div id="invisible-4" class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-S.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-s.png">
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 text-justify">
                 <h5>Introduction</h5>
-                <p>AOE Scientists have been studying the psychological drivers of occupational safety for over two decades and have published their findings in leading scholarly journals. The AOE-S is based upon this foundational work resulting in six primary drivers of workplace safety.</p>
-                <p>The AOE-S is a very good indicator of workplace safety behavior – indicating who is more likely to be involved in an accident at work. Generally speaking, those that possess appropriate job knowledge, motivation, confidence, focus, internal locos of control, and are risk averse tend to behave significantly more safe than those lacking in one or more of these aspects. Such a profile has been quantitatively linked to higher safety behavior and thereby reduced accident involvement.</p>
+                <p>Our scientists have been studying the psychological drivers of occupational safety for over two decades and have published their findings in leading scholarly journals. The Involved Talent Safety Assessment is based upon this foundational work resulting in six primary drivers of workplace safety.</p>
+                <p>The Involved Talent Safety Assessment is a very good indicator of workplace safety behavior – indicating who is more likely to be involved in an accident at work. Generally speaking, those that possess appropriate job knowledge, motivation, confidence, focus, internal locos of control, and are risk averse tend to behave significantly more safe than those lacking in one or more of these aspects. Such a profile has been quantitatively linked to higher safety behavior and thereby reduced accident involvement.</p>
             </div>
         </div>
         <div id="invisible-0" class="row">
@@ -1007,21 +1007,21 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-S.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-s.png">
                     </div>
                 </div>
                 <h1>Scoring and Importance</h1>
-                <h5>of the AOE-S for {{ $job->name }}</h5>
+                <h5>of the Involved Talent Safety Assessment for {{ $job->name }}</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 text-justify">
-                <p>All six factors in the AOE-S are important for improving safety and reducing accidents. Below we present the overall scores for {{ $user->name }}. Next, using our predictive talent analytics algorithms, we provide a Safety Evaluation Recommendation for this job:</p>
+                <p>All six factors in the Involved Talent Safety Assessment are important for improving safety and reducing accidents. Below we present the overall scores for {{ $user->name }}. Next, using our predictive talent analytics algorithms, we provide a Safety Evaluation Recommendation for this job:</p>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <h5>Graphical Representation of AOE-S Scores for {{ $user->name }}</h5>
+                <h5>Graphical Representation of Involved Talent Safety Assessment Scores for {{ $user->name }}</h5>
                 <div id="chart4"></div>
             </div>
         </div>
@@ -1045,7 +1045,7 @@
         </div>
         <div class="row text-center">
             <div class="col-sm-12">
-                <p>Given these AOE-S results, in conjunction with job and industry profiles for {{ $job->name }}, the safety potential for {{ $user->name }} is:</p>
+                <p>Given these Involved Talent Safety Assessment results, in conjunction with job and industry profiles for {{ $job->name }}, the safety potential for {{ $user->name }} is:</p>
                 <br><br>
                 <div class="col-xs-2"></div>
                 {{--<div class="col-xs-8">--}}
@@ -1069,6 +1069,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

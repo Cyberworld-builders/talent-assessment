@@ -174,7 +174,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
             </div>
         </div>
         <!--Candidate-->
@@ -199,7 +199,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -212,7 +212,7 @@
 <!--S-->
 <div class="page-container" id="13">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 13</small>
     </div>
     <div class="container">
@@ -293,7 +293,7 @@
 <!--S-->
 <div class="page-container" id="14">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 14</small>
     </div>
     <div class="container">
@@ -326,7 +326,7 @@
 <!--S-->
 <div class="page-container" id="15">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 15</small>
     </div>
     <div class="container">
@@ -365,6 +365,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

@@ -46,7 +46,7 @@
         <div class="title-env">
             <h1 class="title">Personality Weighting</h1>
             <div class="assessments" style="padding-top: 15px;">
-                <div class="label label-white" style="font-size: 15px; background: white; font-weight: 400;">AOE-Personality</div>
+                <div class="label label-white" style="font-size: 15px; background: white; font-weight: 400;">Involved Talent Personality</div>
             </div>
         </div>
 

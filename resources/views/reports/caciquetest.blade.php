@@ -33,7 +33,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/AOE-L.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-l.png">
             </div>
         </div>
 
@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h5>Overview</h5>
-                <p>AOE-L measures specific leadership behaviors which are desirable for leading change and inspiring employees. This report provides a leadership profile with actionable feedback for Someone. The purpose of this report is to provide actionable feedback to achieve increased team effectiveness and improve management skills which positively impacts business results.</p>
+                <p>The Involved Talent Leadership Assessment measures specific leadership behaviors which are desirable for leading change and inspiring employees. This report provides a leadership profile with actionable feedback for Someone. The purpose of this report is to provide actionable feedback to achieve increased team effectiveness and improve management skills which positively impacts business results.</p>
             </div>
         </div>
         <div class="row"><div class="col-sm-12"><hr></div></div>
@@ -60,7 +60,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6>
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. We use the latest Talent Evidence from the scientific literature, our own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
@@ -113,7 +113,7 @@
 <!--Page 3-->
 <div class="page-container" id="3">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 3</small>
     </div>
     <div class="container">
@@ -124,7 +124,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-l.png">
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@
                 <h5>Introduction</h5>
                 <p>The present report provides detailed feedback on the extent to which Someone displays specific leader behaviors. The leader behaviors can be directed toward individuals, a work unit, team, or department. This report groups specific leadership qualities into dimensions with corresponding sub-dimensions.</p>
                 <h5>Understanding Your Report</h5>
-                <p>Leader involvement refers to how well leaders in your organization engage and empower their employees to take control over their own work. AOE-L is designed to provide a detailed summary of how involved leaders are in engaging their direct reports. High Involvement Leadership (HIL) exists when employees throughout an organization (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
+                <p>Leader involvement refers to how well leaders in your organization engage and empower their employees to take control over their own work. The Involved Talent Leadership Assessment is designed to provide a detailed summary of how involved leaders are in engaging their direct reports. High Involvement Leadership (HIL) exists when employees throughout an organization (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
                 <p>It is critical that all 5 dimensions are present at the same time. If one dimension is missing, involvement will be low. Your leadership data is presented along with the overall average leadership data for your entire organization. This allows you to see how well you are doing on Involvement compared to all other leaders at your company.</p>
                 <br>
                 <img class="img-responsive" src="/assets/images/HIL-flow.png">
@@ -144,7 +144,7 @@
 <!--Page 4-->
 <div class="page-container" id="4">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 4</small>
     </div>
     <div class="container">
@@ -155,7 +155,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-l.png">
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
 <!--Page 5-->
 <div class="page-container" id="5">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 5</small>
     </div>
     <div class="container">
@@ -254,7 +254,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-L.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-l.png">
                     </div>
                 </div>
                 <h1>Overall Scores</h1>
@@ -270,7 +270,7 @@
 <!--Page 6-->
 <div class="page-container" id="6">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 6</small>
     </div>
     <div class="container">
@@ -297,7 +297,7 @@
 <!--Page 7-->
 <div class="page-container" id="7">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 7</small>
     </div>
     <div class="container">
@@ -349,7 +349,7 @@
 <!--Page 8-->
 <div class="page-container" id="8">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 8</small>
     </div>
     <div class="container">
@@ -384,7 +384,7 @@
 <!--Page 9-->
 <div class="page-container" id="9">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 9</small>
     </div>
     <div class="container">
@@ -434,7 +434,7 @@
 <!--Page 10-->
 <div class="page-container" id="10">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 10</small>
     </div>
     <div class="container">
@@ -468,7 +468,7 @@
 <!--Page 11-->
 <div class="page-container" id="11">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 11</small>
     </div>
     <div class="container">
@@ -508,7 +508,7 @@
 <!--Page 12-->
 <div class="page-container" id="12">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 12</small>
     </div>
     <div class="container">
@@ -537,7 +537,7 @@
 <!--Page 13-->
 <div class="page-container" id="13">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 13</small>
     </div>
     <div class="container">
@@ -589,7 +589,7 @@
 <!--Page 14-->
 <div class="page-container" id="14">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 14</small>
     </div>
     <div class="container">
@@ -622,7 +622,7 @@
 <!--Page 15-->
 <div class="page-container" id="15">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 15</small>
     </div>
     <div class="container">
@@ -649,7 +649,7 @@
 <!--Page 16-->
 <div class="page-container" id="16">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 16</small>
     </div>
     <div class="container">
@@ -698,7 +698,7 @@
 <!--Page 17-->
 <div class="page-container" id="17">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 17</small>
     </div>
     <div class="container">
@@ -740,7 +740,7 @@
         </div>
     </div>
 </div>
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 
 <script>
     $(function () {

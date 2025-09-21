@@ -9,7 +9,7 @@
 		<!-- Add your copyright text here -->
 		<div class="footer-text">
 			&copy; {{ date('Y') }}
-			AOE Science
+			Involved Talent
 			<div class="pull-right"><small>Version {{ Config::get('app.version') }}</small></div>
 		</div>
 		

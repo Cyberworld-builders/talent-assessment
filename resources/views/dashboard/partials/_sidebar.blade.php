@@ -70,7 +70,7 @@
 					@if (session('reseller'))
 						<h2 style="font-size: 22px; margin: 15px 0;">{{ session('reseller')->name }}</h2>
 					@else
-						<h2>AOE Science</h2>
+						<h2>Involved Talent</h2>
 					@endif
 				</a>
 
