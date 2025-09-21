@@ -43,11 +43,35 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
 					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update v1.5.8-release</div>
+					<div class="h1 text-warning text-bold">Update v1.5.9-release</div>
 					<span class="text-small text-muted text-upper">Changelog</span>
 
 					{{-- Changelog --}}
 					<ul class="list-unstyled changelog">
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.9 - Critical User Loading & Error Handling Fixes:</strong> Resolved critical issues preventing users from loading myinvolvedtalent.com with enhanced error handling and validation.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed CSRF token mismatch handling with graceful session invalidation and user-friendly error messages.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added comprehensive industry field validation for user creation in both UsersController and ResellersController.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced authentication error handling with proper redirects and clear error messaging.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Improved form data preservation on validation errors while excluding sensitive password fields.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added proper exception handling for TokenMismatchException, UnauthorizedException, and ValidationException.</p>
+						</li>
 						<li>
 							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.5.8 - Production Deployment & Docker Optimization:</strong> Complete overhaul of deployment infrastructure with multi-stage Docker builds and enhanced CI/CD workflows.</p>
