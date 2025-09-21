@@ -32,7 +32,7 @@
             {!! csrf_field() !!}
 
             <div class="login-header">
-                <img src="{{ asset('assets/images/logo.png') }}" /><br/><br/><br/>
+                <img src="{{ asset('images') }}/logo.png" /><br/><br/><br/>
                 
                 <h4>Welcome To Involved Talent</h4>
                 <p>Please enter your user information below to login.</p>
