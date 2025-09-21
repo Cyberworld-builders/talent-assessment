@@ -58,14 +58,19 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+              node-version: '6'
         cache: 'npm'
 
     - name: Install Node Dependencies
       run: npm install
 
     - name: Build Frontend Assets
-      run: npm run gulp
+      run: timeout 300 npm run gulp
+
+    - name: Verify Assets Were Built
+      run: |
+        ls -la public/assets/css/
+        ls -la public/assets/js/
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
@@ -114,14 +119,14 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+              node-version: '6'
         cache: 'npm'
 
     - name: Install Node Dependencies
       run: npm install
 
     - name: Build Frontend Assets
-      run: npm run gulp
+      run: timeout 300 npm run gulp
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
