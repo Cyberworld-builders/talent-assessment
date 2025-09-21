@@ -1,0 +1,108 @@
+# Node.js build stage for frontend assets
+FROM node:6.17.1-alpine AS node-build
+
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy source files needed for gulp build
+COPY resources/assets/ ./resources/assets/
+COPY gulpfile.js ./
+
+# Create public directory structure
+RUN mkdir -p public/assets/css public/assets/js public/assets/fonts public/assets/images
+
+# Build frontend assets
+# Note: Gulp build works when run inside container but fails during Docker build
+# Run manually with: docker-compose exec app npm run gulp
+RUN npm run gulp
+
+# Composer build stage for PHP dependencies
+FROM php:7.4-cli AS composer-build
+
+# Install system dependencies for composer
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    pkg-config \
+    libzip-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install zip extension
+RUN docker-php-ext-install zip
+
+# Install composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Copy application files needed for composer
+COPY app/ ./app/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY bootstrap/ ./bootstrap/
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+# Production stage - minimal final image
+FROM php:7.4-apache
+
+# Install minimal system dependencies for production
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /var/www
+
+# Set ownership of working directory to www-data
+RUN chown -R www-data:www-data /var/www
+
+# Copy application code
+COPY --chown=www-data:www-data . .
+
+# Copy built PHP dependencies from composer stage
+COPY --from=composer-build /app/vendor/ /var/www/vendor/
+
+# Copy built frontend assets from node stage
+COPY --from=node-build /app/public/ /var/www/public/
+
+# Switch to www-data user
+USER www-data
+
+# Create storage directories and set permissions
+RUN mkdir -p /var/www/storage/logs \
+    && mkdir -p /var/www/storage/framework/cache \
+    && mkdir -p /var/www/storage/framework/sessions \
+    && mkdir -p /var/www/storage/framework/views \
+    && chmod -R 775 /var/www/storage
+
+RUN touch /var/www/storage/logs/laravel.log \
+    && chmod 666 /var/www/storage/logs/laravel.log
+
+# Switch back to root for Apache configuration
+USER root
+
+# Configure Apache
+RUN a2enmod rewrite
+
+# Copy Apache configuration
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Expose port 8000
+EXPOSE 8000
+
+# Start Apache
+CMD ["apache2-foreground"]
