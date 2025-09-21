@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - '*-staging'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy (e.g., v1.5.4-staging)'
+        required: true
+        default: 'v1.5.4-staging'
 
 jobs:
   test:
@@ -157,11 +163,11 @@ jobs:
           set -e
           cd /opt/talent-assessment
           
-          echo "Starting staging deployment for tag: ${{ github.ref_name }}"
+          echo "Starting staging deployment for tag: ${{ github.event.inputs.tag || github.ref_name }}"
           
           # Export environment variables
           export AWS_DEFAULT_REGION=${{ vars.AWS_REGION }}
-          export IMAGE_TAG=${{ github.ref_name }}
+          export IMAGE_TAG=${{ github.event.inputs.tag || github.ref_name }}
           export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
           
           # Fetch secrets and set server environment variables
@@ -286,4 +292,4 @@ jobs:
           
           echo "Staging deployment completed successfully!"
           echo "Application URL: https://talent-staging.cyberworldbuilders.dev"
-          echo "Deployed version: ${{ github.ref_name }}"
+          echo "Deployed version: ${{ github.event.inputs.tag || github.ref_name }}"
