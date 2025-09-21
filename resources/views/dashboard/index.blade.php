@@ -43,11 +43,43 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
 					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update v1.5.4-staging</div>
+					<div class="h1 text-warning text-bold">Update v1.5.8-release</div>
 					<span class="text-small text-muted text-upper">Changelog</span>
 
 					{{-- Changelog --}}
 					<ul class="list-unstyled changelog">
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.8 - Production Deployment & Docker Optimization:</strong> Complete overhaul of deployment infrastructure with multi-stage Docker builds and enhanced CI/CD workflows.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Implemented multi-stage Docker builds with separate npm and composer stages for optimized production images.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added workflow_dispatch support to both staging and production deployment workflows for manual triggering.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added skip_tests option to deployment workflows for faster deployments when tests are not needed.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed dev environment ownership issues by removing www-data user switching for artisan serve.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added composer.lock to repository for consistent dependency versions in production builds.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Consolidated Dockerfiles and updated docker-compose configurations for better environment management.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced hot reloading support for development environment with proper volume mappings.</p>
+						</li>
 						<li>
 							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.3.11 - Feedback System Integration:</strong> Complete feedback management system with dynamic assessment-based tabs and enhanced UX.</p>
