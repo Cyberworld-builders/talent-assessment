@@ -951,5 +951,17 @@
     <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
     <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize datepicker
+            $('.datepicker').datepicker({
+                format: 'D, dd M yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+        });
+    </script>
 @stop
 
