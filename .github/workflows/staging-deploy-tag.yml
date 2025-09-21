@@ -154,7 +154,7 @@ jobs:
     - name: Build and Push Image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.ref_name }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
       run: |
         docker build -f Dockerfile.production -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
         docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
