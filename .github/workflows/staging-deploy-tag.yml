@@ -55,6 +55,18 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install Node Dependencies
+      run: npm install
+
+    - name: Build Frontend Assets
+      run: npm run gulp
+
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
@@ -98,6 +110,18 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install Node Dependencies
+      run: npm install
+
+    - name: Build Frontend Assets
+      run: npm run gulp
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
