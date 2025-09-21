@@ -213,7 +213,7 @@
                 $('#generate-new-password').show();
             }
 
-            // If Reseller or AOE Admin
+            // If Reseller or Involved Talent Admin
             if (val == 2 || val == 1) {
                 if ($('#client').val() != null)
                     client = $('#client').val();

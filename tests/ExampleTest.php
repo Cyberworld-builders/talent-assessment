@@ -14,7 +14,7 @@ class ExampleTest extends TestCase
     public function testBasicExample()
     {
         $this->visit('/login')
-             ->see('Welcome To AOE Science');
+             ->see('Welcome To Involved Talent');
 
         $this->visit('/password')
              ->see('Reset Your Password');

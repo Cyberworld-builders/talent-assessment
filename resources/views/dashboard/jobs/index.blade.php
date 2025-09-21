@@ -71,7 +71,7 @@
                             {{--<span aria-hidden="true">×</span>--}}
                             {{--<span class="sr-only">Close</span>--}}
                         {{--</button>--}}
-                        {{--Please contact an AOE Administrator if you wish to add a new Selection Survey related to a specific job.--}}
+                        {{--Please contact an Involved Talent Administrator if you wish to add a new Selection Survey related to a specific job.--}}
                     {{--</div>--}}
                 @endrole
 

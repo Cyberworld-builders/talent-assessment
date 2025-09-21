@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-	AOE : Dashboard
+	Involved Talent : Dashboard
 @stop
 
 @section('body')

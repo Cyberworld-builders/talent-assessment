@@ -7,7 +7,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -49,7 +49,7 @@ Below, we present graphical results for [name] followed by AOE-A potential for t
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">

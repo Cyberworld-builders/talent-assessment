@@ -19788,6 +19788,27 @@ button.toast-close-button {
 .login-page .login-form .login-header .logo img {
   vertical-align: baseline;
 }
+.login-page .login-form .login-header img,
+.login-page.login-light .login-form .login-header img {
+  max-width: 340px;
+}
+.login-page .login-form .login-header,
+.login-page.login-light .login-form .login-header {
+  text-align: center;
+}
+.login-page .login-form .login-header p,
+.login-page.login-light .login-form .login-header p {
+  color: #3a3a3a;
+  font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
+  font-size: 18px !important;
+  color: #aaa !important;
+}
+.login-page .login-form .login-header h4,
+.login-page.login-light .login-form .login-header h4 {
+  color: #3a3a3a;
+  font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
+  font-size: 24px;
+}
 .login-page .login-form .login-header .logo span {
   padding-left: 3px;
   color: rgba(73, 75, 74, 0.6);

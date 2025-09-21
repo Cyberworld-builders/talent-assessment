@@ -84,10 +84,10 @@
             {!! Form::open(['url' => 'terms']) !!}
             <div class="panel panel-default panel-border panel-page">
                 <div>
-                    <h3>Non-Disclosure Agreement and General Terms of Use For AOEScience Assessments</h3>
-                    <p>This Non-Disclosure Agreement and General Terms of Use entered into as of the date the assessment link is sent by and between AOE Science and you (the assessment taker). AOE Assessments are confidential information and are protected by intellectual property laws. They are made available solely for the purpose of assessing a candidate’s standing on the constructs. </p>
+                    <h3>Non-Disclosure Agreement and General Terms of Use For Involved Talent Assessments</h3>
+                    <p>This Non-Disclosure Agreement and General Terms of Use entered into as of the date the assessment link is sent by and between Involved Talent and you (the assessment taker). Involved Talent Assessments are confidential information and are protected by intellectual property laws. They are made available solely for the purpose of assessing a candidate's standing on the constructs. </p>
                     <h4>Exam Security and Integrity</h4>
-                    <p>The candidate may be prohibited from taking any AOE Assessments and/or may be disqualified from consideration of the job applied for if AOE Science believes the candidate violated our Assessment Agreement and/or engaged in any misconduct. This policy is enforced to ensure the integrity of the Assessments. Examples of misconduct and/or misuse of the Exam include, but are not limited to, the following:</p>
+                    <p>The candidate may be prohibited from taking any Involved Talent Assessments and/or may be disqualified from consideration of the job applied for if Involved Talent believes the candidate violated our Assessment Agreement and/or engaged in any misconduct. This policy is enforced to ensure the integrity of the Assessments. Examples of misconduct and/or misuse of the Exam include, but are not limited to, the following:</p>
                     <ul>
                         <li>Modifying and/or altering the original results/score report for any assessments or feedback reports.</li>
                         <li>Fraudulently impersonating another to gain access to the assessments.</li>

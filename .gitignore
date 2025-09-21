@@ -178,4 +178,4 @@ docker-compose.override.yml
 #################################
 # Lock Files
 #################################
-*.lock
+# *.lock - commented out to allow composer.lock for production builds

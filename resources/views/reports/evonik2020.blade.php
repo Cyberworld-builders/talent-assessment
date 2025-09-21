@@ -432,7 +432,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -1284,6 +1284,6 @@
         </div>
     </div>
 </div>
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

@@ -233,7 +233,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
             </div>
         </div>
 
@@ -267,7 +267,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                            <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                            <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
                     </div>
                 </div>
                 <h1>Scores</h1>
@@ -304,7 +304,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                        <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
                     </div>
                 </div>
                 <h1>Distribution</h1>
@@ -327,6 +327,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

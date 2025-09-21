@@ -7,7 +7,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="{{ $baseUrl }}/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
             </div>
         </div>
 
@@ -44,7 +44,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature,
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature,
                     their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>

@@ -407,7 +407,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
             </div>
         </div>
         <!--Candidate-->
@@ -436,7 +436,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -451,7 +451,7 @@
 <!--P-->
 <div class="page-container" id="7">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -535,7 +535,7 @@
 <?php $page++; ?>
 <div class="page-container" id="8">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -581,7 +581,7 @@
 <?php $page++; ?>
 <div class="page-container" id="9">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -713,7 +713,7 @@
 <?php $page++; ?>
 <div class="page-container" id="10">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -845,7 +845,7 @@
 <?php $page++; ?>
 <div class="page-container" id="11">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -977,7 +977,7 @@
 <?php $page++; ?>
 <div class="page-container" id="12">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1017,7 +1017,7 @@
 <!--S-->
 <div class="page-container" id="13">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1098,7 +1098,7 @@
 <?php $page++; ?>
 <div class="page-container" id="14">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1131,7 +1131,7 @@
 <?php $page++; ?>
 <div class="page-container" id="15">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1174,7 +1174,7 @@
 <!--WM-->
 <div class="page-container" id="3">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1206,7 +1206,7 @@
 <?php $page++; ?>
 <div class="page-container" id="4">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1267,7 +1267,7 @@
         </div>
     </div>
 </div>
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 {{--<script src="/assets/reports/charts.js"></script>--}}
 </body>
 </html>

@@ -145,8 +145,8 @@
         @media print {
             header, footer {display:none;}
             @page {margin: 0.25mm;  /* this affects the margin in the printer settings */}
-            .page-container:nth-child(odd) {-webkit-print-color-adjust: exact; background-image:url('/assets/images/aoe-science_logo.png'); background-repeat:no-repeat; background-position:96.25% 98.25%; background-size:96px; background-origin:content-box;}
-            .page-container:nth-child(even) {-webkit-print-color-adjust: exact; background-image:url('/assets/images/aoe-science_logo.png'); background-repeat:no-repeat; background-position:4.25% 98.25%; background-size:96px; background-origin:content-box;}
+            .page-container:nth-child(odd) {-webkit-print-color-adjust: exact; background-image:url('/assets/images/involved-talent-logo.png'); background-repeat:no-repeat; background-position:96.25% 98.25%; background-size:96px; background-origin:content-box;}
+            .page-container:nth-child(even) {-webkit-print-color-adjust: exact; background-image:url('/assets/images/involved-talent-logo.png'); background-repeat:no-repeat; background-position:4.25% 98.25%; background-size:96px; background-origin:content-box;}
             .page-container:nth-child(1) {-webkit-print-color-adjust: exact; background-image:none;}
             .page-container {margin:0px; padding:0px; height:auto; width:100%;}
             .cover-logo {padding-bottom:30px; padding-top:0px;}
@@ -176,7 +176,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
             </div>
         </div>
 
@@ -206,8 +206,8 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6>
-                    The AOE Group, LLC offers the most scientifically valid candidate assessments.
-                    AOE uses the latest Talent Evidence from the scientific literature, their own research, and
+                    Involved Talent offers the most scientifically valid candidate assessments.
+                    We use the latest Talent Evidence from the scientific literature, our own research, and
                     the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
@@ -256,7 +256,7 @@
 <!--Page 5-->
 <div class="page-container" id="3">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 3</small>
     </div>
     <div class="container">
@@ -267,17 +267,17 @@
                 <div class="row">
                     <div id="invisible-4" class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 text-justify">
                 <h5>Introduction</h5>
-                <p>The AOE-P is based on the HEXACO model of personality, which is the latest scientifically
+                <p>The Involved Talent Assessment is based on the HEXACO model of personality, which is the latest scientifically
                     valid model of individual personality. The HEXACO model is valid across many different
                     cultures and incorporates the most up-to-date and accurate framework for assessing personality.</p>
                 <p>Personality is a very good indicator of what people will do on a typical day of work. The
-                    AOE-P is the first HEXACO-based assessment for application to organizations. The theoretical
+                    Involved Talent Assessment is the first HEXACO-based assessment for application to organizations. The theoretical
                     and empirical evidence shows that there are six major dimensions to personality. These are described as:</p>
             </div>
         </div>
@@ -343,7 +343,7 @@
 <!--Page 6-->
 <div class="page-container" id="4">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 4</small>
     </div>
     <div class="container">
@@ -354,17 +354,17 @@
                 <div class="row">
                     <div id="invisible-4" class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
                 <h1>Scoring and Importance</h1>
-                <h5>of the AOE-P for Accounting/Financing</h5>
+                <h5>of the Involved Talent Assessment for Accounting/Financing</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 text-justify">
-                <p>AOE's vast experience in research, predictive analytics, and content validation reveals that for
-                    Accounting and Finance related positions all six dimensions of AOE-P are desired.
+                <p>Our vast experience in research, predictive analytics, and content validation reveals that for
+                    Accounting and Finance related positions all six dimensions of the Involved Talent Assessment are desired.
                     Of these, Conscientiousness is a strongly desired characteristic that connects to performance.
                     Conscientiousness encompasses prudence, organization, detail orientation, and achievement.
                     Honesty and Humility is also strongly desired - encompassing fairness, sincerity, modesty,
@@ -381,7 +381,7 @@
                 <p>For each of the major 6 dimensions there are 4 sub-factors totalling 24 unique indicators of
                     personality. The sub-factor dimensions are described below with the candidate's score for each.
                     Of particular importance for {{ $user->job }} related positions, factors of Conscientiousness
-                    and Honesty-Humility are weighted heavily in the AOE-P evaluation. AOE's proprietary
+                    and Honesty-Humility are weighted heavily in the Involved Talent Assessment evaluation. Our proprietary
                     algorithms take such differences into account to arrive at an overall Job-Fit Recommendation,
                     which is presented below after the sub-factor scores.</p>
             </div>
@@ -392,7 +392,7 @@
 <!--Page 7-->
 <div class="page-container" id="5">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 5</small>
     </div>
@@ -529,7 +529,7 @@
 <!--Page 8-->
 <div class="page-container" id="6">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 6</small>
     </div>
@@ -666,7 +666,7 @@
 <!--Page 9-->
 <div class="page-container" id="7">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 7</small>
     </div>
@@ -803,7 +803,7 @@
 <!--Page 10-->
 <div class="page-container" id="8">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page 8</small>
     </div>
     <div class="container">
@@ -819,7 +819,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 cell-center">
-                <p>Given these AOE-P results, in conjunction with job and industry profiles for this job function, the potential fit for {{ $user->name }} is:</p>
+                <p>Given these Involved Talent Assessment results, in conjunction with job and industry profiles for this job function, the potential fit for {{ $user->name }} is:</p>
                 <br><br>
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8">
@@ -839,7 +839,7 @@
         </div>
     </div>
 </div>
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 <script type="text/javascript">
     $(function () {
 
