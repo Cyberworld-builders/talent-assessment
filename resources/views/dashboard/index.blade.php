@@ -43,11 +43,11 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
 					{{-- Heading --}}
-					{{-- <div class="h1 text-warning text-bold">Update {{ Config::get('app.version') }}</div>
-					<span class="text-small text-muted text-upper">Changelog</span> --}}
+					<div class="h1 text-warning text-bold">Update v1.5.4-staging</div>
+					<span class="text-small text-muted text-upper">Changelog</span>
 
 					{{-- Changelog --}}
-					{{-- <ul class="list-unstyled changelog">
+					<ul class="list-unstyled changelog">
 						<li>
 							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.3.11 - Feedback System Integration:</strong> Complete feedback management system with dynamic assessment-based tabs and enhanced UX.</p>
@@ -134,7 +134,43 @@
 							<i class="fa-asterisk text-info"></i>
 							<p>Comprehensive bug fixes and performance improvements throughout the application.</p>
 						</li>
-					</ul> --}}
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.4 - Dashboard UI/UX Improvements:</strong> Complete dashboard redesign to match involved-legacy styling and enhanced user experience.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Updated dashboard sidebar with dark blue theme (#1d3a51) and proper logo integration.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Reordered sidebar navigation menu: Home, Assessments, Clients, Users, Industries, Benchmarks, Feedback.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Removed admin text and megaphone notifications icon from top navigation bar for cleaner interface.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added "Welcome To Involved Talent" message to main dashboard content area.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed CSS specificity issues with sidebar background color overrides.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced CI/CD workflow with Node.js setup and gulp build integration for frontend assets.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Improved hot reloading support for development environment with proper volume mappings.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Cleaned up malformed comment syntax and template structure for better maintainability.</p>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
