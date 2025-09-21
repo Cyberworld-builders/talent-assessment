@@ -43,11 +43,27 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
 					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update v1.5.9-release</div>
+					<div class="h1 text-warning text-bold">Update v1.5.10-release</div>
 					<span class="text-small text-muted text-upper">Changelog</span>
 
 					{{-- Changelog --}}
 					<ul class="list-unstyled changelog">
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.10 - Calendar/Datepicker Fix:</strong> Fixed calendar popup not appearing on assignment forms with proper JavaScript initialization.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added JavaScript initialization code for bootstrap datepicker in all assignment forms.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Configured datepicker with proper format, autoclose, today highlight, and past date prevention.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed calendar popup functionality in dashboard assignments, assign2, and client dashboard forms.</p>
+						</li>
 						<li>
 							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.5.9 - Critical User Loading & Error Handling Fixes:</strong> Resolved critical issues preventing users from loading myinvolvedtalent.com with enhanced error handling and validation.</p>
