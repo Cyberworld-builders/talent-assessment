@@ -4,10 +4,22 @@ on:
   push:
     tags:
       - '*-release'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy (e.g., v1.5.8-release)'
+        required: true
+        default: 'v1.5.8-release'
+      skip_tests:
+        description: 'Skip test step and go straight to deploy'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_tests }}
     
     env:
       MAILTRAP_USERNAME: ${{ secrets.MAILTRAP_USERNAME }}
@@ -92,6 +104,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    if: ${{ always() && (needs.test.result == 'success' || inputs.skip_tests == true) }}
     permissions:
       id-token: write
       contents: read
@@ -112,9 +125,9 @@ jobs:
     - name: Build and Push Image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.ref_name }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
       run: |
-        docker build -f Dockerfile -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
+        docker build -f Dockerfile.production -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
         docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
         echo "Image pushed: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
 
@@ -132,7 +145,7 @@ jobs:
           
           # Export environment variables
           export AWS_DEFAULT_REGION=${{ vars.AWS_REGION }}
-          export IMAGE_TAG=${{ github.ref_name }}
+          export IMAGE_TAG=${{ github.event.inputs.tag || github.ref_name }}
           export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
           
           # Fetch secrets and set server environment variables
