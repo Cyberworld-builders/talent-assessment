@@ -189,8 +189,6 @@
             <div class="login-footer">
                 @if (! isset($reseller))
                     <a href="{{ url('password') }}">Forgot your password?</a>
-                    <br>
-                    <a href="{{ url('resellers') }}">Login to a Reseller's dashboard?</a>
                 @endif
             </div>
 
