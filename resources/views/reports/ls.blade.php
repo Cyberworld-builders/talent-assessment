@@ -33,7 +33,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/AOE-Ls.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-ls.png">
             </div>
         </div>
 
@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h5>Overview</h5>
-                <p>AOE-Ls measures specific leadership behaviors which are desirable for leading change and inspiring others. This report provides a leadership profile with actionable feedback for {{ $user->name }}. </p>
+                <p>The Involved Talent Leadership Assessment measures specific leadership behaviors which are desirable for leading change and inspiring others. This report provides a leadership profile with actionable feedback for {{ $user->name }}. </p>
             </div>
         </div>
         <div class="row"><div class="col-sm-12"><hr></div></div>
@@ -60,7 +60,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6>
-                    AOE Science offers the most scientifically valid assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid assessments. We use the latest Talent Evidence from the scientific literature, our own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
@@ -114,7 +114,7 @@
 <!--Page 3-->
 <div class="page-container" id="3">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -126,7 +126,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-ls.png">
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                 <h5>Introduction</h5>
                 <p>The present report provides detailed feedback on the extent to which {{ $user->name }} displays specific leader behaviors. The leader behaviors can be directed toward individuals, a work unit, team, or department. This report groups specific leadership qualities into dimensions with corresponding sub-dimensions.</p>
                 <h5>Understanding Your Report</h5>
-                <p>Leader involvement refers to how well you engage and empower others. AOE-Ls is designed to provide a detailed summary of how involved leaders are in engaging others. High Involvement Leadership (HIL) exists when others (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
+                <p>Leader involvement refers to how well you engage and empower others. The Involved Talent Leadership Assessment is designed to provide a detailed summary of how involved leaders are in engaging others. High Involvement Leadership (HIL) exists when others (1) have power to act and make decisions, (2) have the information, (3) and the knowledge, (4) along with the healthy relationship needed to use their power effectively, (5) and are rewarded for doing so.</p>
                 <p>It is critical that all 5 dimensions are present at the same time. If one dimension is missing, involvement will be low. Your leadership data is presented along with the overall average leadership data for your entire institution. This allows you to see how well you are doing on Involvement compared to all other leaders at your institution.</p>
                 <br>
                 <img class="img-responsive" src="/assets/images/HIL-flow.png">
@@ -146,7 +146,7 @@
 <!--Page 4-->
 <div class="page-container" id="4">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -158,7 +158,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-ls.png">
                     </div>
                 </div>
             </div>
@@ -246,7 +246,7 @@
 <!--Page 5-->
 <div class="page-container" id="5">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -258,7 +258,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-Ls.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-ls.png">
                     </div>
                 </div>
                 <h1>Overall Scores</h1>
@@ -274,7 +274,7 @@
 <!--Page 6-->
 <div class="page-container" id="6">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -305,7 +305,7 @@
 <!--Page 8-->
 <div class="page-container" id="8">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -336,7 +336,7 @@
 <!--Page 11-->
 <div class="page-container" id="11">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -382,7 +382,7 @@
 <!--Page 12-->
 <div class="page-container" id="12">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -413,7 +413,7 @@
 <!--Page 15-->
 <div class="page-container" id="15">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <?php $page++; ?>
         <small>Page {{ $page }}</small>
     </div>
@@ -439,7 +439,7 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 
 <script>
     $(function () {

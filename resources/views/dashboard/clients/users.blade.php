@@ -83,7 +83,7 @@
                                                         @elseif ($user->roles->first()->slug == 'reseller')
                                                             <span class="label label-default" style="font-weight:400;font-style:italic;font-size:10px;margin-left:5px;position:relative;top:-2px;background:#ECECEC;color:#2b2b2b;">Reseller</span>
                                                         @elseif ($user->roles->first()->slug == 'admin')
-                                                            <span class="label label-warning" style="font-weight:400;font-style:italic;font-size:10px;margin-left:5px;position:relative;top:-2px;">AOE Admin</span>
+                                                            <span class="label label-warning" style="font-weight:400;font-style:italic;font-size:10px;margin-left:5px;position:relative;top:-2px;">Involved Talent Admin</span>
                                                         @endif
                                                     @else
                                                         <span class="small text-danger" style="font-weight:400;font-style:italic;">&nbsp;No Role Assigned</span>

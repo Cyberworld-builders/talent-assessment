@@ -8,8 +8,8 @@
 
         <!-- Add your copyright text here -->
         <div class="footer-text">
-            Copyright {{ date('Y') }} AOE Science
-            <div class="pull-right">Powered by AOE Science</div>
+            Copyright {{ date('Y') }} Involved Talent
+            <div class="pull-right">Powered by Involved Talent</div>
         </div>
 
         <!-- Go to Top Link, just add rel="go-top" to any link to add this functionality -->

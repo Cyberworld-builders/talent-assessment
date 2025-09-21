@@ -254,7 +254,7 @@
                                     {{--<div class="col-sm-6">--}}
                                     {{--<div class="form-group">--}}
                                     {{--{!! Form::label('email-from', 'From:') !!}--}}
-                                    {{--{!! Form::text('email-from', 'AOE Science', ['class' => 'form-control input-lg']) !!}--}}
+                                    {{--{!! Form::text('email-from', 'Involved Talent', ['class' => 'form-control input-lg']) !!}--}}
                                     {{--</div>--}}
                                     {{--</div>--}}
                                     <div class="col-sm-6">

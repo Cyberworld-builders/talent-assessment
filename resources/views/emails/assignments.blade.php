@@ -27,6 +27,6 @@
 {{--@endif--}}
 
 {{--<br/>--}}
-{{--<div class="footer-text">&copy; {{ date('Y') }} AOE Science</div>--}}
+{{--<div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>--}}
 
 {!! $body !!}

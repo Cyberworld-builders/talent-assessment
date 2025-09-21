@@ -58,7 +58,7 @@
 @endforeach
 
 @if (! $export)
-    <p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+    <p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 @endif
 </body>
 </html>

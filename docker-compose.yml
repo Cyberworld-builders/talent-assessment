@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: talent-assessment-app
     restart: unless-stopped
     working_dir: /var/www

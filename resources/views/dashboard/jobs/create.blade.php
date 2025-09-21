@@ -36,7 +36,7 @@
             @include('dashboard.clients.partials._subnav')
         @endif
 
-        {{-- AOE Admin Editing Reseller --}}
+        {{-- Involved Talent Admin Editing Reseller --}}
         @if (isset($reseller))
             {!! Form::open(['url' => 'dashboard/resellers/'.$reseller->id.'/jobs']) !!}
                 @include('dashboard.jobs.partials._form', [
@@ -52,7 +52,7 @@
                     ])
                 {!! Form::close() !!}
 
-            {{-- AOE Admin Creating New --}}
+            {{-- Involved Talent Admin Creating New --}}
             @else
                 {!! Form::open(['url' => 'dashboard/clients/'.$client->id.'/jobs']) !!}
                     @include('dashboard.jobs.partials._form', [

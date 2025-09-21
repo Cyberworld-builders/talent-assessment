@@ -56,7 +56,7 @@
     $tabs[] = $editTab;
     $tabs[] = $usersTab;
 
-    // Will hide these tabs for Master AOE when viewing a reseller
+    // Will hide these tabs for Master Involved Talent when viewing a reseller
 	if (!isset($reseller))
 	{
 		$tabs[] = $groupsTab;

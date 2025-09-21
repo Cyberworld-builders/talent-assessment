@@ -1496,7 +1496,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
             </div>
         </div>
 
@@ -1505,7 +1505,7 @@
             <div class="col-sm-5 col-sm-offset-7 text-right cover-for">
                 <br><br><br class="hidden-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
                 <h3>Organizational Profile for:</h3>
-                <h4>AOE</h4>
+                <h4>Involved Talent</h4>
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
             </div>
         </div>
@@ -1527,7 +1527,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature,
+                    Involved Talent offers the most scientifically valid candidate assessments. We use the latest Talent Evidence from the scientific literature,
                     their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
@@ -1542,7 +1542,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1553,7 +1553,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h1>Employee Morale</h1>
@@ -1603,7 +1603,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1614,7 +1614,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h5>Employee Morale - Overall Score</h5>
@@ -1654,7 +1654,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1715,7 +1715,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1726,7 +1726,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h1>Leader Involvement</h1>
@@ -1789,7 +1789,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1800,7 +1800,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h5>Leader Involvement - Overall Score</h5>
@@ -1843,7 +1843,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1914,7 +1914,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1925,7 +1925,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h1>Organizational Mindset</h1>
@@ -1978,7 +1978,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -1989,7 +1989,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h5>Organizational Mindset - Overall Score</h5>
@@ -2011,7 +2011,7 @@
                 <br/><br/>
                 <h5>Summary</h5>
                 <p>
-                    The mindset of your organization is the top-level driver to help AOE focus on organizational
+                    The mindset of your organization is the top-level driver to help Involved Talent focus on organizational
                     well-being. By working to increase organizational support, engagement, and strategic
                     alignment, you will be well on your way to improving organizational well-being.
                 </p>
@@ -2028,7 +2028,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2089,7 +2089,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2100,7 +2100,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h1>Team Climate</h1>
@@ -2155,7 +2155,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2166,7 +2166,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-O-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-o-01.png">
                     </div>
                 </div>
                 <h5>Team Climate - Overall Score</h5>
@@ -2208,7 +2208,7 @@
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/assets/images/aoe-science_logo.png">
+        <img src="/assets/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -2265,6 +2265,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

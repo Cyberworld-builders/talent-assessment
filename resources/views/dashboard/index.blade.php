@@ -40,15 +40,89 @@
 			<div class="chart-item-bg">
 				<div class="chart-label">
 
+					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
+
 					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update {{ Config::get('app.version') }}</div>
+					<div class="h1 text-warning text-bold">Update v1.5.8-release</div>
 					<span class="text-small text-muted text-upper">Changelog</span>
 
 					{{-- Changelog --}}
 					<ul class="list-unstyled changelog">
 						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.8 - Production Deployment & Docker Optimization:</strong> Complete overhaul of deployment infrastructure with multi-stage Docker builds and enhanced CI/CD workflows.</p>
+						</li>
+						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Optimized and sped up loading of AOE-L reports.</p>
+							<p>Implemented multi-stage Docker builds with separate npm and composer stages for optimized production images.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added workflow_dispatch support to both staging and production deployment workflows for manual triggering.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added skip_tests option to deployment workflows for faster deployments when tests are not needed.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed dev environment ownership issues by removing www-data user switching for artisan serve.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added composer.lock to repository for consistent dependency versions in production builds.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Consolidated Dockerfiles and updated docker-compose configurations for better environment management.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced hot reloading support for development environment with proper volume mappings.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.3.11 - Feedback System Integration:</strong> Complete feedback management system with dynamic assessment-based tabs and enhanced UX.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Integrated comprehensive feedback system into user experience with improved error handling and user guidance.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added definition field to dimensions table for detailed descriptions of what each dimension measures.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced dimension management with parent/child relationship support and '---' option for deselecting parent.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Made feedback library tabs dynamically populated from assessments instead of hardcoded tabs.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed CSRF token handling in feedback submission for proper form processing.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Updated database seeders to use core assessment suite (Involved-360, Involved-Leader, Involved-Blockers).</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Improved test coverage and CI compatibility - all 320 tests now passing.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced database migration handling and file permissions management.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed CI/CD pipeline test failures for better reliability across environments.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Optimized and sped up loading of assessment reports.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
@@ -56,61 +130,77 @@
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Updated the Bulk Edit form.</p>
+							<p>Client Admins can now bulk edit assignments and re-send assignment emails to applicants.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Client Admins can now bulk edit assignments.</p>
+							<p>Added comprehensive assignment management section to the Client Dashboard.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Client Admins can now re-send assignment emails to applicants.</p>
+							<p>Client Admin can now change assignment dates for applicants with improved applicant detail views.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Added a new section, Assignments, to the Client Dashboard.</p>
-						</li>
-						<li>
-							<i class="fa-asterisk text-info"></i>
-							<p>Client Admin can now change assignment dates for an applicant on the Applicant Detail view.</p>
-						</li>
-						<li>
-							<i class="fa-asterisk text-info"></i>
-							<p>Applicant Detail view on the Client Dashboard now shows the applicant's assigned assessments.</p>
-						</li>
-						<li>
-							<i class="fa-asterisk text-info"></i>
-							<p>Secured the site and resources with HTTPS.</p>
-						</li>
-						<li>
-							<i class="fa-asterisk text-info"></i>
-							<p>Installed SSL certificate on my.aoescience.com.</p>
+							<p>Secured the site and resources with HTTPS and proper SSL certificate implementation.</p>
 						</li>
 						@role('admin')
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Edit Assignment view updated to be the same as the Assign Assessments view.</p>
+							<p>Enhanced assignment views with job-specific assessment locking capabilities.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Can now lock assessments to specific jobs when assigning them to users.</p>
+							<p>Added [job] shortcode support in assessment descriptions and questions for dynamic content.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Can use the shortcode [job] in assessment descriptions and questions.</p>
+							<p>Improved job applicant management with better assessment status tracking and editing capabilities.</p>
 						</li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Updated job applicant view. You can now see the status of each assessment and can easily edit them if needed, such as to un-expire an assessment.</p>
-						</li>
-						<li>
-							<i class="fa-asterisk text-info"></i>
-							<p>For jobs, if an applicant has been assigned duplicate assessments, the data of the last completed assessment will be factored in, instead of the first.</p>
+							<p>Enhanced duplicate assessment handling to prioritize latest completed assessment data.</p>
 						</li>
 						@endrole
 						<li>
 							<i class="fa-asterisk text-info"></i>
-							<p>Tons of bug fixes!</p>
+							<p>Comprehensive bug fixes and performance improvements throughout the application.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.4 - Dashboard UI/UX Improvements:</strong> Complete dashboard redesign to match involved-legacy styling and enhanced user experience.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Updated dashboard sidebar with dark blue theme (#1d3a51) and proper logo integration.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Reordered sidebar navigation menu: Home, Assessments, Clients, Users, Industries, Benchmarks, Feedback.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Removed admin text and megaphone notifications icon from top navigation bar for cleaner interface.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added "Welcome To Involved Talent" message to main dashboard content area.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed CSS specificity issues with sidebar background color overrides.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced CI/CD workflow with Node.js setup and gulp build integration for frontend assets.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Improved hot reloading support for development environment with proper volume mappings.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Cleaned up malformed comment syntax and template structure for better maintainability.</p>
 						</li>
 					</ul>
 				</div>

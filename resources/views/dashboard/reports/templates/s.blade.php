@@ -7,7 +7,7 @@
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -96,7 +96,7 @@ The AOE-S is a very good indicator of workplace safety behavior – indicating w
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -141,7 +141,7 @@ The AOE-S is a very good indicator of workplace safety behavior – indicating w
 <?php $page++; ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/aoe-science_logo.png">
+        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">

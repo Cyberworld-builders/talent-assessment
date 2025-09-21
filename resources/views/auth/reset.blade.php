@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-    AOE : Reset Password
+    Involved Talent : Reset Password
 @stop
 
 @section('styles')

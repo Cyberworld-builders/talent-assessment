@@ -105,7 +105,7 @@
                             </thead>
                             <tbody>
 
-                                {{-- Reseller Tab for AOE Admins --}}
+                                {{-- Reseller Tab for Involved Talent Admins --}}
                                 @if ($role->slug == 'reseller' && !session('reseller'))
                                     <?php
                                         if (isset($reseller))

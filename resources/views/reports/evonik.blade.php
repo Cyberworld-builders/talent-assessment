@@ -432,7 +432,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. We use the latest Talent Evidence from the scientific literature, our own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -617,7 +617,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-A.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-assessment.png">
                     </div>
                 </div>
                 <h1>Reasoning Report</h1>
@@ -625,7 +625,7 @@
             </div>
             <div class="col-sm-12 text-justify">
                 <p>
-                    The AOE-A is a scientifically valid, excellent indicator of a person's maximal performance level
+                    The Involved Talent Assessment is a scientifically valid, excellent indicator of a person's maximal performance level
                     as assessed by reasoning ability. Reasoning Ability has been used for years in many industries as
                     an indicator of the likelihood of job success.
                 </p>
@@ -635,7 +635,7 @@
                     ability to solve problems, learn new skills, and think critically.
                 </p>
                 <p>
-                    Below, we present graphical results for {{ $user->name }} followed by AOE-A potential for this job.
+                    Below, we present graphical results for {{ $user->name }} followed by Involved Talent Assessment potential for this job.
                     The raw score is shown on the graph below. The graph represents percentiles so you can see this
                     candidate's standing relative to the norms for this test.
                 </p>
@@ -662,7 +662,7 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-A.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-assessment.png">
                     </div>
                 </div>
                 <h1>Reasoning Ability Evaluation</h1>
@@ -674,7 +674,7 @@
             <div class="col-sm-12 text-justify">
                 <h3>Raw Score</h3>
                 <p>The raw score for {{ $user->name }} is noted in the graph to provide an overall snapshot of how this score compares on the full range of possible raw scores.</p>
-                <p>{{ $user->name }} answered {{ $scores['Ability']['Score'] }} questions correct on the AOE-A which is {{ $scores['Ability']['Accuracy'] }}% accuracy.</p>
+                <p>{{ $user->name }} answered {{ $scores['Ability']['Score'] }} questions correct on the Involved Talent Assessment which is {{ $scores['Ability']['Accuracy'] }}% accuracy.</p>
             </div>
         </div>
         <div class="row">
@@ -696,7 +696,7 @@
                     <p>The score for {{ $user->name }} suggests moderate strengths with numerical reasoning, thinking about and using data,
                         mathematical calculations, understanding written language, and verbal reasoning. Overall, the score for {{ $user->name }}
                         indicates moderate capability to learn and apply new job knowledge. {{ $user->name }} has some potential for success in this
-                        job based on the AOE-A score, but caution is recommended.</p>
+                        job based on the Involved Talent Assessment score, but caution is recommended.</p>
 
             @elseif ($scores['Ability']['Division'] == 1)
 
@@ -733,16 +733,16 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive" src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive" src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
                 <h1>Personality Report</h1>
             </div>
             <div class="col-sm-12 text-justify">
                 <h5>Introduction</h5>
-                <p>The AOE-P is based on the HEXACO model of personality, which is the latest scientifically valid model of individual personality.
+                <p>The Involved Talent Assessment is based on the HEXACO model of personality, which is the latest scientifically valid model of individual personality.
                     The HEXACO model is valid across many different cultures and incorporates the most up-to-date and accurate framework for assessing personality.</p>
-                <p>Personality is a very good indicator of what people will do on a typical day of work. The AOE-P is the first HEXACO-based assessment
+                <p>Personality is a very good indicator of what people will do on a typical day of work. The Involved Talent Assessment is the first HEXACO-based assessment
                     for application to organizations. The theoretical and empirical evidence shows that there are six major dimensions to personality. These are described as:</p>
             </div>
         </div>
@@ -817,17 +817,17 @@
                 <div class="row">
                     <div class="col-xs-4 visible-xs"></div>
                     <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                        <img class="img-responsive " src="/assets/images/AOE-P-01.png">
+                        <img class="img-responsive " src="/assets/images/involved-talent-assessment-01.png">
                     </div>
                 </div>
                 <h1>Scoring and Importance</h1>
-                <h5>of the AOE-P for {{ $job->name }}</h5>
+                <h5>of the Involved Talent Assessment for {{ $job->name }}</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 text-justify">
-                <p>AOE's vast experience in research, predictive analytics, and content validation reveals that for
-                    {{ $job->name }}s all six dimensions of AOE-P are desired. Of these, Conscientiousness is a strongly
+                <p>Our vast experience in research, predictive analytics, and content validation reveals that for
+                    {{ $job->name }}s all six dimensions of the Involved Talent Assessment are desired. Of these, Conscientiousness is a strongly
                     desired characteristic that connects to performance. Conscientiousness encompasses prudence, organization,
                     detail orientation, and achievement. Honesty and Humility is also strongly desired - encompassing fairness,
                     sincerity, modesty, and greed avoidance. Emotional Control is also strongly desired for {{ $job->name }} positions.
@@ -844,7 +844,7 @@
                 <p>For each of the major 6 dimensions there are 4 sub-factors totalling 24 unique indicators of personality.
                     The sub-factor dimensions are described below with the candidate's score for each. Of particular importance
                     for {{ $job->name }} positions, factors of Conscientiousness, Emotional Control, and Honesty-Humility are weighted
-                    heavily in the AOE-P evaluation for {{ $job->name }}s. AOE's proprietary algorithms take such differences into account
+                    heavily in the Involved Talent Assessment evaluation for {{ $job->name }}s. Our proprietary algorithms take such differences into account
                     to arrive at an overall Job-Fit Recommendation, which is presented below after the sub-factor scores.</p>
             </div>
         </div>
@@ -1264,7 +1264,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <p>Given these AOE-P results, in conjunction with job and industry profiles for {{ $job->name }}s, the potential fit for {{ $user->name }} is:</p>
+                <p>Given these Involved Talent Assessment results, in conjunction with job and industry profiles for {{ $job->name }}s, the potential fit for {{ $user->name }} is:</p>
                 <br><br>
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8">
@@ -1284,6 +1284,6 @@
         </div>
     </div>
 </div>
-<p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 </body>
 </html>

@@ -70,7 +70,7 @@
 					@if (session('reseller'))
 						<h2 style="font-size: 22px; margin: 15px 0;">{{ session('reseller')->name }}</h2>
 					@else
-						<h2>AOE Science</h2>
+						<img src="{{ asset('images') }}/logo-white.png" style="max-width:200px;" /><br/><br/><br/>
 					@endif
 				</a>
 
@@ -125,9 +125,9 @@
 					</a>
 				</li>
 				<li>
-					<a href="{{ url('dashboard/resellers') }}">
-						<i class="fa-compass"></i>
-						<span class="title">Resellers</span>
+					<a href="{{ url('dashboard/users') }}">
+						<i class="fa-user"></i>
+						<span class="title">Users</span>
 					</a>
 				</li>
 				<li>
@@ -146,12 +146,6 @@
 					<a href="{{ url('dashboard/feedback') }}">
 						<i class="fa-file-text-o"></i>
 						<span class="title">Feedback</span>
-					</a>
-				</li>
-				<li>
-					<a href="{{ url('dashboard/users') }}">
-						<i class="fa-user"></i>
-						<span class="title">Users</span>
 					</a>
 				</li>
 			@endrole

@@ -9,7 +9,7 @@
         {{--<!-- Add your copyright text here -->--}}
         {{--<div class="footer-text">--}}
             {{--&copy; {{ date('Y') }}--}}
-            {{--The AOE Group--}}
+            {{--Involved Talent--}}
         {{--</div>--}}
         {{----}}
     {{--</div>--}}

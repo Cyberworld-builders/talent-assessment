@@ -12,7 +12,7 @@
 	{{--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700">--}}
 	<link rel="stylesheet" href="{{ asset('assets/css/fonts/linecons/css/linecons.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/fonts/fontawesome/css/font-awesome.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 	@yield('styles')
 
 	<script src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>

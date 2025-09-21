@@ -4,9 +4,9 @@
 	<ul class="user-info-menu left-links list-inline list-unstyled">
 
 		<li class="current-time">
-			{{--<h3>{{ date("l, M. j, Y, g:i a") }}</h3>--}}
-			@role('admin')
-				<h3><i class="linecons-user text-warning"></i> AOE Admin</h3>
+			{{-- <h3>{{ date("l, M. j, Y, g:i a") }}</h3> --}}
+			{{-- @role('admin')
+				<h3><i class="linecons-user text-warning"></i> Admin</h3>
 			@endrole
 
 			@role('reseller')
@@ -15,7 +15,7 @@
 
 			@role('client')
 				<h3><i class="linecons-user"></i> {{ \Auth::user()->client->name }}</h3>
-			@endrole
+			@endrole --}}
 		</li>
 
 		{{-- <li class="hidden-sm hidden-xs">

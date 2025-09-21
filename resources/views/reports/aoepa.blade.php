@@ -479,7 +479,7 @@
             <div class="col-xs-2 visible-xs"></div>
             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+                <img class="img-responsive text-center cover-logo" src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
             </div>
         </div>
         <!--Candidate-->
@@ -508,7 +508,7 @@
         <div class="row disclaimer">
             <div class="col-xs-10 col-sm-10">
                 <h6 class="small">
-                    AOE Science offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
+                    Involved Talent offers the most scientifically valid candidate assessments. AOE uses the latest Talent Evidence from the scientific literature, their own research, and the needs of organizations to arrive at Evidence-Based Talent Solutions.
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
@@ -577,7 +577,7 @@
 <!--Page 5-->
 <div class="page-container" id="5">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small>Page 2</small>
     </div>
     <div class="container">
@@ -622,7 +622,7 @@
 <!--Page 6-->
 <div class="page-container" id="6">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small>Page 3</small>
     </div>
     <div class="container">
@@ -694,7 +694,7 @@
 <!--Page 7-->
 <div class="page-container" id="7">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small>Page 4</small>
     </div>
     <div class="container">
@@ -778,7 +778,7 @@
 <!--Page 8-->
 <div class="page-container" id="8">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small>Page 5</small>
     </div>
     <div class="container">
@@ -824,7 +824,7 @@
 <!--Page 9-->
 <div class="page-container" id="9">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 6</small>
     </div>
@@ -956,7 +956,7 @@
 <!--Page 10-->
 <div class="page-container" id="10">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 7</small>
     </div>
@@ -1088,7 +1088,7 @@
 <!--Page 11-->
 <div class="page-container" id="11">
     <div class="img-container-1">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page 8</small>
     </div>
@@ -1220,7 +1220,7 @@
 <!--Page 12-->
 <div class="page-container" id="12">
     <div class="img-container-2">
-        <img src="{{ $baseUri }}/assets/images/aoe-science_logo.png">
+        <img src="{{ $baseUri }}/assets/images/involved-talent-logo.png">
         <small>Page 9</small>
     </div>
     <div class="container">
@@ -1256,7 +1256,7 @@
     </div>
 </div>
 @if (! $export)
-    <p class="text-center white">Powered by <a href="http://aoescience.com/">AOE Science</a></p>
+    <p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
 @endif
 </body>
 </html>
