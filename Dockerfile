@@ -23,27 +23,29 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install Node.js 6.17.1 (as root)
+RUN wget https://nodejs.org/dist/v6.17.1/node-v6.17.1-linux-x64.tar.xz \
+    && tar -xf node-v6.17.1-linux-x64.tar.xz \
+    && mv node-v6.17.1-linux-x64 /opt/nodejs \
+    && ln -sf /opt/nodejs/bin/node /usr/local/bin/node \
+    && ln -sf /opt/nodejs/bin/npm /usr/local/bin/npm \
+    && rm node-v6.17.1-linux-x64.tar.xz
+
 # Set working directory
 WORKDIR /var/www
-
-# Set ownership of working directory to www-data
-RUN chown -R www-data:www-data /var/www
 
 # Disable Composer plugins when running as root in CI/containers
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_NO_PLUGINS=1
 
 # Copy composer files
-COPY --chown=www-data:www-data composer.json composer.lock ./
-
-# Switch to www-data user for package installations
-USER www-data
+COPY composer.json composer.lock ./
 
 # Install PHP dependencies (including dev dependencies for development)
 RUN composer install --no-plugins --no-scripts --no-autoloader
 
-# Copy application files with correct ownership
-COPY --chown=www-data:www-data . .
+# Copy application files
+COPY . .
 
 # Create storage directories and set permissions
 RUN mkdir -p /var/www/storage/logs \
@@ -55,24 +57,11 @@ RUN mkdir -p /var/www/storage/logs \
 RUN touch /var/www/storage/logs/laravel.log \
     && chmod 666 /var/www/storage/logs/laravel.log
 
-# Install Node.js 6.17.1
-RUN wget https://nodejs.org/dist/v6.17.1/node-v6.17.1-linux-x64.tar.xz \
-    && tar -xf node-v6.17.1-linux-x64.tar.xz \
-    && mv node-v6.17.1-linux-x64 /opt/nodejs \
-    && ln -sf /opt/nodejs/bin/node /usr/local/bin/node \
-    && ln -sf /opt/nodejs/bin/npm /usr/local/bin/npm \
-    && rm node-v6.17.1-linux-x64.tar.xz
-
-# COPY --from=node:6.17.1-alpine /usr/local/bin/node /usr/local/bin/node
-
 # Install Node.js dependencies
 RUN npm install
 
 # Generate autoloader
 RUN composer dump-autoload --no-plugins --optimize
-
-# # Switch back to root for final setup
-# USER root
 
 # Expose port 8000 for artisan serve
 EXPOSE 8000
