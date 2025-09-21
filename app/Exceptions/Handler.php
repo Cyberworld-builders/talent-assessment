@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Auth\Access\UnauthorizedException;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -18,6 +21,9 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         HttpException::class,
         ModelNotFoundException::class,
+        TokenMismatchException::class,
+        UnauthorizedException::class,
+        ValidationException::class,
     ];
 
     /**
@@ -53,6 +59,32 @@ class Handler extends ExceptionHandler
 //                ]
 //            ], 500);
 //        }
+
+        // Handle CSRF token mismatch gracefully - always redirect to login for security
+        if ($e instanceof TokenMismatchException) {
+            // Log the CSRF issue for debugging (but don't report as error)
+            \Log::info('CSRF token mismatch', [
+                'url' => $request->fullUrl(),
+                'method' => $request->method(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->header('User-Agent', 'Unknown')
+            ]);
+            
+            // Invalidate the session to force re-authentication
+            \Session::flush();
+            \Auth::logout();
+            
+            // Always redirect to login for CSRF token mismatches to force re-authentication
+            return redirect()->to('/login')
+                ->withInput($request->except('_token', 'password', 'password_confirmation'))
+                ->withErrors(['_token' => 'Your session has expired. Please log in again.']);
+        }
+
+        // Handle authentication exceptions gracefully
+        if ($e instanceof UnauthorizedException) {
+            return redirect()->to('/login')
+                ->withErrors(['auth' => 'Please log in to continue.']);
+        }
 
         // If you don't have sufficient permissions to view route
         if ($e instanceof \Bican\Roles\Exceptions\LevelDeniedException)
