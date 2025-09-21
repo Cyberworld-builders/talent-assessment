@@ -10,10 +10,16 @@ on:
         description: 'Tag to deploy (e.g., v1.5.4-staging)'
         required: true
         default: 'v1.5.4-staging'
+      skip_tests:
+        description: 'Skip test step and go straight to deploy'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_tests }}
     
     env:
       MAILTRAP_USERNAME: ${{ secrets.MAILTRAP_USERNAME }}
@@ -115,6 +121,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    if: ${{ always() && (needs.test.result == 'success' || inputs.skip_tests == true) }}
     permissions:
       id-token: write
       contents: read
