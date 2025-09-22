@@ -119,8 +119,21 @@ set_server_environment() {
     # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
     export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
     
+    # Set APP_VERSION from git tag or default
+    if [ -n "$image_tag" ]; then
+        export STAGING_APP_VERSION="$image_tag"
+    else
+        # Try to get version from git tag, fallback to default
+        if command_exists git && [ -d ".git" ]; then
+            export STAGING_APP_VERSION=$(git describe --tags --always 2>/dev/null || echo "1.5.18-staging")
+        else
+            export STAGING_APP_VERSION="1.5.18-staging"
+        fi
+    fi
+    
     print_success "Server environment variables set."
     print_status "Generated APP_KEY: $STAGING_APP_KEY"
+    print_status "Set APP_VERSION: $STAGING_APP_VERSION"
 }
 
 # Function to set image environment variable

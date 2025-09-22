@@ -8,6 +8,7 @@ This is a Laravel 5.1 application (legacy version) running on PHP 7.4 in Docker 
 - No `UploadedFile` class available - use alternative testing methods
 - Excel processing has been replaced with CSV processing due to library compatibility issues
 - Always use Docker commands: `docker-compose exec app <command>`
+- Laravel 5.1 tinker does NOT support `--execute` flag - use interactive tinker or create test commands
 
 ## Development Environment
 - Application runs on http://localhost:8001
