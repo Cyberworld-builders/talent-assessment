@@ -727,6 +727,10 @@ class UsersController extends Controller
      */
     public function download_generated_users($users)
     {
+        // Suppress PHPExcel deprecation warnings for curly brace syntax
+        $oldErrorReporting = error_reporting();
+        error_reporting($oldErrorReporting & ~E_DEPRECATED);
+        
         //$filename = 'Generated Users ' . Carbon::now();
         $filename = 'Generated Users '.time();
         $data = Excel::create($filename, function($excel) use ($users)
@@ -749,7 +753,12 @@ class UsersController extends Controller
             });
         });
 
-        return $data->store('csv', false, true);
+        $result = $data->store('csv', false, true);
+        
+        // Restore original error reporting
+        error_reporting($oldErrorReporting);
+        
+        return $result;
 
         //return view('excel.assignments.show', compact('assessment', 'questions', 'answers', 'user', 'assignment'));
     }
