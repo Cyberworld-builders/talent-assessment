@@ -50,7 +50,7 @@
                        <ul class="list-unstyled changelog">
                            <li>
                                <i class="fa-asterisk text-success"></i>
-                               <p><strong>v1.5.18 - UI/UX Improvements & Branding Cleanup:</strong> Fixed login form placeholder behavior, updated email previews, and removed remaining AOE references.</p>
+                               <p><strong>v1.5.19 - UI/UX Improvements & Branding Cleanup:</strong> Fixed login form placeholder behavior, updated email previews, and removed remaining AOE references.</p>
                            </li>
                            <li>
                                <i class="fa-asterisk text-info"></i>
