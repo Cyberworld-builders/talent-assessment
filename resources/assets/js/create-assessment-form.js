@@ -835,7 +835,6 @@ jQuery(document).ready(function($){
             // processData: false,
             success: function(data) {
                 console.log(data);
-                $("body").prepend(data);
                 //var opts = {
                 //    "closeButton": true,
                 //    "debug": false,
