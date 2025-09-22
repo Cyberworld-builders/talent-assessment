@@ -544,7 +544,7 @@
             new_content = new_content.split('[password]').join('Nj1NB73w');
             new_content = new_content.split('[assessments]').join('- Example Assessment');
             new_content = new_content.split('[expiration-date]').join('Monday, January 1st, 2017');
-            new_content = new_content.split('[login-link]').join('http://aoescience.com/login');
+            new_content = new_content.split('[login-link]').join(window.location.origin);
 
             return new_content;
         }
