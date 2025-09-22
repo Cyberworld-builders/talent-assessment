@@ -49,6 +49,9 @@
             font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
             font-size: 15px !important;
         }
+        .login-page .login-form .login-footer {
+            text-align: center;
+        }
     </style>
 @stop
 
