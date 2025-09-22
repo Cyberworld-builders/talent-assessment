@@ -19,7 +19,7 @@
             @include('questionnaire.partials._form')
             {{--<script src="{{ asset('js/assignment.js') }}"></script>--}}
             <footer>
-                <img src="{{ asset('assets/images/powered-by-aoe.png') }}" />
+                <img src="{{ asset('assets/images/logo-small.png') }}" />
             </footer>
         </div>
 

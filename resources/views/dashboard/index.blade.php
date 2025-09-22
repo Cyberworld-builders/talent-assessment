@@ -69,6 +69,14 @@
                                <p>Added comprehensive test coverage for email functionality and logo replacement.</p>
                            </li>
                            <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Replaced all "powered by AOE" logos with Involved Talent logo across assignment and profile pages.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated assignment list page styling to match legacy version with proper background and fonts.</p>
+                           </li>
+                           <li>
                                <i class="fa-asterisk text-success"></i>
                                <p><strong>v1.5.14 - User Bulk Upload CSV Conversion:</strong> Converted user bulk uploads from Excel to CSV format for better compatibility and performance.</p>
                            </li>
