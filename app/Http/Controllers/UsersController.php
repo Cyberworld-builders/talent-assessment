@@ -670,7 +670,7 @@ class UsersController extends Controller
 	}
 
 	/**
-     * Upload and parse an excel spreadsheet of users.
+     * Upload and parse a CSV file of users.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -681,77 +681,99 @@ class UsersController extends Controller
         $users = [];
 
         $validator = Validator::make($data, [
-            'file' => 'required|mimes:xls,xlsx'
+            'file' => 'required|mimes:csv,txt'
         ]);
 
         if ($validator->fails())
-            return \Response::json(['errors' => 'File must be a valid .xls or a .xlsx file format.']);
+            return \Response::json(['errors' => 'File must be a valid .csv file format.']);
 
-        Excel::load($data['file'], function($reader) use (&$users) {
-            $results = $reader->all();
+        $file = $data['file'];
+        $handle = fopen($file->getPathname(), 'r');
+        
+        if ($handle === false) {
+            return \Response::json(['errors' => 'Could not read the uploaded file.']);
+        }
 
-            $reader->each(function($sheet) use (&$users) {
+        // Read the header row
+        $header = fgetcsv($handle);
+        if ($header === false) {
+            fclose($handle);
+            return \Response::json(['errors' => 'Could not read the header row from the CSV file.']);
+        }
 
-                $sheet->each(function($row) use (&$users) {
-                    $name = $row->name;
-                    $email = trim($row->email);
-                    $job_title = $row->job_title;
-                    $job_family = $row->job_family;
-                    $username = $row->username;
+        // Process each data row
+        while (($row = fgetcsv($handle)) !== false) {
+            // Create an associative array from header and row data
+            $rowData = array_combine($header, $row);
+            
+            $name = isset($rowData['name']) ? $rowData['name'] : '';
+            $email = isset($rowData['email']) ? trim($rowData['email']) : '';
+            $job_title = isset($rowData['job_title']) ? $rowData['job_title'] : '';
+            $job_family = isset($rowData['job_family']) ? $rowData['job_family'] : '';
+            $username = isset($rowData['username']) ? $rowData['username'] : '';
 
-                    if (! $row->email && $row->e_mail)
-                        $email = $row->e_mail;
+            // Handle alternative column names
+            if (empty($email) && isset($rowData['e_mail'])) {
+                $email = trim($rowData['e_mail']);
+            }
 
-                    if (! $row->username && $row->user_name)
-                        $username = $row->user_name;
+            if (empty($username) && isset($rowData['user_name'])) {
+                $username = $rowData['user_name'];
+            }
 
-                    array_push($users, [
-                    	'email' => $email,
-						'name' => $name,
-						'username' => $username,
-						'job_title' => $job_title,
-						'job_family' => $job_family
-					]);
-                });
-            });
-        });
+            array_push($users, [
+                'email' => $email,
+                'name' => $name,
+                'username' => $username,
+                'job_title' => $job_title,
+                'job_family' => $job_family
+            ]);
+        }
+
+        fclose($handle);
 
         return \Response::json(['users' => $users]);
     }
 
 	/**
-     * Download an excel spreadsheet of users that have just been created.
+     * Download a CSV file of users that have just been created.
      *
      * @param $users
      * @return mixed
      */
     public function download_generated_users($users)
     {
-        //$filename = 'Generated Users ' . Carbon::now();
-        $filename = 'Generated Users '.time();
-        $data = Excel::create($filename, function($excel) use ($users)
-        {
-            $excel->setTitle('Generated User Details');
-
-            $excel->sheet('Details', function($sheet) use ($users) {
-
-                $sheet->loadView('excel.generated-users', compact('users'));
-
-                $sheet->setAutoSize(true);
-
-                $sheet->freezeFirstRow();
-                $sheet->cell('A1:F1', function($cell) {
-
-                    $cell->setFont(array(
-                        'bold' => true
-                    ));
-                });
-            });
-        });
-
-        return $data->store('csv', false, true);
-
-        //return view('excel.assignments.show', compact('assessment', 'questions', 'answers', 'user', 'assignment'));
+        $filename = 'Generated Users '.time().'.csv';
+        $filepath = storage_path('app/exports/'.$filename);
+        
+        // Create exports directory if it doesn't exist
+        if (!file_exists(dirname($filepath))) {
+            mkdir(dirname($filepath), 0755, true);
+        }
+        
+        // Create CSV file
+        $handle = fopen($filepath, 'w');
+        
+        // Write CSV header
+        fputcsv($handle, ['Name', 'Email', 'Username', 'Job Title', 'Job Family']);
+        
+        // Write user data
+        foreach ($users as $user) {
+            fputcsv($handle, [
+                $user->name,
+                $user->email,
+                $user->username,
+                $user->job_title,
+                $user->job_family
+            ]);
+        }
+        
+        fclose($handle);
+        
+        return [
+            'file' => $filename,
+            'path' => $filepath
+        ];
     }
 
 	/**
