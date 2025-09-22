@@ -43,11 +43,39 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
                        {{-- Heading --}}
-                       <div class="h1 text-warning text-bold">Update v1.5.14-release</div>
+                       <div class="h1 text-warning text-bold">Update v1.5.16-release</div>
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}
                        <ul class="list-unstyled changelog">
+                           <li>
+                               <i class="fa-asterisk text-success"></i>
+                               <p><strong>v1.5.16 - Email Dates & Branding Fix:</strong> Fixed email date accuracy issues and updated branding from AOE Science to Involved Talent.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Resolved "weird dates" in emails by removing day-of-week from date format to prevent validation issues.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated all email templates and configuration to use "Involved Talent" branding instead of "AOE Science".</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Replaced AOE Science logo with Involved Talent small logo in all assessment reports.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Added comprehensive test coverage for email functionality and logo replacement.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Replaced all "powered by AOE" logos with Involved Talent logo across assignment and profile pages.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated assignment list page styling to match legacy version with proper background and fonts.</p>
+                           </li>
                            <li>
                                <i class="fa-asterisk text-success"></i>
                                <p><strong>v1.5.14 - User Bulk Upload CSV Conversion:</strong> Converted user bulk uploads from Excel to CSV format for better compatibility and performance.</p>

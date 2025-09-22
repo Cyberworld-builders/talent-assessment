@@ -73,7 +73,7 @@
                 </p>
             </div>
             <div class="col-xs-2 col-sm-2 text-right">
-                <img class="img-responsive" src="/assets/images/report-logo-1.png">
+                <img class="img-responsive" src="{{ asset("assets/images/logo-small.png") }}">
             </div>
         </div>
     </div>

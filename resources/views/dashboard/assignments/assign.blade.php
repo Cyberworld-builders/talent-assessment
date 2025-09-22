@@ -78,9 +78,9 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
                                             'class' => 'form-control input-lg datepicker',
-                                            'data-format' => 'D, dd M yyyy',
+                                            'data-format' => 'dd M yyyy',
                                         ]) !!}
                                         <div class="input-group-addon">
                                             <i class="linecons-calendar"></i>
@@ -809,7 +809,7 @@
         $(document).ready(function() {
             // Initialize datepicker
             $('.datepicker').datepicker({
-                format: 'D, dd M yyyy',
+                format: 'dd M yyyy',
                 autoclose: true,
                 todayHighlight: true,
                 startDate: new Date()
