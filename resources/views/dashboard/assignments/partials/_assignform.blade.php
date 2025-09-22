@@ -44,14 +44,14 @@
                         <div class="col-sm-8">
                             <div class="input-group">
                                 @if (! $edit)
-                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'D, dd M yyyy',
+                                        'data-format' => 'dd M yyyy',
                                     ]) !!}
                                 @else
                                     {!! Form::text('expiration', $assignment->expiration, [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'D, dd M yyyy',
+                                        'data-format' => 'dd M yyyy',
                                     ]) !!}
                                 @endif
                                 <div class="input-group-addon">

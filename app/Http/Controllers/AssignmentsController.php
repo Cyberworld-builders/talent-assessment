@@ -123,7 +123,7 @@ class AssignmentsController extends Controller {
             foreach ($data['assignments'] as $assignment_id)
             {
 				$assignment = Assignment::findOrFail($assignment_id);
-				$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
+				$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
 				$next_reminder = '';
 				$reminder_frequency = '';
 				if ($data['reminder'] == 1)
@@ -711,7 +711,7 @@ class AssignmentsController extends Controller {
 				return (($assignment->user_id == $user->id) && ($assignment->created_at->format('Y-m-d H:i') == $data['date']));
 			});
 			$assignment_ids = get_property_list($assignments, 'id');
-			$expiration = $assignments->first()->expires->format('D, d M Y');
+			$expiration = $assignments->first()->expires->format('d M Y');
 
 			$this->send_assignment_link_to_user($user, $assignment_ids, $expiration, $data['subject'], $data['message']);
 		}
@@ -1058,14 +1058,14 @@ class AssignmentsController extends Controller {
         $answers = $assignment->answers;
         $questions = $assessment->questions;
         $user = User::findOrFail($assignment->user_id);
-        $expires = date('D, d M Y',strtotime($assignment->expires));
+        $expires = date('d M Y',strtotime($assignment->expires));
         if (count($data) > 0)
         {
 			$expiration = $data['expiration'];
 			$whitelabel = $data['whitelabel'];
 			$this->update_assignment_for_user($assignment_id,$user,$expiration,$whitelabel);
 		    $assignment = Assignment::findOrFail($assignment_id);
-		    $expires = date('D, d M Y',strtotime($assignment->expires));
+		    $expires = date('d M Y',strtotime($assignment->expires));
 
 		}
 
@@ -1088,7 +1088,7 @@ class AssignmentsController extends Controller {
 
 	public function update_assignment_for_user($assignment_id, $user, $expiration, $whitelabel)
     {
-        $expires = Carbon::createFromFormat('D, d M Y', $expiration);
+        $expires = Carbon::createFromFormat('d M Y', $expiration);
 
         $assignment = Assignment::findOrFail($assignment_id);
         $assignment->update([
@@ -1164,7 +1164,7 @@ class AssignmentsController extends Controller {
 		$assessment = Assessment::findOrFail($assignment->assessment_id);
 		$user = User::findOrFail($assignment->user_id);
 		$client = $user->client;
-		$assignment->expiration = date('D, d M Y', strtotime($assignment->expires));
+		$assignment->expiration = date('d M Y', strtotime($assignment->expires));
         $switch_reminder = 'none';
         if($assignment->reminder){
            // $assignment->reminder = 'true';
@@ -1206,7 +1206,7 @@ class AssignmentsController extends Controller {
     {
 		$data = $request->all();
 		$assignment = Assignment::findOrFail($id);
-		$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
+		$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
 
 		if (! array_key_exists('job_id', $data) || $data['job_id'] == '')
 			$data['job_id'] = null;
@@ -1341,7 +1341,7 @@ class AssignmentsController extends Controller {
 	 */
 	public function generate_assignment_for_user($assessment_id, $user, $job_id, $expiration, $whitelabel, $custom_fields, $target_id, $created_at = null)
 	{
-		$expires = Carbon::createFromFormat('D, d M Y', $expiration);
+		$expires = Carbon::createFromFormat('d M Y', $expiration);
 
 		// Create new assignment
 		$assignment = new Assignment([

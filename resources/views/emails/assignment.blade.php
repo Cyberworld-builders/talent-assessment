@@ -1,7 +1,7 @@
 <h3>Hello, {{ $user->name }}</h3>
 
 <p>
-    You have been assigned to complete the {{ $assessment->name }} assessment. This assessment will expire on {{ $expire_date->format('D, d M Y') }}.
+    You have been assigned to complete the {{ $assessment->name }} assessment. This assessment will expire on {{ $expire_date->format('l, F j, Y') }}.
 </p>
 
 @if ($user->level() == 1 || $mock)
@@ -37,4 +37,4 @@
 {{--</p>--}}
 
 <br/>
-<div class="footer-text">&copy; {{ date('Y') }} The AOE Group</div>
+<div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>
