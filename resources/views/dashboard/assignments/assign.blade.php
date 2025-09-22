@@ -249,12 +249,12 @@
                                     </p>
                                     <p><i>Note: These assignments will expire on <b>expiration date</b>.</i></p>
                                     <p>
-                                        Login <a target="_blank" href="#null">here</a> to view your assignments. You can use the following credentials to log in:<br/>
+                                        Login <a target="_blank" href="{{ url('/') }}">here</a> to view your assignments. You can use the following credentials to log in:<br/>
                                         username: <i>user12345</i><br/>
                                         password: <i>password</i>
                                     </p>
                                     <br/>
-                                    <div class="footer-text">&copy; {{ date('Y') }} The AOE Group</div>
+                                    <div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>
                                 </div>
                             </div>
                             {{--<div class="col-sm-6">--}}

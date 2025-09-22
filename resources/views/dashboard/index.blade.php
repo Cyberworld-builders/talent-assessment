@@ -43,11 +43,47 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
                        {{-- Heading --}}
-                       <div class="h1 text-warning text-bold">Update v1.5.16-release</div>
+                       <div class="h1 text-warning text-bold">Update {{ config('app.version') }}</div>
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}
-                       <ul class="list-unstyled changelog">
+        <ul class="list-unstyled changelog">
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.20 - Login Page Styling & UX Improvements:</strong> Updated login page to match legacy styling with proper background, positioning, logo size, and font families.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed login form to use proper HTML labels instead of placeholders for better UX consistency with legacy.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Applied correct CSS selectors and styling to ensure logo displays at proper size (340px max-width).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented Avant Garde font family and proper font sizes to match legacy login page exactly.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.19 - UI/UX Improvements & Branding Cleanup:</strong> Fixed login form placeholder behavior, updated email previews, and removed remaining AOE references.</p>
+            </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Fixed login form to use proper HTML5 placeholder attributes instead of absolutely positioned labels.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated email preview to use dynamic app URL instead of hardcoded AOE URLs in all assignment forms.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Replaced remaining "AOE Science" references with "Involved Talent" in email templates and error messages.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Added version management to deployment pipelines for staging and production environments.</p>
+                           </li>
                            <li>
                                <i class="fa-asterisk text-success"></i>
                                <p><strong>v1.5.16 - Email Dates & Branding Fix:</strong> Fixed email date accuracy issues and updated branding from AOE Science to Involved Talent.</p>

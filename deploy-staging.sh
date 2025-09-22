@@ -119,8 +119,21 @@ set_server_environment() {
     # Generate APP_KEY properly (32-byte key encoded in base64, but shorter format like Laravel artisan)
     export STAGING_APP_KEY=$(openssl rand -base64 24 | tr -d '\n')
     
+    # Set APP_VERSION from image tag or default
+    if [ -n "$image_tag" ]; then
+        export STAGING_APP_VERSION="$image_tag"
+    else
+        # Try to get version from git tag, fallback to default
+        if command_exists git && [ -d ".git" ]; then
+            export STAGING_APP_VERSION=$(git describe --tags --always 2>/dev/null || echo "1.5.18-staging")
+        else
+            export STAGING_APP_VERSION="1.5.18-staging"
+        fi
+    fi
+    
     print_success "Server environment variables set."
     print_status "Generated APP_KEY: $STAGING_APP_KEY"
+    print_status "Set APP_VERSION: $STAGING_APP_VERSION"
 }
 
 # Function to set image environment variable
@@ -139,6 +152,23 @@ set_image_environment() {
         print_error "Image tag and ECR registry are required for staging deployment."
         print_error "Usage: $0 -t IMAGE_TAG -r ECR_REGISTRY"
         exit 1
+    fi
+}
+
+# Function to update staging environment file
+update_staging_environment_file() {
+    print_status "Updating .env.staging file with version..."
+    
+    # Update APP_VERSION in .env.staging if it exists, otherwise add it
+    if [ -f ".env.staging" ]; then
+        if grep -q "APP_VERSION=" .env.staging; then
+            sed -i "s|APP_VERSION=.*|APP_VERSION=$STAGING_APP_VERSION|" .env.staging
+        else
+            echo "APP_VERSION=$STAGING_APP_VERSION" >> .env.staging
+        fi
+        print_success ".env.staging file updated with APP_VERSION: $STAGING_APP_VERSION"
+    else
+        print_warning ".env.staging file not found, skipping APP_VERSION update"
     fi
 }
 
@@ -350,6 +380,9 @@ main() {
     
     # Set image environment variable if image tag provided
     set_image_environment "$image_tag" "$ecr_registry"
+    
+    # Update staging environment file with version
+    update_staging_environment_file
     
     # Authenticate with ECR if registry provided
     authenticate_ecr "$ecr_registry"

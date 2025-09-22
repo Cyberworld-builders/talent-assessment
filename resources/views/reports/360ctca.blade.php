@@ -201,8 +201,8 @@
 					<?php if ($category == 'Total') continue; ?>
                     <div class="col-xs-6" id="score-360-sm">
                         <div style="position:relative;">
-                            <img class="score-bar-background" src="http://aoescience.com/assets/images/360-gradient.jpg">
-                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}" src="http://aoescience.com/assets/images/score-bar.jpg">
+                            <img class="score-bar-background" src="{{ url("/") }}assets/images/360-gradient.jpg">
+                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}" src="{{ url("/") }}assets/images/score-bar.jpg">
                             <div class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}"></div>
                         </div>
                     </div>
@@ -303,7 +303,7 @@
 
 @endforeach
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
+<p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
 {{--<script src="aoe-360_files/charts.html"></script>--}}
 
 </body></html>

@@ -4,6 +4,54 @@
     Involved Talent : Login
 @stop
 
+@section('styles')
+    <style type="text/css">
+        .login-page,
+        .login-page.login-light {
+            background: white;
+            padding-top: 0 !important;
+            background: url('{{ asset('images/background.jpg') }}') no-repeat scroll 50% 50% !important;
+        }
+        .login-page .login-container,
+        .login-page.login-light .login-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%)translateY(-65%);
+        }
+        .login-page .login-form,
+        .login-page.login-light .login-form {
+            max-width: 370px;
+            margin: 0 auto;
+            padding: 0;
+            background: transparent;
+        }
+        .login-page .login-form .login-header {
+            text-align: center;
+        }
+        .login-page .login-form .login-header img,
+        .login-page.login-light .login-form .login-header img {
+            max-width: 340px;
+        }
+        .login-page .login-form .login-header p {
+            color: #3a3a3a;
+            font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
+            font-size: 18px !important;
+            color: #aaa !important;
+        }
+        .login-page .login-form .login-header h4 {
+            color: #3a3a3a;
+            font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
+            font-size: 24px;
+        }
+        .login-page .login-form input,
+        .login-page .login-form button {
+            font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
+            font-size: 15px !important;
+        }
+    </style>
+@stop
+
 @section('body-class')
     login-page login-light
 @stop
@@ -40,13 +88,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="username">User ID</label>
-                <input type="text" class="form-control" name="username" id="username" autocomplete="off" />
+                <input type="text" class="form-control" name="username" id="username" placeholder="Username" autocomplete="off" />
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="passwd">Password</label>
-                <input type="password" class="form-control" name="password" id="passwd" autocomplete="off" />
+                <input type="password" class="form-control" name="password" id="passwd" placeholder="Password" autocomplete="off" />
             </div>
 
             <input type="hidden" name="timezone" id="timezone">
