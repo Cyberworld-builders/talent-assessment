@@ -7,7 +7,7 @@
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -96,7 +96,7 @@ Personality is a very good indicator of what people will do on a typical day of 
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">
@@ -142,7 +142,7 @@ Personality is a very good indicator of what people will do on a typical day of 
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -278,7 +278,7 @@ Personality is a very good indicator of what people will do on a typical day of 
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -414,7 +414,7 @@ Personality is a very good indicator of what people will do on a typical day of 
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-1">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small class="leftside">Scale: 1=Low 5=High</small>
         <small>Page {{ $page }}</small>
     </div>
@@ -551,7 +551,7 @@ Personality is a very good indicator of what people will do on a typical day of 
 <?php $page++ ?>
 <div class="page-container" id="{{ $page }}">
     <div class="img-container-2">
-        <img src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+        <img src="{{ asset('assets/images/involved-talent-logo.png') }}">
         <small>Page {{ $page }}</small>
     </div>
     <div class="container">

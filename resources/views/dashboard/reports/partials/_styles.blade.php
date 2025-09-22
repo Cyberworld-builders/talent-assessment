@@ -73,7 +73,7 @@
 
     /* Main report styles */
     body {
-        background:url('/wp/wp-content/themes/aoe/images/aoe-group_home-banner.jpg') fixed no-repeat;
+        background:url('{{ asset('assets/images/aoe-background.jpg') }}') fixed no-repeat;
         background-size: 100% 100%;
     }
     .page-container.assignment.details {
