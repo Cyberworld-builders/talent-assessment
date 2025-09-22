@@ -42,10 +42,13 @@ command_exists() {
 
 # Function to set development environment variables
 set_dev_environment() {
+    local version_arg="$1"
     print_status "Setting development environment variables..."
     
-    # Set APP_VERSION from git tag or default
-    if command_exists git && [ -d ".git" ]; then
+    # Set APP_VERSION from argument, git tag, or default
+    if [ -n "$version_arg" ]; then
+        export DEV_APP_VERSION="$version_arg"
+    elif command_exists git && [ -d ".git" ]; then
         export DEV_APP_VERSION=$(git describe --tags --always 2>/dev/null || echo "1.5.18-dev")
     else
         export DEV_APP_VERSION="1.5.18-dev"
@@ -180,16 +183,25 @@ verify_dev_deployment() {
 
 # Function to show usage
 show_usage() {
-    echo "Usage: $0 [OPTIONS]"
+    echo "Usage: $0 [OPTIONS] [VERSION]"
     echo ""
     echo "Options:"
     echo "  -h, --help               Show this help message"
+    echo ""
+    echo "Arguments:"
+    echo "  VERSION                  Optional version tag (e.g., v1.5.18-dev)"
+    echo ""
+    echo "Examples:"
+    echo "  $0                       # Deploy with auto-detected version"
+    echo "  $0 v1.5.18-dev          # Deploy with specific version"
     echo ""
     echo "This script deploys the development environment with version management."
 }
 
 # Main execution
 main() {
+    local version_arg=""
+    
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -197,17 +209,25 @@ main() {
                 show_usage
                 exit 0
                 ;;
-            *)
+            -*)
                 print_error "Unknown option: $1"
                 show_usage
                 exit 1
+                ;;
+            *)
+                # Treat as version argument
+                version_arg="$1"
+                shift
                 ;;
         esac
     done
     
     print_status "Starting development deployment..."
+    if [ -n "$version_arg" ]; then
+        print_status "Using version: $version_arg"
+    fi
     
-    set_dev_environment
+    set_dev_environment "$version_arg"
     update_dev_environment_file
     deploy_dev
     verify_dev_deployment
