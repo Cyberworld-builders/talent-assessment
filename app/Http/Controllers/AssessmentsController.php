@@ -232,22 +232,34 @@ class AssessmentsController extends Controller
 		if ($request->file('logo'))
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
-			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
-			//$request->file('logo')->move(uploads_path(), $imageName);
-			//$assessment_data['logo'] = $imageName;
-			$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+			
+			// Use S3 if configured, otherwise use local storage
+			if (env('AWS_S3_BUCKET') && env('AWS_ACCESS_KEY_ID')) {
+				$s3 = new S3Client(config('aws'));
+				$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
+				$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+			} else {
+				// Use local storage for development
+				$request->file('logo')->move(uploads_path(), $imageName);
+				$assessment_data['logo'] = $imageName;
+			}
 		}
 
 		// Store the background
 		if ($request->file('background'))
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
-			$s3 = new S3Client(config('aws'));
-			$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
-			//$request->file('background')->move(uploads_path(), $imageName);
-			//$assessment_data['background'] = $imageName;
-			$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+			
+			// Use S3 if configured, otherwise use local storage
+			if (env('AWS_S3_BUCKET') && env('AWS_ACCESS_KEY_ID')) {
+				$s3 = new S3Client(config('aws'));
+				$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
+				$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+			} else {
+				// Use local storage for development
+				$request->file('background')->move(uploads_path(), $imageName);
+				$assessment_data['background'] = $imageName;
+			}
 		}
 
 		// Update the assessment
