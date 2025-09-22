@@ -43,11 +43,31 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
                        {{-- Heading --}}
-                       <div class="h1 text-warning text-bold">Update v1.5.12-release</div>
+                       <div class="h1 text-warning text-bold">Update v1.5.13-release</div>
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}
                        <ul class="list-unstyled changelog">
+                           <li>
+                               <i class="fa-asterisk text-success"></i>
+                               <p><strong>v1.5.13 - Assessment Data Download & UI Fixes:</strong> Fixed critical assessment data download functionality and updated UI to match legacy styling.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Fixed PHPExcel deprecation warnings causing 'Whoops' errors in assessment data downloads.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Added error suppression for PHPExcel 1.8.2 compatibility with PHP 7.4+.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated assessments index page to remove 'AOE' prefix and match legacy color scheme.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Changed background color from dark gray (#2D2E30) to dark blue (#1d3a51) for consistency.</p>
+                           </li>
                            <li>
                                <i class="fa-asterisk text-success"></i>
                                <p><strong>v1.5.12 - Complete Datepicker Fix:</strong> Fixed all missing datepicker assets causing 404 errors and calendar popup failures.</p>
