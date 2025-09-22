@@ -1069,6 +1069,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
+<p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
 </body>
 </html>
