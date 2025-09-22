@@ -68,5 +68,6 @@ elixir(function(mix) {
         .copy('resources/assets/xenon/js/jquery-ui', 'public/assets/js/jquery-ui')
         .copy('resources/assets/xenon/js/selectboxit', 'public/assets/js/selectboxit')
         .copy('resources/assets/xenon/js/datepicker', 'public/assets/js/datepicker')
+        .copy('resources/assets/xenon/js/daterangepicker', 'public/assets/js/daterangepicker')
         .copy('resources/assets/xenon/css/fonts', 'public/assets/css/fonts');
 });
