@@ -42,16 +42,32 @@
 
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
-					{{-- Heading --}}
-					<div class="h1 text-warning text-bold">Update v1.5.10-release</div>
-					<span class="text-small text-muted text-upper">Changelog</span>
+                       {{-- Heading --}}
+                       <div class="h1 text-warning text-bold">Update v1.5.12-release</div>
+                       <span class="text-small text-muted text-upper">Changelog</span>
 
-					{{-- Changelog --}}
-					<ul class="list-unstyled changelog">
-						<li>
-							<i class="fa-asterisk text-success"></i>
-							<p><strong>v1.5.10 - Calendar/Datepicker Fix:</strong> Fixed calendar popup not appearing on assignment forms with proper JavaScript initialization.</p>
-						</li>
+                       {{-- Changelog --}}
+                       <ul class="list-unstyled changelog">
+                           <li>
+                               <i class="fa-asterisk text-success"></i>
+                               <p><strong>v1.5.12 - Complete Datepicker Fix:</strong> Fixed all missing datepicker assets causing 404 errors and calendar popup failures.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Added datepicker and daterangepicker directory copying to Gulp build process.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Fixed missing bootstrap-datepicker.js, daterangepicker-bs3.css, and daterangepicker.js files.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Calendar popup now works properly on all assignment forms in staging and production.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-success"></i>
+                               <p><strong>v1.5.10 - Calendar/Datepicker Fix:</strong> Fixed calendar popup not appearing on assignment forms with proper JavaScript initialization.</p>
+                           </li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
 							<p>Added JavaScript initialization code for bootstrap datepicker in all assignment forms.</p>
