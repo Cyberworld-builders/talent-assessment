@@ -43,7 +43,7 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
                        {{-- Heading --}}
-                       <div class="h1 text-warning text-bold">Update v1.5.16-release</div>
+                       <div class="h1 text-warning text-bold">Update {{ config('app.version') }}</div>
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}

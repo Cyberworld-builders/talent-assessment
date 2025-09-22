@@ -192,6 +192,14 @@ jobs:
           sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)/" .env.staging
           sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)/" .env.staging
           
+          # Update APP_VERSION with the deployment tag
+          echo "Updating APP_VERSION to: $IMAGE_TAG"
+          if grep -q "APP_VERSION=" .env.staging; then
+            sed -i "s|APP_VERSION=.*|APP_VERSION=$IMAGE_TAG|" .env.staging
+          else
+            echo "APP_VERSION=$IMAGE_TAG" >> .env.staging
+          fi
+          
           # Ensure AWS deprecation warning suppression is set
           if ! grep -q "AWS_SUPPRESS_PHP_DEPRECATION_WARNING" .env.staging; then
             echo "AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true" >> .env.staging

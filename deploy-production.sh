@@ -146,8 +146,19 @@ set_image_variable() {
 update_environment_file() {
     print_status "Updating .env.production file..."
     
-    # Create .env.production file with production values
-    cat > .env.production << EOF
+    # Update APP_VERSION in .env.production if it exists, otherwise add it
+    if [ -f ".env.production" ]; then
+        if grep -q "APP_VERSION=" .env.production; then
+            sed -i "s|APP_VERSION=.*|APP_VERSION=$PRODUCTION_APP_VERSION|" .env.production
+        else
+            echo "APP_VERSION=$PRODUCTION_APP_VERSION" >> .env.production
+        fi
+        print_success ".env.production file updated with APP_VERSION: $PRODUCTION_APP_VERSION"
+    else
+        print_warning ".env.production file not found, creating new one..."
+        
+        # Create .env.production file with production values
+        cat > .env.production << EOF
 # Production Environment Configuration
 APP_NAME="Involved Talent Assessment"
 APP_ENV=production
@@ -201,8 +212,8 @@ BCRYPT_ROUNDS=12
 # Logging
 LOG_LEVEL=error
 EOF
-    
-    print_success ".env.production file updated."
+        print_success ".env.production file created with APP_VERSION: $PRODUCTION_APP_VERSION"
+    fi
 }
 
 # Function to deploy production environment
