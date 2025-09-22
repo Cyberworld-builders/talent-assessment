@@ -88,13 +88,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="username">User ID</label>
-                <input type="text" class="form-control" name="username" id="username" autocomplete="off" />
+                <input type="text" class="form-control" name="username" id="username" placeholder="Username" autocomplete="off" />
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="passwd">Password</label>
-                <input type="password" class="form-control" name="password" id="passwd" autocomplete="off" />
+                <input type="password" class="form-control" name="password" id="passwd" placeholder="Password" autocomplete="off" />
             </div>
 
             <input type="hidden" name="timezone" id="timezone">
