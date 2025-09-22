@@ -1107,6 +1107,10 @@ class AssignmentsController extends Controller {
      */
     public function download_assignment($id)
     {
+        // Suppress PHPExcel deprecation warnings for curly brace syntax
+        $oldErrorReporting = error_reporting();
+        error_reporting($oldErrorReporting & ~E_DEPRECATED);
+        
         $assignment = Assignment::findOrFail($id);
         $assessment = Assessment::findOrFail($assignment->assessment_id);
         $answers = $assignment->answers;
@@ -1141,6 +1145,9 @@ class AssignmentsController extends Controller {
         });
 
         $data->store('csv')->export('csv');
+
+        // Restore original error reporting
+        error_reporting($oldErrorReporting);
 
         //return view('excel.assignments.show', compact('assessment', 'questions', 'answers', 'user', 'assignment'));
     }
@@ -1574,6 +1581,11 @@ class AssignmentsController extends Controller {
     public function download_all_assignments_for_client($client_id, $type)
     {
 		ini_set('max_execution_time', 300);
+        
+        // Suppress PHPExcel deprecation warnings for curly brace syntax
+        $oldErrorReporting = error_reporting();
+        error_reporting($oldErrorReporting & ~E_DEPRECATED);
+        
         $client = Client::findOrFail($client_id);
         $users = $client->users;
         $assessments = [];
@@ -1612,6 +1624,10 @@ class AssignmentsController extends Controller {
         // Return a csv
         $return_data = $data->store('csv', false, true);
         sse_complete($return_data);
+        
+        // Restore original error reporting
+        error_reporting($oldErrorReporting);
+        
         return true;
         //return view('excel.assignments.index', compact('users', 'assessments'));
     }

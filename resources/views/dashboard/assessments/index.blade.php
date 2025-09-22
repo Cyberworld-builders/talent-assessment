@@ -43,7 +43,7 @@
 
 			<!-- Title -->
 			<div class="page-heading">
-				<h1>AOE Assessments</h1>
+				<h1>Assessments</h1>
 			</div>
 
 			<!-- Assessments -->
