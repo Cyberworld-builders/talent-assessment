@@ -804,4 +804,16 @@
     <script src="{{ asset('assets/js/datepicker/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize datepicker
+            $('.datepicker').datepicker({
+                format: 'D, dd M yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+        });
+    </script>
 @stop
