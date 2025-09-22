@@ -43,11 +43,31 @@
 					<div class="h1 text-muted text-bold">Welcome To Involved Talent</div>
 
                        {{-- Heading --}}
-                       <div class="h1 text-warning text-bold">Update v1.5.13-release</div>
+                       <div class="h1 text-warning text-bold">Update v1.5.14-release</div>
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}
                        <ul class="list-unstyled changelog">
+                           <li>
+                               <i class="fa-asterisk text-success"></i>
+                               <p><strong>v1.5.14 - User Bulk Upload CSV Conversion:</strong> Converted user bulk uploads from Excel to CSV format for better compatibility and performance.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Replaced Excel file processing with native PHP CSV parsing in user upload functionality.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Updated frontend UI to accept CSV files instead of Excel files for bulk user uploads.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Fixed download_generated_users method to create CSV files instead of Excel files.</p>
+                           </li>
+                           <li>
+                               <i class="fa-asterisk text-info"></i>
+                               <p>Added comprehensive CSV upload tests and workspace documentation for AI assistants.</p>
+                           </li>
                            <li>
                                <i class="fa-asterisk text-success"></i>
                                <p><strong>v1.5.13 - Assessment Data Download & UI Fixes:</strong> Fixed critical assessment data download functionality and updated UI to match legacy styling.</p>

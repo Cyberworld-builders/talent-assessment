@@ -94,7 +94,7 @@
                                         <li><a id="generate-users">Random Users</a></li>
                                     </ul>
                                 </div>
-                                <a id="import" class="btn btn-black"><i class="fa-list-ol"></i> Import From Excel</a>
+                                <a id="import" class="btn btn-black"><i class="fa-list-ol"></i> Import From CSV</a>
                                 <a id="remove-incomplete" class="btn btn-black"><i class="fa-trash-o"></i> Remove Incomplete</a>
                             </div>
 
@@ -144,9 +144,9 @@
                 <div class="modal-body">
                     <div class="well">
                         <p>
-                            Upload a spreadsheet of users for faster entry. The first row in the spreadsheet will be counted as the header.
+                            Upload a CSV file of users for faster entry. The first row in the CSV file will be counted as the header.
                             Please make sure you have <b>email</b> and <b>name</b> as column headers in your first row, as these are required.
-                            Accepted file types: <b>.xls</b>, <b>.xlsx</b>
+                            Accepted file types: <b>.csv</b>
                         </p>
                     </div>
                     {{--                    {!! Form::open(['url' => 'dashboard/users/import/', 'files' => true, 'id' => 'uploadform']) !!}--}}
@@ -286,8 +286,8 @@
 
                             // Check if extension is correct
                             var extension = files[0].name.substr(files[0].name.length - 3);
-                            if (extension != 'xls' && extension != 'lsx') {
-                                toastr.error('File must be a valid .xls or .xlsx format.', "Error", opts);
+                            if (extension != 'csv') {
+                                toastr.error('File must be a valid .csv format.', "Error", opts);
                                 return false;
                             }
 
@@ -324,7 +324,7 @@
                             }
 
                             else {
-                                alert('No users found in Excel document, or the file could not be read correctly.');
+                                alert('No users found in CSV document, or the file could not be read correctly.');
                             }
 
                             $modal.modal('hide');
@@ -455,7 +455,7 @@
                             var link = data['download_link'];
                             var count = data['count'];
                             //$('#save').before('<a class="btn btn-black" target="_blank" href="'+link+'"><i class="fa-download"></i> Download Generated Users</a>');
-                            $('.heading-row').after('<div class="row"><div class="alert alert-white"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>'+count+' Users Generated!</strong> <a href="'+link+'">Download Excel file of generated users.</a></div></div>');
+                            $('.heading-row').after('<div class="row"><div class="alert alert-white"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>'+count+' Users Generated!</strong> <a href="'+link+'">Download CSV file of generated users.</a></div></div>');
                         }
                     },
                     error: function (data) {

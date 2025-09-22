@@ -1,0 +1,111 @@
+# Cursor Rules for Talent Assessment Project
+
+## Project Context
+This is a Laravel 5.1 application (legacy version) running on PHP 7.4 in Docker containers.
+
+## Critical Constraints
+- Laravel 5.1 does NOT have `php artisan test` command - use `vendor/bin/phpunit` instead
+- No `UploadedFile` class available - use alternative testing methods
+- Excel processing has been replaced with CSV processing due to library compatibility issues
+- Always use Docker commands: `docker-compose exec app <command>`
+
+## Development Environment
+- Application runs on http://localhost:8001
+- Use Docker for all commands: `docker-compose exec app <command>`
+- Database: MySQL 8.0 in container
+- Cache: Redis 7 in container
+
+## Environment-Specific Docker Compose Rules
+
+### Development Environment
+- **Compose file**: `docker-compose.yml`
+- **Container prefix**: `talent-assessment-*`
+- **Access**: `http://localhost:8001`
+- **Commands**: Always use `docker-compose exec app <command>`
+
+### Staging Environment
+- **Compose file**: `docker-compose.staging.yml`
+- **Container prefix**: `talent-assessment-app-staging`, `talent-assessment-mysql-staging`, `talent-assessment-redis-staging`
+- **Access**: `https://talent-staging.cyberworldbuilders.dev`
+- **Commands**: Use `docker-compose -f docker-compose.staging.yml exec app-staging <command>`
+- **Deployment**: Automated via GitHub Actions
+
+### Production Environment
+- **Compose file**: `docker-compose.production.yml`
+- **Container prefix**: `talent-assessment-app-production`, `talent-assessment-mysql-production`, `talent-assessment-redis-production`
+- **Access**: `https://talent.cyberworldbuilders.dev`
+- **Commands**: Use `docker-compose -f docker-compose.production.yml exec app-production <command>`
+- **Deployment**: Manual via SSH
+
+## Testing Guidelines
+- Use `docker-compose exec app vendor/bin/phpunit` for tests
+- Use `DatabaseTransactions` trait for database tests
+- Test CSV parsing logic directly rather than file uploads
+- Create temporary files for file-based tests
+
+## File Upload System
+- User bulk uploads now use CSV format (converted from Excel)
+- Endpoint: POST /dashboard/users/upload
+- Controller: UsersController@upload_from_file
+- Validation: accepts .csv and .txt files
+
+## Code Style
+- Follow Laravel 5.1 conventions
+- Use existing patterns in codebase
+- Maintain backward compatibility
+- Document breaking changes
+
+## Common Commands
+
+### Development Environment
+```bash
+# Run tests
+docker-compose exec app vendor/bin/phpunit
+
+# Run specific test
+docker-compose exec app vendor/bin/phpunit tests/UserCsvUploadTest.php
+
+# Access container
+docker-compose exec app bash
+
+# Artisan commands
+docker-compose exec app php artisan <command>
+
+# View logs
+docker-compose logs app
+```
+
+### Staging Environment
+```bash
+# Run tests
+docker-compose -f docker-compose.staging.yml exec app-staging vendor/bin/phpunit
+
+# Access container
+docker-compose -f docker-compose.staging.yml exec app-staging bash
+
+# Artisan commands
+docker-compose -f docker-compose.staging.yml exec app-staging php artisan <command>
+
+# View logs
+docker-compose -f docker-compose.staging.yml logs app-staging
+```
+
+### Production Environment
+```bash
+# Access container (be very careful!)
+docker-compose -f docker-compose.production.yml exec app-production bash
+
+# Artisan commands (be very careful!)
+docker-compose -f docker-compose.production.yml exec app-production php artisan <command>
+
+# View logs
+docker-compose -f docker-compose.production.yml logs app-production
+
+# Check container status
+docker-compose -f docker-compose.production.yml ps
+```
+
+## Documentation
+- Main README: /readme.md
+- Environment setup: /ENVIRONMENT_SETUP.md
+- Workspace context: /.cursor/workspace-context.md
