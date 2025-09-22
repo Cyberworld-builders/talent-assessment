@@ -114,12 +114,12 @@ class Assignment extends Model
 			't' => base64_encode($hash)
 		]);
 
-		$server = $_SERVER['SERVER_NAME'];
+		$server = $_SERVER['SERVER_NAME'] ?? parse_url(env('APP_URL'), PHP_URL_HOST);
 		$port = '';
 		if ($server == 'localhost')
 			$port = ':8000';
 
-		$assignment_url = 'http://'.$server.$port.'/'.$url.'?'.$hashed_url;
+		$assignment_url = 'https://'.$server.$port.'/'.$url.'?'.$hashed_url;
 
 		return $assignment_url;
 	}
