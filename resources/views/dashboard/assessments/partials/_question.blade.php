@@ -23,15 +23,10 @@
 					<!-- Body -->
 					<div class="body">
 
-						<!-- React Component -->
-						@if ($type == 6 or $type == 7 or $type == 8 or $type == 9 or $type == 10)
-							<div class="react-comp" data-type="{{ $type }}" data-json="{{ $content }}"><i class="fa-spinner fa-spin"></i></div>
-						@endif
-
-						<!-- Content -->
-						<div id="content" class="content" <?php if ($type == 6 or $type == 7 or $type == 8 or $type == 9 or $type == 10) echo ' style="display:none;"'; ?>>
-							{!! $content !!}
-						</div>
+					<!-- Content -->
+					<div id="content" class="content">
+						{!! $content !!}
+					</div>
 
 						<!-- Instructions -->
 						<p id="description" class="small text-muted">{!! $description !!}</p>
@@ -58,14 +53,14 @@
 					<!-- Controls -->
 					<div class="controls">
 
-						<!-- WM Controls -->
-						<div id="practice" data-practice="{{ $practice }}"<?php echo ($practice) ? ' class="active"' : null; ?><?php echo ($isWMType) ? null : ' style="display:none;"' ?>>
-							@if ($practice)
-								Practice Question
-							@else
-								Test Question
-							@endif
-						</div>
+					<!-- Practice Toggle (simplified for main question types) -->
+					<div id="practice" data-practice="{{ $practice }}"<?php echo ($practice) ? ' class="active"' : null; ?> style="display:none;">
+						@if ($practice)
+							Practice Question
+						@else
+							Test Question
+						@endif
+					</div>
 
 						<!-- Dimension -->
 						<?php $current_dim = $dimensions->where('id', $dimension_id)->first(); ?>
@@ -149,7 +144,14 @@
 			<h3>Choose the <strong>type</strong> of question this is:</h3>
 			<span id="cancel-question-type"><i class="fa-times"></i> Cancel</span>
 			<div class="question-types">
-				@foreach (\App\Question::types() as $typeId => $type)
+				@php
+					$mainTypes = [
+						1 => \App\Question::types()[1], // Multiple Choice
+						2 => \App\Question::types()[2], // Description  
+						3 => \App\Question::types()[3]  // Text Input
+					];
+				@endphp
+				@foreach ($mainTypes as $typeId => $type)
 					<div class="question-type" data-id="{{ $typeId }}" data-name="{{ $type['name'] }}" data-icon="{{ $type['icon'] }}" data-description="{{ $type['description'] }}" data-default="{{ $type['default'] }}">
 						<span><i class="{{ $type['icon'] }}"></i> {{ $type['name'] }}</span>
 					</div>
