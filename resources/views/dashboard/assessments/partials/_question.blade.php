@@ -144,14 +144,11 @@
 			<h3>Choose the <strong>type</strong> of question this is:</h3>
 			<span id="cancel-question-type"><i class="fa-times"></i> Cancel</span>
 			<div class="question-types">
-				@php
-					$mainTypes = [
-						1 => \App\Question::types()[1], // Multiple Choice
-						2 => \App\Question::types()[2], // Description  
-						3 => \App\Question::types()[3]  // Text Input
-					];
-				@endphp
-				@foreach ($mainTypes as $typeId => $type)
+				@foreach ([
+					1 => \App\Question::types()[1], // Multiple Choice
+					2 => \App\Question::types()[2], // Description  
+					3 => \App\Question::types()[3]  // Text Input
+				] as $typeId => $type)
 					<div class="question-type" data-id="{{ $typeId }}" data-name="{{ $type['name'] }}" data-icon="{{ $type['icon'] }}" data-description="{{ $type['description'] }}" data-default="{{ $type['default'] }}">
 						<span><i class="{{ $type['icon'] }}"></i> {{ $type['name'] }}</span>
 					</div>
