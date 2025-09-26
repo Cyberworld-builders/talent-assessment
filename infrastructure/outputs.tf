@@ -80,6 +80,21 @@ output "staging_s3_bucket_name" {
   value       = aws_s3_bucket.staging_uploads_bucket.bucket
 }
 
+output "staging_cloudfront_domain" {
+  description = "CloudFront domain for staging environment"
+  value       = aws_cloudfront_distribution.staging_uploads_distribution.domain_name
+}
+
+output "production_cloudfront_domain" {
+  description = "CloudFront domain for production environment"
+  value       = aws_cloudfront_distribution.production_uploads_distribution.domain_name
+}
+
+output "production_s3_bucket_name" {
+  description = "S3 bucket name for production environment"
+  value       = aws_s3_bucket.production_uploads_bucket.bucket
+}
+
 # SES Outputs
 output "ses_domain_identity" {
   description = "SES domain identity"
