@@ -1,0 +1,46 @@
+# Cursor Rules for Talent Assessment Project
+
+## Laravel Version Compatibility
+- This project uses Laravel 5.1 which has limited tinker functionality
+- **NEVER use `php artisan tinker --execute`** - it doesn't work on this Laravel version
+- **Use direct database queries instead**: `docker-compose exec mysql mysql -u [user] -p[password] [database] -e "SELECT * FROM table;"`
+- **For PHP code execution**: Use `docker-compose exec app php -r "echo 'test';"` for simple PHP commands
+
+## Docker Compose Usage
+- **Always use Docker Compose for this project** - never run commands directly on the host
+- **For production operations**: Use `docker-compose -f docker-compose.production.yml`
+- **For development**: Use `docker-compose` (default)
+- **When updating files in containers**: Use `docker-compose cp` to copy updated files into running containers
+
+## Database Operations
+- **For database queries**: Use `docker-compose exec mysql mysql -u [user] -p[password] [database] -e "QUERY"`
+- **For Laravel commands**: Use `docker-compose exec app php artisan [command]`
+- **For production database**: Use production credentials from `.env.production`
+
+## File Management
+- **When copying files to production containers**: Always use `docker-compose cp` after making changes
+- **Database backups**: Store outside the repository (e.g., `/opt/`) to avoid committing sensitive data
+- **Environment files**: Use appropriate `.env` file for the environment (`.env.production`, `.env.staging`, etc.)
+
+## Development Workflow
+- **Always check which branch you're on** before making changes
+- **Use feature branches** for bug fixes and new features
+- **Test in development** before deploying to production
+- **Create database backups** before running seeders or migrations in production
+
+## Error Handling
+- **For "Whoops" errors**: Check Laravel logs with `docker-compose logs app`
+- **For database connection issues**: Verify container status with `docker-compose ps`
+- **For permission issues**: Use `sudo` when necessary for file operations
+
+## Production Deployment
+- **Always create database backups** before making changes
+- **Use `--force` flag** for production seeders: `php artisan db:seed --class=SeederName --force`
+- **Copy updated files to containers** before running commands
+- **Verify changes** with database queries after deployment
+
+## UI/UX Fixes
+- **Login form placeholders**: Use `placeholder` attributes instead of separate `<label>` elements for username/password fields
+- **Form interactions**: Always test that placeholder text clears when users start typing
+- **Reference release versions**: Compare with working release tags (e.g., `v1.5.26-release`) before making UI changes
+- **Document UI fixes**: Create documentation in `/docs/` for any UI/UX fixes to prevent regression
