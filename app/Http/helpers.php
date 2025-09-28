@@ -220,7 +220,7 @@ function get_default_email_body()
 			password: <i>[password]</i>
 		</p>
 		<p><i>Please Note: If you already logged in before and changed your password, use the new password you have set for yourself instead.</i></p>
-		<p>&copy; '.date('Y').' AOE Science</p>';
+		<p>&copy; '.date('Y').' Involved Talent</p>';
 }
 
 /**

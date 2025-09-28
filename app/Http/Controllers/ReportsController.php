@@ -147,10 +147,10 @@ class ReportsController extends Controller
 
 		// Catch errors
 		if (! $report)
-			return view('error', ['message' => "A report template could not be found for this report. Please contact an AOE Science administrator."]);
+			return view('error', ['message' => "A report template could not be found for this report. Please contact an Involved Talent administrator."]);
 
 		if (! method_exists($this, $report))
-			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an AOE Science administrator."]);
+			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an Involved Talent administrator."]);
 
 		// Development reports
 		if ($report == 'l' || $report == 'ls' || $report == 'cacique')
@@ -180,10 +180,10 @@ class ReportsController extends Controller
 
 		// Catch errors
 		if (! $report)
-			return view('error', ['message' => "A report template could not be found for this report. Please contact an AOE Science administrator."]);
+			return view('error', ['message' => "A report template could not be found for this report. Please contact an Involved Talent administrator."]);
 
 		if (! method_exists($this, $report))
-			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an AOE Science administrator."]);
+			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an Involved Talent administrator."]);
 
 		return $this->{$report}($assignmentId, $userId);
     }

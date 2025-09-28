@@ -340,9 +340,14 @@ Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@
 		Route::delete('dashboard/assessments/{id}/translations/{translationId}', 'TranslationsController@destroy');
 
 		// Assignments
-		Route::get('dashboard/assignments/{id}/details', 'AssignmentsController@show_assignment_details');
 		Route::get('dashboard/assignment/{id}/download', 'AssignmentsController@download_assignment');
 		Route::get('dashboard/assignments/download/{client_id}/{type}', 'AssignmentsController@download_all_assignments_for_client');
+	});
+
+	// Assignment details should be accessible to resellers and above (level 3+)
+	Route::group(['middleware' => ['level:3']], function()
+	{
+		Route::get('dashboard/assignments/{id}/details', 'AssignmentsController@show_assignment_details');
 	});
 
 	// Assignments

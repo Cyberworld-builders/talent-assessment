@@ -74,6 +74,7 @@
             {{-- Tabs --}}
             <ul class="nav nav-tabs">
                 @foreach ($roles as $i => $role)
+                    <?php if ($role->name == 'Reseller') continue; ?>
                     <li<?php echo ($i == 0) ? ' class="active"' : '' ?>>
                         <a href="#{{ $role->slug }}s" data-toggle="tab">{{ $role->name }}s</a>
                     </li>
@@ -83,6 +84,7 @@
             {{-- Content --}}
             <div class="tab-content">
                 @foreach ($roles as $i => $role)
+                    <?php if ($role->name == 'Reseller') continue; ?>
                     <div class="tab-pane<?php echo ($i == 0) ? ' active' : '' ?>" id="{{ $role->slug }}s">
                         <table class="table table-hover members-table middle-align">
 

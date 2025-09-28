@@ -141,7 +141,7 @@
             </script>
 
             <footer>
-                <img src="{{ asset('assets/images/powered-by-aoe.png') }}" />
+                <img src="{{ asset('assets/images/logo-small.png') }}" />
             </footer>
 
         </div>

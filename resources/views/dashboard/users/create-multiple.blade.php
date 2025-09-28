@@ -36,7 +36,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">Add Users To: {{ $client->name }}</h1>
-            <p class="description">You can manually add users to this client, or import an excel spreadsheet of users.</p>
+            <p class="description">You can manually add users to this client, or import a CSV file of users.</p>
         </div>
     </div>
 
@@ -66,7 +66,7 @@
                                 <li><a id="generate-users">Random Users</a></li>
                             </ul>
                         </div>
-                        <a id="import" class="btn btn-black"><i class="fa-list-ol"></i> Import From Excel</a>
+                        <a id="import" class="btn btn-black"><i class="fa-list-ol"></i> Import From CSV</a>
                         <a id="remove-incomplete" class="btn btn-black"><i class="fa-trash-o"></i> Remove Incomplete</a>
                     </div>
 
@@ -113,10 +113,10 @@
                 <div class="modal-body">
                     <div class="well">
                         <p>
-                            Upload a spreadsheet of users for faster entry. The first row in the spreadsheet will be counted as the header.
+                            Upload a CSV file of users for faster entry. The first row in the CSV file will be counted as the header.
                             Please make sure you have <b>Name</b> and <b>Email</b> as column headers in your first row, as these are required.
                             You can also have <b>Job Title</b> and <b>Job Family</b>, but these are not required.
-                            Accepted file types: <b>.xls</b>, <b>.xlsx</b>
+                            Accepted file types: <b>.csv</b>
                         </p>
                     </div>
                     {!! Form::open(['url' => 'dashboard/users/import/', 'files' => true, 'id' => 'uploadform']) !!}
@@ -246,8 +246,8 @@
 
                             // Check if extension is correct
                             var extension = files[0].name.substr(files[0].name.length - 3);
-                            if (extension != 'xls' && extension != 'lsx') {
-                                toastr.error('File must be a valid .xls or .xlsx format.', "Error", opts);
+                            if (extension != 'csv') {
+                                toastr.error('File must be a valid .csv format.', "Error", opts);
                                 return false;
                             }
 

@@ -229,7 +229,7 @@ class AssessmentsController extends Controller
 //		}
 
 		// Store the logo
-		if (array_key_exists('logo', $assessment_data))
+		if ($request->file('logo'))
 		{
 			$imageName = $request->file('logo')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
@@ -240,7 +240,7 @@ class AssessmentsController extends Controller
 		}
 
 		// Store the background
-		if (array_key_exists('background', $assessment_data))
+		if ($request->file('background'))
 		{
 			$imageName = $request->file('background')->getClientOriginalName();
 			$s3 = new S3Client(config('aws'));
@@ -255,8 +255,17 @@ class AssessmentsController extends Controller
     	$assessment->update($assessment_data);
 
 		$valid_ids = $assessment->get_existing_question_ids();
-		$questions_without_ids = $this->update_questions($question_data, $valid_ids, $assessment);
-		$this->delete_questions($deleted_questions, $valid_ids);
+		$questions_without_ids = [];
+		
+		// Only update questions if question_data is not null
+		if ($question_data) {
+			$questions_without_ids = $this->update_questions($question_data, $valid_ids, $assessment);
+		}
+		
+		// Only delete questions if deleted_questions is not null
+		if ($deleted_questions) {
+			$this->delete_questions($deleted_questions, $valid_ids);
+		}
 
 		return \Response::json(['success' => true, 'data' => $question_data, 'non-ids' => $questions_without_ids, 'reload' => true]);
     }

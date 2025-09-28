@@ -1,6 +1,6 @@
 <?php
     // Template urls
-    $baseUrl = $export ? 'https://my.aoescience.com' : '';
+    $baseUrl = $export ? '{{ url("/") }}' : '';
     $fontsUrl = '/assets/fonts';
     if ($export) $fontsUrl = (env('APP_ENV') == 'local') ? '/var/www/public/assets/fonts' : '/var/app/current/assets/fonts';
 
@@ -58,7 +58,7 @@
 @endforeach
 
 @if (! $export)
-    <p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
+    <p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
 @endif
 </body>
 </html>

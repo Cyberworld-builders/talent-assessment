@@ -78,9 +78,9 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
                                             'class' => 'form-control input-lg datepicker',
-                                            'data-format' => 'D, dd M yyyy',
+                                            'data-format' => 'dd M yyyy',
                                         ]) !!}
                                         <div class="input-group-addon">
                                             <i class="linecons-calendar"></i>
@@ -249,12 +249,12 @@
                                     </p>
                                     <p><i>Note: These assignments will expire on <b>expiration date</b>.</i></p>
                                     <p>
-                                        Login <a target="_blank" href="#null">here</a> to view your assignments. You can use the following credentials to log in:<br/>
+                                        Login <a target="_blank" href="{{ url('/') }}">here</a> to view your assignments. You can use the following credentials to log in:<br/>
                                         username: <i>user12345</i><br/>
                                         password: <i>password</i>
                                     </p>
                                     <br/>
-                                    <div class="footer-text">&copy; {{ date('Y') }} The AOE Group</div>
+                                    <div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>
                                 </div>
                             </div>
                             {{--<div class="col-sm-6">--}}
@@ -809,7 +809,7 @@
         $(document).ready(function() {
             // Initialize datepicker
             $('.datepicker').datepicker({
-                format: 'D, dd M yyyy',
+                format: 'dd M yyyy',
                 autoclose: true,
                 todayHighlight: true,
                 startDate: new Date()

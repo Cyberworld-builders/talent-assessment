@@ -327,7 +327,7 @@
     <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
     <script src="https://fb.me/react-0.13.3.js"></script>
     <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/mathjax/MathJax.js?config=AM_HTMLorMML') }}"></script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             showProcessingMessages: false,

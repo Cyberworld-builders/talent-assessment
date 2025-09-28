@@ -162,9 +162,9 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
                                             'class' => 'form-control input-lg datepicker',
-                                            'data-format' => 'D, dd M yyyy',
+                                            'data-format' => 'dd M yyyy',
                                         ]) !!}
                                         <div class="input-group-addon">
                                             <i class="linecons-calendar"></i>
@@ -553,7 +553,7 @@
                             new_content = new_content.split('[password]').join('Nj1NB73w');
                             new_content = new_content.split('[assessments]').join('- Example Assessment');
                             new_content = new_content.split('[expiration-date]').join('Monday, January 1st, 2017');
-                            new_content = new_content.split('[login-link]').join('http://aoescience.com/login');
+                            new_content = new_content.split('[login-link]').join(window.location.origin);
 
                             return new_content;
                         }
@@ -956,7 +956,7 @@
         $(document).ready(function() {
             // Initialize datepicker
             $('.datepicker').datepicker({
-                format: 'D, dd M yyyy',
+                format: 'dd M yyyy',
                 autoclose: true,
                 todayHighlight: true,
                 startDate: new Date()

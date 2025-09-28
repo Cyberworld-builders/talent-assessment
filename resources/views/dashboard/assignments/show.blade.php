@@ -49,7 +49,7 @@
         <div class="main-content">
             <div class="report-template">
 
-                <script src="/wp/wp-content/themes/aoe/js/highcharts.js"></script>
+                <script src="https://code.highcharts.com/highcharts.js"></script>
                 <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
                 {{--<link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">--}}
                 {{--<link rel="stylesheet" type="text/css" media="all" href="/wp/wp-content/themes/aoe/reports/reports.css">--}}
@@ -57,8 +57,8 @@
                     .page-container.assignment.details {
                         /*background-image:none;*/
                         /*background-color:#ddd;*/
-                        background:url('/wp/wp-content/themes/aoe/images/aoe-group_home-banner.jpg') fixed no-repeat;
-                        background-size: 100% 100%;
+                        background:url('{{ asset('images/report-background.jpg') }}') fixed no-repeat;
+                        background-size: cover;
                     }
                     .assignment.details .main-content {
                         background: transparent;
@@ -224,7 +224,7 @@
                             <div class="col-xs-2 visible-xs"></div>
                             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                                <img class="img-responsive text-center cover-logo" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+                                <img class="img-responsive text-center cover-logo" src="{{ asset('images/logo.png') }}">
                             </div>
                         </div>
 
@@ -294,7 +294,7 @@
                                         @if ($assessment->logo)
                                             <img class="img-responsive" src="{{ show_image($assessment->logo) }}">
                                         @else
-                                            <img class="img-responsive" src="/wp/wp-content/themes/aoe/images/involved-talent-logo.png">
+                                            <img class="img-responsive" src="{{ asset('images/logo.png') }}">
                                         @endif
                                     </div>
                                 </div>
@@ -351,7 +351,7 @@
                     </div>
                 </div>
 
-                <p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
+                <p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
 
             </div>
         </div>

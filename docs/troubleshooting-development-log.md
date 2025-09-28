@@ -250,6 +250,109 @@ $("body").prepend(data); // This seems incorrect
 
 ---
 
+## Session 5: Email Date Accuracy & Branding Fix (Issue #73)
+
+### Date: September 2025
+### Issue: Email dates showing inaccurate dates and incorrect branding
+
+### Problem Statement
+- Email dates were showing "weird dates" that didn't match user expectations
+- Email footers still displayed "AOE Science" instead of "Involved Talent"
+- Users reported confusion about assignment expiration dates
+
+### Root Cause Analysis
+- **Date Format Issue**: The date format `'D, d M Y'` (e.g., "Mon, 23 Sep 2025") was causing validation problems
+- **Day-of-Week Validation**: When users selected invalid day-of-week combinations (like "Mon, 23 Sep 2025" when Sep 23, 2025 is actually Tuesday), Carbon would "fix" it by finding the next matching date
+- **Branding Inconsistency**: Email templates and configuration still contained old "AOE Science" branding
+
+### Solution Implemented
+
+#### 1. Date Format Standardization
+**Files Modified:**
+- `app/Http/Controllers/AssignmentsController.php`
+- `resources/views/dashboard/assignments/partials/_assignform.blade.php`
+- `resources/views/dashboard/assignments/assign.blade.php`
+- `resources/views/dashboard/assignments/assign2.blade.php`
+- `resources/views/clientdashboard/assign.blade.php`
+
+**Key Changes:**
+```php
+// Before: Problematic format with day-of-week
+$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
+
+// After: Clean format without day-of-week
+$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
+```
+
+**JavaScript Datepicker Updates:**
+```javascript
+// Before: Format included day-of-week
+format: 'D, dd M yyyy'
+
+// After: Clean format without day-of-week
+format: 'dd M yyyy'
+```
+
+#### 2. Email Template Branding Updates
+**Files Modified:**
+- `resources/views/emails/assignment.blade.php`
+- `resources/views/emails/completed.blade.php`
+- `config/mail.php`
+
+**Key Changes:**
+```php
+// Email templates updated
+<div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>
+
+// Mail configuration updated
+'from' => [
+    'address' => env('MAIL_FROM_ADDRESS', 'postmaster@mg.involvedtalent.com'), 
+    'name' => env('MAIL_FROM_NAME', 'Involved Talent')
+],
+```
+
+#### 3. User-Friendly Email Date Display
+**Email Template Enhancement:**
+```php
+// Email shows full day name for clarity
+You have been assigned to complete the {{ $assessment->name }} assessment. 
+This assessment will expire on {{ $expire_date->format('l, F j, Y') }}.
+// Output: "Tuesday, September 23, 2025"
+```
+
+#### 4. Comprehensive Testing
+**Files Created:**
+- `tests/EmailDateAndBrandingTest.php`
+
+**Test Coverage:**
+- Date parsing accuracy with new format
+- Email branding verification
+- Mail configuration validation
+- Date format validation
+- Email date formatting
+- Form date generation
+
+### Results
+- ✅ **Email dates are now accurate** - No more "weird dates" caused by day-of-week validation issues
+- ✅ **Email branding updated** - All emails now show "Involved Talent" instead of "AOE Science"
+- ✅ **Date picker improved** - Users can no longer select invalid date combinations
+- ✅ **Email format user-friendly** - Emails show full day names for clarity
+- ✅ **All tests passing** - 6 tests with 18 assertions all pass successfully
+
+### Technical Details
+**Before**: 
+- Date format: `'D, d M Y'` (e.g., "Mon, 23 Sep 2025")
+- Problem: "Mon, 23 Sep 2025" would parse to "2025-09-29" (next Monday) because Sep 23, 2025 is actually Tuesday
+- Branding: "AOE Science" and "The AOE Group"
+
+**After**:
+- Date format: `'d M Y'` (e.g., "23 Sep 2025") 
+- Solution: "23 Sep 2025" parses correctly to "2025-09-23" (Tuesday)
+- Email display: "Tuesday, September 23, 2025" (user-friendly format)
+- Branding: "Involved Talent"
+
+---
+
 ## Development Patterns & Best Practices Established
 
 ### 1. Docker Development
@@ -326,5 +429,5 @@ $("body").prepend(data); // This seems incorrect
 
 ---
 
-*Last Updated: September 22, 2025*
-*Document Version: 1.0*
+*Last Updated: September 23, 2025*
+*Document Version: 1.1*

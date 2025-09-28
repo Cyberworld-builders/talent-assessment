@@ -286,7 +286,7 @@
                 </h6>
             </div>
             <div class="col-xs-2 col-sm-2 text-right report-logo">
-                <img class="img-responsive" src="/assets/images/report-logo-1.png">
+                <img class="img-responsive" src="{{ asset("assets/images/logo-small.png") }}">
             </div>
         </div>
     </div>
@@ -1069,6 +1069,6 @@
     </div>
 </div>
 
-<p class="text-center white">Powered by <a href="http://aoescience.com/">Involved Talent</a></p>
+<p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
 </body>
 </html>

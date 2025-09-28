@@ -100,6 +100,8 @@ docker compose exec app ./vendor/bin/phpunit
 docker compose exec app ./vendor/bin/phpunit tests/IndustryTest.php
 ```
 
+**Important**: This Laravel 5.1 application does NOT support `php artisan test` - always use `vendor/bin/phpunit` directly.
+
 ### CI/CD Pipeline
 The GitHub Actions workflow uses MySQL for testing to ensure consistency with the production environment. The pipeline:
 - Uses MySQL 5.7 service container
@@ -111,6 +113,12 @@ The GitHub Actions workflow uses MySQL for testing to ensure consistency with th
 - **Local**: Uses SQLite in-memory database (`:memory:`) for fast, isolated testing
 - **CI/CD**: Uses MySQL service container with dedicated test database
 - **Test Traits**: Uses `DatabaseTransactions` to rollback changes after each test
+
+## AI Assistant Documentation
+
+For AI assistants working on this project, see:
+- **Workspace Context**: [.cursor/workspace-context.md](.cursor/workspace-context.md) - Comprehensive project context and constraints
+- **Cursor Rules**: [.cursorrules](.cursorrules) - Quick reference for development guidelines
 
 ## Official Documentation
 
