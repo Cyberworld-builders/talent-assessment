@@ -173,7 +173,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<strong><big>Your rating for Creative Problem Solving:</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => 1,
+                'number' => 2,
                 'type' => 1, // Multiple Choice
                 'dimension_id' => 1,
                 'anchors' => serialize([
@@ -191,7 +191,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<table border="0" cellpadding="0" cellspacing="0" style="width:100.0%" class=" cke_show_border"><tbody><tr><td><p><br></p><p>Lacks creativity when trying to solve existing problems</p></td><td><br></td><td><p>Sometimes develops creative solutions to navigate problems</p></td><td><br></td><td><p>Always seeks innovative solutions to problems</p></td></tr><tr><td><p>Consistently fails to utilize talent to improve processes, advance procedures, or execute tasks</p></td><td><br></td><td><p>Implements novel solutions to existing problems with some success</p></td><td><br></td><td><p>Consistently implements creative solutions to existing challenges with high success</p></td></tr><tr><td><p>Fails to follow through with executing new ideas/initiatives &nbsp;as promised</p></td><td><br></td><td><p>Notices when change is necessary</p></td><td><br></td><td><p>Implements new/improved processes or procedures to navigate obstacles</p></td></tr><tr><td><p>Typically satisfied with following the same routines/processes over extended periods of time</p></td><td><br></td><td><br></td><td><br></td><td><p>Consistently educates self in areas of expertise and seeks out new knowledge in unfamiliar areas</p></td></tr><tr><td><p>Highly resistant to change</p></td><td><br></td><td><br></td><td><br></td><td><p>Takes positive action, even in the face of unforeseen obstacles, and works to overcome traditional boundaries to move ahead in day-to-day activities as well as long-term activities.&nbsp;</p></td></tr></tbody></table>',
                 'assessment_id' => $assessmentId,
-                'number' => 2,
+                'number' => 3,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -203,7 +203,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<strong><big>Developmental Comments for Creative Problem Solving:</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => 2,
+                'number' => 4,
                 'type' => 3, // Text Input
                 'dimension_id' => 1,
                 'anchors' => serialize([]),
@@ -215,7 +215,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<h2>Leadership Adaptability</h2><p><strong>Definition</strong>: Leadership Adaptability is having the ability to see the need for change early on. Having the willingness to smoothly and comfortably adjust his/her work style to the change as well as assist his/her team in positively adapting to the change. This competency also captures one\'s psychological ownership over the change.</p><h3 style="color:rgb(170, 170, 170); font-style:italic"><small><big>Please select your rating for [name] for this dimension.</big></small></h3>',
                 'assessment_id' => $assessmentId,
-                'number' => 3,
+                'number' => 5,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -227,7 +227,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<strong><big>Your rating for Leadership Adaptability:</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => 3,
+                'number' => 6,
                 'type' => 1, // Multiple Choice
                 'dimension_id' => 2,
                 'anchors' => serialize([
@@ -245,7 +245,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<table border="0" cellpadding="0" cellspacing="0" style="width:100.0%" class=" cke_show_border"><tbody><tr><td><p>Fails to make changes happen even after being asked to do so by trusted advisors or superiors</p></td><td><br></td><td><p>Makes changes happen without significant negative impact when asked to do so&nbsp;</p></td><td><br></td><td><p>Takes ownership of changes and creates a positive change atmosphere</p></td></tr><tr><td><p>Does not react well to changing environments and fails to maneuver him/herself in a manner that generates productive outcomes</p></td><td><br></td><td><p>Reacts well to changing environments and minimizes stress on others</p></td><td><br></td><td><p>Has the ability to see change coming and actively maneuvers him/herself to create a positive outcome</p></td></tr><tr><td><p>Handles change poorly, creating a negative environment for others</p></td><td><br></td><td><p>Generally supports change</p></td><td><br></td><td><p>Acts as an advocate for change to others facing difficult circumstances</p></td></tr><tr><td><br></td><td><br></td><td><p>Handles change well without creating a negative environment for others</p></td><td><br></td><td><p>Volunteers to be an active participant in groups or tasks where change is expected</p></td></tr></tbody></table>',
                 'assessment_id' => $assessmentId,
-                'number' => 4,
+                'number' => 7,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -257,7 +257,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<strong><big>Developmental Comments for Leadership Adaptability:</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => 4,
+                'number' => 8,
                 'type' => 3, // Text Input
                 'dimension_id' => 2,
                 'anchors' => serialize([]),
@@ -269,7 +269,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<h2>Collaboration</h2><p><strong>Definition</strong>: Collaboration is being able to effectively work with internal stakeholders/employees up and down the chain of organizational hierarchy (vertical) and horizontally with peers as well as external individuals/organizations/partners (e.g., vendor, community leaders) all the while&nbsp;knowing and showing ones authentic self to others at work while simultaneously knowing how one is portrayed across all work settings.&nbsp;</p><h3 style="color:rgb(170, 170, 170); font-style:italic"><small><big>Please select your rating for [name] for this dimension.</big></small></h3>',
                 'assessment_id' => $assessmentId,
-                'number' => 5,
+                'number' => 9,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -281,7 +281,7 @@ class Involved360AssessmentSeeder extends Seeder
             [
                 'content' => '<big><strong>Your rating for Collaboration:</strong></big>',
                 'assessment_id' => $assessmentId,
-                'number' => 5,
+                'number' => 10,
                 'type' => 1, // Multiple Choice
                 'dimension_id' => 3,
                 'anchors' => serialize([
@@ -302,14 +302,14 @@ class Involved360AssessmentSeeder extends Seeder
         $dimensionIds = [4, 5, 6, 7, 8, 9];
         
         for ($i = 0; $i < count($dimensionNames); $i++) {
-            $questionNumber = 6 + ($i * 4);
+            $baseQuestionNumber = 11 + ($i * 4); // Start from 11 (after Collaboration)
             $dimensionId = $dimensionIds[$i];
             
             // Instructions
             $questions[] = [
                 'content' => '<h2>' . $dimensionNames[$i] . '</h2><p><strong>Definition</strong>: [Definition for ' . $dimensionNames[$i] . ']</p><h3 style="color:rgb(170, 170, 170); font-style:italic"><small><big>Please select your rating for [name] for this dimension.</big></small></h3>',
                 'assessment_id' => $assessmentId,
-                'number' => $questionNumber,
+                'number' => $baseQuestionNumber,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -322,7 +322,7 @@ class Involved360AssessmentSeeder extends Seeder
             $questions[] = [
                 'content' => '<strong><big>Your rating for ' . $dimensionNames[$i] . ':</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => $questionNumber,
+                'number' => $baseQuestionNumber + 1,
                 'type' => 1, // Multiple Choice
                 'dimension_id' => $dimensionId,
                 'anchors' => serialize([
@@ -341,7 +341,7 @@ class Involved360AssessmentSeeder extends Seeder
             $questions[] = [
                 'content' => '<p>Performance descriptors for ' . $dimensionNames[$i] . ' would go here.</p>',
                 'assessment_id' => $assessmentId,
-                'number' => $questionNumber + 1,
+                'number' => $baseQuestionNumber + 2,
                 'type' => 2, // Description
                 'dimension_id' => 0,
                 'anchors' => serialize([]),
@@ -354,7 +354,7 @@ class Involved360AssessmentSeeder extends Seeder
             $questions[] = [
                 'content' => '<strong><big>Developmental Comments for ' . $dimensionNames[$i] . ':</big></strong>',
                 'assessment_id' => $assessmentId,
-                'number' => $questionNumber + 1,
+                'number' => $baseQuestionNumber + 3,
                 'type' => 3, // Text Input
                 'dimension_id' => $dimensionId,
                 'anchors' => serialize([]),
