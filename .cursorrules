@@ -21,6 +21,7 @@ This is a Laravel 5.1 application (legacy version) running on PHP 7.4 in Docker 
 - **For production operations**: Use `docker-compose -f docker-compose.production.yml`
 - **For development**: Use `docker-compose` (default)
 - **When updating files in containers**: Use `docker-compose cp` to copy updated files into running containers
+- **CRITICAL**: All commands (npm, gulp, composer, etc.) must be run INSIDE the container using `docker-compose exec app <command>`
 
 ## Database Operations
 - **For database queries**: Use `docker-compose exec mysql mysql -u [user] -p[password] [database] -e "QUERY"`
