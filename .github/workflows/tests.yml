@@ -34,7 +34,11 @@ jobs:
         coverage: none
 
     - name: Install MySQL Client
-      run: sudo apt-get update && sudo apt-get install -y mysql-client
+      run: |
+        # Remove problematic Microsoft repositories to avoid 403 errors
+        sudo rm -f /etc/apt/sources.list.d/microsoft-*
+        sudo apt-get update --allow-releaseinfo-change || true
+        sudo apt-get install -y mysql-client || sudo apt-get install -y default-mysql-client
 
     - name: Setup Testing Environment
       run: |

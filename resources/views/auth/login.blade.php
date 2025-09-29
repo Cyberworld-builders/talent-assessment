@@ -10,7 +10,7 @@
         .login-page.login-light {
             background: white;
             padding-top: 0 !important;
-            background: url('{{ asset('images/background.jpg') }}') no-repeat scroll 50% 50% !important;
+            background: url('{{ asset('assets/images/background.jpg') }}') no-repeat scroll 50% 50% !important;
         }
         .login-page .login-container,
         .login-page.login-light .login-container {
