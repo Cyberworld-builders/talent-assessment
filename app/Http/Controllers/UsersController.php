@@ -706,11 +706,12 @@ class UsersController extends Controller
             // Create an associative array from header and row data
             $rowData = array_combine($header, $row);
             
-            $name = isset($rowData['name']) ? $rowData['name'] : '';
-            $email = isset($rowData['email']) ? trim($rowData['email']) : '';
-            $job_title = isset($rowData['job_title']) ? $rowData['job_title'] : '';
-            $job_family = isset($rowData['job_family']) ? $rowData['job_family'] : '';
-            $username = isset($rowData['username']) ? $rowData['username'] : '';
+            $name = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+            $email = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+            $industry = isset($rowData['Industry']) ? $rowData['Industry'] : (isset($rowData['industry']) ? $rowData['industry'] : '');
+            $job_title = isset($rowData['Job Title']) ? $rowData['Job Title'] : (isset($rowData['job_title']) ? $rowData['job_title'] : '');
+            $job_family = isset($rowData['Job Family']) ? $rowData['Job Family'] : (isset($rowData['job_family']) ? $rowData['job_family'] : '');
+            $username = isset($rowData['Username']) ? $rowData['Username'] : (isset($rowData['username']) ? $rowData['username'] : '');
 
             // Handle alternative column names
             if (empty($email) && isset($rowData['e_mail'])) {
@@ -725,6 +726,7 @@ class UsersController extends Controller
                 'email' => $email,
                 'name' => $name,
                 'username' => $username,
+                'industry' => $industry,
                 'job_title' => $job_title,
                 'job_family' => $job_family
             ]);
@@ -733,6 +735,30 @@ class UsersController extends Controller
         fclose($handle);
 
         return \Response::json(['users' => $users]);
+    }
+
+    /**
+     * Download a CSV template for user bulk upload.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function download_template()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="user_upload_template.csv"',
+        ];
+
+        $callback = function() {
+            $file = fopen('php://output', 'w');
+            
+            // Write header row
+            fputcsv($file, ['Name', 'Email', 'Industry']);
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
 	/**

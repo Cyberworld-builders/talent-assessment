@@ -118,6 +118,8 @@ Route::group(['middleware' => ['auth']], function()
 		Route::delete('dashboard/users/{id}', 'UsersController@destroy');
 		Route::post('dashboard/users/get_users_from_ids', 'UsersController@get_users_from_ids');
 		Route::get('dashboard/users/{id}/auth', 'UsersController@auth');
+		Route::post('dashboard/users/upload', 'UsersController@upload_from_file');
+		Route::get('dashboard/users/template', 'UsersController@download_template');
 
 		// Clients
 		Route::resource('dashboard/clients', 'ClientsController');

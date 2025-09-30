@@ -115,8 +115,14 @@
                         <p>
                             Upload a CSV file of users for faster entry. The first row in the CSV file will be counted as the header.
                             Please make sure you have <b>Name</b> and <b>Email</b> as column headers in your first row, as these are required.
-                            You can also have <b>Job Title</b> and <b>Job Family</b>, but these are not required.
+                            You can also have <b>Industry</b>, <b>Job Title</b> and <b>Job Family</b>, but these are not required.
                             Accepted file types: <b>.csv</b>
+                        </p>
+                        <p>
+                            <a href="/dashboard/users/template" class="btn btn-sm btn-info">
+                                <i class="fa fa-download"></i> Download CSV Template
+                            </a>
+                            <small class="text-muted">Download a blank template with the correct headers</small>
                         </p>
                     </div>
                     {!! Form::open(['url' => 'dashboard/users/import/', 'files' => true, 'id' => 'uploadform']) !!}
