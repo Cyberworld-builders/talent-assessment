@@ -115,7 +115,8 @@
                         <p>
                             Upload a CSV file of users for faster entry. The first row in the CSV file will be counted as the header.
                             Please make sure you have <b>Name</b> and <b>Email</b> as column headers in your first row, as these are required.
-                            You can also have <b>Industry</b>, <b>Job Title</b> and <b>Job Family</b>, but these are not required.
+                            You can also have <b>Industry</b>, <b>Username</b>, <b>Job Title</b> and <b>Job Family</b>, but these are not required.
+                            If no Username is provided, one will be generated automatically from the Name.
                             Accepted file types: <b>.csv</b>
                         </p>
                         <p>

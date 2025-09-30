@@ -730,16 +730,47 @@ class UsersController extends Controller
             // Create an associative array from header and row data
             $rowData = array_combine($header, $row);
             
-            $name = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
-            $email = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
-            $industry = isset($rowData['Industry']) ? $rowData['Industry'] : (isset($rowData['industry']) ? $rowData['industry'] : '');
-            $job_title = isset($rowData['Job Title']) ? $rowData['Job Title'] : (isset($rowData['job_title']) ? $rowData['job_title'] : '');
-            $job_family = isset($rowData['Job Family']) ? $rowData['Job Family'] : (isset($rowData['job_family']) ? $rowData['job_family'] : '');
-            $username = isset($rowData['Username']) ? $rowData['Username'] : (isset($rowData['username']) ? $rowData['username'] : '');
+            // Handle different CSV formats
+            $name = '';
+            $email = '';
+            $industry = '';
+            $job_title = '';
+            $job_family = '';
+            $username = '';
+            
+            // Check if this is the standard format (Name, Email, Industry)
+            if (isset($rowData['Name']) || isset($rowData['name'])) {
+                $name = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+                $email = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+                $industry = isset($rowData['Industry']) ? $rowData['Industry'] : (isset($rowData['industry']) ? $rowData['industry'] : '');
+                $job_title = isset($rowData['Job Title']) ? $rowData['Job Title'] : (isset($rowData['job_title']) ? $rowData['job_title'] : '');
+                $job_family = isset($rowData['Job Family']) ? $rowData['Job Family'] : (isset($rowData['job_family']) ? $rowData['job_family'] : '');
+                $username = isset($rowData['Username']) ? $rowData['Username'] : (isset($rowData['username']) ? $rowData['username'] : '');
+            }
+            // Handle the Involved-360 format (positional columns)
+            else {
+                // Based on the log data: [username, name, email, ...]
+                $username = isset($row[0]) ? trim($row[0]) : '';
+                $name = isset($row[1]) ? trim($row[1]) : '';
+                $email = isset($row[2]) ? trim($row[2]) : '';
+                $industry = isset($row[3]) ? trim($row[3]) : '';
+                $job_title = isset($row[4]) ? trim($row[4]) : '';
+                $job_family = isset($row[5]) ? trim($row[5]) : '';
+            }
 
             // Skip rows that don't have at least a name or email
             if (empty(trim($name)) && empty(trim($email))) {
+                \Log::info("Skipping row $rowCount - no name or email");
                 continue;
+            }
+
+            // Generate username if not provided
+            if (empty(trim($username)) && !empty(trim($name))) {
+                $username = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', $name));
+                // Ensure username is not empty and add a number if needed
+                if (empty($username)) {
+                    $username = 'user' . $rowCount;
+                }
             }
 
             // Handle alternative column names
@@ -788,7 +819,7 @@ class UsersController extends Controller
             $file = fopen('php://output', 'w');
             
             // Write header row
-            fputcsv($file, ['Name', 'Email', 'Industry']);
+            fputcsv($file, ['Name', 'Email', 'Industry', 'Username']);
             
             fclose($file);
         };
