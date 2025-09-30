@@ -41,6 +41,7 @@ class AssignmentFormTest extends TestCase
 
         $this->job = Job::firstOrCreate([
             'name' => 'Test Job Position',
+            'slug' => 'test-job-position-' . uniqid(),
             'client_id' => $this->client->id
         ]);
         

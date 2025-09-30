@@ -41,6 +41,7 @@ class AssignmentsControllerTest extends TestCase
 
         $this->job = Job::firstOrCreate([
             'name' => 'Test Controller Job',
+            'slug' => 'test-controller-job-' . uniqid(),
             'client_id' => $this->client->id
         ]);
         

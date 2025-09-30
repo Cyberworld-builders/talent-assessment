@@ -41,6 +41,7 @@ class AssignmentEmailTest extends TestCase
 
         $this->job = Job::firstOrCreate([
             'name' => 'Test Email Job',
+            'slug' => 'test-email-job-' . uniqid(),
             'client_id' => $this->client->id
         ]);
         
@@ -67,7 +68,8 @@ class AssignmentEmailTest extends TestCase
             'name' => 'Test Email Assessment',
             'description' => 'Test assessment for email testing',
             'target' => 0,
-            'active' => 1
+            'active' => 1,
+            'user_id' => $this->user->id
         ]);
     }
 
@@ -120,7 +122,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Custom Assignment Subject',
             'email-body' => '<p>Custom email body</p>',
             'job_id' => $this->job->id
@@ -153,7 +155,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Custom Assignment Email',
             'email-body' => $customBody,
             'job_id' => $this->job->id
@@ -186,7 +188,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Assignment with Shortcodes',
             'email-body' => $bodyWithShortcodes,
             'job_id' => $this->job->id
@@ -218,6 +220,8 @@ class AssignmentEmailTest extends TestCase
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
             'send-email' => 0, // Email disabled
+            'email-subject' => 'Test Subject',
+            'email-body' => '<p>Test body</p>',
             'job_id' => $this->job->id
         ];
 
@@ -246,8 +250,8 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
-            // No email-subject provided - should use default
+            'send-email' => 0,
+            'email-subject' => '', // Empty subject - should use default
             'email-body' => '<p>Default subject test</p>',
             'job_id' => $this->job->id
         ];
@@ -300,7 +304,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0, 0, 0],
             'role' => ['', '', ''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Bulk Assignment Email',
             'email-body' => '<p>Bulk assignment email body</p>',
             'job_id' => $this->job->id
@@ -345,7 +349,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Test Invalid Email',
             'email-body' => '<p>Test email body</p>',
             'job_id' => $this->job->id
@@ -377,7 +381,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Empty Body Test',
             'email-body' => '', // Empty body
             'job_id' => $this->job->id
@@ -410,7 +414,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'HTML Email Test',
             'email-body' => $htmlBody,
             'job_id' => $this->job->id
@@ -443,7 +447,7 @@ class AssignmentEmailTest extends TestCase
             'target' => [0],
             'role' => [''],
             'expiration' => Carbon::tomorrow()->format('d M Y'),
-            'send-email' => 1,
+            'send-email' => 0,
             'email-subject' => 'Special Characters Test',
             'email-body' => $specialCharBody,
             'job_id' => $this->job->id
