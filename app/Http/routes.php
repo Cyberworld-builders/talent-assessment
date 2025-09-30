@@ -151,6 +151,8 @@ Route::group(['middleware' => ['auth']], function()
 		Route::delete('dashboard/clients/{id}/groups/{groupId}', 'GroupsController@destroy');
 		Route::post('dashboard/clients/{id}/generate-groups', 'GroupsController@autoGenerateGroups');
 		Route::post('dashboard/clients/{id}/upload-groups', 'GroupsController@uploadGroups');
+		Route::post('dashboard/clients/{id}/upload-groups-csv', 'GroupsController@uploadGroupsFromCsv');
+		Route::get('dashboard/groups/template', 'GroupsController@downloadGroupsTemplate');
 
 		// Client Jobs
 		Route::get('dashboard/clients/{id}/jobs', 'JobsController@index');

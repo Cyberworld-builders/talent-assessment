@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.35 - Groups CSV Upload Enhancement:</strong> Converted groups bulk upload from Excel to CSV format with template downloads and enhanced processing capabilities.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added CSV template download for groups with proper headers (Target Name, Target Email, Name, Email, Role) for easy bulk group creation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Converted groups upload from Excel (.xls, .xlsx) to CSV format for better compatibility and easier file management.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Enhanced groups CSV parsing to handle multiple column naming conventions and skip empty rows automatically.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated groups upload UI with modern interface, template download button, and CSV file validation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added comprehensive logging for groups CSV upload debugging and troubleshooting.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.34 - CSV Upload Enhancements & Production Fixes:</strong> Enhanced user bulk upload functionality with template downloads, automatic username generation, and fixed production deployment issues.</p>
             </li>
             <li>
