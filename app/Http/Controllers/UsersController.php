@@ -703,6 +703,11 @@ class UsersController extends Controller
 
         // Process each data row
         while (($row = fgetcsv($handle)) !== false) {
+            // Skip empty rows (rows with all empty values)
+            if (empty(array_filter($row, function($value) { return !empty(trim($value)); }))) {
+                continue;
+            }
+            
             // Create an associative array from header and row data
             $rowData = array_combine($header, $row);
             
@@ -712,6 +717,11 @@ class UsersController extends Controller
             $job_title = isset($rowData['Job Title']) ? $rowData['Job Title'] : (isset($rowData['job_title']) ? $rowData['job_title'] : '');
             $job_family = isset($rowData['Job Family']) ? $rowData['Job Family'] : (isset($rowData['job_family']) ? $rowData['job_family'] : '');
             $username = isset($rowData['Username']) ? $rowData['Username'] : (isset($rowData['username']) ? $rowData['username'] : '');
+
+            // Skip rows that don't have at least a name or email
+            if (empty(trim($name)) && empty(trim($email))) {
+                continue;
+            }
 
             // Handle alternative column names
             if (empty($email) && isset($rowData['e_mail'])) {

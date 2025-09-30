@@ -125,7 +125,7 @@
                             <small class="text-muted">Download a blank template with the correct headers</small>
                         </p>
                     </div>
-                    {!! Form::open(['url' => 'dashboard/users/import/', 'files' => true, 'id' => 'uploadform']) !!}
+                    {!! Form::open(['url' => 'dashboard/users/upload', 'files' => true, 'id' => 'uploadform']) !!}
                         {!! Form::file('file', ['id' => 'file']) !!}
                     {!! Form::close() !!}
                     <br/>
