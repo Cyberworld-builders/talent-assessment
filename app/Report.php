@@ -74,6 +74,9 @@ class Report extends Model
 	 */
 	public function getModelAttribute()
 	{
+		if (!isset($this->attributes['model']) || is_null($this->attributes['model'])) {
+			return null;
+		}
 		return json_decode($this->attributes['model']);
 	}
 
@@ -94,6 +97,9 @@ class Report extends Model
 	 */
 	public function getModelFactorsAttribute()
 	{
+		if (!isset($this->attributes['model_factors']) || is_null($this->attributes['model_factors'])) {
+			return null;
+		}
 		return json_decode($this->attributes['model_factors']);
 	}
 }
