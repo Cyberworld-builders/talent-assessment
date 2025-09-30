@@ -288,8 +288,7 @@
                                     $user_add_form.find('input[name="email[]"]').val(user['email']);
                                     $user_add_form.find('input[name="name[]"]').val(user['name']);
                                     $user_add_form.find('input[name="username[]"]').val(user['username']);
-                                    $user_add_form.find('input[name="job_title[]"]').val(user['job_title']);
-                                    $user_add_form.find('input[name="job_family[]"]').val(user['job_family']);
+                                    $user_add_form.find('input[name="industry[]"]').val(user['industry']);
                                     $('.user-forms').append($user_add_form);
                                 }
                                 $modal.modal('hide');

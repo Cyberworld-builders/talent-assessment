@@ -239,16 +239,35 @@ class ClientsController extends Controller
         $client = Client::find($id);
         $users = $client->users;
 
-        $filename = 'Users for '.sanitize_string($client->name).' '.Carbon::now();
+        $filename = 'Users_for_' . sanitize_string($client->name) . '_' . Carbon::now()->format('Y-m-d_H-i-s') . '.csv';
+        $filepath = storage_path('app/exports/' . $filename);
+        
+        // Ensure directory exists
+        if (!file_exists(dirname($filepath))) {
+            mkdir(dirname($filepath), 0755, true);
+        }
 
-        $data = Excel::create($filename, function($excel) use ($users, $client)
-        {
-            $excel->setTitle('Users');
-            $excel->sheet('Details', function($sheet) use ($users, $client) {
-                $sheet->loadView('excel.client-users', compact('users', 'client'));
-            });
-        });
+        // Create CSV file
+        $handle = fopen($filepath, 'w');
+        
+        // Write CSV header
+        fputcsv($handle, ['Name', 'Email', 'Username', 'Industry', 'Role', 'Created At']);
+        
+        // Write user data
+        foreach ($users as $user) {
+            fputcsv($handle, [
+                $user->name,
+                $user->email,
+                $user->username,
+                $user->industry ? $user->industry->name : 'N/A',
+                $user->roles->first() ? $user->roles->first()->name : 'N/A',
+                $user->created_at ? $user->created_at->format('Y-m-d H:i:s') : 'N/A'
+            ]);
+        }
+        
+        fclose($handle);
 
-        $data->store('csv')->export('csv');
+        // Return file download
+        return response()->download($filepath, $filename)->deleteFileAfterSend(true);
     }
 }
