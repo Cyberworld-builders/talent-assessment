@@ -50,6 +50,34 @@
 					<ul class="list-unstyled changelog">
 						<li>
 							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.30 - Assignment Form Improvements & Test Coverage:</strong> Enhanced assignment forms with better email notifications, removed white label fields, and added comprehensive test coverage.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed email notification field visibility in client assignment forms - field now properly displays without syntax errors.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Removed white label field from assignment forms to simplify the user interface and reduce form complexity.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-warning"></i>
+							<p>Fixed GroupsController undefined variable error that was causing runtime issues in group management.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added comprehensive test coverage for assignment forms to ensure reliability and prevent regressions.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-warning"></i>
+							<p>Fixed test failures related to jobs slug constraint and assessment foreign key issues in the test suite.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Optimized staging deployment workflow for faster and more reliable deployments.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.5.29 - Assessment Assign Tab Removal:</strong> Removed the assign tab from assessments page to streamline the assignment workflow and reduce confusion.</p>
 						</li>
 						<li>
