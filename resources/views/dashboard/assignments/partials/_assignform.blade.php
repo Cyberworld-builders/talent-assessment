@@ -62,23 +62,6 @@
                     </div>
                 </div>
 
-                {{-- Whitelabel Field --}}
-                @role('admin')
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {!! Form::label('whitelabel', 'White-Label', ['class' => 'control-label']) !!}
-                                <p class="small text-muted">White-labeled assessments will display the logo and background of the client to which the user belongs to.</p>
-                            </div>
-                            <div class="col-sm-8">
-                                {!! Form::select('whitelabel', [
-                                    0 => 'No',
-                                    1 => 'Yes',
-                                ], ($edit ? $assignment->whitelabel : 0), ['class' => 'form-control input-lg']) !!}
-                            </div>
-                        </div>
-                    </div>
-                @endrole
 
                 {{-- Tie To Specific Job --}}
                 @role('admin')
