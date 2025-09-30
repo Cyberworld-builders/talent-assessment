@@ -631,7 +631,7 @@ class UsersController extends Controller
                 array_push($errors, 'User "'.$name.'" could not be added. '.$error);
                 \Log::error("User creation failed for $name", [
                     'error' => $e->getMessage(),
-                    'user_data' => $user->toArray()
+                    'user_data' => $user ? $user->toArray() : 'User object not created'
                 ]);
             }
             
@@ -641,7 +641,7 @@ class UsersController extends Controller
                 array_push($errors, 'User "'.$name.'" could not be added. '.$error);
                 \Log::error("Unexpected error creating user $name", [
                     'error' => $e->getMessage(),
-                    'user_data' => $user->toArray()
+                    'user_data' => $user ? $user->toArray() : 'User object not created'
                 ]);
             }
 
