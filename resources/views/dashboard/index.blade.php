@@ -47,11 +47,39 @@
                        <span class="text-small text-muted text-upper">Changelog</span>
 
                        {{-- Changelog --}}
-					<ul class="list-unstyled changelog">
-						<li>
-							<i class="fa-asterisk text-success"></i>
-							<p><strong>v1.5.30 - Assignment Form Improvements & Test Coverage:</strong> Enhanced assignment forms with better email notifications, removed white label fields, and added comprehensive test coverage.</p>
-						</li>
+        <ul class="list-unstyled changelog">
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.34 - CSV Upload Enhancements & Production Fixes:</strong> Enhanced user bulk upload functionality with template downloads, automatic username generation, and fixed production deployment issues.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added CSV template download feature with proper headers (Name, Email, Industry, Username) for easy bulk user creation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented automatic username generation from names when not provided in CSV uploads to prevent validation errors.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed CSV upload blank rows issue by adding validation to skip empty rows and rows without name/email.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced CSV parsing to support multiple formats including standard (Name, Email, Industry) and Involved-360 formats.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed production deployment issues with proper environment file creation and APP_KEY persistence across container restarts.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated production APP_URL to use correct domain (https://my.involvedtalent.com) and added comprehensive debugging for deployments.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.30 - Assignment Form Improvements & Test Coverage:</strong> Enhanced assignment forms with better email notifications, removed white label fields, and added comprehensive test coverage.</p>
+            </li>
 						<li>
 							<i class="fa-asterisk text-info"></i>
 							<p>Fixed email notification field visibility in client assignment forms - field now properly displays without syntax errors.</p>
