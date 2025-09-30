@@ -186,6 +186,19 @@ jobs:
           if [ ! -f ".env.production" ]; then
             echo "Creating .env.production file from template..."
             cp .env.example .env.production
+            
+            # Set basic production environment variables
+            sed -i 's/APP_NAME=.*/APP_NAME="Talent Assessment"/' .env.production
+            sed -i 's/APP_ENV=.*/APP_ENV=production/' .env.production
+            sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env.production
+            sed -i 's/APP_URL=.*/APP_URL=https:\/\/talent.cyberworldbuilders.dev/' .env.production
+            sed -i 's/DB_HOST=.*/DB_HOST=mysql-production/' .env.production
+            sed -i 's/CACHE_DRIVER=.*/CACHE_DRIVER=redis/' .env.production
+            sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=database/' .env.production
+            sed -i 's/QUEUE_DRIVER=.*/QUEUE_DRIVER=redis/' .env.production
+            sed -i 's/REDIS_HOST=.*/REDIS_HOST=redis-production/' .env.production
+            
+            echo "Generated initial .env.production file with production settings"
           fi
           
           # Update .env.production file with secrets
@@ -221,6 +234,14 @@ jobs:
           # Clean up secrets file
           rm secrets.json
           
+          # Display final .env.production for debugging
+          echo "Final .env.production configuration:"
+          echo "DB_HOST: $(grep '^DB_HOST=' .env.production)"
+          echo "DB_DATABASE: $(grep '^DB_DATABASE=' .env.production)"
+          echo "DB_USERNAME: $(grep '^DB_USERNAME=' .env.production)"
+          echo "APP_ENV: $(grep '^APP_ENV=' .env.production)"
+          echo "APP_KEY: $(grep '^APP_KEY=' .env.production)"
+          
           # SES configuration uses IAM role-based authentication (OIDC)
           echo "SES configuration will use IAM role-based authentication"
           
@@ -241,6 +262,22 @@ jobs:
           # Check service status
           echo "Checking service status..."
           docker-compose -f docker-compose.production.yml ps
+          
+          # Wait for database to be ready
+          echo "Waiting for database to be ready..."
+          sleep 15
+          
+          # Test database connectivity
+          echo "Testing database connectivity..."
+          docker-compose -f docker-compose.production.yml exec -T app-production php -r "
+            try {
+              \$pdo = new PDO('mysql:host=mysql-production;port=3306;dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+              echo 'Database connection successful\n';
+            } catch (Exception \$e) {
+              echo 'Database connection failed: ' . \$e->getMessage() . '\n';
+              exit(1);
+            }
+          " || echo "Database connectivity test failed, but continuing..."
           
           # Generate APP_KEY using Laravel artisan command
           echo "Generating APP_KEY using Laravel artisan..."
