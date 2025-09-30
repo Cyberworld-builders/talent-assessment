@@ -105,22 +105,21 @@
                 </div>
                 @endif
 
-                @if (! $edit)
-                    {{-- Send Email --}}
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {!! Form::label('send-email', 'Email Notification', ['class' => 'control-label']) !!}
-                                <p class="small text-muted">Users with a valid email address will receive a notification for this assessment.</p>
-                            </div>
-                            <div class="col-sm-8">
-                                {!! Form::select('send-email', [
-                                    0 => 'No',
-                                    1 => 'Yes',
-                                ], 0, ['class' => 'form-control input-lg']) !!}
-                            </div>
+                {{-- Send Email --}}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {!! Form::label('send-email', 'Email Notification', ['class' => 'control-label']) !!}
+                            <p class="small text-muted">Users with a valid email address will receive a notification for this assessment.</p>
+                        </div>
+                        <div class="col-sm-8">
+                            {!! Form::select('send-email', [
+                                0 => 'No',
+                                1 => 'Yes',
+                            ], 0, ['class' => 'form-control input-lg']) !!}
                         </div>
                     </div>
+                </div>
 
                     {{-- Email Preview Window --}}
                     <div class="field-email" style="display: none;">
