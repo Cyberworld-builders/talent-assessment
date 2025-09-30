@@ -191,7 +191,7 @@ jobs:
             sed -i 's/APP_NAME=.*/APP_NAME="Talent Assessment"/' .env.production
             sed -i 's/APP_ENV=.*/APP_ENV=production/' .env.production
             sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env.production
-            sed -i 's/APP_URL=.*/APP_URL=https:\/\/talent.cyberworldbuilders.dev/' .env.production
+            sed -i 's/APP_URL=.*/APP_URL=https:\/\/my.involvedtalent.com/' .env.production
             sed -i 's/DB_HOST=.*/DB_HOST=mysql-production/' .env.production
             sed -i 's/CACHE_DRIVER=.*/CACHE_DRIVER=redis/' .env.production
             sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=database/' .env.production
