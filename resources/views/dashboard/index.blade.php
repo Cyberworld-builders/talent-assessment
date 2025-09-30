@@ -50,6 +50,18 @@
 					<ul class="list-unstyled changelog">
 						<li>
 							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.29 - Assessment Assign Tab Removal:</strong> Removed the assign tab from assessments page to streamline the assignment workflow and reduce confusion.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Removed assessment assign functionality from assessments page - assignments should now be done through the dedicated assignments section.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Cleaned up routes, controller methods, and templates related to assessment assignment functionality.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-success"></i>
 							<p><strong>v1.5.28 - Infrastructure Planning & UI Fixes:</strong> Created comprehensive infrastructure plan for dedicated production environment, fixed login page logo, and improved asset management.</p>
 						</li>
 						<li>

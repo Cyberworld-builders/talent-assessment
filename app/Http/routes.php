@@ -44,7 +44,6 @@ Route::group(['middleware' => ['auth']], function()
 		Route::get('dashboard/jobs/{id}/export-users', 'ClientDashboardController@exportApplicants');
 		Route::post('dashboard/assign/add-users', 'AssignmentsController@add_users_to_assignment_from_client');
 		Route::post('dashboard/assign/add-user', 'AssignmentsController@add_user_to_assignment');
-		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@generate_assignment_for_assessment');
 
 		// Client Job Applicants
 		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants', 'JobsController@applicants');
@@ -320,8 +319,6 @@ Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
-		Route::get('dashboard/assessments/{id}/assign', 'AssessmentsController@assign');
-		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@assign_assessment');
 
 		// Assessment Dimensions
 		Route::get('dashboard/assessments/{id}/dimensions', 'DimensionsController@index');
