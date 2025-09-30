@@ -50,6 +50,42 @@
 					<ul class="list-unstyled changelog">
 						<li>
 							<i class="fa-asterisk text-success"></i>
+							<p><strong>v1.5.28 - Infrastructure Planning & UI Fixes:</strong> Created comprehensive infrastructure plan for dedicated production environment, fixed login page logo, and improved asset management.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added comprehensive infrastructure documentation and deployment planning for dedicated production environment with RDS, ECS, and ALB.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Fixed missing logo.png on login page by updating asset path from images/ to assets/images/ directory.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Added critical Docker container usage rules to .cursorrules for proper command execution.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Improved asset management by standardizing image paths and running Gulp build to compile all assets.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
+							<p>Enhanced environment variable handling and Docker container usage documentation.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-warning"></i>
+							<p>Fixed Involved360AssessmentSeeder question numbering to ensure sequential ordering for assessment input fields.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-warning"></i>
+							<p>Resolved GitHub Actions MySQL client installation issues in CI/CD pipelines.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-warning"></i>
+							<p>Fixed production and staging environment configurations and removed sensitive files from git tracking.</p>
+						</li>
+						<li>
+							<i class="fa-asterisk text-info"></i>
 							<p><strong>v1.5.25 - S3 Configuration & Minor Fixes:</strong> Standardized S3 file uploads across all environments, fixed assessment form 500 errors, and improved assignment URL generation.</p>
 						</li>
 						<li>

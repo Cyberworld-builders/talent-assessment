@@ -126,14 +126,40 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build and Push Image
+    - name: Check if Image Exists
+      id: check-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
       run: |
+        echo "Checking if image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists..."
+        if aws ecr describe-images --repository-name talent-assessment-app --image-ids imageTag=$IMAGE_TAG --region us-east-2 >/dev/null 2>&1; then
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+          echo "image_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG does not exist in ECR"
+          echo "image_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and Push Image
+      if: steps.check-image.outputs.image_exists == 'false'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Building and pushing new image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
         docker build -f Dockerfile.production -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
         docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
         echo "Image pushed: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+
+    - name: Skip Build (Image Already Exists)
+      if: steps.check-image.outputs.image_exists == 'true'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Skipping build - image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+        echo "This deployment will use the existing image, which should speed up the deployment process"
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.3
