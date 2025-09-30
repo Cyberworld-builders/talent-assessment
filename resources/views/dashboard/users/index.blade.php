@@ -143,7 +143,7 @@
                                                 {{ \App\Reseller::find($user->reseller_id)->name }}
                                             </td>
                                             <td>
-                                                @if ($user->industry)
+                                                @if ($user->industry_id && $user->industry)
                                                     {{ $user->industry->name }}
                                                 @else
                                                     ---
@@ -204,7 +204,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($user->industry)
+                                                @if ($user->industry_id && $user->industry)
                                                     {{ $user->industry->name }}
                                                 @else
                                                     ---

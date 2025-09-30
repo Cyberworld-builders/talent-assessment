@@ -19,12 +19,8 @@
                         {!! Form::text('email[]', null, ['class' => 'form-control input-lg']) !!}
                     </div>
                     <div class="col-sm-2">
-                        {!! Form::label('job_title[]', 'Job Title', ['class' => 'control-label']) !!}
-                        {!! Form::text('job_title[]', null, ['class' => 'form-control input-lg']) !!}
-                    </div>
-                    <div class="col-sm-2">
-                        {!! Form::label('job_family[]', 'Job Family', ['class' => 'control-label']) !!}
-                        {!! Form::text('job_family[]', null, ['class' => 'form-control input-lg']) !!}
+                        {!! Form::label('industry[]', 'Industry', ['class' => 'control-label']) !!}
+                        {!! Form::text('industry[]', null, ['class' => 'form-control input-lg']) !!}
                     </div>
                     <div class="col-sm-2">
                         {!! Form::label('job_id[]', 'Add To Job?', ['class' => 'control-label']) !!}

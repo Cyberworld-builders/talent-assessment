@@ -400,8 +400,13 @@ class ClientDashboardController extends Controller
 	{
 		$client = Client::findOrFail(Auth::user()->client_id);
 		$user = User::findOrFail($id);
+		$industries = Industry::orderBy('name')->get();
 
-		return view('clientdashboard.editUser', compact('client', 'user'));
+		$industriesArray = [null => 'Select Industry'];
+		foreach ($industries as $industry)
+			$industriesArray[$industry->id] = $industry->name;
+
+		return view('clientdashboard.editUser', compact('client', 'user', 'industriesArray'));
 	}
 
 	/**

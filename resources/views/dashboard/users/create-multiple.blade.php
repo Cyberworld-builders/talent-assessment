@@ -410,16 +410,57 @@
 
                         //console.log(data);
 
-                        if (data['download_link']) {
+                        console.log('Form submission response:', data);
+                        
+                        // Clear any existing alerts
+                        $('.alert').remove();
+                        
+                        if (data.success && data.count > 0) {
                             var link = data['download_link'];
                             var count = data['count'];
-                            //$('#save').before('<a class="btn btn-black" target="_blank" href="'+link+'"><i class="fa-download"></i> Download Generated Users</a>');
-                            $('.page-title').after('<div class="row"><div class="alert alert-white"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>'+count+' Users Generated!</strong> <a href="'+link+'">Download Excel file of generated users.</a></div></div>');
+                            var alertClass = 'alert-success';
+                            var message = '<strong>Success!</strong> ' + count + ' users were created successfully.';
+                            
+                            if (link) {
+                                message += ' <a href="' + link + '" class="btn btn-sm btn-primary">Download Generated Users</a>';
+                            }
+                            
+                            $('.page-title').after('<div class="row"><div class="alert ' + alertClass + '"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + message + '</div></div>');
+                        }
+                        
+                        // Show errors if any
+                        if (data.errors && data.errors.length > 0) {
+                            var errorMessage = '<strong>Errors:</strong><ul>';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                errorMessage += '<li>' + data.errors[i] + '</li>';
+                            }
+                            errorMessage += '</ul>';
+                            
+                            $('.page-title').after('<div class="row"><div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + errorMessage + '</div></div>');
+                        }
+                        
+                        // If no users were created and no errors, show generic message
+                        if (!data.success && (!data.errors || data.errors.length === 0)) {
+                            $('.page-title').after('<div class="row"><div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>Warning:</strong> No users were created. Please check your data and try again.</div></div>');
                         }
                     },
-                    error: function (data) {
-                        console.log(data.status + ' ' + data.statusText);
-                        $('html').prepend(data.responseText);
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response:', xhr.responseText);
+                        
+                        // Clear any existing alerts
+                        $('.alert').remove();
+                        
+                        var errorMessage = '<strong>Error:</strong> Unable to process the request. ';
+                        if (xhr.status === 422) {
+                            errorMessage += 'Please check your data and try again.';
+                        } else if (xhr.status === 500) {
+                            errorMessage += 'Server error occurred. Please try again later.';
+                        } else {
+                            errorMessage += 'Please try again.';
+                        }
+                        
+                        $('.page-title').after('<div class="row"><div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + errorMessage + '</div></div>');
                     }
                 });
             });

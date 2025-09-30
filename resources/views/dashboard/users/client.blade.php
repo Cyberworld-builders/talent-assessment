@@ -69,6 +69,7 @@
                             <th>Name and Role</th>
                             <th>Username</th>
                             <th class="hidden-xs hidden-sm">E-mail</th>
+                            <th>Industry</th>
                             {{--<th>Users</th>--}}
                             <th>Settings</th>
                         </tr>
@@ -96,6 +97,13 @@
                             <td class="hidden-xs hidden-sm">
                                 @if ($user->email)
                                     <span class="email">{{ $user->email }}</span>
+                                @else
+                                    ---
+                                @endif
+                            </td>
+                            <td>
+                                @if ($user->industry_id && $user->industry)
+                                    {{ $user->industry->name }}
                                 @else
                                     ---
                                 @endif
