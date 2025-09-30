@@ -50,7 +50,31 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
-                <p><strong>v1.5.36 - Groups CSV Upload UI Fixes:</strong> Fixed groups CSV upload UI refresh issues and resolved edit functionality errors.</p>
+                <p><strong>v1.5.36 - Major Functionality Restoration & Error Handling:</strong> Comprehensive fixes for CSV uploads, user management, and download functionality with enhanced error handling throughout the system.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed user CSV upload industry field population by updating JavaScript to properly populate industry field after CSV upload.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Replaced Excel library with native CSV generation for user downloads to resolve PHP 7.4+ compatibility issues.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added comprehensive error handling for user creation with specific database error messages, industry validation, and email format validation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced frontend error display with structured error messages, success notifications, and graceful AJAX error handling.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated user management system to replace Job Title/Job Family fields with Industry field throughout all interfaces.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed groups CSV upload UI refresh issues and resolved edit functionality errors.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-info"></i>
