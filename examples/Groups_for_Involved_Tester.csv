@@ -1,6 +1,11 @@
 Target Name,Target Email,Name,Email,Role
-Mickie Mouse,jeraewallace@yahoo.com,Craig Wallace,jcraigwallace@gmail.com,subordinate
-Mickie Mouse,jeraewallace@yahoo.com,Jerae Wallace,ljeraewallace@gmail.com,subordinate
-Iron Man,jcraigwallace@yahoo.com,Goofy NLN,cw74@clemson.edu,supervisor
-Iron Man,jcraigwallace@yahoo.com,Don Duck,j.craig.wallace@me.com,peer
-Iron Man,jcraigwallace@yahoo.com,Iron Man,jcraigwallace@yahoo.com,self
+Dietrich,dietrich@cyberworldbuilders.dev,Frost,frost@cyberworldbuilders.dev,subordinate
+Dietrich,dietrich@cyberworldbuilders.dev,Hicks,hicks@cyberworldbuilders.dev,peer
+Dietrich,dietrich@cyberworldbuilders.dev,Hudson,hudson@cyberworldbuilders.dev,subordinate
+Dietrich,dietrich@cyberworldbuilders.dev,Dietrich,dietrich@cyberworldbuilders.dev,self
+Vasquez,vasquez@cyberworldbuilders.dev,Drake,drake@cyberworldbuilders.dev,peer
+Vasquez,vasquez@cyberworldbuilders.dev,Ferro,ferro@cyberworldbuilders.dev,subordinate
+Vasquez,vasquez@cyberworldbuilders.dev,Spunkmeyer,spunkmeyer@cyberworldbuilders.dev,subordinate
+Vasquez,vasquez@cyberworldbuilders.dev,Vasquez,vasquez@cyberworldbuilders.dev,self
+Crowe,crowe@cyberworldbuilders.dev,Wierzbowski,wierzbowski@cyberworldbuilders.dev,peer
+Crowe,crowe@cyberworldbuilders.dev,Crowe,crowe@cyberworldbuilders.dev,self

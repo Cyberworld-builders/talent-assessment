@@ -285,7 +285,7 @@ class GroupsController extends Controller
 	{
 		$client = Client::findOrFail($id);
 		$data = $request->all();
-		$users = [];
+		$groups = [];
 
 		$validator = Validator::make($data, [
 			'file' => 'required|mimes:csv,txt'
@@ -322,8 +322,10 @@ class GroupsController extends Controller
 		// Debug: Log header information
 		\Log::info('Groups CSV Header', ['header' => $header]);
 
-		// Process each data row
+		// Process each data row and group by target
 		$rowCount = 0;
+		$targetGroups = [];
+		
 		while (($row = fgetcsv($handle)) !== false) {
 			$rowCount++;
 			\Log::info("Processing groups row $rowCount", ['row' => $row]);
@@ -338,14 +340,25 @@ class GroupsController extends Controller
 			$rowData = array_combine($header, $row);
 			
 			// Handle different CSV formats
+			$groupName = '';
 			$targetName = '';
 			$targetEmail = '';
 			$userName = '';
 			$userEmail = '';
 			$userRole = '';
 			
-			// Check if this is the standard format (Target Name, Target Email, Name, Email, Role)
-			if (isset($rowData['Target Name']) || isset($rowData['target_name'])) {
+			// Check if this is the new format (Group Name, Target Name, Target Email, Name, Email, Role)
+			if (isset($rowData['Group Name']) || isset($rowData['group_name'])) {
+				$groupName = isset($rowData['Group Name']) ? $rowData['Group Name'] : (isset($rowData['group_name']) ? $rowData['group_name'] : '');
+				$targetName = isset($rowData['Target Name']) ? $rowData['Target Name'] : (isset($rowData['target_name']) ? $rowData['target_name'] : '');
+				$targetEmail = isset($rowData['Target Email']) ? trim($rowData['Target Email']) : (isset($rowData['target_email']) ? trim($rowData['target_email']) : '');
+				$userName = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+				$userEmail = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+				$userRole = isset($rowData['Role']) ? $rowData['Role'] : (isset($rowData['role']) ? $rowData['role'] : '');
+			}
+			// Handle old format (Target Name, Target Email, Name, Email, Role)
+			elseif (isset($rowData['Target Name']) || isset($rowData['target_name'])) {
+				$groupName = ''; // Will be generated from target name
 				$targetName = isset($rowData['Target Name']) ? $rowData['Target Name'] : (isset($rowData['target_name']) ? $rowData['target_name'] : '');
 				$targetEmail = isset($rowData['Target Email']) ? trim($rowData['Target Email']) : (isset($rowData['target_email']) ? trim($rowData['target_email']) : '');
 				$userName = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
@@ -354,6 +367,7 @@ class GroupsController extends Controller
 			}
 			// Handle alternative column names
 			else {
+				$groupName = isset($rowData['GroupName']) ? $rowData['GroupName'] : (isset($rowData['groupName']) ? $rowData['groupName'] : '');
 				$targetName = isset($rowData['TargetName']) ? $rowData['TargetName'] : (isset($rowData['targetName']) ? $rowData['targetName'] : '');
 				$targetEmail = isset($rowData['TargetEmail']) ? trim($rowData['TargetEmail']) : (isset($rowData['targetEmail']) ? trim($rowData['targetEmail']) : '');
 				$userName = isset($rowData['UserName']) ? $rowData['UserName'] : (isset($rowData['userName']) ? $rowData['userName'] : '');
@@ -391,17 +405,28 @@ class GroupsController extends Controller
 				])->first();
 			}
 
-			// If we have both user and target, add to results
+			// If we have both user and target, add to target groups
 			if ($user && $target) {
-				array_push($users, [
+				$targetKey = $target->id;
+				
+				if (!isset($targetGroups[$targetKey])) {
+					// Generate group name if not provided (old format)
+					$generatedGroupName = $groupName ?: $target->name . ' Rating Group';
+					$targetGroups[$targetKey] = [
+						'target' => $target,
+						'group_name' => $generatedGroupName,
+						'users' => []
+					];
+				}
+				
+				$targetGroups[$targetKey]['users'][] = [
 					'id' => $user->id,
 					'name' => $user->name,
 					'email' => $user->email,
 					'role' => $userRole,
-					'target_id' => $target->id,
-					'target_name' => $target->name,
-					'target_email' => $target->email,
-				]);
+					'position' => $userRole,
+					'leader' => 0
+				];
 			} else {
 				\Log::info("Skipping groups row $rowCount - user or target not found", [
 					'user_found' => $user ? true : false,
@@ -416,13 +441,34 @@ class GroupsController extends Controller
 
 		fclose($handle);
 
+		// Now create the actual groups
+		$createdGroups = [];
+		foreach ($targetGroups as $targetId => $groupData) {
+			$group = new Group([
+				'name' => $groupData['group_name'],
+				'description' => 'CSV imported group for ' . $groupData['target']->name,
+				'users' => $groupData['users'],
+			]);
+			
+			$group->target_id = $targetId;
+			$client->groups()->save($group);
+			
+			$createdGroups[] = [
+				'id' => $group->id,
+				'name' => $group->name,
+				'target_name' => $groupData['target']->name,
+				'target_email' => $groupData['target']->email,
+				'users_count' => count($groupData['users'])
+			];
+		}
+
 		\Log::info('Groups CSV Upload Complete', [
 			'total_rows_processed' => $rowCount,
-			'users_found' => count($users),
-			'users' => $users
+			'groups_created' => count($createdGroups),
+			'groups' => $createdGroups
 		]);
 
-		return \Response::json(['users' => $users]);
+		return \Response::json(['groups' => $createdGroups]);
 	}
 
 	/**
@@ -440,8 +486,8 @@ class GroupsController extends Controller
 		$callback = function() {
 			$file = fopen('php://output', 'w');
 			
-			// Write header row
-			fputcsv($file, ['Target Name', 'Target Email', 'Name', 'Email', 'Role']);
+			// Write header row with group name field
+			fputcsv($file, ['Group Name', 'Target Name', 'Target Email', 'Name', 'Email', 'Role']);
 			
 			fclose($file);
 		};
@@ -488,7 +534,7 @@ class GroupsController extends Controller
         foreach ($groupRoles as $role)
             $groupRolesArray[$role->id] = $role->name;
 
-        return view('dashboard.groups.edit', compact('group', 'client', 'users', 'usersArray', 'groupUsers', 'groupRolesArray', 'targetsArray'));
+        return view('dashboard.groups.edit', compact('group', 'client', 'users', 'usersArray', 'groupRolesArray', 'targetsArray'));
     }
 
     /**

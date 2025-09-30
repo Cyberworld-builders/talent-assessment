@@ -50,6 +50,26 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.36 - Groups CSV Upload UI Fixes:</strong> Fixed groups CSV upload UI refresh issues and resolved edit functionality errors.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed JavaScript error preventing page refresh after successful groups CSV upload by removing undefined 'opts' variable.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced groups CSV upload success callback with proper console logging and page reload functionality.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed groups edit functionality by removing undefined 'groupUsers' variable from compact() function.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated groups CSV upload to handle both old format (without Group Name) and new format (with Group Name) seamlessly.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.35 - Groups CSV Upload Enhancement:</strong> Converted groups bulk upload from Excel to CSV format with template downloads and enhanced processing capabilities.</p>
             </li>
             <li>
