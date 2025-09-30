@@ -283,6 +283,17 @@ jobs:
           echo "Generating APP_KEY using Laravel artisan..."
           docker-compose -f docker-compose.production.yml exec -T app-production php artisan key:generate
           
+          # Extract the generated APP_KEY and update .env.production file
+          echo "Extracting generated APP_KEY and updating .env.production..."
+          # Read the APP_KEY from the container's environment and update the file
+          GENERATED_KEY=$(docker-compose -f docker-compose.production.yml exec -T app-production printenv APP_KEY 2>/dev/null || echo "")
+          if [ -n "$GENERATED_KEY" ]; then
+            sed -i "s|APP_KEY=.*|APP_KEY=$GENERATED_KEY|" .env.production
+            echo "Updated .env.production with generated APP_KEY: ${GENERATED_KEY:0:20}..."
+          else
+            echo "Warning: Could not extract generated APP_KEY from container environment"
+          fi
+          
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."
           docker system prune -a -f || echo "Docker cleanup failed, continuing..."
