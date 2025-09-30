@@ -99,6 +99,12 @@ jobs:
           echo "Fetching secrets from AWS Secrets Manager..."
           aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > secrets.json
           
+          # Create .env.staging file if it doesn't exist
+          if [ ! -f ".env.staging" ]; then
+            echo "Creating .env.staging file from template..."
+            cp .env.example .env.staging
+          fi
+          
           # Update .env.staging file with secrets
           echo "Updating .env.staging file with secrets..."
           sed -i "s/DB_DATABASE=.*/DB_DATABASE=$(jq -r '.STAGING_DB_DATABASE' secrets.json)/" .env.staging
