@@ -48,6 +48,12 @@ class GroupsController extends Controller
 		$targetsArray = User::getSelectFormattedArrayForClient($client->id);
 		$targetsArray = [0 => 'None'] + $targetsArray;
 
+        // Get group roles for the client
+        $groupRoles = $client->groupRoles;
+        $groupRolesArray = [];
+        foreach ($groupRoles as $role)
+            $groupRolesArray[$role->id] = $role->name;
+
         return view('dashboard.groups.create', compact('client', 'users', 'usersArray', 'groupRolesArray', 'targetsArray'));
     }
 
@@ -301,6 +307,12 @@ class GroupsController extends Controller
 
 		$targetsArray = User::getSelectFormattedArrayForClient($client->id);
 		$targetsArray = [0 => 'None'] + $targetsArray;
+
+        // Get group roles for the client
+        $groupRoles = $client->groupRoles;
+        $groupRolesArray = [];
+        foreach ($groupRoles as $role)
+            $groupRolesArray[$role->id] = $role->name;
 
         return view('dashboard.groups.edit', compact('group', 'client', 'users', 'usersArray', 'groupUsers', 'groupRolesArray', 'targetsArray'));
     }
