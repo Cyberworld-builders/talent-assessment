@@ -688,9 +688,19 @@ class UsersController extends Controller
             return \Response::json(['errors' => 'File must be a valid .csv file format.']);
 
         $file = $data['file'];
+        
+        // Debug: Log file information
+        \Log::info('CSV Upload Debug', [
+            'file_name' => $file->getClientOriginalName(),
+            'file_size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'temp_path' => $file->getPathname()
+        ]);
+        
         $handle = fopen($file->getPathname(), 'r');
         
         if ($handle === false) {
+            \Log::error('Could not open uploaded file');
             return \Response::json(['errors' => 'Could not read the uploaded file.']);
         }
 
@@ -698,13 +708,22 @@ class UsersController extends Controller
         $header = fgetcsv($handle);
         if ($header === false) {
             fclose($handle);
+            \Log::error('Could not read header row from CSV');
             return \Response::json(['errors' => 'Could not read the header row from the CSV file.']);
         }
+        
+        // Debug: Log header information
+        \Log::info('CSV Header', ['header' => $header]);
 
         // Process each data row
+        $rowCount = 0;
         while (($row = fgetcsv($handle)) !== false) {
+            $rowCount++;
+            \Log::info("Processing row $rowCount", ['row' => $row]);
+            
             // Skip empty rows (rows with all empty values)
             if (empty(array_filter($row, function($value) { return !empty(trim($value)); }))) {
+                \Log::info("Skipping empty row $rowCount");
                 continue;
             }
             
@@ -743,6 +762,12 @@ class UsersController extends Controller
         }
 
         fclose($handle);
+
+        \Log::info('CSV Upload Complete', [
+            'total_rows_processed' => $rowCount,
+            'users_found' => count($users),
+            'users' => $users
+        ]);
 
         return \Response::json(['users' => $users]);
     }
