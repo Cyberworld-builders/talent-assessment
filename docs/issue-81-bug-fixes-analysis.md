@@ -144,6 +144,19 @@ This document provides a detailed analysis and implementation plan for the compr
    - ✅ Added comprehensive error handling
    - ✅ Improved user experience with better error messages
 
+### Phase 4: Assessment Editing Fixes (Week 4) ✅ **COMPLETED**
+1. **✅ COMPLETED - Fix Assessment Dimension Consistency**
+   - ✅ Fixed dimension selection inconsistency in assessment editor
+   - ✅ Updated AssessmentsController to load only assessment-specific dimensions
+   - ✅ Ensured input field options match dimensions tab display
+   - **Result**: Assessment editor now shows consistent dimension options
+
+2. **✅ COMPLETED - Fix Child Dimension Parent Relationships**
+   - ✅ Fixed child dimensions not maintaining parent relationship on save
+   - ✅ Corrected logic in DimensionsController for proper parent-child handling
+   - ✅ Fixed boolean logic for sub-dimension field processing
+   - **Result**: Child dimensions now properly maintain their parent relationships
+
 ## Technical Investigation Checklist
 
 ### Error Logging & Debugging
@@ -210,6 +223,10 @@ This document provides a detailed analysis and implementation plan for the compr
   - Download functionality fixed (Excel → CSV)
   - Comprehensive error handling added
 - [x] All "Whoops" errors eliminated ✅ **COMPLETED**
+- [x] Assessment editing functionality restored ✅ **COMPLETED**
+  - Dimension consistency fixed
+  - Child dimension parent relationships working
+  - Assessment editor fully functional
 
 ## Notes & Considerations
 
@@ -230,8 +247,8 @@ This document provides a detailed analysis and implementation plan for the compr
 
 ---
 
-**Last Updated**: September 30, 2025  
-**Status**: Phase 1-3 Complete - Major Functionality Restored  
+**Last Updated**: October 1, 2025  
+**Status**: Phase 1-4 Complete - Major Functionality Restored + Assessment Editing Fixed  
 **Next Steps**: Investigate Assessment Access After Email issue
 
 ## Recent Progress Summary (v1.5.36)
@@ -251,10 +268,36 @@ This document provides a detailed analysis and implementation plan for the compr
 4. **Test Coverage** - Added comprehensive test coverage for assignment forms
 5. **Deployment Optimization** - Improved staging deployment workflow
 
+### ✅ **COMPLETED IN v1.5.37**
+1. **Reports Functionality Fixes** - Added null checks to Report model's getModelAttribute() and getModelFactorsAttribute() methods
+2. **Assignment Flow JavaScript Fixes** - Fixed "Uncaught ReferenceError: $modal is not defined" errors in assignment forms
+3. **Language Selection Enhancement** - Auto-default to English and skip language selection page
+4. **Template Fixes** - Fixed _cover.blade.php template with proper variable scoping and null checks
+
+### ✅ **COMPLETED IN v1.5.39**
+1. **Assessment Dimension Consistency Fix** - Fixed dimension selection inconsistency in assessment editor
+   - **Issue**: Input fields showed all dimensions instead of assessment-specific ones
+   - **Solution**: Updated AssessmentsController.edit() to use `Dimension::where('assessment_id', $id)->get()` instead of `Dimension::all()`
+   - **Files modified**: `app/Http/Controllers/AssessmentsController.php`
+   - **Result**: Input field dimension options now match what's shown in dimensions tab
+
+2. **Child Dimension Parent Relationship Fix** - Fixed child dimensions not maintaining parent relationship on save
+   - **Issue**: Child dimensions were losing their parent relationship when saved
+   - **Solution**: Fixed logic in DimensionsController.store() and update() methods
+   - **Root cause**: Incorrect condition `if (! $data['is_sub'] || $data['parent'] == 0)` was setting parent to 0 even for sub-dimensions
+   - **Fix**: Changed to `if (! $data['is_sub'])` to only set parent=0 when not a sub-dimension
+   - **Files modified**: `app/Http/Controllers/DimensionsController.php`
+   - **Result**: Child dimensions now properly maintain their parent relationship on save
+
+3. **Controller Logic Improvements** - Updated AssessmentsController and DimensionsController for proper dimension handling
+   - **Enhancement**: Improved dimension loading logic for better consistency
+   - **Files modified**: Both controllers updated for proper dimension relationship handling
+   - **Result**: Assessment editing workflow now works correctly with proper dimension relationships
+
 ### 🔄 **REMAINING ISSUES**
 1. **Assessment Access After Email** - Users still cannot access assigned assessments (requires investigation)
 
 ### 📊 **PROGRESS METRICS**
 - **Critical Issues**: 4/5 completed (80%)
-- **Enhancements**: 4/4 completed (100%)
-- **Overall Progress**: Major functionality restored - CSV uploads, group management, and user management now fully operational
+- **Enhancements**: 6/6 completed (100%)
+- **Overall Progress**: Major functionality restored - CSV uploads, group management, user management, reports, and assessment editing now fully operational
