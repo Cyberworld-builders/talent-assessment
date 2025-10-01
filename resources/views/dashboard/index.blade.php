@@ -50,6 +50,18 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.39 - Assessment Dimension Consistency Fix:</strong> Fixed dimension selection inconsistency in assessment editor where input fields showed all dimensions instead of assessment-specific ones.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated AssessmentsController.edit() method to load only dimensions belonging to the specific assessment being edited, ensuring consistency between dimensions tab and input field options.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Resolved discrepancy where assessment input fields displayed a more complete list of dimensions than what was shown in the assessment's dimensions tab.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.37 - Reports & Assignment Flow Fixes:</strong> Resolved critical JavaScript errors in assignment forms and reports functionality with enhanced user experience improvements.</p>
             </li>
             <li>

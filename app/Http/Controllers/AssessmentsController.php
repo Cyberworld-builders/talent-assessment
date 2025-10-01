@@ -169,10 +169,10 @@ class AssessmentsController extends Controller
 	 * @param $id
 	 * @return View
 	 */
-	public function edit($id)
+    public function edit($id)
     {
     	$assessment = Assessment::findOrFail($id);
-        $dimensions = Dimension::all();
+        $dimensions = Dimension::where('assessment_id', $id)->get();
 //		$unsorted_questions = $assessment->questions->toArray();
 
 		// Edit the questions and resort them
