@@ -70,7 +70,7 @@
 					@if (session('reseller'))
 						<h2 style="font-size: 22px; margin: 15px 0;">{{ session('reseller')->name }}</h2>
 					@else
-						<img src="{{ asset('images') }}/logo-white.png" style="max-width:200px;" /><br/><br/><br/>
+						<img src="{{ asset('assets/images/logo-white.png') }}" style="max-width:200px;" /><br/><br/><br/>
 					@endif
 				</a>
 

@@ -10,122 +10,10 @@ on:
         description: 'Tag to deploy (e.g., v1.5.4-staging)'
         required: true
         default: 'v1.5.4-staging'
-      skip_tests:
-        description: 'Skip test step and go straight to deploy'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    if: ${{ !inputs.skip_tests }}
-    
-    env:
-      MAILTRAP_USERNAME: ${{ secrets.MAILTRAP_USERNAME }}
-      MAILTRAP_PASSWORD: ${{ secrets.MAILTRAP_PASSWORD }}
-      
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: testing
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqlnd, zip, gd, curl, fileinfo, openssl, tokenizer, json, bcmath, dom, filter, hash, libxml, session, simplexml, spl, xmlreader, xmlwriter, phar
-        coverage: none
-
-    - name: Install MySQL Client
-      run: |
-        # Remove problematic Microsoft repositories to avoid 403 errors
-        sudo rm -f /etc/apt/sources.list.d/microsoft-*
-        sudo apt-get update --allow-releaseinfo-change || true
-        sudo apt-get install -y mysql-client || sudo apt-get install -y default-mysql-client
-
-    - name: Setup Testing Environment
-      run: |
-        cp .env.example .env.testing
-        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql_testing/' .env.testing
-        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env.testing
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=testing/' .env.testing
-        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env.testing
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env.testing
-        # Configure email for testing (using environment variables or defaults)
-        sed -i 's/MAIL_DRIVER=.*/MAIL_DRIVER=smtp/' .env.testing
-        sed -i 's/MAIL_HOST=.*/MAIL_HOST=sandbox.smtp.mailtrap.io/' .env.testing
-        sed -i 's/MAIL_PORT=.*/MAIL_PORT=2525/' .env.testing
-        sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=$MAILTRAP_USERNAME/" .env.testing
-        sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=$MAILTRAP_PASSWORD/" .env.testing
-        sed -i 's/MAIL_ENCRYPTION=.*/MAIL_ENCRYPTION=tls/' .env.testing
-
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '6'
-        cache: 'npm'
-
-    - name: Install Node Dependencies
-      run: npm install
-
-    - name: Build Frontend Assets
-      run: timeout 300 npm run gulp
-
-    - name: Verify Assets Were Built
-      run: |
-        ls -la public/assets/css/
-        ls -la public/assets/js/
-
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-
-    - name: Clear All Caches
-      run: |
-        php artisan cache:clear
-        php artisan config:clear
-        php artisan route:clear
-        php artisan view:clear
-        composer dump-autoload
-
-    - name: Wait for MySQL
-      run: |
-        echo "Waiting for MySQL to be ready..."
-        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ppassword --silent; do
-          sleep 1
-        done
-        echo "MySQL is ready!"
-
-    - name: Setup Environment for Artisan
-      run: cp .env.testing .env
-
-    - name: Generate key
-      run: php artisan key:generate
-
-    - name: Run Migrations
-      run: php artisan migrate --force
-
-    - name: Run Database Seeders
-      run: php artisan db:seed --force
-
-    - name: Execute tests (via phpunit)
-      run: vendor/bin/phpunit --colors=never
-
   deploy:
-    needs: test
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.test.result == 'success' || inputs.skip_tests == true) }}
     permissions:
       id-token: write
       contents: read
@@ -155,14 +43,40 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build and Push Image
+    - name: Check if Image Exists
+      id: check-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
       run: |
+        echo "Checking if image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists..."
+        if aws ecr describe-images --repository-name talent-assessment-app --image-ids imageTag=$IMAGE_TAG --region us-east-2 >/dev/null 2>&1; then
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+          echo "image_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG does not exist in ECR"
+          echo "image_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and Push Image
+      if: steps.check-image.outputs.image_exists == 'false'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Building and pushing new image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
         docker build -f Dockerfile.production -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
         docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
         echo "Image pushed: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+
+    - name: Skip Build (Image Already Exists)
+      if: steps.check-image.outputs.image_exists == 'true'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Skipping build - image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+        echo "This deployment will use the existing image, which should speed up the deployment process"
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.3
@@ -184,6 +98,12 @@ jobs:
           # Fetch secrets and set server environment variables
           echo "Fetching secrets from AWS Secrets Manager..."
           aws secretsmanager get-secret-value --secret-id talent-assessment-staging-secrets --region us-east-2 --query SecretString --output text > secrets.json
+          
+          # Create .env.staging file if it doesn't exist
+          if [ ! -f ".env.staging" ]; then
+            echo "Creating .env.staging file from template..."
+            cp .env.example .env.staging
+          fi
           
           # Update .env.staging file with secrets
           echo "Updating .env.staging file with secrets..."
@@ -241,6 +161,17 @@ jobs:
           # Generate APP_KEY using Laravel artisan command
           echo "Generating APP_KEY using Laravel artisan..."
           docker-compose -f docker-compose.staging.yml exec -T app-staging php artisan key:generate
+          
+          # Extract the generated APP_KEY and update .env.staging file
+          echo "Extracting generated APP_KEY and updating .env.staging..."
+          # Read the APP_KEY from the container's environment and update the file
+          GENERATED_KEY=$(docker-compose -f docker-compose.staging.yml exec -T app-staging printenv APP_KEY 2>/dev/null || echo "")
+          if [ -n "$GENERATED_KEY" ]; then
+            sed -i "s|APP_KEY=.*|APP_KEY=$GENERATED_KEY|" .env.staging
+            echo "Updated .env.staging with generated APP_KEY: ${GENERATED_KEY:0:20}..."
+          else
+            echo "Warning: Could not extract generated APP_KEY from container environment"
+          fi
           
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."

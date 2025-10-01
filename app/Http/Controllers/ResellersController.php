@@ -613,7 +613,12 @@ class ResellersController extends Controller
 		foreach ($clients as $client)
 			$clientsArray[$client->id] = $client->name;
 
-		return view('dashboard.users.edit', compact('reseller', 'user', 'rolesArray', 'clientsArray'));
+		$industries = Industry::orderBy('name')->get();
+		$industriesArray = [null => 'Select Industry'];
+		foreach ($industries as $industry)
+			$industriesArray[$industry->id] = $industry->name;
+
+		return view('dashboard.users.edit', compact('reseller', 'user', 'rolesArray', 'clientsArray', 'industriesArray'));
 	}
 
 	/**

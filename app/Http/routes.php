@@ -44,7 +44,6 @@ Route::group(['middleware' => ['auth']], function()
 		Route::get('dashboard/jobs/{id}/export-users', 'ClientDashboardController@exportApplicants');
 		Route::post('dashboard/assign/add-users', 'AssignmentsController@add_users_to_assignment_from_client');
 		Route::post('dashboard/assign/add-user', 'AssignmentsController@add_user_to_assignment');
-		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@generate_assignment_for_assessment');
 
 		// Client Job Applicants
 		Route::get('dashboard/clients/{id}/jobs/{jobId}/applicants', 'JobsController@applicants');
@@ -109,6 +108,8 @@ Route::group(['middleware' => ['auth']], function()
 
 		// Users
 		Route::get('dashboard/users/{id}/auth', 'UsersController@auth');
+		Route::get('dashboard/users/template', 'UsersController@download_template');
+		Route::post('dashboard/users/upload', 'UsersController@upload_from_file');
 		Route::resource('dashboard/users', 'UsersController');
 		Route::get('dashboard/users/client/{id}', 'UsersController@show_users_for_client');
 		Route::get('dashboard/users/create/{id}', 'UsersController@add_users_to_client');
@@ -150,6 +151,8 @@ Route::group(['middleware' => ['auth']], function()
 		Route::delete('dashboard/clients/{id}/groups/{groupId}', 'GroupsController@destroy');
 		Route::post('dashboard/clients/{id}/generate-groups', 'GroupsController@autoGenerateGroups');
 		Route::post('dashboard/clients/{id}/upload-groups', 'GroupsController@uploadGroups');
+		Route::post('dashboard/clients/{id}/upload-groups-csv', 'GroupsController@uploadGroupsFromCsv');
+		Route::get('dashboard/groups/template', 'GroupsController@downloadGroupsTemplate');
 
 		// Client Jobs
 		Route::get('dashboard/clients/{id}/jobs', 'JobsController@index');
@@ -320,8 +323,6 @@ Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
-		Route::get('dashboard/assessments/{id}/assign', 'AssessmentsController@assign');
-		Route::post('dashboard/assessments/{id}/assign', 'AssessmentsController@assign_assessment');
 
 		// Assessment Dimensions
 		Route::get('dashboard/assessments/{id}/dimensions', 'DimensionsController@index');

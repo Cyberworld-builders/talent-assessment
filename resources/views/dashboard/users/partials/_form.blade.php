@@ -63,27 +63,6 @@
                 </div>
             </div>
 
-            {{-- Job Title --}}
-            <div class="row">
-                <div class="col-sm-3">
-                    {!! Form::label('job_title', 'Job Title', ['class' => 'control-label']) !!}
-                    <p class="small text-muted">This user's current job title.</p>
-                </div>
-                <div class="col-sm-9">
-                    {!! Form::text('job_title', null, ['class' => 'form-control input-lg']) !!}
-                </div>
-            </div>
-
-            {{-- Job Family --}}
-            <div class="row">
-                <div class="col-sm-3">
-                    {!! Form::label('job_family', 'Job Family', ['class' => 'control-label']) !!}
-                    <p class="small text-muted">This user's job family of his current job.</p>
-                </div>
-                <div class="col-sm-9">
-                    {!! Form::text('job_family', null, ['class' => 'form-control input-lg']) !!}
-                </div>
-            </div>
 
             {{-- Password --}}
             <div class="row">
@@ -131,7 +110,7 @@
                     <p class="small text-muted">The client to which this user belongs to.</p>
                 </div>
                 <div class="col-sm-9">
-                    {!! Form::select('client_id', $clientsArray, null, ['class' => 'form-control input-lg', 'id' => 'client']) !!}
+                    {!! Form::select('client_id', $clientsArray, $user->client_id, ['class' => 'form-control input-lg', 'id' => 'client']) !!}
                 </div>
             </div>
 
@@ -213,8 +192,8 @@
                 $('#generate-new-password').show();
             }
 
-            // If Reseller or Involved Talent Admin
-            if (val == 2 || val == 1) {
+            // If Reseller
+            if (val == 2) {
                 if ($('#client').val() != null)
                     client = $('#client').val();
                 $('#client').val(null).attr('disabled', '');
@@ -231,7 +210,7 @@
             $('#password-label').after(' <span>(Auto-generated)</span>');
         }
 
-        if ($('#role').val() == 1 || $('#role').val() == 2) {
+        if ($('#role').val() == 2) {
             $('#client').val(null).attr('disabled', '');
         }
 

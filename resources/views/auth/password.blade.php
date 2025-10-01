@@ -147,7 +147,7 @@
             {!! csrf_field() !!}
 
             <div class="login-header">
-                <img src="{{ asset('images') }}/logo.png" /><br/><br/>
+                <img src="{{ asset('assets/images/logo.png') }}" /><br/><br/>
 
                 <h4>Reset Your Password</h4>
                 <p>Please enter your email to reset your password.</p>

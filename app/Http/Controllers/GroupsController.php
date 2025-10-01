@@ -48,6 +48,12 @@ class GroupsController extends Controller
 		$targetsArray = User::getSelectFormattedArrayForClient($client->id);
 		$targetsArray = [0 => 'None'] + $targetsArray;
 
+        // Get group roles for the client
+        $groupRoles = $client->groupRoles;
+        $groupRolesArray = [];
+        foreach ($groupRoles as $role)
+            $groupRolesArray[$role->id] = $role->name;
+
         return view('dashboard.groups.create', compact('client', 'users', 'usersArray', 'groupRolesArray', 'targetsArray'));
     }
 
@@ -269,6 +275,226 @@ class GroupsController extends Controller
 		return \Response::json(['users' => $users]);
 	}
 
+	/**
+	 * Upload and parse a CSV file of groups.
+	 *
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function uploadGroupsFromCsv($id, Request $request)
+	{
+		$client = Client::findOrFail($id);
+		$data = $request->all();
+		$groups = [];
+
+		$validator = Validator::make($data, [
+			'file' => 'required|mimes:csv,txt'
+		]);
+
+		if ($validator->fails())
+			return \Response::json(['errors' => 'File must be a valid .csv file format.']);
+
+		$file = $data['file'];
+		
+		// Debug: Log file information
+		\Log::info('Groups CSV Upload Debug', [
+			'file_name' => $file->getClientOriginalName(),
+			'file_size' => $file->getSize(),
+			'mime_type' => $file->getMimeType(),
+			'temp_path' => $file->getPathname()
+		]);
+		
+		$handle = fopen($file->getPathname(), 'r');
+		
+		if ($handle === false) {
+			\Log::error('Could not open uploaded groups file');
+			return \Response::json(['errors' => 'Could not read the uploaded file.']);
+		}
+
+		// Read the header row
+		$header = fgetcsv($handle);
+		if ($header === false) {
+			fclose($handle);
+			\Log::error('Could not read header row from groups CSV');
+			return \Response::json(['errors' => 'Could not read the header row from the CSV file.']);
+		}
+		
+		// Debug: Log header information
+		\Log::info('Groups CSV Header', ['header' => $header]);
+
+		// Process each data row and group by target
+		$rowCount = 0;
+		$targetGroups = [];
+		
+		while (($row = fgetcsv($handle)) !== false) {
+			$rowCount++;
+			\Log::info("Processing groups row $rowCount", ['row' => $row]);
+			
+			// Skip empty rows (rows with all empty values)
+			if (empty(array_filter($row, function($value) { return !empty(trim($value)); }))) {
+				\Log::info("Skipping empty groups row $rowCount");
+				continue;
+			}
+			
+			// Create an associative array from header and row data
+			$rowData = array_combine($header, $row);
+			
+			// Handle different CSV formats
+			$groupName = '';
+			$targetName = '';
+			$targetEmail = '';
+			$userName = '';
+			$userEmail = '';
+			$userRole = '';
+			
+			// Check if this is the new format (Group Name, Target Name, Target Email, Name, Email, Role)
+			if (isset($rowData['Group Name']) || isset($rowData['group_name'])) {
+				$groupName = isset($rowData['Group Name']) ? $rowData['Group Name'] : (isset($rowData['group_name']) ? $rowData['group_name'] : '');
+				$targetName = isset($rowData['Target Name']) ? $rowData['Target Name'] : (isset($rowData['target_name']) ? $rowData['target_name'] : '');
+				$targetEmail = isset($rowData['Target Email']) ? trim($rowData['Target Email']) : (isset($rowData['target_email']) ? trim($rowData['target_email']) : '');
+				$userName = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+				$userEmail = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+				$userRole = isset($rowData['Role']) ? $rowData['Role'] : (isset($rowData['role']) ? $rowData['role'] : '');
+			}
+			// Handle old format (Target Name, Target Email, Name, Email, Role)
+			elseif (isset($rowData['Target Name']) || isset($rowData['target_name'])) {
+				$groupName = ''; // Will be generated from target name
+				$targetName = isset($rowData['Target Name']) ? $rowData['Target Name'] : (isset($rowData['target_name']) ? $rowData['target_name'] : '');
+				$targetEmail = isset($rowData['Target Email']) ? trim($rowData['Target Email']) : (isset($rowData['target_email']) ? trim($rowData['target_email']) : '');
+				$userName = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+				$userEmail = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+				$userRole = isset($rowData['Role']) ? $rowData['Role'] : (isset($rowData['role']) ? $rowData['role'] : '');
+			}
+			// Handle alternative column names
+			else {
+				$groupName = isset($rowData['GroupName']) ? $rowData['GroupName'] : (isset($rowData['groupName']) ? $rowData['groupName'] : '');
+				$targetName = isset($rowData['TargetName']) ? $rowData['TargetName'] : (isset($rowData['targetName']) ? $rowData['targetName'] : '');
+				$targetEmail = isset($rowData['TargetEmail']) ? trim($rowData['TargetEmail']) : (isset($rowData['targetEmail']) ? trim($rowData['targetEmail']) : '');
+				$userName = isset($rowData['UserName']) ? $rowData['UserName'] : (isset($rowData['userName']) ? $rowData['userName'] : '');
+				$userEmail = isset($rowData['UserEmail']) ? trim($rowData['UserEmail']) : (isset($rowData['userEmail']) ? trim($rowData['userEmail']) : '');
+				$userRole = isset($rowData['UserRole']) ? $rowData['UserRole'] : (isset($rowData['userRole']) ? $rowData['userRole'] : '');
+			}
+
+			// Skip rows that don't have at least user name/email and target name/email
+			if ((empty(trim($userName)) && empty(trim($userEmail))) || (empty(trim($targetName)) && empty(trim($targetEmail)))) {
+				\Log::info("Skipping groups row $rowCount - missing user or target info");
+				continue;
+			}
+
+			// Find the user
+			$user = null;
+			if (!empty(trim($userEmail)) && !empty(trim($userName))) {
+				$user = User::where([
+					'email' => $userEmail,
+					'client_id' => $client->id,
+				])->orWhere([
+					'name' => $userName,
+					'client_id' => $client->id,
+				])->first();
+			}
+
+			// Find the target
+			$target = null;
+			if (!empty(trim($targetEmail)) && !empty(trim($targetName))) {
+				$target = User::where([
+					'email' => $targetEmail,
+					'client_id' => $client->id,
+				])->orWhere([
+					'name' => $targetName,
+					'client_id' => $client->id,
+				])->first();
+			}
+
+			// If we have both user and target, add to target groups
+			if ($user && $target) {
+				$targetKey = $target->id;
+				
+				if (!isset($targetGroups[$targetKey])) {
+					// Generate group name if not provided (old format)
+					$generatedGroupName = $groupName ?: $target->name . ' Rating Group';
+					$targetGroups[$targetKey] = [
+						'target' => $target,
+						'group_name' => $generatedGroupName,
+						'users' => []
+					];
+				}
+				
+				$targetGroups[$targetKey]['users'][] = [
+					'id' => $user->id,
+					'name' => $user->name,
+					'email' => $user->email,
+					'role' => $userRole,
+					'position' => $userRole,
+					'leader' => 0
+				];
+			} else {
+				\Log::info("Skipping groups row $rowCount - user or target not found", [
+					'user_found' => $user ? true : false,
+					'target_found' => $target ? true : false,
+					'user_email' => $userEmail,
+					'user_name' => $userName,
+					'target_email' => $targetEmail,
+					'target_name' => $targetName
+				]);
+			}
+		}
+
+		fclose($handle);
+
+		// Now create the actual groups
+		$createdGroups = [];
+		foreach ($targetGroups as $targetId => $groupData) {
+			$group = new Group([
+				'name' => $groupData['group_name'],
+				'description' => 'CSV imported group for ' . $groupData['target']->name,
+				'users' => $groupData['users'],
+			]);
+			
+			$group->target_id = $targetId;
+			$client->groups()->save($group);
+			
+			$createdGroups[] = [
+				'id' => $group->id,
+				'name' => $group->name,
+				'target_name' => $groupData['target']->name,
+				'target_email' => $groupData['target']->email,
+				'users_count' => count($groupData['users'])
+			];
+		}
+
+		\Log::info('Groups CSV Upload Complete', [
+			'total_rows_processed' => $rowCount,
+			'groups_created' => count($createdGroups),
+			'groups' => $createdGroups
+		]);
+
+		return \Response::json(['groups' => $createdGroups]);
+	}
+
+	/**
+	 * Download a CSV template for groups bulk upload.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function downloadGroupsTemplate()
+	{
+		$headers = [
+			'Content-Type' => 'text/csv',
+			'Content-Disposition' => 'attachment; filename="groups_upload_template.csv"',
+		];
+
+		$callback = function() {
+			$file = fopen('php://output', 'w');
+			
+			// Write header row with group name field
+			fputcsv($file, ['Group Name', 'Target Name', 'Target Email', 'Name', 'Email', 'Role']);
+			
+			fclose($file);
+		};
+
+		return response()->stream($callback, 200, $headers);
+	}
+
     /**
      * Display the specified resource.
      *
@@ -302,7 +528,13 @@ class GroupsController extends Controller
 		$targetsArray = User::getSelectFormattedArrayForClient($client->id);
 		$targetsArray = [0 => 'None'] + $targetsArray;
 
-        return view('dashboard.groups.edit', compact('group', 'client', 'users', 'usersArray', 'groupUsers', 'groupRolesArray', 'targetsArray'));
+        // Get group roles for the client
+        $groupRoles = $client->groupRoles;
+        $groupRolesArray = [];
+        foreach ($groupRoles as $role)
+            $groupRolesArray[$role->id] = $role->name;
+
+        return view('dashboard.groups.edit', compact('group', 'client', 'users', 'usersArray', 'groupRolesArray', 'targetsArray'));
     }
 
     /**

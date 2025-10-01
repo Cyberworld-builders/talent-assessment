@@ -99,28 +99,25 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="well" style="overflow: hidden;">
+                    <div class="well">
                         <p>
-                            Upload a spreadsheet of custom groupings for faster entry.
+                            Upload a CSV file of groups for faster entry. The first row in the CSV file will be counted as the header.
+                            Please make sure you have <b>Group Name</b>, <b>Target Name</b>, <b>Target Email</b>, <b>Name</b>, <b>Email</b>, and <b>Role</b> as column headers in your first row.
+                            Accepted file types: <b>.csv</b>
                         </p>
                         <p>
-                            Structure your excel document in the following manner: The first row in the spreadsheet will be counted as the header. Please make sure you have <b>Target Name</b>, <b>Target Email</b>, <b>Name</b>, <b>Email</b>, and <b>Role</b> as column headers in your first row, in that specific order.
-                        </p>
-                        <p>
-                            <img class="img" src="https://s3-us-west-2.amazonaws.com/aoe-uploads/images/import_targets_sample.png" /><br/>
-                            Refer to this image when structuring your spreadsheet file.
-                        </p>
-                        <p>
-                            Accepted file types: <b>.xls</b>, <b>.xlsx</b>
+                            <a href="/dashboard/groups/template" class="btn btn-sm btn-info">
+                                <i class="fa fa-download"></i> Download CSV Template
+                            </a>
+                            <small class="text-muted">Download a blank template with the correct headers</small>
                         </p>
                     </div>
-                    {{-- The Url on the form doesn't do anything, the upload button callback queries another url via ajax --}}
-                    {{--{!! Form::open(['url' => 'dashboard/assessments/import/', 'files' => true, 'id' => 'uploadform']) !!}--}}
-                    {!! Form::file('file', ['id' => 'file']) !!}
-                    {{--{!! Form::close() !!}--}}
+                    {!! Form::open(['url' => 'dashboard/clients/'.$client->id.'/upload-groups-csv', 'files' => true, 'id' => 'uploadform']) !!}
+                        {!! Form::file('file', ['id' => 'file']) !!}
+                    {!! Form::close() !!}
                     <br/>
                     <div class="progress progress-striped active">
-                        <div id="progress-bar" class="progress-bar progress-bar-success"></div>
+                        <div id="progress-bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
                     </div>
                     <div id="progress-text"></div>
                 </div>
@@ -152,7 +149,7 @@
                     form.submit();
             });
 
-            // Import Targets From Excel
+            // Import Groups From CSV
             $('#import-groups').on('click', function(){
                 $modal = $('#modal-import');
                 $modal.modal('show').on('click', '#upload', function()
@@ -160,7 +157,7 @@
                     var inputElement = $('input#file')[0];
                     var data = new FormData();
                     data.append('file', inputElement.files[0]);
-                    var url = '/dashboard/clients/{{ $client->id }}/upload-groups';
+                    var url = '/dashboard/clients/{{ $client->id }}/upload-groups-csv';
 
                     $.ajax({
                         type: 'post',
@@ -173,19 +170,14 @@
                             var xhr = new XMLHttpRequest();
                             var total = 0;
 
-                            // Get the total size of files
-                            //$.each(document.getElementById('file').files, function(i, file) {
-                            //    total += file.size;
-                            //});
-
                             // Get total file size
                             var files = $('#file').prop('files');
                             total = files[0].size;
 
                             // Check if extension is correct
                             var extension = files[0].name.substr(files[0].name.length - 3);
-                            if (extension != 'xls' && extension != 'lsx') {
-                                toastr.error('File must be a valid .xls or .xlsx format.', "Error", opts);
+                            if (extension != 'csv') {
+                                toastr.error('File must be a valid .csv format.', "Error", opts);
                                 return false;
                             }
 
@@ -203,39 +195,28 @@
                             return xhr;
                         },
                         success: function (data) {
-                            $('html').prepend(data.responseText);
-                            console.log(data);
-
+                            console.log('CSV Upload Success Response:', data);
+                            
                             if (data['errors']) {
-                                toastr.error(data['errors'], "Error", opts);
+                                console.log('Errors found:', data['errors']);
+                                toastr.error(data['errors'], "Error");
                                 $modal.modal('hide');
+                                return;
                             }
 
-                            if (data['users'])
-                            {
-                                var url = '/dashboard/clients/{{ $client->id }}/generate-groups';
-
-                                $.ajax({
-                                    type: 'post',
-                                    url: url,
-                                    data: data,
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        $('html').prepend(data.responseText);
-                                        console.log(data);
-
-                                        if (data['success'])
-                                            location.reload();
-
-                                        else
-                                            alert('An error has occurred!');
-                                    },
-                                    error: function (data) {
-                                        console.log(data.status + ' ' + data.statusText);
-                                        $('html').prepend(data.responseText);
-                                    }
-                                });
-
+                            if (data['groups']) {
+                                console.log('Groups created successfully:', data['groups']);
+                                toastr.success('Groups created successfully!', "Success");
+                                $modal.modal('hide');
+                                
+                                // Force page reload to show new groups
+                                setTimeout(function() {
+                                    console.log('Reloading page...');
+                                    window.location.reload(true);
+                                }, 1000);
+                            } else {
+                                console.log('No groups found in response');
+                                toastr.warning('No groups were created', "Warning");
                                 $modal.modal('hide');
                             }
 

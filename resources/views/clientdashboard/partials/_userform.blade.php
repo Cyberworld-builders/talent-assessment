@@ -39,25 +39,14 @@
                 </div>
             </div>
 
-            {{-- Job Title --}}
+            {{-- Industry --}}
             <div class="row">
                 <div class="col-sm-3">
-                    {!! Form::label('job_title', 'Job Title', ['class' => 'control-label']) !!}
-                    <p class="small text-muted">This user's current job title.</p>
+                    {!! Form::label('industry_id', 'Industry', ['class' => 'control-label']) !!}
+                    <p class="small text-muted">This user's industry.</p>
                 </div>
                 <div class="col-sm-9">
-                    {!! Form::text('job_title', null, ['class' => 'form-control input-lg']) !!}
-                </div>
-            </div>
-
-            {{-- Job Family --}}
-            <div class="row">
-                <div class="col-sm-3">
-                    {!! Form::label('job_family', 'Job Family', ['class' => 'control-label']) !!}
-                    <p class="small text-muted">This user's job family of his current job.</p>
-                </div>
-                <div class="col-sm-9">
-                    {!! Form::text('job_family', null, ['class' => 'form-control input-lg']) !!}
+                    {!! Form::select('industry_id', $industriesArray, null, ['class' => 'form-control input-lg']) !!}
                 </div>
             </div>
 

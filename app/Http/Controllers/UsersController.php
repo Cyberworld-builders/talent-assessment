@@ -194,14 +194,16 @@ class UsersController extends Controller
     {
         $user = \Auth::user();
 
-        $languages = Language::all();
-        $languages_array = [
-            '' => '',
-        ];
-        foreach ($languages as $language)
-            $languages_array[$language->id] = $language->native_name;
+        // If user already has a language set, redirect to profile
+        if ($user->language_id) {
+            return redirect('/profile');
+        }
 
-        return view('profile.language', compact('user', 'languages_array'));
+        // Auto-set English as default language (ID 1) and skip selection
+        $user->language_id = 1; // English
+        $user->save();
+
+        return redirect('/profile');
     }
 
 	/**
@@ -463,13 +465,10 @@ class UsersController extends Controller
         else
             unset($data['password']);
 
-		if (! array_key_exists('client_id', $data))
-			$data['client_id'] = false;
-
-        if (! $data['client_id']) {
-            unset($data['client_id']);
-            $user->client_id = null;
-        }
+		// Handle client_id - only update if it's explicitly provided and not empty
+		if (! array_key_exists('client_id', $data) || empty($data['client_id'])) {
+			unset($data['client_id']); // Don't update client_id if not provided or empty
+		}
 
         $user->update($data);
 
@@ -553,23 +552,43 @@ class UsersController extends Controller
         $errors = [];
         $users = [];
 
+        // Debug: Log the received data
+        \Log::info('Store Multiple Debug', [
+            'data_keys' => array_keys($data),
+            'username_count' => count($data['username']),
+            'name_count' => count($data['name']),
+            'email_count' => count($data['email']),
+            'industry_count' => isset($data['industry']) ? count($data['industry']) : 'NOT SET',
+            'industry_data' => isset($data['industry']) ? $data['industry'] : 'NOT SET'
+        ]);
+
         // For each user field
         foreach($data['username'] as $i => $username) {
 
             $users[$i] = false;
             $name = $data['name'][$i];
             $email = $data['email'][$i];
-            $job_title = $data['job_title'][$i];
-            $job_family = $data['job_family'][$i];
+            $industry = isset($data['industry'][$i]) ? $data['industry'][$i] : '';
             $job = $data['job_id'][$i];
+
+            // Find industry by name (case-insensitive)
+            $industryRecord = \App\Industry::whereRaw('LOWER(name) = ?', [strtolower($industry)])->first();
+            if (!$industryRecord) {
+                $availableIndustries = \App\Industry::pluck('name')->toArray();
+                \Log::error("Industry not found for user $name", [
+                    'industry' => $industry, 
+                    'available_industries' => $availableIndustries
+                ]);
+                array_push($errors, 'User "'.$name.'" could not be added. Industry "'.$industry.'" not found. Available industries: ' . implode(', ', $availableIndustries));
+                continue;
+            }
 
             // Generate new user
             $user = new User([
                 'username' => $username,
                 'name' => $name,
                 'email' => $email,
-                'job_title' => $job_title,
-                'job_family' => $job_family,
+                'industry_id' => $industryRecord->id,
                 'password' => bcrypt(\Auth::user()->generate_password($name, $username)),
                 'client_id' => $client->id
             ]);
@@ -593,23 +612,63 @@ class UsersController extends Controller
                 }
             }
 
-            // If can't save, must be a duplicate entry
-            catch (\Exception $e) {
+            // Handle specific database errors
+            catch (\Illuminate\Database\QueryException $e) {
                 $error = '';
-
-                if (strpos($e, 'Duplicate entry'))
-                    $error = 'Username '.$username.' is already in use.';
-
-                array_push($errors, 'User '.$name.' could not be added. '.$error);
+                
+                if (strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                    if (strpos($e->getMessage(), 'username') !== false) {
+                        $error = 'Username "'.$username.'" is already in use.';
+                    } elseif (strpos($e->getMessage(), 'email') !== false) {
+                        $error = 'Email "'.$email.'" is already in use.';
+                    } else {
+                        $error = 'Duplicate entry found.';
+                    }
+                } elseif (strpos($e->getMessage(), 'foreign key constraint') !== false) {
+                    $error = 'Invalid industry or client reference.';
+                } else {
+                    $error = 'Database error: ' . $e->getMessage();
+                }
+                
+                array_push($errors, 'User "'.$name.'" could not be added. '.$error);
+                \Log::error("User creation failed for $name", [
+                    'error' => $e->getMessage(),
+                    'user_data' => $user ? $user->toArray() : 'User object not created'
+                ]);
+            }
+            
+            // Handle other exceptions
+            catch (\Exception $e) {
+                $error = 'Unexpected error: ' . $e->getMessage();
+                array_push($errors, 'User "'.$name.'" could not be added. '.$error);
+                \Log::error("Unexpected error creating user $name", [
+                    'error' => $e->getMessage(),
+                    'user_data' => $user ? $user->toArray() : 'User object not created'
+                ]);
             }
 
             $users[$i] = $user;
         }
 
-        $file = $this->download_generated_users($users);
-        $download_link = '/download/'.$file['file'];
+        // Only generate download file if we have successful users
+        $download_link = null;
+        if ($count > 0) {
+            try {
+                $file = $this->download_generated_users($users);
+                $download_link = '/download/'.$file['file'];
+            } catch (\Exception $e) {
+                \Log::error("Failed to generate download file", ['error' => $e->getMessage()]);
+                array_push($errors, 'Users were created but download file could not be generated.');
+            }
+        }
 
-        return \Response::json(['count' => $count, 'errors' => $errors, 'users' => $users, 'download_link' => $download_link]);
+        return \Response::json([
+            'count' => $count, 
+            'errors' => $errors, 
+            'users' => $users, 
+            'download_link' => $download_link,
+            'success' => $count > 0
+        ]);
     }
 
 	/**
@@ -688,9 +747,19 @@ class UsersController extends Controller
             return \Response::json(['errors' => 'File must be a valid .csv file format.']);
 
         $file = $data['file'];
+        
+        // Debug: Log file information
+        \Log::info('CSV Upload Debug', [
+            'file_name' => $file->getClientOriginalName(),
+            'file_size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'temp_path' => $file->getPathname()
+        ]);
+        
         $handle = fopen($file->getPathname(), 'r');
         
         if ($handle === false) {
+            \Log::error('Could not open uploaded file');
             return \Response::json(['errors' => 'Could not read the uploaded file.']);
         }
 
@@ -698,19 +767,86 @@ class UsersController extends Controller
         $header = fgetcsv($handle);
         if ($header === false) {
             fclose($handle);
+            \Log::error('Could not read header row from CSV');
             return \Response::json(['errors' => 'Could not read the header row from the CSV file.']);
         }
+        
+        // Debug: Log header information
+        \Log::info('CSV Header', ['header' => $header]);
 
         // Process each data row
+        $rowCount = 0;
         while (($row = fgetcsv($handle)) !== false) {
+            $rowCount++;
+            \Log::info("Processing row $rowCount", ['row' => $row]);
+            
+            // Skip empty rows (rows with all empty values)
+            if (empty(array_filter($row, function($value) { return !empty(trim($value)); }))) {
+                \Log::info("Skipping empty row $rowCount");
+                continue;
+            }
+            
             // Create an associative array from header and row data
             $rowData = array_combine($header, $row);
             
-            $name = isset($rowData['name']) ? $rowData['name'] : '';
-            $email = isset($rowData['email']) ? trim($rowData['email']) : '';
-            $job_title = isset($rowData['job_title']) ? $rowData['job_title'] : '';
-            $job_family = isset($rowData['job_family']) ? $rowData['job_family'] : '';
-            $username = isset($rowData['username']) ? $rowData['username'] : '';
+            // Handle different CSV formats
+            $name = '';
+            $email = '';
+            $industry = '';
+            $username = '';
+            
+            // Check if this is the standard format (Name, Email, Industry)
+            if (isset($rowData['Name']) || isset($rowData['name'])) {
+                $name = isset($rowData['Name']) ? $rowData['Name'] : (isset($rowData['name']) ? $rowData['name'] : '');
+                $email = isset($rowData['Email']) ? trim($rowData['Email']) : (isset($rowData['email']) ? trim($rowData['email']) : '');
+                $industry = isset($rowData['Industry']) ? $rowData['Industry'] : (isset($rowData['industry']) ? $rowData['industry'] : '');
+                $username = isset($rowData['Username']) ? $rowData['Username'] : (isset($rowData['username']) ? $rowData['username'] : '');
+            }
+            // Handle the Involved-360 format (positional columns)
+            else {
+                // Based on the log data: [username, name, email, industry, ...]
+                $username = isset($row[0]) ? trim($row[0]) : '';
+                $name = isset($row[1]) ? trim($row[1]) : '';
+                $email = isset($row[2]) ? trim($row[2]) : '';
+                $industry = isset($row[3]) ? trim($row[3]) : '';
+            }
+
+            // Skip rows that don't have at least a name or email
+            if (empty(trim($name)) && empty(trim($email))) {
+                \Log::info("Skipping row $rowCount - no name or email");
+                continue;
+            }
+
+            // Validate required fields with specific error messages
+            if (empty(trim($name))) {
+                \Log::error("Row $rowCount - Name is required");
+                return \Response::json(['errors' => "Row $rowCount: Name is required. Please provide a name for each user."]);
+            }
+            
+            if (empty(trim($email))) {
+                \Log::error("Row $rowCount - Email is required");
+                return \Response::json(['errors' => "Row $rowCount: Email is required. Please provide an email address for each user."]);
+            }
+            
+            if (empty(trim($industry))) {
+                \Log::error("Row $rowCount - Industry is required");
+                return \Response::json(['errors' => "Row $rowCount: Industry is required. Please provide an industry for each user."]);
+            }
+            
+            // Validate email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                \Log::error("Row $rowCount - Invalid email format: $email");
+                return \Response::json(['errors' => "Row $rowCount: Invalid email format for '$email'. Please provide a valid email address."]);
+            }
+
+            // Generate username if not provided
+            if (empty(trim($username)) && !empty(trim($name))) {
+                $username = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', $name));
+                // Ensure username is not empty and add a number if needed
+                if (empty($username)) {
+                    $username = 'user' . $rowCount;
+                }
+            }
 
             // Handle alternative column names
             if (empty($email) && isset($rowData['e_mail'])) {
@@ -725,14 +861,43 @@ class UsersController extends Controller
                 'email' => $email,
                 'name' => $name,
                 'username' => $username,
-                'job_title' => $job_title,
-                'job_family' => $job_family
+                'industry' => $industry
             ]);
         }
 
         fclose($handle);
 
+        \Log::info('CSV Upload Complete', [
+            'total_rows_processed' => $rowCount,
+            'users_found' => count($users),
+            'users' => $users
+        ]);
+
         return \Response::json(['users' => $users]);
+    }
+
+    /**
+     * Download a CSV template for user bulk upload.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function download_template()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="user_upload_template.csv"',
+        ];
+
+        $callback = function() {
+            $file = fopen('php://output', 'w');
+            
+            // Write header row
+            fputcsv($file, ['Name', 'Email', 'Industry', 'Username']);
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
 	/**
@@ -755,17 +920,18 @@ class UsersController extends Controller
         $handle = fopen($filepath, 'w');
         
         // Write CSV header
-        fputcsv($handle, ['Name', 'Email', 'Username', 'Job Title', 'Job Family']);
+        fputcsv($handle, ['Name', 'Email', 'Username', 'Industry']);
         
         // Write user data
         foreach ($users as $user) {
-            fputcsv($handle, [
-                $user->name,
-                $user->email,
-                $user->username,
-                $user->job_title,
-                $user->job_family
-            ]);
+            if ($user && $user->id) {
+                fputcsv($handle, [
+                    $user->name,
+                    $user->email,
+                    $user->username,
+                    $user->industry ? $user->industry->name : 'N/A'
+                ]);
+            }
         }
         
         fclose($handle);

@@ -123,20 +123,6 @@
                             </div>
                         </div>
 
-                        <!-- Whitelabel -->
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="whitelabel" class="control-label">White-label these assignments?</label>
-                                    <p>White-labeled assessments will display the logo and background of the client to which the user belongs to.</p>
-                                </div>
-                                <div class="col-sm-8">
-                                    {!! Form::checkbox('whitelabel', 1, 1, [
-                                        'class' => 'icheck',
-                                    ]) !!}
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Send Email -->
                         <div class="form-group">

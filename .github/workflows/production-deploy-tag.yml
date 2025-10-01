@@ -126,14 +126,40 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build and Push Image
+    - name: Check if Image Exists
+      id: check-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
       run: |
+        echo "Checking if image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists..."
+        if aws ecr describe-images --repository-name talent-assessment-app --image-ids imageTag=$IMAGE_TAG --region us-east-2 >/dev/null 2>&1; then
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+          echo "image_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "Image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG does not exist in ECR"
+          echo "image_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and Push Image
+      if: steps.check-image.outputs.image_exists == 'false'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Building and pushing new image: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
         docker build -f Dockerfile.production -t $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG .
         docker push $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG
         echo "Image pushed: $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG"
+
+    - name: Skip Build (Image Already Exists)
+      if: steps.check-image.outputs.image_exists == 'true'
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      run: |
+        echo "Skipping build - image $ECR_REGISTRY/talent-assessment-app:$IMAGE_TAG already exists in ECR"
+        echo "This deployment will use the existing image, which should speed up the deployment process"
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.3
@@ -155,6 +181,25 @@ jobs:
           # Fetch secrets and set server environment variables
           echo "Fetching secrets from AWS Secrets Manager..."
           aws secretsmanager get-secret-value --secret-id talent-assessment-production-secrets --region us-east-2 --query SecretString --output text > secrets.json
+          
+          # Create .env.production file if it doesn't exist
+          if [ ! -f ".env.production" ]; then
+            echo "Creating .env.production file from template..."
+            cp .env.example .env.production
+            
+            # Set basic production environment variables
+            sed -i 's/APP_NAME=.*/APP_NAME="Talent Assessment"/' .env.production
+            sed -i 's/APP_ENV=.*/APP_ENV=production/' .env.production
+            sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env.production
+            sed -i 's/APP_URL=.*/APP_URL=https:\/\/my.involvedtalent.com/' .env.production
+            sed -i 's/DB_HOST=.*/DB_HOST=mysql-production/' .env.production
+            sed -i 's/CACHE_DRIVER=.*/CACHE_DRIVER=redis/' .env.production
+            sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=database/' .env.production
+            sed -i 's/QUEUE_DRIVER=.*/QUEUE_DRIVER=redis/' .env.production
+            sed -i 's/REDIS_HOST=.*/REDIS_HOST=redis-production/' .env.production
+            
+            echo "Generated initial .env.production file with production settings"
+          fi
           
           # Update .env.production file with secrets
           echo "Updating .env.production file with secrets..."
@@ -189,6 +234,14 @@ jobs:
           # Clean up secrets file
           rm secrets.json
           
+          # Display final .env.production for debugging
+          echo "Final .env.production configuration:"
+          echo "DB_HOST: $(grep '^DB_HOST=' .env.production)"
+          echo "DB_DATABASE: $(grep '^DB_DATABASE=' .env.production)"
+          echo "DB_USERNAME: $(grep '^DB_USERNAME=' .env.production)"
+          echo "APP_ENV: $(grep '^APP_ENV=' .env.production)"
+          echo "APP_KEY: $(grep '^APP_KEY=' .env.production)"
+          
           # SES configuration uses IAM role-based authentication (OIDC)
           echo "SES configuration will use IAM role-based authentication"
           
@@ -210,9 +263,36 @@ jobs:
           echo "Checking service status..."
           docker-compose -f docker-compose.production.yml ps
           
+          # Wait for database to be ready
+          echo "Waiting for database to be ready..."
+          sleep 15
+          
+          # Test database connectivity
+          echo "Testing database connectivity..."
+          docker-compose -f docker-compose.production.yml exec -T app-production php -r "
+            try {
+              \$pdo = new PDO('mysql:host=mysql-production;port=3306;dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+              echo 'Database connection successful\n';
+            } catch (Exception \$e) {
+              echo 'Database connection failed: ' . \$e->getMessage() . '\n';
+              exit(1);
+            }
+          " || echo "Database connectivity test failed, but continuing..."
+          
           # Generate APP_KEY using Laravel artisan command
           echo "Generating APP_KEY using Laravel artisan..."
           docker-compose -f docker-compose.production.yml exec -T app-production php artisan key:generate
+          
+          # Extract the generated APP_KEY and update .env.production file
+          echo "Extracting generated APP_KEY and updating .env.production..."
+          # Read the APP_KEY from the container's environment and update the file
+          GENERATED_KEY=$(docker-compose -f docker-compose.production.yml exec -T app-production printenv APP_KEY 2>/dev/null || echo "")
+          if [ -n "$GENERATED_KEY" ]; then
+            sed -i "s|APP_KEY=.*|APP_KEY=$GENERATED_KEY|" .env.production
+            echo "Updated .env.production with generated APP_KEY: ${GENERATED_KEY:0:20}..."
+          else
+            echo "Warning: Could not extract generated APP_KEY from container environment"
+          fi
           
           # Clean up Docker resources aggressively
           echo "Cleaning up Docker resources..."

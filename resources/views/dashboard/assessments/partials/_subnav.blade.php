@@ -16,10 +16,6 @@ $tabs = [
         'name' => 'Preview',
         'link' => '/dashboard/assessments/'.$assessment->id,
     ],
-    [
-        'name' => 'Assign',
-        'link' => '/dashboard/assessments/'.$assessment->id.'/assign',
-    ],
 ];
 ?>
 

@@ -47,8 +47,7 @@
                                 <th>Name and Role</th>
                                 <th>Username</th>
                                 <th>E-mail</th>
-                                <th>Job Title</th>
-                                <th>Job Family</th>
+                                <th>Industry</th>
                                 {{--<th>Users</th>--}}
                                 <th>Settings</th>
                             </tr>
@@ -102,15 +101,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($user->job_title)
-                                                <span class="email">{{ $user->job_title }}</span>
-                                            @else
-                                                ---
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($user->job_family)
-                                                <span class="email">{{ $user->job_family }}</span>
+                                            @if ($user->industry_id && $user->industry)
+                                                <span class="email">{{ $user->industry->name }}</span>
                                             @else
                                                 ---
                                             @endif

@@ -26,10 +26,15 @@
             <div class="col-sm-10">
                 <h5>Overview</h5>
                 <?php
-                    if ($assessments[0]->id == get_global('personality'))
-                    	$intro = 'This report provides a recommendation for [name], who applied for a [job] position. This report covers [job] personality and provides evidence for the candidate\'s likelihood of success in [job] related positions.';
-                    if ($assessments[0]->id == get_global('ospan') || $assessments[0]->id == get_global('sspan'))
-                    	$intro = 'This report provides a recommendation for [name], who applied for a [job] position. This report covers [job]  working memory, which focuses on memory, attention, and information processing. This report provides evidence for the candidate\'s likelihood of success in [job] related positions.';
+                    $intro = 'This report provides a recommendation for [name], who applied for a [job] position. This report covers [job] assessment and provides evidence for the candidate\'s likelihood of success in [job] related positions.';
+                    
+                    if (isset($assessments[0]) && $assessments[0]->id == get_global('personality')) {
+                        $intro = 'This report provides a recommendation for [name], who applied for a [job] position. This report covers [job] personality and provides evidence for the candidate\'s likelihood of success in [job] related positions.';
+                    }
+                    
+                    if (isset($assessments[0]) && ($assessments[0]->id == get_global('ospan') || $assessments[0]->id == get_global('sspan'))) {
+                        $intro = 'This report provides a recommendation for [name], who applied for a [job] position. This report covers [job] working memory, which focuses on memory, attention, and information processing. This report provides evidence for the candidate\'s likelihood of success in [job] related positions.';
+                    }
                 ?>
                 @include('dashboard.reports.partials._field', [
                     'cover' => true,

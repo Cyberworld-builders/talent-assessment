@@ -130,12 +130,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($reports as $report)
+                                @foreach ($clientReports as $clientReport)
                                     <tr>
                                         <td>
                                             <a class="name">
-                                                {{ $report->name }}
-                                                @if ($report->customized())
+                                                {{ $clientReport->report->name }}
+                                                @if ($clientReport->report->customized())
                                                     <span class="text-small text-success"><br/>Customized</span>
                                                 @else
                                                     <span class="text-small text-danger"><br/>Not Customized</span>
@@ -143,15 +143,15 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if ($report->job_id)
-                                                {{ $report->job()->name }}
+                                            @if ($clientReport->job_id)
+                                                {{ $clientReport->job->name }}
                                             @else
                                                 All Assignments
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($report->assessments && json_decode($report->assessments))
-                                                @foreach (json_decode($report->assessments) as $assessmentId)
+                                            @if ($clientReport->report->assessments && json_decode($clientReport->report->assessments))
+                                                @foreach (json_decode($clientReport->report->assessments) as $assessmentId)
                                                     <?php $assessment = \App\Assessment::find($assessmentId); ?>
                                                     <span class="text-muted">
                                                         {{ $assessment->name }}<br/>
@@ -160,13 +160,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($report->customized())
-                                                {!! Form::open(['method' => 'patch', 'action' => ['ReportsController@resetCustomizations', $client->id, $report->id]]) !!}
-                                                    <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$report->id.'/customize') }}" class="edit"><i class="linecons-pencil"></i> Customize</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <a href="#null" class="edit reset" data-name="{{ $report->name }}"><i class="fa-times"></i> Reset</a>
+                                            @if ($clientReport->report->customized())
+                                                {!! Form::open(['method' => 'patch', 'action' => ['ReportsController@resetCustomizations', $client->id, $clientReport->report->id]]) !!}
+                                                    <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$clientReport->report->id.'/customize') }}" class="edit"><i class="linecons-pencil"></i> Customize</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <a href="#null" class="edit reset" data-name="{{ $clientReport->report->name }}"><i class="fa-times"></i> Reset</a>
                                                 {!! Form::close(); !!}
                                             @else
-                                                <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$report->id.'/customize') }}" class="edit"><i class="linecons-pencil"></i> Customize</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$clientReport->report->id.'/customize') }}" class="edit"><i class="linecons-pencil"></i> Customize</a> &nbsp;&nbsp;&nbsp;&nbsp;
                                             @endif
                                             {{--@role('admin')--}}
                                             {{--@if ($report->customized)--}}
@@ -180,9 +180,9 @@
                                             {{--@endrole--}}
                                         </td>
                                         <td>
-                                            @if ($report->customized())
+                                            @if ($clientReport->report->customized())
                                                 <div>
-                                                    <input type="checkbox" id="switch1" name="enabled" class="switch" data-id="{{ $report->id }}" {!! ($report->enabled) ? 'checked' : '' !!} />
+                                                    <input type="checkbox" id="switch1" name="enabled" class="switch" data-id="{{ $clientReport->id }}" {!! ($clientReport->enabled) ? 'checked' : '' !!} />
                                                     <label for="switch1" class="text-muted">Enabled</label>
                                                 </div>
                                             @else
@@ -190,9 +190,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($report->customized())
+                                            @if ($clientReport->report->customized())
                                                 <div>
-                                                    <input type="checkbox" id="switch2" name="visible" class="switch" data-id="{{ $report->id }}" {!! ($report->visible) ? 'checked' : '' !!} />
+                                                    <input type="checkbox" id="switch2" name="visible" class="switch" data-id="{{ $clientReport->id }}" {!! ($clientReport->visible) ? 'checked' : '' !!} />
                                                     <label for="switch2" class="text-muted">Visible</label>
                                                 </div>
                                             @else
@@ -200,9 +200,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {!! Form::open(['method' => 'delete', 'action' => ['ReportsController@destroy', $client->id, $report->id]]) !!}
-                                                <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$report->id.'/edit') }}" class="edit"><i class="linecons-pencil"></i> Edit</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#null" class="edit delete" data-name="{{ $report->name }}"><i class="linecons-trash"></i> Delete</a>
+                                            {!! Form::open(['method' => 'delete', 'action' => ['ReportsController@destroy', $client->id, $clientReport->report->id]]) !!}
+                                                <a href="{{ url('dashboard/clients/'.$client->id.'/reports/'.$clientReport->report->id.'/edit') }}" class="edit"><i class="linecons-pencil"></i> Edit</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="#null" class="edit delete" data-name="{{ $clientReport->report->name }}"><i class="linecons-trash"></i> Delete</a>
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>

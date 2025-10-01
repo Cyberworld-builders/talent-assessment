@@ -169,10 +169,10 @@ class AssessmentsController extends Controller
 	 * @param $id
 	 * @return View
 	 */
-	public function edit($id)
+    public function edit($id)
     {
     	$assessment = Assessment::findOrFail($id);
-        $dimensions = Dimension::all();
+        $dimensions = Dimension::where('assessment_id', $id)->get();
 //		$unsorted_questions = $assessment->questions->toArray();
 
 		// Edit the questions and resort them
@@ -270,112 +270,7 @@ class AssessmentsController extends Controller
 		return \Response::json(['success' => true, 'data' => $question_data, 'non-ids' => $questions_without_ids, 'reload' => true]);
     }
 
-	/**
-	 * Show the form for assigning a specified assessment to a user.
-	 *
-	 * @param $id
-	 * @return View
-	 */
-	public function assign($id)
-	{
-		$assessment = Assessment::findOrFail($id);
-		$usersArray = User::getSelectFormattedArray();
-		$clientsArray = Client::getSelectFormattedArray();
-		$assessmentsArray = get_select_formatted_array(Assessment::all());
-		$emailBody = get_default_email_body();
 
-		return view('dashboard.assessments.assign', compact('assessment', 'usersArray', 'clientsArray', 'assessmentsArray', 'emailBody'));
-	}
-
-	/**
-	 * Assign an assessment to a user.
-	 *
-	 * @param Request $request
-	 * @return bool|\Illuminate\Http\RedirectResponse
-	 */
-	public function assign_assessment($id, Request $request)
-	{
-		$assessment = Assessment::findOrFail($id);
-		$data = $request->all();
-		$expiration = $data['expiration'];
-
-		if (! $data['user'])
-			return false;
-
-		if (! $data['email-subject'])
-			$data['email-subject'] = 'New assessments have been assigned to you';
-
-		$validator = Validator::make($data, [
-			'assessments' => 'required',
-			'user' => 'required',
-		]);
-
-		if ($validator->fails())
-			return redirect()->back()->withInput()->withErrors($validator->errors());
-
-		// Find all the users we are assigning to
-		$group = [];
-		foreach ($data['user'] as $i => $userId)
-		{
-			$user = User::find($userId);
-			if ($user)
-				array_push($group, $user);
-		}
-
-		// Generate assignments for each user, per assessment
-		foreach ($group as $i => $user)
-		{
-			$assignment_ids = [];
-			foreach ($data['assessments'] as $assessment_id)
-			{
-				$assessment = Assessment::find($assessment_id);
-
-				// Target another User as the subject
-				if ($assessment->target == 1 or $assessment->target == 2)
-				{
-					// If target not assigned, ignore
-					if (! $data['target'][$i])
-						continue;
-
-					$target = User::find($data['target'][$i]);
-					$role = $data['role'][$i];
-					$custom_fields = [
-						'type' => ['name', 'email', 'role'],
-						'value' => [$target->name, $target->email, $role],
-					];
-
-					// Generate assignment for user
-					$assignment_id = $this->generate_assignment_for_user($assessment->id, $user, $expiration, $data['whitelabel'], $custom_fields, $target->id,$data['reminder'],$data['reminder-frequency']);
-					array_push($assignment_ids, $assignment_id);
-				}
-
-				// Regular assignment without custom fields
-				else
-				{
-
-					// Generate assignment for user
-
-					$assignment_id = $this->generate_assignment_for_user($assessment->id, $user, $expiration, $data['whitelabel'], 0,$user->id,$data['reminder'],$data['reminder-frequency']);
-					array_push($assignment_ids, $assignment_id);
-				}
-			}
-
-			// Email assignment links to the user
-			if ($data['send-email'])
-			{
-				$this->send_assignment_link_to_user($user, $assignment_ids, $expiration, $data['email-subject'], $data['email-body']);
-			}
-		}
-
-		// Generate string message of assigned assessments
-		$assessments_string = '';
-		foreach ($data['assessments'] as $assessment_id) {
-			$assessment = Assessment::findOrFail($assessment_id);
-			$assessments_string .= ', ' . $assessment->name;
-		}
-
-		return redirect()->back()->with('success', ($i + 1).' users have been assigned '.count($data['assessments']).' assessments'.$assessments_string);
-	}
 
 	/**
 	 * Generate assignment for user.

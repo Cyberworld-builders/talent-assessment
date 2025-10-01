@@ -115,11 +115,18 @@
                         <p>
                             Upload a CSV file of users for faster entry. The first row in the CSV file will be counted as the header.
                             Please make sure you have <b>Name</b> and <b>Email</b> as column headers in your first row, as these are required.
-                            You can also have <b>Job Title</b> and <b>Job Family</b>, but these are not required.
+                            You can also have <b>Industry</b>, <b>Username</b>, <b>Job Title</b> and <b>Job Family</b>, but these are not required.
+                            If no Username is provided, one will be generated automatically from the Name.
                             Accepted file types: <b>.csv</b>
                         </p>
+                        <p>
+                            <a href="/dashboard/users/template" class="btn btn-sm btn-info">
+                                <i class="fa fa-download"></i> Download CSV Template
+                            </a>
+                            <small class="text-muted">Download a blank template with the correct headers</small>
+                        </p>
                     </div>
-                    {!! Form::open(['url' => 'dashboard/users/import/', 'files' => true, 'id' => 'uploadform']) !!}
+                    {!! Form::open(['url' => 'dashboard/users/upload', 'files' => true, 'id' => 'uploadform']) !!}
                         {!! Form::file('file', ['id' => 'file']) !!}
                     {!! Form::close() !!}
                     <br/>
@@ -281,8 +288,7 @@
                                     $user_add_form.find('input[name="email[]"]').val(user['email']);
                                     $user_add_form.find('input[name="name[]"]').val(user['name']);
                                     $user_add_form.find('input[name="username[]"]').val(user['username']);
-                                    $user_add_form.find('input[name="job_title[]"]').val(user['job_title']);
-                                    $user_add_form.find('input[name="job_family[]"]').val(user['job_family']);
+                                    $user_add_form.find('input[name="industry[]"]').val(user['industry']);
                                     $('.user-forms').append($user_add_form);
                                 }
                                 $modal.modal('hide');
@@ -403,16 +409,57 @@
 
                         //console.log(data);
 
-                        if (data['download_link']) {
+                        console.log('Form submission response:', data);
+                        
+                        // Clear any existing alerts
+                        $('.alert').remove();
+                        
+                        if (data.success && data.count > 0) {
                             var link = data['download_link'];
                             var count = data['count'];
-                            //$('#save').before('<a class="btn btn-black" target="_blank" href="'+link+'"><i class="fa-download"></i> Download Generated Users</a>');
-                            $('.page-title').after('<div class="row"><div class="alert alert-white"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>'+count+' Users Generated!</strong> <a href="'+link+'">Download Excel file of generated users.</a></div></div>');
+                            var alertClass = 'alert-success';
+                            var message = '<strong>Success!</strong> ' + count + ' users were created successfully.';
+                            
+                            if (link) {
+                                message += ' <a href="' + link + '" class="btn btn-sm btn-primary">Download Generated Users</a>';
+                            }
+                            
+                            $('.page-title').after('<div class="row"><div class="alert ' + alertClass + '"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + message + '</div></div>');
+                        }
+                        
+                        // Show errors if any
+                        if (data.errors && data.errors.length > 0) {
+                            var errorMessage = '<strong>Errors:</strong><ul>';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                errorMessage += '<li>' + data.errors[i] + '</li>';
+                            }
+                            errorMessage += '</ul>';
+                            
+                            $('.page-title').after('<div class="row"><div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + errorMessage + '</div></div>');
+                        }
+                        
+                        // If no users were created and no errors, show generic message
+                        if (!data.success && (!data.errors || data.errors.length === 0)) {
+                            $('.page-title').after('<div class="row"><div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><strong>Warning:</strong> No users were created. Please check your data and try again.</div></div>');
                         }
                     },
-                    error: function (data) {
-                        console.log(data.status + ' ' + data.statusText);
-                        $('html').prepend(data.responseText);
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response:', xhr.responseText);
+                        
+                        // Clear any existing alerts
+                        $('.alert').remove();
+                        
+                        var errorMessage = '<strong>Error:</strong> Unable to process the request. ';
+                        if (xhr.status === 422) {
+                            errorMessage += 'Please check your data and try again.';
+                        } else if (xhr.status === 500) {
+                            errorMessage += 'Server error occurred. Please try again later.';
+                        } else {
+                            errorMessage += 'Please try again.';
+                        }
+                        
+                        $('.page-title').after('<div class="row"><div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + errorMessage + '</div></div>');
                     }
                 });
             });

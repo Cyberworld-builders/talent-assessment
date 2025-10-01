@@ -62,23 +62,6 @@
                     </div>
                 </div>
 
-                {{-- Whitelabel Field --}}
-                @role('admin')
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {!! Form::label('whitelabel', 'White-Label', ['class' => 'control-label']) !!}
-                                <p class="small text-muted">White-labeled assessments will display the logo and background of the client to which the user belongs to.</p>
-                            </div>
-                            <div class="col-sm-8">
-                                {!! Form::select('whitelabel', [
-                                    0 => 'No',
-                                    1 => 'Yes',
-                                ], ($edit ? $assignment->whitelabel : 0), ['class' => 'form-control input-lg']) !!}
-                            </div>
-                        </div>
-                    </div>
-                @endrole
 
                 {{-- Tie To Specific Job --}}
                 @role('admin')
@@ -120,24 +103,22 @@
                         </div>
                     </div>
                 </div>
-                @endif
 
-                @if (! $edit)
-                    {{-- Send Email --}}
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {!! Form::label('send-email', 'Email Notification', ['class' => 'control-label']) !!}
-                                <p class="small text-muted">Users with a valid email address will receive a notification for this assessment.</p>
-                            </div>
-                            <div class="col-sm-8">
-                                {!! Form::select('send-email', [
-                                    0 => 'No',
-                                    1 => 'Yes',
-                                ], 0, ['class' => 'form-control input-lg']) !!}
-                            </div>
+                {{-- Send Email --}}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {!! Form::label('send-email', 'Email Notification', ['class' => 'control-label']) !!}
+                            <p class="small text-muted">Users with a valid email address will receive a notification for this assessment.</p>
+                        </div>
+                        <div class="col-sm-8">
+                            {!! Form::select('send-email', [
+                                0 => 'No',
+                                1 => 'Yes',
+                            ], 0, ['class' => 'form-control input-lg']) !!}
                         </div>
                     </div>
+                </div>
 
                     {{-- Email Preview Window --}}
                     <div class="field-email" style="display: none;">
@@ -702,6 +683,8 @@
 
         // Add All Users From Client
         $('#add-users-from-client').on('click', function(){
+            $modal = $('#modal-users');
+            $modal.modal('show');
 
             var data = {
                 'client': {{ $client->id }},
@@ -742,6 +725,9 @@
         // Add All Users From Groups
         $('#add-users-from-groups').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-groups';
 
             $.ajax({
@@ -780,6 +766,9 @@
         // Add Users From A Specific Job Family
         $('.add-by-job-family').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-job-family';
             var family = $(this).text();
 
@@ -819,6 +808,9 @@
         // Add Users From A Specific Job Family
         $('.add-by-job').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-job';
             var job = $(this).attr('data-job-id');
 

@@ -3340,9 +3340,9 @@ class ReportsController extends Controller
 	public function reportsIndex($id)
 	{
 		$client = Client::findOrFail($id);
-		$reports = Report::where('client_id', $id)->get();
+		$clientReports = $client->reports()->with('report')->get();
 
-		return view('dashboard.reports.index', compact('reports', 'client', 'clientReports'));
+		return view('dashboard.reports.index', compact('clientReports', 'client'));
 	}
 
 	/**
