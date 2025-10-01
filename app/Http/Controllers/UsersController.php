@@ -194,14 +194,16 @@ class UsersController extends Controller
     {
         $user = \Auth::user();
 
-        $languages = Language::all();
-        $languages_array = [
-            '' => '',
-        ];
-        foreach ($languages as $language)
-            $languages_array[$language->id] = $language->native_name;
+        // If user already has a language set, redirect to profile
+        if ($user->language_id) {
+            return redirect('/profile');
+        }
 
-        return view('profile.language', compact('user', 'languages_array'));
+        // Auto-set English as default language (ID 1) and skip selection
+        $user->language_id = 1; // English
+        $user->save();
+
+        return redirect('/profile');
     }
 
 	/**

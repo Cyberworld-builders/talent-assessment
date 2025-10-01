@@ -683,6 +683,8 @@
 
         // Add All Users From Client
         $('#add-users-from-client').on('click', function(){
+            $modal = $('#modal-users');
+            $modal.modal('show');
 
             var data = {
                 'client': {{ $client->id }},
@@ -723,6 +725,9 @@
         // Add All Users From Groups
         $('#add-users-from-groups').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-groups';
 
             $.ajax({
@@ -761,6 +766,9 @@
         // Add Users From A Specific Job Family
         $('.add-by-job-family').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-job-family';
             var family = $(this).text();
 
@@ -800,6 +808,9 @@
         // Add Users From A Specific Job Family
         $('.add-by-job').on('click', function()
         {
+            $modal = $('#modal-users');
+            $modal.modal('show');
+            
             var url = '/dashboard/clients/{{ $client->id }}/add-from-job';
             var job = $(this).attr('data-job-id');
 
