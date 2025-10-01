@@ -50,6 +50,34 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.37 - Reports & Assignment Flow Fixes:</strong> Resolved critical JavaScript errors in assignment forms and reports functionality with enhanced user experience improvements.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed assignment form JavaScript errors by adding proper modal variable definitions to all user selection functions (From Client, From Groups, From Job Family, From Job).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Resolved "Uncaught ReferenceError: $modal is not defined" errors that were breaking the assignment flow's user selection buttons.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed reports functionality by adding null checks to Report model's getModelAttribute() and getModelFactorsAttribute() methods.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Resolved "Undefined index: model" and "Undefined variable: intro" errors in reports customize functionality.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced language selection to automatically default to English and skip the language selection page for improved user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed _cover.blade.php template by converting @php directive to regular PHP code with proper variable scoping and null checks.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.36 - Major Functionality Restoration & Error Handling:</strong> Comprehensive fixes for CSV uploads, user management, and download functionality with enhanced error handling throughout the system.</p>
             </li>
             <li>
