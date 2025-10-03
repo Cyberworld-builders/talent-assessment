@@ -323,6 +323,8 @@ Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
+		Route::get('dashboard/assessments/{id}/edit-new', 'AssessmentsController@editNew');
+		Route::patch('dashboard/assessments/{id}/update-new', 'AssessmentsController@updateNew');
 
 		// Assessment Dimensions
 		Route::get('dashboard/assessments/{id}/dimensions', 'DimensionsController@index');

@@ -5,6 +5,10 @@ $tabs = [
         'link' => '/dashboard/assessments/'.$assessment->id.'/edit',
     ],
     [
+        'name' => 'Edit Assessment (New)',
+        'link' => '/dashboard/assessments/'.$assessment->id.'/edit-new',
+    ],
+    [
         'name' => 'Dimensions',
         'link' => '/dashboard/assessments/'.$assessment->id.'/dimensions',
     ],

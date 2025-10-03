@@ -50,6 +50,7 @@ elixir(function(mix) {
         .scripts('assignment.js', 'public/assets/js/assignment.js')
         .scripts('timer.js', 'public/assets/js/timer.js')
         .scripts('autosize.js', 'public/assets/js/autosize.js')
+        .scripts('modern-assessment-editor.js', 'public/assets/js/modern-assessment-editor.js')
         // Copy xenon theme assets
         .copy('resources/assets/xenon/js/jquery-1.11.1.min.js', 'public/assets/js/jquery-1.11.1.min.js')
         .copy('resources/assets/xenon/js/bootstrap.min.js', 'public/assets/js/bootstrap.min.js')

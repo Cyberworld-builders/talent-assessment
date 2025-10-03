@@ -60,6 +60,9 @@ RUN touch /var/www/storage/logs/laravel.log \
 # Install Node.js dependencies
 RUN npm install
 
+# Build frontend assets with gulp
+RUN npm run gulp
+
 # Generate autoloader
 RUN composer dump-autoload --no-plugins --optimize
 

@@ -842,4 +842,52 @@ class AssessmentsController extends Controller
 
 		return $task;
 	}
+
+	/**
+	 * Show the new assessment editor interface.
+	 *
+	 * @param $id
+	 * @return View
+	 */
+	public function editNew($id)
+	{
+		$assessment = Assessment::findOrFail($id);
+		$dimensions = Dimension::where('assessment_id', $id)->get();
+		$questions = $assessment->questions()->orderBy('number', 'asc')->get()->toArray();
+		
+		return view('dashboard.assessments.edit-new', compact('assessment', 'dimensions', 'questions'));
+	}
+
+	/**
+	 * Update assessment using the new editor interface.
+	 *
+	 * @param $id
+	 * @param AssessmentRequest $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function updateNew($id, AssessmentRequest $request)
+	{
+		$assessment_data = $request->except(['questions', 'deleted_questions']);
+		$question_data = json_decode($request->get('questions'));
+		$deleted_questions = json_decode($request->get('deleted_questions'));
+
+		// Update the assessment
+		$assessment = Assessment::findOrFail($id);
+		$assessment->update($assessment_data);
+
+		$valid_ids = $assessment->get_existing_question_ids();
+		$questions_without_ids = [];
+		
+		// Only update questions if question_data is not null
+		if ($question_data) {
+			$questions_without_ids = $this->update_questions($question_data, $valid_ids, $assessment);
+		}
+		
+		// Only delete questions if deleted_questions is not null
+		if ($deleted_questions) {
+			$this->delete_questions($deleted_questions, $valid_ids);
+		}
+
+		return \Response::json(['success' => true, 'data' => $question_data, 'non-ids' => $questions_without_ids, 'reload' => true]);
+	}
 }
