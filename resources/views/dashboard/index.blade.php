@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.40 - Rich Text WYSIWYG Editor & Modern Assessment Editor:</strong> Added comprehensive rich text editing capabilities and completely new modern assessment editor with flexible field reordering.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Integrated CKEditor for rich text WYSIWYG editing of field content with full formatting toolbar including bold, italic, lists, links, colors, and HTML source editing.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Created new modern assessment editor interface with drag-and-drop field reordering, comprehensive edit functionality, and real-time preview capabilities.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added new assessment editor routes (editNew, updateNew) and controller methods with support for all field types including multiple choice, description, text input, letters, and equations.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Implemented field management features: add, edit, duplicate, remove fields with dimension assignment, anchor management for multiple choice options, and practice question toggles.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced Docker build process to include gulp compilation for proper asset management and added modern-assessment-editor.js to gulpfile for automated compilation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.39 - Assessment Dimension Consistency Fix:</strong> Fixed dimension selection inconsistency in assessment editor where input fields showed all dimensions instead of assessment-specific ones.</p>
             </li>
             <li>
