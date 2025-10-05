@@ -383,6 +383,53 @@
             background: #a8a8a8;
         }
         
+        /* Make form fields narrower to fit modal better */
+        .modal-body .form-group input[type="text"],
+        .modal-body .form-group input[type="number"],
+        .modal-body .form-group textarea,
+        .modal-body .form-group select {
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+        
+        .modal-body .form-group .col-sm-6,
+        .modal-body .form-group .col-sm-4,
+        .modal-body .form-group .col-sm-3 {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+        
+        /* Make anchor input fields more compact */
+        .modal-body .anchor-option {
+            display: flex !important;
+            gap: 8px !important;
+            margin-bottom: 8px !important;
+            align-items: center !important;
+        }
+        
+        .modal-body .anchor-option input[type="text"] {
+            flex: 2 !important;
+            min-width: 0 !important;
+            max-width: 200px !important;
+        }
+        
+        .modal-body .anchor-option input[type="number"] {
+            flex: 1 !important;
+            min-width: 0 !important;
+            max-width: 80px !important;
+        }
+        
+        .modal-body .anchor-option .remove-anchor {
+            flex-shrink: 0 !important;
+            padding: 6px 8px !important;
+            margin-left: 5px !important;
+        }
+        
+        /* Ensure modal content doesn't overflow */
+        .modal-body {
+            overflow-x: hidden !important;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .editor-content {

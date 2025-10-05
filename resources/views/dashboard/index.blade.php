@@ -50,6 +50,38 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.5.41 - Assessment Editor UI/UX Improvements & Anchor Management:</strong> Enhanced modern assessment editor with improved user interface, fixed anchor persistence, and streamlined field management.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed anchor value persistence in database by properly handling JSON serialization/deserialization in AssessmentsController update_questions method.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Resolved "Array to string conversion" error in assessment editor by using model accessors for proper anchor data handling in edit and editNew methods.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Updated field preview to display anchors as UI elements instead of raw Blade code, improving visual consistency and user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed modal positioning and z-index issues to prevent backdrop from covering modal content and ensure proper scrolling behavior.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Improved field numbering styling by changing from toggle-like circular badges to clean rectangular question numbers with subtle gray styling.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed unnecessary field type badge that served no functional purpose, reducing visual clutter in the assessment editor interface.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced field header layout with better spacing, alignment, and non-interactive styling to prevent user confusion.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.40 - Rich Text WYSIWYG Editor & Modern Assessment Editor:</strong> Added comprehensive rich text editing capabilities and completely new modern assessment editor with flexible field reordering.</p>
             </li>
             <li>
