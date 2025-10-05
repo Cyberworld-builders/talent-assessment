@@ -185,16 +185,12 @@ class AssessmentsController extends Controller
 
 		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
 		
-		// Convert to array and manually unserialize anchors
+		// Convert to array and use model accessors for proper data
 		$questionsArray = [];
 		foreach ($questions as $question) {
 			$questionData = $question->toArray();
-			// Manually unserialize anchors if they exist
-			if (isset($questionData['anchors']) && !empty($questionData['anchors'])) {
-				$questionData['anchors'] = unserialize(clean_non_ascii_characters($questionData['anchors']));
-			} else {
-				$questionData['anchors'] = [];
-			}
+			// Use the model's accessor to get properly unserialized anchors
+			$questionData['anchors'] = $question->anchors;
 			$questionsArray[] = $questionData;
 		}
 
@@ -892,16 +888,12 @@ class AssessmentsController extends Controller
 		$dimensions = Dimension::where('assessment_id', $id)->get();
 		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
 		
-		// Convert to array and manually unserialize anchors
+		// Convert to array and use model accessors for proper data
 		$questionsArray = [];
 		foreach ($questions as $question) {
 			$questionData = $question->toArray();
-			// Manually unserialize anchors if they exist
-			if (isset($questionData['anchors']) && !empty($questionData['anchors'])) {
-				$questionData['anchors'] = unserialize(clean_non_ascii_characters($questionData['anchors']));
-			} else {
-				$questionData['anchors'] = [];
-			}
+			// Use the model's accessor to get properly unserialized anchors
+			$questionData['anchors'] = $question->anchors;
 			$questionsArray[] = $questionData;
 		}
 		

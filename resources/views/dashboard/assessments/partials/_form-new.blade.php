@@ -315,6 +315,73 @@
             margin-top: 5px;
         }
         
+        /* Modal Fixes */
+        .modal {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 1055 !important;
+        }
+        
+        .modal-backdrop {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 1050 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+        
+        .modal-dialog {
+            position: relative !important;
+            margin: 30px auto !important;
+            max-height: calc(100vh - 60px) !important;
+            overflow: hidden !important;
+            z-index: 1060 !important;
+        }
+        
+        .modal-content {
+            max-height: calc(100vh - 60px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            z-index: 1065 !important;
+        }
+        
+        .modal-body {
+            overflow-y: auto !important;
+            flex: 1 !important;
+            max-height: calc(100vh - 200px) !important;
+        }
+        
+        .modal-header,
+        .modal-footer {
+            flex-shrink: 0 !important;
+        }
+        
+        /* Ensure modal backdrop covers entire viewport */
+        body.modal-open {
+            overflow: hidden !important;
+        }
+        
+        /* Fix for long content in modal body */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .editor-content {
@@ -330,6 +397,19 @@
             .field-actions {
                 width: 100%;
                 justify-content: flex-end;
+            }
+            
+            .modal-dialog {
+                margin: 10px auto !important;
+                max-height: calc(100vh - 20px) !important;
+            }
+            
+            .modal-content {
+                max-height: calc(100vh - 20px) !important;
+            }
+            
+            .modal-body {
+                max-height: calc(100vh - 160px) !important;
             }
         }
     </style>
