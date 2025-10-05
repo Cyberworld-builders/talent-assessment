@@ -96,6 +96,12 @@
             margin-bottom: 25px;
         }
         
+        .field-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
         .fields-title {
             font-size: 20px;
             font-weight: 600;
@@ -117,6 +123,89 @@
         .add-field-btn:hover {
             background: #229954;
             transform: translateY(-1px);
+        }
+        
+        .sort-fields-btn {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sort-fields-btn:hover {
+            background: #7f8c8d;
+            transform: translateY(-1px);
+        }
+        
+        .dimension-indicator {
+            display: inline-block;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+        }
+        
+        .dimension-indicator i {
+            margin-right: 4px;
+            font-size: 10px;
+        }
+        
+        /* Delete Confirmation Modal */
+        .delete-confirmation-content {
+            text-align: center;
+        }
+        
+        .field-info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        
+        .field-info h5 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+        }
+        
+        .field-info p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 13px;
+        }
+        
+        .delete-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        
+        .delete-status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .delete-status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .delete-status.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
         }
         
         /* Field List */
@@ -470,6 +559,9 @@
     </div>
     
     <div class="editor-content">
+        <!-- Hidden dimension data for JavaScript -->
+        {!! Form::hidden('dimension_data', json_encode($assessment->dimensions->toArray())) !!}
+        
         <!-- Basic Information Section -->
         <div class="form-section">
             <h3 class="section-title">Basic Information</h3>
@@ -491,9 +583,14 @@
         <div class="fields-section">
             <div class="fields-header">
                 <h3 class="fields-title">Assessment Fields</h3>
-                <button type="button" class="add-field-btn" id="add-field-btn">
-                    <i class="fa-plus"></i> Add Field
-                </button>
+                <div class="field-actions">
+                    <button type="button" class="sort-fields-btn" id="sort-fields-btn" title="Sort fields by dimension">
+                        <i class="fa-sort"></i> Sort by Dimension
+                    </button>
+                    <button type="button" class="add-field-btn" id="add-field-btn">
+                        <i class="fa-plus"></i> Add Field
+                    </button>
+                </div>
             </div>
             
             <div class="field-list" id="field-list">
@@ -574,7 +671,7 @@
                 <h4 class="modal-title">Edit Field</h4>
             </div>
             <div class="modal-body">
-                <form id="field-edit-form">
+                <div id="field-edit-form">
                     <!-- Field Type Selection -->
                     <div class="form-group-modern">
                         <label class="form-label-modern">Field Type</label>
@@ -590,7 +687,7 @@
                            <!-- Field Content -->
                            <div class="form-group-modern">
                                <label class="form-label-modern">Field Content <span style="color: #e74c3c;">*</span></label>
-                               <textarea class="form-control-modern" id="edit-field-content" rows="4" placeholder="Enter field content..." required></textarea>
+                               <textarea class="form-control-modern" id="edit-field-content" name="edit-field-content" rows="4" placeholder="Enter field content..."></textarea>
                                <div class="form-help">Use the rich text editor above to format your content. For multiple choice questions, this is the question text.</div>
                            </div>
                     
@@ -626,7 +723,7 @@
                         </label>
                         <div class="form-help">Mark this as a practice question (won't count toward final score).</div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -636,9 +733,36 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="delete-confirmation-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Field</h4>
+            </div>
+            <div class="modal-body">
+                <div class="delete-confirmation-content">
+                    <p>Are you sure you want to delete this field?</p>
+                    <div class="field-info" id="delete-field-info">
+                        <!-- Field information will be populated here -->
+                    </div>
+                    <div class="delete-status" id="delete-status" style="display: none;">
+                        <!-- Status messages will appear here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">Delete Field</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/modern-assessment-editor.js') }}"></script>
+<script src="{{ asset('assets/js/modern-assessment-editor.js') }}?v={{ time() }}"></script>
 
 @section('scripts')
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>

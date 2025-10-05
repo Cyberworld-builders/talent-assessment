@@ -701,6 +701,12 @@ class AssessmentsController extends Controller
 
 			// Update an existing question
 			$question = Question::findOrFail($data['id']);
+			
+			// Handle dimension_id for existing questions
+			if (array_key_exists('dimension_id', $data) && !empty($data['dimension_id'])) {
+				$question->dimension_id = $data['dimension_id'];
+			}
+			
 			$question->update($data);
 		}
 
@@ -907,6 +913,15 @@ class AssessmentsController extends Controller
 			$questionData = $question->toArray();
 			// Use the model's accessor to get properly unserialized anchors
 			$questionData['anchors'] = $question->anchors;
+			
+			// Add dimension name for display
+			if ($question->dimension_id) {
+				$dimension = $dimensions->find($question->dimension_id);
+				$questionData['dimension_name'] = $dimension ? $dimension->name : 'Unknown Dimension';
+			} else {
+				$questionData['dimension_name'] = null;
+			}
+			
 			$questionsArray[] = $questionData;
 		}
 		
@@ -944,5 +959,23 @@ class AssessmentsController extends Controller
 		}
 
 		return \Response::json(['success' => true, 'data' => $question_data, 'non-ids' => $questions_without_ids, 'reload' => true]);
+	}
+
+	/**
+	 * Delete a single question via AJAX
+	 *
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteQuestion($id)
+	{
+		try {
+			$question = Question::findOrFail($id);
+			$question->delete();
+			
+			return \Response::json(['success' => true, 'message' => 'Question deleted successfully']);
+		} catch (\Exception $e) {
+			return \Response::json(['success' => false, 'message' => 'Error deleting question: ' . $e->getMessage()], 500);
+		}
 	}
 }

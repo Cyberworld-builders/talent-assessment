@@ -33,6 +33,13 @@
 					<div style="margin-top: 8px; padding: 10px; background: #e8f4fd; border-left: 3px solid #3498db; border-radius: 3px;">
 						{!! $content !!}
 					</div>
+					@if (isset($dimension_name) && !empty($dimension_name))
+						<div style="margin-top: 8px;">
+							<span class="dimension-indicator">
+								<i class="fa-tag"></i> {{ $dimension_name }}
+							</span>
+						</div>
+					@endif
 				</div>
 			@elseif ($type == 1)
 				<!-- Multiple Choice Field -->
@@ -52,6 +59,13 @@
 								</div>
 							</div>
 						@endif
+						@if (isset($dimension_name) && !empty($dimension_name))
+							<div style="margin-top: 8px;">
+								<span class="dimension-indicator">
+									<i class="fa-tag"></i> {{ $dimension_name }}
+								</span>
+							</div>
+						@endif
 					</div>
 				</div>
 			@elseif ($type == 3)
@@ -63,6 +77,13 @@
 						<div style="margin-top: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa;">
 							<input type="text" placeholder="User will type here..." style="border: none; background: none; width: 100%; color: #6c757d; font-style: italic;" disabled>
 						</div>
+						@if (isset($dimension_name) && !empty($dimension_name))
+							<div style="margin-top: 8px;">
+								<span class="dimension-indicator">
+									<i class="fa-tag"></i> {{ $dimension_name }}
+								</span>
+							</div>
+						@endif
 					</div>
 				</div>
 			@else
@@ -72,6 +93,13 @@
 					<div style="margin-top: 8px;">
 						{!! $content !!}
 					</div>
+					@if (isset($dimension_name) && !empty($dimension_name))
+						<div style="margin-top: 8px;">
+							<span class="dimension-indicator">
+								<i class="fa-tag"></i> {{ $dimension_name }}
+							</span>
+						</div>
+					@endif
 				</div>
 			@endif
 		</div>

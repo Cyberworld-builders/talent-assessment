@@ -1,10 +1,13 @@
 jQuery(document).ready(function($) {
     
     // Initialize the modern assessment editor
-    console.log('Modern Assessment Editor initialized');
+    console.log('Modern Assessment Editor initialized - v2.0 with modal delete confirmation');
     
     // Field counter for numbering
     let fieldCounter = 1;
+    
+    // Deletion state management
+    let isDeleting = false;
     
     // Initialize drag and drop
     initDragAndDrop();
@@ -13,6 +16,52 @@ jQuery(document).ready(function($) {
     $('#add-field-btn').on('click', function() {
         showFieldTypeModal();
     });
+    
+    // Sort fields by dimension button
+    $('#sort-fields-btn').on('click', function() {
+        sortFieldsByDimension();
+    });
+    
+    // Confirm delete button
+    $('#confirm-delete').on('click', function() {
+        console.log('Delete button clicked');
+        confirmFieldDeletion();
+    });
+    
+    // Reset modal when it's hidden (but only if not currently deleting)
+    $('#delete-confirmation-modal').on('hidden.bs.modal', function() {
+        if (!isDeleting) {
+            resetDeleteModal();
+        }
+    });
+    
+    // Reset modal when it's shown (but only clear status, don't reset everything)
+    $('#delete-confirmation-modal').on('show.bs.modal', function() {
+        // Only clear status messages, don't reset button or field info
+        $('#delete-status').hide().removeClass('success error info').empty();
+    });
+    
+    /**
+     * Reset delete modal to clean state
+     */
+    function resetDeleteModal() {
+        // Reset button state
+        $('#confirm-delete').prop('disabled', false).text('Delete Field');
+        
+        // Clear status
+        $('#delete-status').hide().removeClass('success error info').empty();
+        
+        // Clear field info
+        $('#delete-field-info').empty();
+        
+        // Don't clear global reference here - it should persist until deletion is complete
+        
+        // Remove any aria-hidden attributes that might be causing issues
+        $('#delete-confirmation-modal').removeAttr('aria-hidden');
+        
+        // Clean up any lingering event listeners
+        $('#delete-confirmation-modal').off('hidden.bs.modal');
+    }
     
     // Field type selection
     $(document).on('click', '.field-type-option', function() {
@@ -163,6 +212,10 @@ jQuery(document).ready(function($) {
         $('#edit-field-type').val(fieldType);
         $('#edit-field-dimension').val(fieldDimension);
         
+        // Debug: Log the dimension value being loaded
+        console.log('Loading dimension:', fieldDimension);
+        console.log('Dimension select value after setting:', $('#edit-field-dimension').val());
+        
         // Handle anchors for multiple choice
         if (fieldType == 1 && fieldAnchors) {
             try {
@@ -269,6 +322,12 @@ jQuery(document).ready(function($) {
         const fieldDimension = $('#edit-field-dimension').val();
         const practiceQuestion = $('#edit-practice-question').is(':checked');
         
+        // Debug: Log all dimension-related values
+        console.log('Field type:', fieldType);
+        console.log('Dimension value from select:', fieldDimension);
+        console.log('Dimension select element:', $('#edit-field-dimension'));
+        console.log('Dimension select options:', $('#edit-field-dimension option').map(function() { return $(this).val() + ': ' + $(this).text(); }).get());
+        
         // Get content from CKEditor or fallback to textarea
         let fieldContent;
         if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['edit-field-content']) {
@@ -309,6 +368,10 @@ jQuery(document).ready(function($) {
         $field.find('input[name="field_type[]"]').val(fieldType);
         $field.find('input[name="field_content[]"]').val(fieldContent);
         $field.find('input[name="field_dimension[]"]').val(fieldDimension);
+        
+        // Debug: Log the dimension value being saved
+        console.log('Saving dimension:', fieldDimension);
+        console.log('Hidden field value after setting:', $field.find('input[name="field_dimension[]"]').val());
         
         // Handle anchors for multiple choice
         if (fieldType == 1) {
@@ -363,6 +426,32 @@ jQuery(document).ready(function($) {
         };
         $fieldType.text(typeNames[fieldType] || 'Unknown');
         
+        // Get dimension name for display
+        let dimensionName = '';
+        if (dimension && dimension !== '') {
+            // Try to get dimension name from the select options
+            const $dimensionSelect = $('#edit-field-dimension');
+            const selectedOption = $dimensionSelect.find('option[value="' + dimension + '"]');
+            dimensionName = selectedOption.text() || 'Unknown Dimension';
+            
+            // If we can't find it in the current select, try to get it from the original data
+            if (dimensionName === 'Unknown Dimension') {
+                // Look for dimension data in the page
+                const $dimensionData = $('input[name="dimension_data"]');
+                if ($dimensionData.length > 0) {
+                    try {
+                        const dimensions = JSON.parse($dimensionData.val());
+                        const foundDimension = dimensions.find(d => d.id == dimension);
+                        if (foundDimension) {
+                            dimensionName = foundDimension.name;
+                        }
+                    } catch (e) {
+                        console.log('Could not parse dimension data');
+                    }
+                }
+            }
+        }
+        
         // Update preview content
         if (fieldType == 1) {
             // Multiple Choice
@@ -381,6 +470,7 @@ jQuery(document).ready(function($) {
                 <div style="margin-top: 8px;">
                     <div style="margin-bottom: 5px; font-weight: 500;">${content}</div>
                     ${anchorsHtml}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else if (fieldType == 2) {
@@ -389,6 +479,7 @@ jQuery(document).ready(function($) {
                 <strong>Description:</strong>
                 <div style="margin-top: 8px; padding: 10px; background: #e8f4fd; border-left: 3px solid #3498db; border-radius: 3px;">
                     ${content}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else if (fieldType == 3) {
@@ -400,6 +491,7 @@ jQuery(document).ready(function($) {
                     <div style="margin-top: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa;">
                         <input type="text" placeholder="User will type here..." style="border: none; background: none; width: 100%; color: #6c757d; font-style: italic;" disabled>
                     </div>
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else {
@@ -408,6 +500,7 @@ jQuery(document).ready(function($) {
                 <strong>${typeNames[fieldType]}:</strong>
                 <div style="margin-top: 8px;">
                     ${content}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         }
@@ -439,16 +532,141 @@ jQuery(document).ready(function($) {
      * Remove a field
      */
     function removeField($field) {
-        if (confirm('Are you sure you want to remove this field?')) {
-            $field.fadeOut(300, function() {
-                $(this).remove();
-                updateFieldNumbers();
-                
-                // Show empty state if no fields left
-                if ($('#field-list .field-item').length === 0) {
-                    $('.empty-state').show();
+        // Store reference to the field being deleted
+        window.fieldToDelete = $field;
+        
+        // Get field information for display
+        const fieldType = $field.data('type');
+        const fieldContent = $field.find('input[name="field_content[]"]').val();
+        const fieldId = $field.find('input[name="field_id[]"]').val();
+        const fieldNumber = $field.find('.field-number').text();
+        
+        // Get field type name
+        const typeNames = {
+            '1': 'Multiple Choice',
+            '2': 'Description', 
+            '3': 'Text Input',
+            '4': 'Letters',
+            '5': 'Equation'
+        };
+        
+        // Populate modal with field information
+        $('#delete-field-info').html(`
+            <h5>Field #${fieldNumber}: ${typeNames[fieldType] || 'Unknown'}</h5>
+            <p><strong>Content:</strong> ${fieldContent ? fieldContent.substring(0, 100) + (fieldContent.length > 100 ? '...' : '') : 'No content'}</p>
+            <p><strong>Field ID:</strong> ${fieldId || 'New field (not saved yet)'}</p>
+        `);
+        
+        // Show the modal (reset will be handled by show.bs.modal event)
+        $('#delete-confirmation-modal').modal('show');
+    }
+    
+    /**
+     * Confirm field deletion
+     */
+    function confirmFieldDeletion() {
+        console.log('confirmFieldDeletion called');
+        
+        // Prevent multiple simultaneous deletions
+        if (isDeleting) {
+            console.log('Already deleting, ignoring request');
+            return;
+        }
+        
+        const $field = window.fieldToDelete;
+        if (!$field) {
+            console.log('No field to delete');
+            return;
+        }
+        console.log('Field to delete:', $field);
+        
+        // Set deletion flag
+        isDeleting = true;
+        
+        const fieldId = $field.find('input[name="field_id[]"]').val();
+        
+        // Show loading status
+        $('#delete-status').show().removeClass('success error info').addClass('info').html('Deleting field...');
+        $('#confirm-delete').prop('disabled', true).text('Deleting...');
+        
+        // If field has an ID, delete it from the database immediately
+        if (fieldId && fieldId !== '') {
+            console.log('Deleting field with ID:', fieldId);
+            console.log('CSRF Token:', $('meta[name="csrf_token"]').attr('content'));
+            
+            $.ajax({
+                url: '/dashboard/assessments/delete-question/' + fieldId,
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log('Field deleted from database:', response);
+                    $('#delete-status').removeClass('info').addClass('success').html('Field deleted successfully from database.');
+                    
+                    // Close modal and remove field immediately
+                    setTimeout(() => {
+                        $('#delete-confirmation-modal').modal('hide');
+                        
+                        // Remove field after modal closes
+                        setTimeout(() => {
+                            $field.fadeOut(300, function() {
+                                $(this).remove();
+                                updateFieldNumbers();
+                                
+                                // Show empty state if no fields left
+                                if ($('#field-list .field-item').length === 0) {
+                                    $('.empty-state').show();
+                                }
+                                
+                                // Reset deletion flag
+                                isDeleting = false;
+                                window.fieldToDelete = null;
+                            });
+                        }, 300);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting field:', error);
+                    console.error('Response:', xhr.responseText);
+                    console.error('Status:', xhr.status);
+                    
+                    $('#delete-status').removeClass('info').addClass('error').html(`
+                        <strong>Delete Failed:</strong><br>
+                        Status: ${xhr.status}<br>
+                        Error: ${error}<br>
+                        Response: ${xhr.responseText}
+                    `);
+                    $('#confirm-delete').prop('disabled', false).text('Delete Field');
+                    
+                    // Reset deletion flag on error
+                    isDeleting = false;
                 }
             });
+        } else {
+            // New field (no ID), just remove from DOM
+            $('#delete-status').removeClass('info').addClass('success').html('New field removed from form.');
+            
+            setTimeout(() => {
+                $('#delete-confirmation-modal').modal('hide');
+                
+                // Remove field after modal closes
+                setTimeout(() => {
+                    $field.fadeOut(300, function() {
+                        $(this).remove();
+                        updateFieldNumbers();
+                        
+                        // Show empty state if no fields left
+                        if ($('#field-list .field-item').length === 0) {
+                            $('.empty-state').show();
+                        }
+                        
+                        // Reset deletion flag
+                        isDeleting = false;
+                        window.fieldToDelete = null;
+                    });
+                }, 300);
+            }, 1000);
         }
     }
     
@@ -673,5 +891,59 @@ jQuery(document).ready(function($) {
             }
         `)
         .appendTo('head');
+    
+    /**
+     * Sort fields by dimension
+     */
+    function sortFieldsByDimension() {
+        const $fieldList = $('#field-list');
+        const $fields = $fieldList.find('.field-item');
+        
+        if ($fields.length === 0) {
+            showToast('info', 'No Fields', 'No fields to sort.');
+            return;
+        }
+        
+        // Get dimension data for sorting
+        const dimensionData = [];
+        try {
+            const $dimensionData = $('input[name="dimension_data"]');
+            if ($dimensionData.length > 0) {
+                dimensionData.push(...JSON.parse($dimensionData.val()));
+            }
+        } catch (e) {
+            console.error('Error parsing dimension data:', e);
+        }
+        
+        // Sort fields by dimension name
+        const sortedFields = $fields.toArray().sort((a, b) => {
+            const dimensionA = $(a).find('input[name="field_dimension[]"]').val();
+            const dimensionB = $(b).find('input[name="field_dimension[]"]').val();
+            
+            // Get dimension names for comparison
+            let nameA = 'Unknown';
+            let nameB = 'Unknown';
+            
+            if (dimensionData.length > 0) {
+                const dimA = dimensionData.find(d => d.id == dimensionA);
+                const dimB = dimensionData.find(d => d.id == dimensionB);
+                nameA = dimA ? dimA.name : 'Unknown';
+                nameB = dimB ? dimB.name : 'Unknown';
+            }
+            
+            return nameA.localeCompare(nameB);
+        });
+        
+        // Reorder the fields in the DOM
+        $fieldList.empty();
+        sortedFields.forEach(field => {
+            $fieldList.append(field);
+        });
+        
+        // Update field numbers
+        updateFieldNumbers();
+        
+        showToast('success', 'Fields Sorted', 'Fields have been sorted by dimension.');
+    }
     
 });
