@@ -87,6 +87,16 @@ case "$1" in
         docker-compose exec app npm run gulp
         print_success "Assets compiled!"
         ;;
+    "build")
+        check_docker
+        print_status "Building assets and clearing caches..."
+        docker-compose exec app npm run gulp
+        docker-compose exec app php artisan view:clear
+        docker-compose exec app php artisan cache:clear
+        docker-compose exec app php artisan config:clear
+        docker-compose exec app php artisan route:clear
+        print_success "Assets compiled and caches cleared!"
+        ;;
     "logs")
         check_docker
         if [ -n "$2" ]; then
@@ -255,6 +265,7 @@ case "$1" in
         echo "  artisan <cmd>     - Run artisan commands"
         echo "  test [filter]     - Run PHPUnit tests"
         echo "  gulp             - Compile assets"
+        echo "  build            - Compile assets and clear caches"
         echo "  logs [lines]     - Show application logs"
         echo "  shell            - Open container shell"
         echo ""
