@@ -559,7 +559,9 @@ class UsersController extends Controller
             'name_count' => count($data['name']),
             'email_count' => count($data['email']),
             'industry_count' => isset($data['industry']) ? count($data['industry']) : 'NOT SET',
-            'industry_data' => isset($data['industry']) ? $data['industry'] : 'NOT SET'
+            'industry_data' => isset($data['industry']) ? $data['industry'] : 'NOT SET',
+            'industry_type' => isset($data['industry']) ? gettype($data['industry']) : 'NOT SET',
+            'industry_is_array' => isset($data['industry']) ? is_array($data['industry']) : 'NOT SET'
         ]);
 
         // For each user field
@@ -568,7 +570,14 @@ class UsersController extends Controller
             $users[$i] = false;
             $name = $data['name'][$i];
             $email = $data['email'][$i];
-            $industry = isset($data['industry'][$i]) ? $data['industry'][$i] : '';
+            
+            // Handle industry data - check if it's an array or string
+            if (isset($data['industry']) && is_array($data['industry'])) {
+                $industry = isset($data['industry'][$i]) ? $data['industry'][$i] : '';
+            } else {
+                $industry = isset($data['industry']) ? $data['industry'] : '';
+            }
+            
             $job = $data['job_id'][$i];
 
             // Find industry by name (case-insensitive)

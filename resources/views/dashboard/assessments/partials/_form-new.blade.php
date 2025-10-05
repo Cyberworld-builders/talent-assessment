@@ -409,6 +409,7 @@
                         <i class="fa-list-ul"></i>
                         <h4>Multiple Choice</h4>
                         <p>Single or multiple selection from options</p>
+                        <small style="color: #7f8c8d; font-style: italic;">Edit modal will open to configure answer options</small>
                     </div>
                     <div class="field-type-option" data-type="2">
                         <i class="fa-paragraph"></i>
@@ -479,7 +480,7 @@
                     
                     <!-- Multiple Choice Options -->
                     <div class="form-group-modern" id="edit-anchors-group" style="display: none;">
-                        <label class="form-label-modern">Answer Options</label>
+                        <label class="form-label-modern">Anchors</label>
                         <div id="edit-anchors-container">
                             <!-- Dynamic anchor options will be added here -->
                         </div>

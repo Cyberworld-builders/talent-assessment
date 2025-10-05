@@ -183,9 +183,22 @@ class AssessmentsController extends Controller
 //		}
 //		ksort($questions);
 
-		$questions = $assessment->questions()->orderBy('number', 'asc')->get()->toArray();
+		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
+		
+		// Convert to array and manually unserialize anchors
+		$questionsArray = [];
+		foreach ($questions as $question) {
+			$questionData = $question->toArray();
+			// Manually unserialize anchors if they exist
+			if (isset($questionData['anchors']) && !empty($questionData['anchors'])) {
+				$questionData['anchors'] = unserialize(clean_non_ascii_characters($questionData['anchors']));
+			} else {
+				$questionData['anchors'] = [];
+			}
+			$questionsArray[] = $questionData;
+		}
 
-    	return view('dashboard.assessments.edit', compact('assessment', 'dimensions', 'questions'));
+    	return view('dashboard.assessments.edit', compact('assessment', 'dimensions') + ['questions' => $questionsArray]);
     }
 
 	/**
@@ -638,6 +651,20 @@ class AssessmentsController extends Controller
 			// If question doesn't have an id, it needs to be created
 			if (! $data['id'])
 			{
+				// Handle anchors data properly for new questions
+				if (array_key_exists('anchors', $data)) {
+					// If anchors is a JSON string, decode it to array
+					if (is_string($data['anchors'])) {
+						$data['anchors'] = json_decode($data['anchors'], true);
+					}
+					// If anchors is null or empty, set to empty array
+					if (empty($data['anchors'])) {
+						$data['anchors'] = [];
+					}
+				} else {
+					$data['anchors'] = [];
+				}
+				
 				$question = new Question($data);
 				$questions_without_ids = array_add($questions_without_ids, $i, $question);
 				$assessment->questions()->save($question);
@@ -649,9 +676,19 @@ class AssessmentsController extends Controller
 			if (! in_array($data['id'], $valid_ids))
 				continue;
 
-			// If anchors don't exist in array, create the anchors key
-			if (! array_key_exists('anchors', $data))
-				$data['anchors'] = '';
+			// Handle anchors data properly
+			if (array_key_exists('anchors', $data)) {
+				// If anchors is a JSON string, decode it to array
+				if (is_string($data['anchors'])) {
+					$data['anchors'] = json_decode($data['anchors'], true);
+				}
+				// If anchors is null or empty, set to empty array
+				if (empty($data['anchors'])) {
+					$data['anchors'] = [];
+				}
+			} else {
+				$data['anchors'] = [];
+			}
 
 			// Update an existing question
 			$question = Question::findOrFail($data['id']);
@@ -853,9 +890,22 @@ class AssessmentsController extends Controller
 	{
 		$assessment = Assessment::findOrFail($id);
 		$dimensions = Dimension::where('assessment_id', $id)->get();
-		$questions = $assessment->questions()->orderBy('number', 'asc')->get()->toArray();
+		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
 		
-		return view('dashboard.assessments.edit-new', compact('assessment', 'dimensions', 'questions'));
+		// Convert to array and manually unserialize anchors
+		$questionsArray = [];
+		foreach ($questions as $question) {
+			$questionData = $question->toArray();
+			// Manually unserialize anchors if they exist
+			if (isset($questionData['anchors']) && !empty($questionData['anchors'])) {
+				$questionData['anchors'] = unserialize(clean_non_ascii_characters($questionData['anchors']));
+			} else {
+				$questionData['anchors'] = [];
+			}
+			$questionsArray[] = $questionData;
+		}
+		
+		return view('dashboard.assessments.edit-new', compact('assessment', 'dimensions') + ['questions' => $questionsArray]);
 	}
 
 	/**
