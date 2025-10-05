@@ -589,14 +589,14 @@
                     
                            <!-- Field Content -->
                            <div class="form-group-modern">
-                               <label class="form-label-modern">Field Content</label>
-                               <textarea class="form-control-modern" id="edit-field-content" rows="4" placeholder="Enter field content..."></textarea>
+                               <label class="form-label-modern">Field Content <span style="color: #e74c3c;">*</span></label>
+                               <textarea class="form-control-modern" id="edit-field-content" rows="4" placeholder="Enter field content..." required></textarea>
                                <div class="form-help">Use the rich text editor above to format your content. For multiple choice questions, this is the question text.</div>
                            </div>
                     
                     <!-- Dimension Assignment -->
                     <div class="form-group-modern" id="edit-dimension-group">
-                        <label class="form-label-modern">Dimension</label>
+                        <label class="form-label-modern">Dimension <span style="color: #e74c3c;">*</span></label>
                         <select class="form-control-modern" id="edit-field-dimension">
                             <option value="">No Dimension</option>
                             @foreach ($dimensions as $dimension)

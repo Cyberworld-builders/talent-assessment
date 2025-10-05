@@ -661,6 +661,19 @@ class AssessmentsController extends Controller
 					$data['anchors'] = [];
 				}
 				
+				// Handle dimension_id - if empty or null, get first available dimension
+				if (empty($data['dimension_id'])) {
+					// Get the first dimension for this assessment as default
+					$firstDimension = $assessment->dimensions()->first();
+					if ($firstDimension) {
+						$data['dimension_id'] = $firstDimension->id;
+					} else {
+						// If no dimensions exist, create a default one or use a fallback
+						// For now, we'll skip this question to avoid the error
+						continue;
+					}
+				}
+				
 				$question = new Question($data);
 				$questions_without_ids = array_add($questions_without_ids, $i, $question);
 				$assessment->questions()->save($question);

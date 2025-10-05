@@ -84,10 +84,8 @@
 	{!! Form::hidden('field_type[]', $type) !!}
 	{!! Form::hidden('field_content[]', $content) !!}
 	{!! Form::hidden('field_number[]', $number) !!}
+	{!! Form::hidden('field_dimension[]', $dimension_id ?? '') !!}
 	@if (isset($anchors))
 		{!! Form::hidden('field_anchors[]', json_encode($anchors)) !!}
-	@endif
-	@if (isset($dimension_id))
-		{!! Form::hidden('field_dimension[]', $dimension_id) !!}
 	@endif
 </div>

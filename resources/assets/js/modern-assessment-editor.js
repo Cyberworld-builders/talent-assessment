@@ -138,12 +138,10 @@ jQuery(document).ready(function($) {
         // Add animation
         $newField.hide().fadeIn(300);
         
-        // For multiple choice fields, automatically open edit modal to configure options
-        if (fieldType == 1) {
-            setTimeout(function() {
-                editField($newField);
-            }, 350); // Wait for fade-in animation to complete
-        }
+        // Automatically open edit modal for all field types
+        setTimeout(function() {
+            editField($newField);
+        }, 350); // Wait for fade-in animation to complete
         
         console.log('Added new field of type:', fieldType);
     }
@@ -277,6 +275,33 @@ jQuery(document).ready(function($) {
             fieldContent = CKEDITOR.instances['edit-field-content'].getData();
         } else {
             fieldContent = $('#edit-field-content').val();
+        }
+        
+        // Validation with visual feedback
+        let hasErrors = false;
+        let errorMessage = '';
+        
+        if (!fieldContent || fieldContent.trim() === '') {
+            hasErrors = true;
+            errorMessage += 'Please enter field content.\n';
+            $('#edit-field-content').addClass('error-border');
+        } else {
+            $('#edit-field-content').removeClass('error-border');
+        }
+        
+        // For non-description fields, dimension is required
+        if (fieldType != 2 && (!fieldDimension || fieldDimension === '')) {
+            hasErrors = true;
+            errorMessage += 'Please select a dimension for this field.\n';
+            $('#edit-field-dimension').addClass('error-border');
+        } else {
+            $('#edit-field-dimension').removeClass('error-border');
+        }
+        
+        if (hasErrors) {
+            // Show error in modal
+            showModalError(errorMessage);
+            return;
         }
         
         // Update field data
@@ -442,6 +467,35 @@ jQuery(document).ready(function($) {
      * Save the assessment
      */
     function saveAssessment() {
+        // Validate all fields before submission
+        let hasErrors = false;
+        let errorMessage = '';
+        
+        $('#field-list .field-item').each(function(index) {
+            const $field = $(this);
+            const fieldType = $field.find('input[name="field_type[]"]').val();
+            const fieldContent = $field.find('input[name="field_content[]"]').val();
+            const fieldDimension = $field.find('input[name="field_dimension[]"]').val();
+            
+            // Check content
+            if (!fieldContent || fieldContent.trim() === '') {
+                hasErrors = true;
+                errorMessage += `Field ${index + 1}: Please enter content.\n`;
+            }
+            
+            // Check dimension for non-description fields
+            if (fieldType != 2 && (!fieldDimension || fieldDimension === '')) {
+                hasErrors = true;
+                errorMessage += `Field ${index + 1}: Please select a dimension.\n`;
+            }
+        });
+        
+        if (hasErrors) {
+            // Show error as toast notification
+            showToast('error', 'Validation Error', errorMessage.trim());
+            return;
+        }
+        
         const formData = new FormData($('form')[0]);
         
         // Collect field data
@@ -511,6 +565,59 @@ jQuery(document).ready(function($) {
         }, 3000);
     }
     
+    /**
+     * Show modal error
+     */
+    function showModalError(message) {
+        // Remove any existing error messages
+        $('.modal-error').remove();
+        
+        // Add error message to modal header
+        const $errorDiv = $('<div class="modal-error" style="background: #f8d7da; color: #721c24; padding: 10px 15px; margin: 10px 0; border: 1px solid #f5c6cb; border-radius: 4px; font-size: 14px;">' + message + '</div>');
+        $('#field-edit-modal .modal-header').after($errorDiv);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(function() {
+            $errorDiv.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+    
+    /**
+     * Show toast notification
+     */
+    function showToast(type, title, message) {
+        // Use existing notification system but with better styling
+        const bgColor = type === 'error' ? '#e74c3c' : type === 'success' ? '#27ae60' : '#3498db';
+        const $toast = $(`
+            <div class="toast-notification" style="
+                position: fixed; 
+                top: 20px; 
+                right: 20px; 
+                padding: 15px 20px; 
+                border-radius: 6px; 
+                color: white; 
+                z-index: 10000; 
+                background: ${bgColor};
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                max-width: 400px;
+                font-size: 14px;
+            ">
+                <strong>${title}</strong><br>
+                ${message}
+            </div>
+        `);
+        
+        $('body').append($toast);
+        
+        setTimeout(function() {
+            $toast.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+    
     // Add some CSS for the placeholder
     $('<style>')
         .prop('type', 'text/css')
@@ -543,6 +650,17 @@ jQuery(document).ready(function($) {
                 font-size: 24px;
                 color: #667eea;
                 margin-bottom: 10px;
+            }
+            .error-border {
+                border: 2px solid #e74c3c !important;
+                box-shadow: 0 0 5px rgba(231, 76, 60, 0.3) !important;
+            }
+            .modal-error {
+                animation: slideDown 0.3s ease-out;
+            }
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
             .field-type-option h4 {
                 margin: 10px 0 5px 0;
