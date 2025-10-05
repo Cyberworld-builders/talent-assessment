@@ -25,8 +25,7 @@
 			])
 		{!! Form::close() !!}
 
-		<!-- Templates -->
-		@include('dashboard.assessments.partials._templates-new')
+		<!-- Vue.js handles all templates now -->
 
 	</div>
 @stop

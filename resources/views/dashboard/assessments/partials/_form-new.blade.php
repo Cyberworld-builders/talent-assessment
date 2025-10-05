@@ -579,34 +579,17 @@
             </div>
         </div>
         
-        <!-- Assessment Fields Section -->
-        <div class="fields-section">
-            <div class="fields-header">
-                <h3 class="fields-title">Assessment Fields</h3>
-                <div class="field-actions">
-                    <button type="button" class="sort-fields-btn" id="sort-fields-btn" title="Sort fields by dimension">
-                        <i class="fa-sort"></i> Sort by Dimension
-                    </button>
-                    <button type="button" class="add-field-btn" id="add-field-btn">
-                        <i class="fa-plus"></i> Add Field
-                    </button>
-                </div>
-            </div>
-            
-            <div class="field-list" id="field-list">
-                @if (!empty($questions))
-                    @foreach ($questions as $question)
-                        @include('dashboard.assessments.partials._field-item-new', $question)
-                    @endforeach
-                @else
-                    <div class="empty-state">
-                        <i class="fa-file-text-o"></i>
-                        <h3>No Fields Yet</h3>
-                        <p>Click "Add Field" to start building your assessment</p>
-                    </div>
-                @endif
-            </div>
+        <!-- Vue.js Assessment Editor -->
+        <div id="vue-assessment-editor">
+            <assessment-editor 
+                :initial-fields="{{ json_encode($questions) }}"
+                :dimensions="{{ json_encode($dimensions) }}"
+                :assessment-id="{{ $assessment->id }}"
+            ></assessment-editor>
         </div>
+        
+        <!-- Hidden form data populated by Vue -->
+        <div id="vue-form-data"></div>
         
         <!-- Action Buttons -->
         <div class="form-section">
@@ -620,8 +603,19 @@
     </div>
 </div>
 
-<!-- Field Type Modal -->
-<div class="modal fade" id="field-type-modal">
+<!-- Vue.js will handle all modals -->
+
+@section('scripts')
+    <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tagsinput/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
+@stop
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -762,7 +756,8 @@
 
 <!-- Scripts -->
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/modern-assessment-editor.js') }}?v={{ time() }}"></script>
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
+<script src="{{ asset('assets/js/vue-assessment-editor.js') }}?v={{ time() }}"></script>
 
 @section('scripts')
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
