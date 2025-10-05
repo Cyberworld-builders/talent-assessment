@@ -17,10 +17,6 @@ jQuery(document).ready(function($) {
         showFieldTypeModal();
     });
     
-    // Sort fields by dimension button
-    $('#sort-fields-btn').on('click', function() {
-        sortFieldsByDimension();
-    });
     
     // Confirm delete button
     $('#confirm-delete').on('click', function() {
@@ -216,6 +212,15 @@ jQuery(document).ready(function($) {
         console.log('Loading dimension:', fieldDimension);
         console.log('Dimension select value after setting:', $('#edit-field-dimension').val());
         
+        // Additional debugging - check if dimension field is being reset
+        setTimeout(function() {
+            console.log('Dimension select value after timeout:', $('#edit-field-dimension').val());
+            console.log('Dimension select element:', $('#edit-field-dimension'));
+            console.log('Dimension select options:', $('#edit-field-dimension option').map(function() { 
+                return $(this).val() + ': ' + $(this).text(); 
+            }).get());
+        }, 100);
+        
         // Handle anchors for multiple choice
         if (fieldType == 1 && fieldAnchors) {
             try {
@@ -327,6 +332,10 @@ jQuery(document).ready(function($) {
         console.log('Dimension value from select:', fieldDimension);
         console.log('Dimension select element:', $('#edit-field-dimension'));
         console.log('Dimension select options:', $('#edit-field-dimension option').map(function() { return $(this).val() + ': ' + $(this).text(); }).get());
+        
+        // Additional debugging - check if dimension field is being cleared
+        console.log('Dimension field before save:', $('#edit-field-dimension').val());
+        console.log('Dimension field element exists:', $('#edit-field-dimension').length > 0);
         
         // Get content from CKEditor or fallback to textarea
         let fieldContent;
@@ -892,58 +901,5 @@ jQuery(document).ready(function($) {
         `)
         .appendTo('head');
     
-    /**
-     * Sort fields by dimension
-     */
-    function sortFieldsByDimension() {
-        const $fieldList = $('#field-list');
-        const $fields = $fieldList.find('.field-item');
-        
-        if ($fields.length === 0) {
-            showToast('info', 'No Fields', 'No fields to sort.');
-            return;
-        }
-        
-        // Get dimension data for sorting
-        const dimensionData = [];
-        try {
-            const $dimensionData = $('input[name="dimension_data"]');
-            if ($dimensionData.length > 0) {
-                dimensionData.push(...JSON.parse($dimensionData.val()));
-            }
-        } catch (e) {
-            console.error('Error parsing dimension data:', e);
-        }
-        
-        // Sort fields by dimension name
-        const sortedFields = $fields.toArray().sort((a, b) => {
-            const dimensionA = $(a).find('input[name="field_dimension[]"]').val();
-            const dimensionB = $(b).find('input[name="field_dimension[]"]').val();
-            
-            // Get dimension names for comparison
-            let nameA = 'Unknown';
-            let nameB = 'Unknown';
-            
-            if (dimensionData.length > 0) {
-                const dimA = dimensionData.find(d => d.id == dimensionA);
-                const dimB = dimensionData.find(d => d.id == dimensionB);
-                nameA = dimA ? dimA.name : 'Unknown';
-                nameB = dimB ? dimB.name : 'Unknown';
-            }
-            
-            return nameA.localeCompare(nameB);
-        });
-        
-        // Reorder the fields in the DOM
-        $fieldList.empty();
-        sortedFields.forEach(field => {
-            $fieldList.append(field);
-        });
-        
-        // Update field numbers
-        updateFieldNumbers();
-        
-        showToast('success', 'Fields Sorted', 'Fields have been sorted by dimension.');
-    }
     
 });

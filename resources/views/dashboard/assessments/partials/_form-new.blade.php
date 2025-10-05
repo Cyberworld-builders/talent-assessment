@@ -224,7 +224,6 @@
             margin-bottom: 15px;
             padding: 20px;
             transition: all 0.3s ease;
-            cursor: move;
         }
         
         .field-item:hover {
@@ -584,9 +583,6 @@
             <div class="fields-header">
                 <h3 class="fields-title">Assessment Fields</h3>
                 <div class="field-actions">
-                    <button type="button" class="sort-fields-btn" id="sort-fields-btn" title="Sort fields by dimension">
-                        <i class="fa-sort"></i> Sort by Dimension
-                    </button>
                     <button type="button" class="add-field-btn" id="add-field-btn">
                         <i class="fa-plus"></i> Add Field
                     </button>
@@ -759,6 +755,9 @@
         </div>
     </div>
 </div>
+
+<!-- Field Templates -->
+@include('dashboard.assessments.partials._templates-new')
 
 <!-- Scripts -->
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
