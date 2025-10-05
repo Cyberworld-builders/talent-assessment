@@ -151,27 +151,28 @@
             margin-bottom: 15px;
         }
         
+        .field-header-left {
+            display: flex;
+            align-items: center;
+        }
+        
         .field-number {
-            background: #667eea;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #dee2e6;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 14px;
+            margin-right: 12px;
+            cursor: default;
+            user-select: none;
         }
         
-        .field-type {
-            background: #ecf0f1;
-            color: #7f8c8d;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
         
         .field-actions {
             display: flex;

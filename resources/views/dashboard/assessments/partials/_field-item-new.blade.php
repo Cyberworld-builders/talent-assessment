@@ -5,12 +5,11 @@
 
 <div class="field-item" data-type="{{ $type }}" data-id="{{ $id ?? '' }}">
 	<div class="field-header">
-		<div style="display: flex; align-items: center;">
+		<div class="field-header-left">
 			<div class="drag-handle">
 				<i class="fa-bars"></i>
 			</div>
 			<div class="field-number">{{ $number }}</div>
-			<div class="field-type">{{ $description }}</div>
 		</div>
 		<div class="field-actions">
 			<button type="button" class="field-action-btn edit-field" title="Edit Field">
