@@ -604,6 +604,9 @@
             </div>
         </div>
         
+        <!-- Hidden form data populated by Vue -->
+        <div id="vue-form-data"></div>
+        
         <!-- Action Buttons -->
         <div class="form-section">
             <div style="display: flex; gap: 15px; justify-content: flex-end;">
@@ -616,8 +619,19 @@
     </div>
 </div>
 
-<!-- Field Type Modal -->
-<div class="modal fade" id="field-type-modal">
+<!-- Vue.js will handle all modals -->
+
+@section('scripts')
+    <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tagsinput/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
+@stop
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -761,7 +775,8 @@
 
 <!-- Scripts -->
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/modern-assessment-editor.js') }}?v={{ time() }}"></script>
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
+<script src="{{ asset('assets/js/vue-assessment-editor.js') }}?v={{ time() }}"></script>
 
 @section('scripts')
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>

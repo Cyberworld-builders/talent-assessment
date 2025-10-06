@@ -937,9 +937,36 @@ class AssessmentsController extends Controller
 	 */
 	public function updateNew($id, AssessmentRequest $request)
 	{
-		$assessment_data = $request->except(['questions', 'deleted_questions']);
-		$question_data = json_decode($request->get('questions'));
-		$deleted_questions = json_decode($request->get('deleted_questions'));
+		// Handle both old JSON format and new array format
+		if ($request->has('questions')) {
+			// Old AJAX format
+			$assessment_data = $request->except(['questions', 'deleted_questions']);
+			$question_data = json_decode($request->get('questions'));
+			$deleted_questions = json_decode($request->get('deleted_questions'));
+		} else {
+			// New Vue.js array format
+			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors']);
+			
+			// Convert arrays to question data format
+			$field_ids = $request->get('field_id', []);
+			$field_types = $request->get('field_type', []);
+			$field_contents = $request->get('field_content', []);
+			$field_dimensions = $request->get('field_dimension', []);
+			$field_anchors = $request->get('field_anchors', []);
+			
+			$question_data = [];
+			for ($i = 0; $i < count($field_types); $i++) {
+				$question_data[] = (object)[
+					'id' => !empty($field_ids[$i]) ? $field_ids[$i] : null,
+					'type' => $field_types[$i],
+					'content' => $field_contents[$i],
+					'dimension_id' => !empty($field_dimensions[$i]) ? $field_dimensions[$i] : null,
+					'anchors' => !empty($field_anchors[$i]) ? json_decode($field_anchors[$i], true) : []
+				];
+			}
+			
+			$deleted_questions = null; // Vue.js handles deletion via AJAX
+		}
 
 		// Update the assessment
 		$assessment = Assessment::findOrFail($id);
@@ -958,7 +985,9 @@ class AssessmentsController extends Controller
 			$this->delete_questions($deleted_questions, $valid_ids);
 		}
 
-		return \Response::json(['success' => true, 'data' => $question_data, 'non-ids' => $questions_without_ids, 'reload' => true]);
+		// Return redirect back to the edit page
+		return redirect()->to("/dashboard/assessments/{$assessment->id}/edit-new")
+			->with('success', 'Assessment updated successfully!');
 	}
 
 	/**
