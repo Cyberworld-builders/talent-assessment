@@ -224,6 +224,7 @@
             margin-bottom: 15px;
             padding: 20px;
             transition: all 0.3s ease;
+            cursor: move;
         }
         
         .field-item:hover {
@@ -578,34 +579,82 @@
             </div>
         </div>
         
-        <!-- Assessment Fields Section -->
-        <div class="fields-section">
-            <div class="fields-header">
-                <h3 class="fields-title">Assessment Fields</h3>
-                <div class="field-actions">
-                    <button type="button" class="add-field-btn" id="add-field-btn">
-                        <i class="fa-plus"></i> Add Field
-                    </button>
-                </div>
-            </div>
+        <!-- jQuery Assessment Editor -->
+        <div class="form-section">
+            <h3 class="section-title">Assessment Fields</h3>
+            <p class="section-description">Add and organize your assessment fields. Drag to reorder.</p>
             
+            <!-- Field List -->
             <div class="field-list" id="field-list">
-                @if (!empty($questions))
-                    @foreach ($questions as $question)
-                        @include('dashboard.assessments.partials._field-item-new', $question)
+                @if(isset($questions) && count($questions) > 0)
+                    @foreach($questions as $index => $question)
+                        <div class="field-item" data-field-type="{{ $question['type'] }}">
+                            <div class="drag-handle">
+                                <i class="fa-arrows"></i>
+                            </div>
+                            <div class="field-header">
+                                <div class="field-number">{{ $index + 1 }}</div>
+                                <div class="field-type-badge">
+                                    @if($question['type'] == 1)
+                                        <span class="badge badge-primary">Multiple Choice</span>
+                                    @elseif($question['type'] == 2)
+                                        <span class="badge badge-info">Description</span>
+                                    @elseif($question['type'] == 3)
+                                        <span class="badge badge-success">Text Input</span>
+                                    @elseif($question['type'] == 4)
+                                        <span class="badge badge-warning">Number Input</span>
+                                    @elseif($question['type'] == 5)
+                                        <span class="badge badge-secondary">Date Input</span>
+                                    @endif
+                                </div>
+                                <div class="field-actions">
+                                    <button type="button" class="btn btn-sm btn-primary edit-field">
+                                        <i class="fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger delete-field">
+                                        <i class="fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="field-content">
+                                <div class="field-preview">
+                                    {{ strip_tags($question['content']) }}
+                                </div>
+                                @if(isset($question['dimension_name']) && $question['dimension_name'])
+                                    <div class="field-dimension">
+                                        <strong>Dimension:</strong> {{ $question['dimension_name'] }}
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <!-- Hidden form fields -->
+                            <input type="hidden" name="field_id[]" value="{{ $question['id'] ?? '' }}">
+                            <input type="hidden" name="field_type[]" value="{{ $question['type'] }}">
+                            <input type="hidden" name="field_content[]" value="{{ htmlspecialchars($question['content']) }}">
+                            <input type="hidden" name="field_dimension[]" value="{{ $question['dimension_id'] ?? '' }}">
+                            <input type="hidden" name="field_anchors[]" value="{{ json_encode($question['anchors'] ?? []) }}">
+                            <input type="hidden" name="field_number[]" value="{{ $index + 1 }}">
+                        </div>
                     @endforeach
                 @else
-                    <div class="empty-state">
-                        <i class="fa-file-text-o"></i>
-                        <h3>No Fields Yet</h3>
-                        <p>Click "Add Field" to start building your assessment</p>
+                    <div class="empty-state" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <i class="fa-list-ul" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+                        <h4>No fields yet</h4>
+                        <p>Click "Add Field" to start building your assessment.</p>
                     </div>
                 @endif
             </div>
+            
+            <!-- Add Field Button -->
+            <div class="add-field-section">
+                <button type="button" class="btn btn-primary btn-lg" id="add-field-btn">
+                    <i class="fa-plus"></i> Add Field
+                </button>
+                <button type="button" class="btn btn-secondary" id="sort-fields-btn">
+                    <i class="fa-sort"></i> Sort by Dimension
+                </button>
+            </div>
         </div>
-        
-        <!-- Hidden form data populated by Vue -->
-        <div id="vue-form-data"></div>
         
         <!-- Action Buttons -->
         <div class="form-section">
@@ -619,12 +668,12 @@
     </div>
 </div>
 
-<!-- Vue.js will handle all modals -->
 
 @section('scripts')
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/modern-assessment-editor.js') }}"></script>
     <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
     <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
     <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
@@ -770,18 +819,14 @@
     </div>
 </div>
 
-<!-- Field Templates -->
-@include('dashboard.assessments.partials._templates-new')
-
 <!-- Scripts -->
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-<script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
-<script src="{{ asset('assets/js/vue-assessment-editor.js') }}?v={{ time() }}"></script>
 
 @section('scripts')
     <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/modern-assessment-editor.js') }}"></script>
     <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
     <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
     <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>

@@ -895,6 +895,7 @@ class AssessmentsController extends Controller
 		return $task;
 	}
 
+
 	/**
 	 * Show the new assessment editor interface.
 	 *
@@ -944,7 +945,7 @@ class AssessmentsController extends Controller
 			$question_data = json_decode($request->get('questions'));
 			$deleted_questions = json_decode($request->get('deleted_questions'));
 		} else {
-			// New Vue.js array format
+			// New jQuery array format
 			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors']);
 			
 			// Convert arrays to question data format
@@ -965,7 +966,7 @@ class AssessmentsController extends Controller
 				];
 			}
 			
-			$deleted_questions = null; // Vue.js handles deletion via AJAX
+			$deleted_questions = null; // jQuery handles deletion via AJAX
 		}
 
 		// Update the assessment
