@@ -134,21 +134,6 @@
             transform: translateY(-1px);
         }
         
-        .sort-fields-btn {
-            background: #95a5a6;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .sort-fields-btn:hover {
-            background: #7f8c8d;
-            transform: translateY(-1px);
-        }
         
         .dimension-indicator {
             display: inline-block;
@@ -836,9 +821,6 @@
                 <button type="button" class="btn btn-primary btn-lg" id="add-field-btn">
                     <i class="fa-plus"></i> Add Field
                 </button>
-                <button type="button" class="btn btn-secondary" id="sort-fields-btn">
-                    <i class="fa-sort"></i> Sort by Dimension
-                </button>
             </div>
         </div>
         
@@ -938,7 +920,7 @@
                     
                     <!-- Dimension Assignment -->
                     <div class="form-group-modern" id="edit-dimension-group">
-                        <label class="form-label-modern">Dimension <span style="color: #e74c3c;">*</span></label>
+                        <label class="form-label-modern">Dimension</label>
                         <select class="form-control-modern" id="edit-field-dimension">
                             <option value="">No Dimension</option>
                             @foreach ($dimensions as $dimension)

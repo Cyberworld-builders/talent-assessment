@@ -639,10 +639,14 @@ class AssessmentsController extends Controller
 		if (empty($question_data))
 			return false;
 
+		// Process all questions in the order they appear in the frontend
 		foreach ($question_data as $data)
 		{
 			// Get data in array format
 			$data = json_decode(json_encode($data), true);
+			
+			// Ensure number is set based on frontend order
+			$data['number'] = $i + 1;
 
 			// If question doesn't have an id, it needs to be created
 			if (! $data['id'])
@@ -699,7 +703,7 @@ class AssessmentsController extends Controller
 				$data['anchors'] = [];
 			}
 
-			// Update an existing question
+			// Update an existing question with new order
 			$question = Question::findOrFail($data['id']);
 			
 			// Handle dimension_id for existing questions
@@ -707,7 +711,9 @@ class AssessmentsController extends Controller
 				$question->dimension_id = $data['dimension_id'];
 			}
 			
+			// Update the question with new order number
 			$question->update($data);
+			$i++;
 		}
 
 		return $questions_without_ids;
@@ -946,7 +952,7 @@ class AssessmentsController extends Controller
 			$deleted_questions = json_decode($request->get('deleted_questions'));
 		} else {
 			// New jQuery array format
-			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors']);
+			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors', 'field_number']);
 			
 			// Convert arrays to question data format
 			$field_ids = $request->get('field_id', []);
@@ -954,6 +960,7 @@ class AssessmentsController extends Controller
 			$field_contents = $request->get('field_content', []);
 			$field_dimensions = $request->get('field_dimension', []);
 			$field_anchors = $request->get('field_anchors', []);
+			$field_numbers = $request->get('field_number', []);
 			
 			$question_data = [];
 			for ($i = 0; $i < count($field_types); $i++) {
@@ -961,6 +968,7 @@ class AssessmentsController extends Controller
 					'id' => !empty($field_ids[$i]) ? $field_ids[$i] : null,
 					'type' => $field_types[$i],
 					'content' => $field_contents[$i],
+					'number' => !empty($field_numbers[$i]) ? $field_numbers[$i] : $i + 1,
 					'dimension_id' => !empty($field_dimensions[$i]) ? $field_dimensions[$i] : null,
 					'anchors' => !empty($field_anchors[$i]) ? json_decode($field_anchors[$i], true) : []
 				];

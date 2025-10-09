@@ -24,11 +24,11 @@ jQuery(document).ready(function($) {
         confirmFieldDeletion();
     });
     
-    // Reset modal when it's hidden (but only if not currently deleting)
+    // Reset modal when it's hidden
     $('#delete-confirmation-modal').on('hidden.bs.modal', function() {
-        if (!isDeleting) {
-            resetDeleteModal();
-        }
+        // Always reset the deletion state when modal is hidden
+        isDeleting = false;
+        resetDeleteModal();
     });
     
     // Reset modal when it's shown (but only clear status, don't reset everything)
@@ -279,6 +279,9 @@ jQuery(document).ready(function($) {
         // Add animation
         $newField.hide().fadeIn(300);
         
+        // Update field numbers after adding new field
+        updateFieldNumbers();
+        
         // Automatically open edit modal for all field types
         setTimeout(function() {
             editField($newField);
@@ -366,12 +369,8 @@ jQuery(document).ready(function($) {
             $anchorsGroup.hide();
         }
         
-        // Show/hide dimension for non-description fields
-        if (fieldType == 2) {
-            $dimensionGroup.hide();
-        } else {
-            $dimensionGroup.show();
-        }
+        // Show dimension field for all field types
+        $dimensionGroup.show();
     }
     
     /**
@@ -463,11 +462,10 @@ jQuery(document).ready(function($) {
             $('#edit-field-content').removeClass('error-border');
         }
         
-        // For non-description fields, dimension is required
-        if (fieldType != 2 && (!fieldDimension || fieldDimension === '')) {
-            hasErrors = true;
-            errorMessage += 'Please select a dimension for this field.\n';
-            $('#edit-field-dimension').addClass('error-border');
+        // Dimension is optional for all field types
+        if (!fieldDimension || fieldDimension === '') {
+            // Dimension is optional, just remove any error styling
+            $('#edit-field-dimension').removeClass('error-border');
         } else {
             $('#edit-field-dimension').removeClass('error-border');
         }
@@ -704,6 +702,16 @@ jQuery(document).ready(function($) {
         $('#delete-status').show().removeClass('success error info').addClass('info').html('Deleting field...');
         $('#confirm-delete').prop('disabled', true).text('Deleting...');
         
+        // Set a timeout to prevent button from getting stuck indefinitely
+        const deletionTimeout = setTimeout(() => {
+            if (isDeleting) {
+                console.log('Deletion timeout - resetting button state');
+                isDeleting = false;
+                $('#confirm-delete').prop('disabled', false).text('Delete Field');
+                $('#delete-status').removeClass('info').addClass('error').html('Deletion timed out. Please try again.');
+            }
+        }, 10000); // 10 second timeout
+        
         // If field has an ID, delete it from the database immediately
         if (fieldId && fieldId !== '') {
             console.log('Deleting field with ID:', fieldId);
@@ -717,6 +725,7 @@ jQuery(document).ready(function($) {
                 },
                 success: function(response) {
                     console.log('Field deleted from database:', response);
+                    clearTimeout(deletionTimeout); // Clear the timeout
                     $('#delete-status').removeClass('info').addClass('success').html('Field deleted successfully from database.');
                     
                     // Close modal and remove field immediately
@@ -746,6 +755,7 @@ jQuery(document).ready(function($) {
                     console.error('Response:', xhr.responseText);
                     console.error('Status:', xhr.status);
                     
+                    clearTimeout(deletionTimeout); // Clear the timeout
                     $('#delete-status').removeClass('info').addClass('error').html(`
                         <strong>Delete Failed:</strong><br>
                         Status: ${xhr.status}<br>
@@ -760,6 +770,7 @@ jQuery(document).ready(function($) {
             });
         } else {
             // New field (no ID), just remove from DOM
+            clearTimeout(deletionTimeout); // Clear the timeout
             $('#delete-status').removeClass('info').addClass('success').html('New field removed from form.');
             
             setTimeout(() => {
@@ -831,11 +842,7 @@ jQuery(document).ready(function($) {
                 errorMessage += `Field ${index + 1}: Please enter content.\n`;
             }
             
-            // Check dimension for non-description fields
-            if (fieldType != 2 && (!fieldDimension || fieldDimension === '')) {
-                hasErrors = true;
-                errorMessage += `Field ${index + 1}: Please select a dimension.\n`;
-            }
+            // Dimension is optional for all field types - no validation needed
         });
         
         if (hasErrors) {
