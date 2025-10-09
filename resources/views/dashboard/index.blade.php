@@ -50,6 +50,38 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.0 - Assessment Editor Overhaul & Drag-and-Drop Restoration:</strong> Major release featuring complete drag-and-drop functionality restoration, fixed field positioning, enhanced delete functionality, and modern UI/UX improvements.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed new field positioning issue - fields now correctly appear at the bottom of the list instead of in the second position.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Resolved delete button getting stuck on "Deleting..." after multiple deletions by implementing proper state management and timeout protection.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Completely restored drag-and-drop functionality using jQuery UI Sortable, removing all Vue.js dependencies for better compatibility.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Enhanced field ordering system with complete reordering approach - backend now processes all fields in frontend order for proper sequential numbering.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added rich text support with full HTML table functionality in description fields, including proper CKEditor integration and content sanitization.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Improved field type management by making field types read-only after creation, preventing bugs and ensuring proper UX flow for field type changes.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Enhanced delete functionality with modal confirmation, proper error handling, and 10-second timeout protection to prevent infinite "Deleting..." state.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.5.41 - Assessment Editor UI/UX Improvements & Anchor Management:</strong> Enhanced modern assessment editor with improved user interface, fixed anchor persistence, and streamlined field management.</p>
             </li>
             <li>
