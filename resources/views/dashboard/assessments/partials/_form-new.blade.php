@@ -152,20 +152,20 @@
         
         .dimension-indicator {
             display: inline-block;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: #6c757d;
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            box-shadow: none;
+            border: none;
         }
         
         .dimension-indicator i {
-            margin-right: 4px;
-            font-size: 10px;
+            display: none;
         }
         
         /* Delete Confirmation Modal */

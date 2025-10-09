@@ -135,6 +135,39 @@ jQuery(document).ready(function($) {
     // Initialize field numbering
     updateFieldNumbers();
     
+    // Initialize dimension indicators for existing fields
+    initializeDimensionIndicators();
+    
+    /**
+     * Initialize dimension indicators for existing fields on page load
+     */
+    function initializeDimensionIndicators() {
+        $('.field-item').each(function() {
+            const $field = $(this);
+            const fieldType = $field.data('field-type');
+            const fieldContent = $field.find('input[name="field_content[]"]').val();
+            const fieldDimension = $field.find('input[name="field_dimension[]"]').val();
+            const fieldAnchors = $field.find('input[name="field_anchors[]"]').val();
+            
+            if (fieldType && fieldContent) {
+                // Parse anchors if they exist
+                let anchors = [];
+                if (fieldAnchors && fieldAnchors !== '[]') {
+                    try {
+                        anchors = JSON.parse(fieldAnchors);
+                    } catch (e) {
+                        console.log('Could not parse anchors:', e);
+                    }
+                }
+                
+                // Temporarily store anchors for updateFieldDisplay to use
+                window.tempAnchors = anchors;
+                updateFieldDisplay($field, fieldType, fieldContent, fieldDimension);
+                window.tempAnchors = null;
+            }
+        });
+    }
+    
     /**
      * Initialize drag and drop functionality
      */
@@ -258,7 +291,7 @@ jQuery(document).ready(function($) {
      * Edit a field
      */
     function editField($field) {
-        const fieldType = $field.data('type');
+        const fieldType = $field.data('field-type');
         const fieldContent = $field.find('input[name="field_content[]"]').val();
         const fieldDimension = $field.find('input[name="field_dimension[]"]').val() || '';
         const fieldAnchors = $field.find('input[name="field_anchors[]"]').val();
@@ -276,7 +309,8 @@ jQuery(document).ready(function($) {
             '4': 'Letters',
             '5': 'Equation'
         };
-        $('#edit-field-type-text').text(fieldTypeNames[fieldType] || 'Unknown');
+        const fieldTypeText = fieldTypeNames[fieldType] || 'Unknown';
+        $('#edit-field-type-text').text(fieldTypeText);
         $('#edit-field-dimension').val(fieldDimension);
         
         // Debug: Log the dimension value being loaded
@@ -536,7 +570,7 @@ jQuery(document).ready(function($) {
         // Update preview content
         if (fieldType == 1) {
             // Multiple Choice
-            const anchors = collectAnchors();
+            const anchors = window.tempAnchors || collectAnchors();
             let anchorsHtml = '';
             if (anchors.length > 0) {
                 anchorsHtml = '<div style="margin-top: 10px;"><small style="color: #7f8c8d; font-weight: 600;">Anchors:</small><div style="margin-top: 5px;">';
@@ -551,7 +585,7 @@ jQuery(document).ready(function($) {
                 <div style="margin-top: 8px;">
                     <div style="margin-bottom: 5px; font-weight: 500;">${content}</div>
                     ${anchorsHtml}
-                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator">Dimension: ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else if (fieldType == 2) {
@@ -560,7 +594,7 @@ jQuery(document).ready(function($) {
                 <strong>Description:</strong>
                 <div style="margin-top: 8px; padding: 10px; background: #e8f4fd; border-left: 3px solid #3498db; border-radius: 3px;">
                     ${content}
-                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator">Dimension: ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else if (fieldType == 3) {
@@ -572,7 +606,7 @@ jQuery(document).ready(function($) {
                     <div style="margin-top: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa;">
                         <input type="text" placeholder="User will type here..." style="border: none; background: none; width: 100%; color: #6c757d; font-style: italic;" disabled>
                     </div>
-                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator">Dimension: ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         } else {
@@ -581,7 +615,7 @@ jQuery(document).ready(function($) {
                 <strong>${typeNames[fieldType]}:</strong>
                 <div style="margin-top: 8px;">
                     ${content}
-                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator"><i class="fa-tag"></i> ${dimensionName}</span></div>` : ''}
+                    ${dimensionName ? `<div style="margin-top: 8px;"><span class="dimension-indicator">Dimension: ${dimensionName}</span></div>` : ''}
                 </div>
             `);
         }
