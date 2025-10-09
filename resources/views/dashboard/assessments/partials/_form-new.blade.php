@@ -10,6 +10,15 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow: hidden;
+            margin-left: 40px;
+            margin-right: 20px;
+        }
+        
+        /* Tab Alignment */
+        .nav-tabs {
+            margin-left: 40px;
+            margin-right: 20px;
+            border-bottom: 1px solid #ddd;
         }
         
         .editor-header {
@@ -243,6 +252,97 @@
         .field-header-left {
             display: flex;
             align-items: center;
+        }
+        
+        .field-type-badge {
+            margin-left: 10px;
+        }
+        
+        .field-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .field-content {
+            margin-top: 15px;
+        }
+        
+        .field-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        
+        .field-dimension {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #1976d2;
+        }
+        
+        .add-field-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .add-field-section .btn {
+            margin: 0 10px;
+        }
+        
+        /* Field Types Grid */
+        .field-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .field-type-option {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        
+        .field-type-option:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .field-type-option i {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .field-type-option h4 {
+            margin: 10px 0 5px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        .field-type-option p {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .field-type-option small {
+            display: block;
+            margin-top: 8px;
+            font-size: 11px;
         }
         
         .field-number {
@@ -549,6 +649,51 @@
                 max-height: calc(100vh - 160px) !important;
             }
         }
+        
+        /* Table styling for rich text content */
+        .field-preview table,
+        .field-content table,
+        .description-preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .field-preview table td,
+        .field-preview table th,
+        .field-content table td,
+        .field-content table th,
+        .description-preview table td,
+        .description-preview table th {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .field-preview table th,
+        .field-content table th,
+        .description-preview table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .field-preview table tr:nth-child(even),
+        .field-content table tr:nth-child(even),
+        .description-preview table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .field-preview table tr:hover,
+        .field-content table tr:hover,
+        .description-preview table tr:hover {
+            background-color: #e9ecef;
+        }
     </style>
 @stop
 
@@ -588,59 +733,100 @@
             <div class="field-list" id="field-list">
                 @if(isset($questions) && count($questions) > 0)
                     @foreach($questions as $index => $question)
-                        <div class="field-item" data-field-type="{{ $question['type'] }}">
-                            <div class="drag-handle">
-                                <i class="fa-arrows"></i>
-                            </div>
+                        <div class="field-item" data-field-type="{{ $question['type'] }}" data-id="{{ $question['id'] ?? '' }}">
                             <div class="field-header">
-                                <div class="field-number">{{ $index + 1 }}</div>
-                                <div class="field-type-badge">
-                                    @if($question['type'] == 1)
-                                        <span class="badge badge-primary">Multiple Choice</span>
-                                    @elseif($question['type'] == 2)
-                                        <span class="badge badge-info">Description</span>
-                                    @elseif($question['type'] == 3)
-                                        <span class="badge badge-success">Text Input</span>
-                                    @elseif($question['type'] == 4)
-                                        <span class="badge badge-warning">Number Input</span>
-                                    @elseif($question['type'] == 5)
-                                        <span class="badge badge-secondary">Date Input</span>
-                                    @endif
+                                <div class="field-header-left">
+                                    <div class="drag-handle">
+                                        <i class="fa-bars"></i>
+                                    </div>
+                                    <div class="field-number">{{ $index + 1 }}</div>
                                 </div>
                                 <div class="field-actions">
-                                    <button type="button" class="btn btn-sm btn-primary edit-field">
+                                    <button type="button" class="field-action-btn edit-field" title="Edit Field">
                                         <i class="fa-edit"></i> Edit
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-danger delete-field">
-                                        <i class="fa-trash"></i> Delete
+                                    <button type="button" class="field-action-btn duplicate-field" title="Duplicate Field">
+                                        <i class="fa-copy"></i> Duplicate
+                                    </button>
+                                    <button type="button" class="field-action-btn remove-field" title="Remove Field">
+                                        <i class="fa-trash"></i> Remove
                                     </button>
                                 </div>
                             </div>
+                            
                             <div class="field-content">
                                 <div class="field-preview">
-                                    {{ strip_tags($question['content']) }}
+                                    @if ($question['type'] == 2)
+                                        <!-- Description Field -->
+                                        <div class="description-preview">
+                                            <strong>Description:</strong>
+                                            <div style="margin-top: 8px; padding: 10px; background: #e8f4fd; border-left: 3px solid #3498db; border-radius: 3px;">
+                                                {!! preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', preg_replace('/on\w+\s*=\s*["\'][^"\']*["\']/i', '', $question['content'])) !!}
+                                            </div>
+                                        </div>
+                                    @elseif ($question['type'] == 1)
+                                        <!-- Multiple Choice Field -->
+                                        <div class="multiple-choice-preview">
+                                            <strong>Multiple Choice Question:</strong>
+                                            <div style="margin-top: 8px;">
+                                                <div style="margin-bottom: 5px; font-weight: 500;">{!! $question['content'] !!}</div>
+                                                @if (isset($question['anchors']) && !empty($question['anchors']))
+                                                    <div style="margin-top: 10px;">
+                                                        <small style="color: #7f8c8d; font-weight: 600;">Anchors:</small>
+                                                        <div style="margin-top: 5px;">
+                                                            @foreach ($question['anchors'] as $anchor)
+                                                                <div style="margin: 3px 0; padding: 6px 12px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; display: inline-block; margin-right: 8px; font-size: 13px;">
+                                                                    <i class="fa-circle-o" style="margin-right: 5px; color: #6c757d;"></i>{{ $anchor['tag'] }}
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @elseif ($question['type'] == 3)
+                                        <!-- Text Input Field -->
+                                        <div class="text-input-preview">
+                                            <strong>Text Input:</strong>
+                                            <div style="margin-top: 8px;">
+                                                <div style="margin-bottom: 5px; font-weight: 500;">{!! $question['content'] !!}</div>
+                                                <div style="margin-top: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa;">
+                                                    <input type="text" placeholder="User will type here..." style="border: none; background: none; width: 100%; color: #6c757d; font-style: italic;" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <!-- Other Field Types -->
+                                        <div class="other-field-preview">
+                                            <strong>{{ \App\Question::getTypeDescription($question['type']) }}:</strong>
+                                            <div style="margin-top: 8px;">
+                                                {!! preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', preg_replace('/on\w+\s*=\s*["\'][^"\']*["\']/i', '', $question['content'])) !!}
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
-                                @if(isset($question['dimension_name']) && $question['dimension_name'])
-                                    <div class="field-dimension">
-                                        <strong>Dimension:</strong> {{ $question['dimension_name'] }}
-                                    </div>
-                                @endif
                             </div>
                             
-                            <!-- Hidden form fields -->
-                            <input type="hidden" name="field_id[]" value="{{ $question['id'] ?? '' }}">
+                            <!-- Hidden form fields for submission -->
+                            @if ($question['id'] ?? false)
+                                <input type="hidden" name="field_id[]" value="{{ $question['id'] }}">
+                            @endif
                             <input type="hidden" name="field_type[]" value="{{ $question['type'] }}">
-                            <input type="hidden" name="field_content[]" value="{{ htmlspecialchars($question['content']) }}">
-                            <input type="hidden" name="field_dimension[]" value="{{ $question['dimension_id'] ?? '' }}">
-                            <input type="hidden" name="field_anchors[]" value="{{ json_encode($question['anchors'] ?? []) }}">
+                            <input type="hidden" name="field_content[]" value="{{ $question['content'] }}">
                             <input type="hidden" name="field_number[]" value="{{ $index + 1 }}">
+                            @if (isset($question['anchors']))
+                                <input type="hidden" name="field_anchors[]" value="{{ json_encode($question['anchors']) }}">
+                            @endif
+                            @if (isset($question['dimension_id']))
+                                <input type="hidden" name="field_dimension[]" value="{{ $question['dimension_id'] }}">
+                            @endif
                         </div>
                     @endforeach
                 @else
-                    <div class="empty-state" style="text-align: center; padding: 40px; color: #7f8c8d;">
-                        <i class="fa-list-ul" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
-                        <h4>No fields yet</h4>
-                        <p>Click "Add Field" to start building your assessment.</p>
+                    <div class="empty-state">
+                        <i class="fa-file-text-o"></i>
+                        <h3>No Fields Yet</h3>
+                        <p>Click "Add Field" to start building your assessment</p>
                     </div>
                 @endif
             </div>
@@ -668,19 +854,8 @@
     </div>
 </div>
 
-
-@section('scripts')
-    <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/modern-assessment-editor.js') }}"></script>
-    <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
-    <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
-    <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
-    <script src="{{ asset('assets/js/tagsinput/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
-@stop
+<!-- Field Type Modal -->
+<div class="modal fade" id="field-type-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -720,6 +895,19 @@
         </div>
     </div>
 </div>
+
+@section('scripts')
+    <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/modern-assessment-editor.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
+    <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tagsinput/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
+@stop
 
 <!-- Field Edit Modal -->
 <div class="modal fade" id="field-edit-modal">
@@ -819,18 +1007,3 @@
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-
-@section('scripts')
-    <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/modern-assessment-editor.js') }}"></script>
-    <script src="{{ asset('assets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
-    <script src="{{ asset('assets/js/uikit/js/uikit.min.js') }}"></script>
-    <script src="{{ asset('assets/js/uikit/js/addons/nestable.min.js') }}"></script>
-    <script src="{{ asset('assets/js/tagsinput/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ asset('assets/js/ckeditor/adapters/jquery.js') }}"></script>
-@stop

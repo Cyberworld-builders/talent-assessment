@@ -17,6 +17,7 @@ elixir(function(mix) {
         .scripts('JSXTransformer.js', 'public/assets/js/JSXTransformer.js')
         .scripts('MathJax.js', 'public/assets/js/MathJax.js')
         .scripts('create-assessment-form.js', 'public/assets/js/create-assessment-form.js')
+        .scripts('modern-assessment-editor.js', 'public/assets/js/modern-assessment-editor.js')
         .scripts([
             'wm/util.js',
             'wm/models.js',

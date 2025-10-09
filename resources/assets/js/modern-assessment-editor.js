@@ -17,10 +17,6 @@ jQuery(document).ready(function($) {
         showFieldTypeModal();
     });
     
-    // Sort fields by dimension button
-    $('#sort-fields-btn').on('click', function() {
-        sortFieldsByDimension();
-    });
     
     // Confirm delete button
     $('#confirm-delete').on('click', function() {
@@ -90,12 +86,17 @@ jQuery(document).ready(function($) {
                     { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
                     { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
                     { name: 'links', items: ['Link', 'Unlink'] },
+                    { name: 'insert', items: ['Table'] },
                     { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
                     { name: 'colors', items: ['TextColor', 'BGColor'] },
                     { name: 'tools', items: ['Maximize', 'Source'] }
                 ],
                 height: 200,
-                width: '100%'
+                width: '100%',
+                allowedContent: true,
+                extraAllowedContent: 'table tbody tr td th thead tfoot colgroup col',
+                removePlugins: 'elementspath',
+                resize_enabled: false
             });
         }
     });
@@ -142,37 +143,18 @@ jQuery(document).ready(function($) {
      * Initialize drag and drop functionality
      */
     function initDragAndDrop() {
-        console.log('Initializing drag and drop...');
-        console.log('Field list element:', $('#field-list'));
-        console.log('Field list length:', $('#field-list').length);
-        console.log('Drag handles found:', $('.drag-handle').length);
-        
-        if ($('#field-list').length === 0) {
-            console.error('Field list not found!');
-            return;
-        }
-        
-        if ($('.drag-handle').length === 0) {
-            console.error('No drag handles found!');
-            return;
-        }
-        
         $('#field-list').sortable({
             handle: '.drag-handle',
             placeholder: 'field-placeholder',
             forcePlaceholderSize: true,
             tolerance: 'pointer',
             start: function(e, ui) {
-                console.log('Drag started');
                 ui.placeholder.html('<div style="padding: 20px; text-align: center; color: #7f8c8d; border: 2px dashed #bdc3c7; border-radius: 8px; background: #f8f9fa;"><i class="fa-arrows"></i> Drop field here</div>');
             },
             stop: function(e, ui) {
-                console.log('Drag stopped');
                 updateFieldNumbers();
             }
         });
-        
-        console.log('Sortable initialized successfully');
     }
     
     /**
@@ -183,18 +165,80 @@ jQuery(document).ready(function($) {
     }
     
     /**
+     * Create HTML for a new field based on type
+     */
+    function createFieldHtml(fieldType, fieldNumber) {
+        const fieldTypes = {
+            1: { name: 'Multiple Choice', icon: 'fa-list-ul' },
+            2: { name: 'Description', icon: 'fa-paragraph' },
+            3: { name: 'Text Input', icon: 'fa-edit' },
+            4: { name: 'Letters', icon: 'fa-font' },
+            5: { name: 'Equation', icon: 'fa-calculator' },
+            6: { name: 'Math and Letters', icon: 'fa-superscript' },
+            7: { name: 'Square Sequence', icon: 'fa-th' },
+            8: { name: 'Symmetry', icon: 'fa-mirror' },
+            9: { name: 'Square Symmetry', icon: 'fa-th-large' },
+            10: { name: 'Instructions', icon: 'fa-info-circle' },
+            11: { name: 'Slider', icon: 'fa-sliders' }
+        };
+        
+        const typeInfo = fieldTypes[fieldType] || { name: 'Unknown', icon: 'fa-question' };
+        
+        return `
+            <div class="field-item" data-field-type="${fieldType}" data-id="">
+                <div class="field-header">
+                    <div class="field-header-left">
+                        <div class="drag-handle">
+                            <i class="fa fa-grip-vertical"></i>
+                        </div>
+                        <div class="field-number">${fieldNumber}</div>
+                        <div class="field-type-badge">
+                            <i class="fa ${typeInfo.icon}"></i>
+                            <span>${typeInfo.name}</span>
+                        </div>
+                    </div>
+                    <div class="field-actions">
+                        <button type="button" class="field-action-btn edit-field" title="Edit Field">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" class="field-action-btn remove-field" title="Remove Field">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="field-content">
+                    <div class="field-preview">
+                        <div class="field-dimension">
+                            <span class="dimension-label">Dimension:</span>
+                            <span class="dimension-value">Not assigned</span>
+                        </div>
+                        <div class="field-text">
+                            <span class="field-label">Question:</span>
+                            <span class="field-value">Click to edit question content</span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="field_type[]" value="${fieldType}">
+                <input type="hidden" name="field_number[]" value="${fieldNumber}">
+                <input type="hidden" name="field_id[]" value="">
+                <input type="hidden" name="field_content[]" value="">
+                <input type="hidden" name="field_dimension[]" value="">
+                <input type="hidden" name="field_anchors[]" value="[]">
+            </div>
+        `;
+    }
+
+    /**
      * Add a new field of the specified type
      */
     function addNewField(fieldType) {
-        const $template = $('#field-template-' + fieldType);
-        const $newField = $template.clone();
+        console.log('Adding new field of type:', fieldType);
         
-        // Update field number
-        $newField.find('.field-number').text(fieldCounter);
-        $newField.find('input[name="field_number[]"]').val(fieldCounter);
+        // Create new field HTML based on type
+        const fieldHtml = createFieldHtml(fieldType, fieldCounter);
+        const $newField = $(fieldHtml);
         
-        // Remove template ID and add to field list
-        $newField.removeAttr('id');
+        // Add to field list
         $newField.appendTo('#field-list');
         
         // Update counter
@@ -211,7 +255,7 @@ jQuery(document).ready(function($) {
             editField($newField);
         }, 350); // Wait for fade-in animation to complete
         
-        console.log('Added new field of type:', fieldType);
+        console.log('Field added successfully');
     }
     
     /**
@@ -234,6 +278,15 @@ jQuery(document).ready(function($) {
         // Debug: Log the dimension value being loaded
         console.log('Loading dimension:', fieldDimension);
         console.log('Dimension select value after setting:', $('#edit-field-dimension').val());
+        
+        // Additional debugging - check if dimension field is being reset
+        setTimeout(function() {
+            console.log('Dimension select value after timeout:', $('#edit-field-dimension').val());
+            console.log('Dimension select element:', $('#edit-field-dimension'));
+            console.log('Dimension select options:', $('#edit-field-dimension option').map(function() { 
+                return $(this).val() + ': ' + $(this).text(); 
+            }).get());
+        }, 100);
         
         // Handle anchors for multiple choice
         if (fieldType == 1 && fieldAnchors) {
@@ -346,6 +399,10 @@ jQuery(document).ready(function($) {
         console.log('Dimension value from select:', fieldDimension);
         console.log('Dimension select element:', $('#edit-field-dimension'));
         console.log('Dimension select options:', $('#edit-field-dimension option').map(function() { return $(this).val() + ': ' + $(this).text(); }).get());
+        
+        // Additional debugging - check if dimension field is being cleared
+        console.log('Dimension field before save:', $('#edit-field-dimension').val());
+        console.log('Dimension field element exists:', $('#edit-field-dimension').length > 0);
         
         // Get content from CKEditor or fallback to textarea
         let fieldContent;
@@ -701,6 +758,21 @@ jQuery(document).ready(function($) {
     }
     
     /**
+     * Sanitize HTML content to remove scripts and event handlers
+     */
+    function sanitizeHtml(html) {
+        if (!html) return '';
+        
+        // Remove script tags and their content
+        let sanitized = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi, '');
+        
+        // Remove event handlers (onclick, onload, etc.)
+        sanitized = sanitized.replace(/on\w+\s*=\s*["\'][^"\']*["\']/gi, '');
+        
+        return sanitized;
+    }
+
+    /**
      * Save the assessment
      */
     function saveAssessment() {
@@ -768,14 +840,21 @@ jQuery(document).ready(function($) {
             success: function(response) {
                 console.log('Assessment saved successfully:', response);
                 
-                // Show success message
-                showNotification('Assessment saved successfully!', 'success');
+                // Check if response is JSON
+                if (typeof response === 'object' && response.success) {
+                    // Show success message
+                    showNotification(response.message || 'Assessment saved successfully!', 'success');
+                } else {
+                    // Handle HTML response (fallback)
+                    showNotification('Assessment saved successfully!', 'success');
+                }
                 
                 // Reset button
                 $submitBtn.val(originalText).prop('disabled', false);
             },
             error: function(xhr, status, error) {
                 console.error('Error saving assessment:', error);
+                console.error('Response:', xhr.responseText);
                 
                 // Show error message
                 showNotification('Error saving assessment. Please try again.', 'error');
@@ -911,58 +990,5 @@ jQuery(document).ready(function($) {
         `)
         .appendTo('head');
     
-    /**
-     * Sort fields by dimension
-     */
-    function sortFieldsByDimension() {
-        const $fieldList = $('#field-list');
-        const $fields = $fieldList.find('.field-item');
-        
-        if ($fields.length === 0) {
-            showToast('info', 'No Fields', 'No fields to sort.');
-            return;
-        }
-        
-        // Get dimension data for sorting
-        const dimensionData = [];
-        try {
-            const $dimensionData = $('input[name="dimension_data"]');
-            if ($dimensionData.length > 0) {
-                dimensionData.push(...JSON.parse($dimensionData.val()));
-            }
-        } catch (e) {
-            console.error('Error parsing dimension data:', e);
-        }
-        
-        // Sort fields by dimension name
-        const sortedFields = $fields.toArray().sort((a, b) => {
-            const dimensionA = $(a).find('input[name="field_dimension[]"]').val();
-            const dimensionB = $(b).find('input[name="field_dimension[]"]').val();
-            
-            // Get dimension names for comparison
-            let nameA = 'Unknown';
-            let nameB = 'Unknown';
-            
-            if (dimensionData.length > 0) {
-                const dimA = dimensionData.find(d => d.id == dimensionA);
-                const dimB = dimensionData.find(d => d.id == dimensionB);
-                nameA = dimA ? dimA.name : 'Unknown';
-                nameB = dimB ? dimB.name : 'Unknown';
-            }
-            
-            return nameA.localeCompare(nameB);
-        });
-        
-        // Reorder the fields in the DOM
-        $fieldList.empty();
-        sortedFields.forEach(field => {
-            $fieldList.append(field);
-        });
-        
-        // Update field numbers
-        updateFieldNumbers();
-        
-        showToast('success', 'Fields Sorted', 'Fields have been sorted by dimension.');
-    }
     
 });

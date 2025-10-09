@@ -986,7 +986,15 @@ class AssessmentsController extends Controller
 			$this->delete_questions($deleted_questions, $valid_ids);
 		}
 
-		// Return redirect back to the edit page
+		// Return appropriate response based on request type
+		if (request()->ajax()) {
+			return response()->json([
+				'success' => true,
+				'message' => 'Assessment updated successfully!'
+			]);
+		}
+		
+		// Return redirect back to the edit page for non-AJAX requests
 		return redirect()->to("/dashboard/assessments/{$assessment->id}/edit-new")
 			->with('success', 'Assessment updated successfully!');
 	}
