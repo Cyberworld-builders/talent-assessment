@@ -919,16 +919,14 @@
             </div>
             <div class="modal-body">
                 <div id="field-edit-form">
-                    <!-- Field Type Selection -->
+                    <!-- Field Type Display (Read-only) -->
                     <div class="form-group-modern">
                         <label class="form-label-modern">Field Type</label>
-                        <select class="form-control-modern" id="edit-field-type">
-                            <option value="1">Multiple Choice</option>
-                            <option value="2">Description</option>
-                            <option value="3">Text Input</option>
-                            <option value="4">Letters</option>
-                            <option value="5">Equation</option>
-                        </select>
+                        <div class="form-control-modern" id="edit-field-type-display" style="background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 12px 15px; border-radius: 6px; color: #6c757d;">
+                            <i class="fa fa-info-circle" style="margin-right: 8px;"></i>
+                            <span id="edit-field-type-text">Loading...</span>
+                        </div>
+                        <div class="form-help">Field type cannot be changed. To change the field type, delete this field and create a new one.</div>
                     </div>
                     
                            <!-- Field Content -->

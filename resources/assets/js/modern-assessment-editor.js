@@ -72,11 +72,7 @@ jQuery(document).ready(function($) {
         editField($field);
     });
     
-    // Edit modal handlers
-    $(document).on('change', '#edit-field-type', function() {
-        const fieldType = $(this).val();
-        toggleEditFields(fieldType);
-    });
+    // Edit modal handlers - field type is now read-only, no change handler needed
     
     // Initialize CKEditor when modal is shown
     $('#field-edit-modal').on('shown.bs.modal', function() {
@@ -272,7 +268,15 @@ jQuery(document).ready(function($) {
         window.currentEditingField = $field;
         
         // Populate edit modal
-        $('#edit-field-type').val(fieldType);
+        // Set field type display (read-only)
+        const fieldTypeNames = {
+            '1': 'Multiple Choice',
+            '2': 'Description', 
+            '3': 'Text Input',
+            '4': 'Letters',
+            '5': 'Equation'
+        };
+        $('#edit-field-type-text').text(fieldTypeNames[fieldType] || 'Unknown');
         $('#edit-field-dimension').val(fieldDimension);
         
         // Debug: Log the dimension value being loaded
@@ -390,7 +394,8 @@ jQuery(document).ready(function($) {
         const $field = window.currentEditingField;
         if (!$field) return;
         
-        const fieldType = $('#edit-field-type').val();
+        // Get field type from the current field (since it's read-only in modal)
+        const fieldType = $field.find('input[name="field_type[]"]').val();
         const fieldDimension = $('#edit-field-dimension').val();
         const practiceQuestion = $('#edit-practice-question').is(':checked');
         
