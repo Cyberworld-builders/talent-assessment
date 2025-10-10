@@ -236,7 +236,7 @@ class AssignmentsController extends Controller {
 			return (in_array($assignment->user_id, $userIds) && $assignment->created_at->format('Y-m-d H:i') == $date);
 		});
 
-		return view('dashboard.clients.assignments', compact('client', 'assignments', 'report', 'date'));
+		return view('dashboard.clients.assignments', compact('client', 'assignments', 'date'));
 	}
 
 
