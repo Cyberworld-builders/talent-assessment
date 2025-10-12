@@ -1,6 +1,16 @@
 @if (! $task)
-    {{-- Show description only on first page (when paginated) or always (when not paginated) --}}
-    @if (!$assessment->paginate || ($questions instanceof \Illuminate\Contracts\Pagination\Paginator && $questions->currentPage() == 1))
+    <?php
+    // Determine if we should show description or questions
+    $isPaginated = $assessment->paginate;
+    $currentPage = ($questions instanceof \Illuminate\Contracts\Pagination\Paginator) ? $questions->currentPage() : 1;
+    $showDescriptionOnly = $isPaginated && $currentPage == 1;
+    $showQuestions = !$showDescriptionOnly;
+    ?>
+
+    {{-- For paginated assessments: Page 1 shows description only, Page 2+ shows questions only --}}
+    {{-- For non-paginated assessments: Show description and all questions together --}}
+    
+    @if (!$isPaginated || $currentPage == 1)
         <div class="description">
             @if (! $preview)
                 @if ($assessment->translation() && $assessment->translation()->description)
@@ -16,7 +26,7 @@
 
     {{-- Questions heading removed for cleaner user experience --}}
 
-    @if (! empty($questions))
+    @if ($showQuestions && ! empty($questions))
         @foreach ($questions as $question)
 
             <div class="question-container">
@@ -225,7 +235,8 @@
 @endif
 
 <!-- Submit Field -->
-@if (! $assessment->paginate || ! $questions->hasMorePages())
+{{-- Show submit button only on the last page of questions (not on description-only page 1) --}}
+@if (! $assessment->paginate || (! $questions->hasMorePages() && $currentPage > 1))
     <div class="form-group" {!! ($task) ? 'style="display:none;"' : '' !!}>
         <br/>
         <div class="pull-right">
