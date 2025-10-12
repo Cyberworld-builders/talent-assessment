@@ -62,6 +62,38 @@
                     </div>
                 </div>
 
+                {{-- Email Reminder --}}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {!! Form::label('email-reminder', 'Email Reminder', ['class' => 'control-label']) !!}
+                            <p class="small text-muted">Users will receive periodic email reminders for incomplete assessments.</p>
+                        </div>
+                        <div class="col-sm-8">
+                            {!! Form::select('reminder', [
+                                0 => 'No',
+                                1 => 'Yes',
+                            ], 0, ['class' => 'form-control input-lg']) !!}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group field-reminder" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {!! Form::label('field-reminder', 'Reminder Frequency', ['class' => 'control-label']) !!}
+                            <p class="small text-muted">Users will be notified of pending tasks on selected frequency.</p>
+                        </div>
+                        <div class="col-sm-8">
+                            {!! Form::select('reminder-frequency', [
+                                '+1 week' => '1 Week',
+                                '+2 weeks' => '2 Weeks',
+                                '+3 weeks' =>'3 Weeks',
+                                '+1 month'=>'Monthly'
+                            ], '+1 week', ['class' => 'form-control input-lg']) !!}
+                        </div>
+                    </div>
+                </div>
 
                 {{-- Tie To Specific Job - Removed per user request --}}
                 @role('admin')
@@ -460,6 +492,16 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
             }
+        });
+
+        // Email reminder toggle
+        $('select[name="reminder"]').on('change', function()
+        {
+            var val = $(this).val();
+            if (val == 1)
+                $('.field-reminder').slideDown();
+            else
+                $('.field-reminder').slideUp();
         });
 
         // New save button
