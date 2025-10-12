@@ -1,15 +1,18 @@
 @if (! $task)
-    <div class="description">
-        @if (! $preview)
-            @if ($assessment->translation() && $assessment->translation()->description)
-                {!! custom_fields($assignment->id, $assessment->translation()->description) !!}
+    {{-- Show description only on first page (when paginated) or always (when not paginated) --}}
+    @if (!$assessment->paginate || ($questions instanceof \Illuminate\Contracts\Pagination\Paginator && $questions->currentPage() == 1))
+        <div class="description">
+            @if (! $preview)
+                @if ($assessment->translation() && $assessment->translation()->description)
+                    {!! custom_fields($assignment->id, $assessment->translation()->description) !!}
+                @else
+                    {!! custom_fields($assignment->id, $assessment->description) !!}
+                @endif
             @else
-                {!! custom_fields($assignment->id, $assessment->description) !!}
-            @endif
-        @else
-        {!! $assessment->description !!}
+            {!! $assessment->description !!}
+        @endif
+        </div>
     @endif
-    </div>
 
     {{-- Questions heading removed for cleaner user experience --}}
 
