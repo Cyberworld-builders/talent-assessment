@@ -50,6 +50,22 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.5 - Assignment Form Improvements & Editor Updates:</strong> Streamlined assignment workflow by making modern editor the default, removing unnecessary fields, and adding email reminder functionality for better user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Made modern assessment editor the default 'General' tab - legacy editor removed from navigation for cleaner interface.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed 'Lock To Specific Job' field from assignment form - simplified workflow by removing rarely-used validation feature.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added Email Reminder functionality to assignment form with frequency options (1 Week, 2 Weeks, 3 Weeks, Monthly) for consistent reminder management across both assignment interfaces.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.4 - Modern Assessment Editor Enhancements:</strong> Completed migration to modern assessment editor with missing fields from legacy editor, fixed rich text HTML preservation, and resolved file upload issues.</p>
             </li>
             <li>
