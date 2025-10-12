@@ -58,7 +58,7 @@
             </li>
             <li>
                 <i class="fa-asterisk text-warning"></i>
-                <p>Removed 'Lock To Specific Job' field from assignment form - simplified workflow by removing rarely-used validation feature.</p>
+                <p>Removed 'Lock To Specific Job' field and 'From Job Family' button from assignment form - simplified workflow by removing rarely-used features.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-success"></i>
