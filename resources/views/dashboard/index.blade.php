@@ -50,6 +50,26 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.4 - Modern Assessment Editor Enhancements:</strong> Completed migration to modern assessment editor with missing fields from legacy editor, fixed rich text HTML preservation, and resolved file upload issues.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added missing assessment fields to modern editor: Logo upload, Background image, Pagination settings, Timed assessment options, and Assessment target selection (Self/Other/Group Leader).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Fixed rich text content preservation - tables with borders, padding, and styling now display correctly without being stripped.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed logo and background image uploads to properly save to S3/CloudFront instead of storing temporary file paths.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added conditional field display for Items Per Page (shows when pagination enabled) and Time Limit (shows when timed assessment enabled).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.3 - Assessment UX Improvements:</strong> Significantly improved user experience for assessment takers with cleaner interface, dedicated instruction page, and removal of confusing numbering elements.</p>
             </li>
             <li>
