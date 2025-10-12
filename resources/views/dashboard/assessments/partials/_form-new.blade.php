@@ -726,7 +726,7 @@
                                     </div>
                                     <div class="field-number">{{ $index + 1 }}</div>
                                 </div>
-                                <div class="field-actions">
+                <div class="field-actions">
                                     <button type="button" class="field-action-btn edit-field" title="Edit Field">
                                         <i class="fa-edit"></i> Edit
                                     </button>
@@ -735,10 +735,10 @@
                                     </button>
                                     <button type="button" class="field-action-btn remove-field" title="Remove Field">
                                         <i class="fa-trash"></i> Remove
-                                    </button>
-                                </div>
-                            </div>
-                            
+                    </button>
+                </div>
+            </div>
+            
                             <div class="field-content">
                                 <div class="field-preview">
                                     @if ($question['type'] == 2)

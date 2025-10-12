@@ -210,7 +210,23 @@ jobs:
           sed -i "s|AWS_S3_BUCKET=.*|AWS_S3_BUCKET=$(jq -r '.PRODUCTION_S3_BUCKET' secrets.json)|" .env.production
           sed -i "s|AWS_REGION=.*|AWS_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)|" .env.production
           sed -i "s|AWS_DEFAULT_REGION=.*|AWS_DEFAULT_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)|" .env.production
+          
+          # Configure SES email (using IAM role-based authentication, no credentials needed)
+          echo "Configuring SES email settings..."
+          sed -i "s|MAIL_DRIVER=.*|MAIL_DRIVER=ses|" .env.production
           sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=$(jq -r '.PRODUCTION_SES_FROM_ADDRESS' secrets.json)|" .env.production
+          sed -i "s|MAIL_FROM_NAME=.*|MAIL_FROM_NAME=\"Involved Talent Assessment\"|" .env.production
+          
+          # Ensure SES config values exist (add if missing)
+          if ! grep -q "^MAIL_DRIVER=" .env.production; then
+            echo "MAIL_DRIVER=ses" >> .env.production
+          fi
+          if ! grep -q "^MAIL_FROM_ADDRESS=" .env.production; then
+            echo "MAIL_FROM_ADDRESS=$(jq -r '.PRODUCTION_SES_FROM_ADDRESS' secrets.json)" >> .env.production
+          fi
+          if ! grep -q "^MAIL_FROM_NAME=" .env.production; then
+            echo "MAIL_FROM_NAME=\"Involved Talent Assessment\"" >> .env.production
+          fi
           
           # Update APP_VERSION with the deployment tag
           echo "Updating APP_VERSION to: $IMAGE_TAG"
@@ -241,6 +257,9 @@ jobs:
           echo "DB_USERNAME: $(grep '^DB_USERNAME=' .env.production)"
           echo "APP_ENV: $(grep '^APP_ENV=' .env.production)"
           echo "APP_KEY: $(grep '^APP_KEY=' .env.production)"
+          echo "MAIL_DRIVER: $(grep '^MAIL_DRIVER=' .env.production)"
+          echo "MAIL_FROM_ADDRESS: $(grep '^MAIL_FROM_ADDRESS=' .env.production)"
+          echo "AWS_DEFAULT_REGION: $(grep '^AWS_DEFAULT_REGION=' .env.production)"
           
           # SES configuration uses IAM role-based authentication (OIDC)
           echo "SES configuration will use IAM role-based authentication"
