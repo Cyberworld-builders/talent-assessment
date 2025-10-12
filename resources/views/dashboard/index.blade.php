@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.6 - Critical Bugfixes & Data Export:</strong> Fixed critical issues with server-sent events, assignment URLs, email date formatting, and added user bulk upload improvements.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p>Fixed "Download All Data" button throwing SSE output buffering error - added proper buffer initialization and safety checks.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p>Fixed assignment URL generation linking to 0.0.0.0 - added dynamic URL regeneration accessor to use correct APP_URL from environment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p>Fixed group assignment email failure due to Carbon date format mismatch - corrected format from 'D, d M Y' to 'd M Y'.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Removed "Add To Job" field from user bulk upload form - simplified user import workflow.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added detailed error logging for EventSource downloads to help diagnose connection issues.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.5 - Assignment Form Improvements & Editor Updates:</strong> Streamlined assignment workflow by making modern editor the default, removing unnecessary fields, and adding email reminder functionality for better user experience.</p>
             </li>
             <li>
