@@ -22,7 +22,7 @@
                         {!! Form::label('industry[]', 'Industry', ['class' => 'control-label']) !!}
                         {!! Form::text('industry[]', null, ['class' => 'form-control input-lg']) !!}
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         {!! Form::label('job_id[]', 'Add To Job?', ['class' => 'control-label']) !!}
                         <a href="#null" id="apply-job-to-all" class="text-muted text-small">Apply To All</a>
                         {!! Form::select('job_id[]', $jobsArray, (Input::get("job") ? Input::get("job") : 0), ['class' => 'form-control input-lg', 'id' => 'job_id']) !!}
@@ -38,7 +38,7 @@
                                 });
                             });
                         </script>
-                    </div>
+                    </div> --}}
                 @endrole
                 @role('client')
                     <div class="col-sm-3">
@@ -53,7 +53,7 @@
                         {!! Form::label('email[]', 'Email', ['class' => 'control-label']) !!}
                         {!! Form::text('email[]', null, ['class' => 'form-control input-lg']) !!}
                     </div>
-                    <div class="col-sm-3">
+                    {{-- <div class="col-sm-3">
                         {!! Form::label('job_id[]', 'Add To Job?', ['class' => 'control-label']) !!}
                         <a href="#null" id="apply-job-to-all" class="text-muted text-small">Apply To All</a>
                         {!! Form::select('job_id[]', $jobsArray, (Input::get("job") ? Input::get("job") : 0), ['class' => 'form-control input-lg', 'id' => 'job_id']) !!}
@@ -69,7 +69,7 @@
                                 {{--});--}}
                             {{--});--}}
                         {{--</script>--}}
-                    </div>
+                    </div> --}}
                 @endrole
             </div>
         </div>
