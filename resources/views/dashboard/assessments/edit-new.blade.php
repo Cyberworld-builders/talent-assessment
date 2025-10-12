@@ -5,7 +5,7 @@
 	<!-- Title -->
 	<div class="page-title">
 		<div class="title-env">
-			<h1 class="title">{{ $assessment->name }}: New Editor</h1>
+			<h1 class="title">{{ $assessment->name }}: General</h1>
 			<p class="description">Modern, flexible assessment editor with drag-and-drop reordering.</p>
 		</div>
 	</div>
@@ -16,7 +16,7 @@
 		@include('errors.list')
 
 		<!-- Sub Navigation -->
-		@include('dashboard.assessments.partials._subnav', ['active' => 'Edit Assessment (New)'])
+		@include('dashboard.assessments.partials._subnav', ['active' => 'General'])
 
 		{!! Form::model($assessment, ['method' => 'PATCH', 'action' => ['AssessmentsController@updateNew', $assessment->id]]) !!}
 			@include('dashboard.assessments.partials._form-new', [
