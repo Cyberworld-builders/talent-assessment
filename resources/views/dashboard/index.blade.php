@@ -49,6 +49,10 @@
                        {{-- Changelog --}}
         <ul class="list-unstyled changelog">
             <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p><strong>v1.6.4 - Production Deployment Hotfix:</strong> Fixed Docker build failure in production by adding Python and build tools required for node-sass compilation in Alpine Linux image.</p>
+            </li>
+            <li>
                 <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.3 - Assessment UX Improvements:</strong> Significantly improved user experience for assessment takers with cleaner interface, dedicated instruction page, and removal of confusing numbering elements.</p>
             </li>
