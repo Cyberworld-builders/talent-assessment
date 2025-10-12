@@ -7,11 +7,11 @@
                 {!! custom_fields($assignment->id, $assessment->description) !!}
             @endif
         @else
-            {!! $assessment->description !!}
-        @endif
+        {!! $assessment->description !!}
+    @endif
     </div>
 
-    <h1>{{ translate('Questions') }}</h1>
+    {{-- Questions heading removed for cleaner user experience --}}
 
     @if (! empty($questions))
         @foreach ($questions as $question)
