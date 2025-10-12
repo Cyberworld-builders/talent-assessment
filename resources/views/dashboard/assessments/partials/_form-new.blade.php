@@ -708,6 +708,89 @@
                 <div class="form-help">Description that will be shown to users before they start the assessment</div>
             </div>
         </div>
+
+        <!-- Appearance Section -->
+        <div class="form-section">
+            <h3 class="section-title">Appearance</h3>
+            
+            <div class="form-group-modern">
+                <label class="form-label-modern" for="logo">Logo</label>
+                @if ($edit && $assessment->logo)
+                    <div style="margin-bottom: 10px;">
+                        <img src="{{ show_image($assessment->logo) }}" style="max-width:200px; border-radius: 4px;" />
+                    </div>
+                @endif
+                {!! Form::file('logo', ['id' => 'logo', 'class' => 'form-control-modern']) !!}
+                <div class="form-help">This will display in the header of the assessment</div>
+            </div>
+            
+            <div class="form-group-modern">
+                <label class="form-label-modern" for="background">Background Image</label>
+                @if ($edit && $assessment->background)
+                    <div style="margin-bottom: 10px;">
+                        <img src="{{ show_image($assessment->background) }}" style="max-width:200px; border-radius: 4px;" />
+                    </div>
+                @endif
+                {!! Form::file('background', ['id' => 'background', 'class' => 'form-control-modern']) !!}
+                <div class="form-help">This will display in the background of the assessment header</div>
+            </div>
+        </div>
+
+        <!-- Assessment Settings Section -->
+        <div class="form-section">
+            <h3 class="section-title">Assessment Settings</h3>
+            
+            <div class="form-group-modern">
+                <label class="form-label-modern" for="paginate">Split Questions Into Pages</label>
+                {!! Form::select('paginate', [
+                    0 => 'No - Show all questions on one page',
+                    1 => 'Yes - Split into multiple pages'
+                ], null, [
+                    'class' => 'form-control-modern reveal-field-by-selection',
+                    'id' => 'paginate',
+                    'data-field-to-reveal' => 'field-items-per-page'
+                ]) !!}
+                <div class="form-help">If enabled, questions will be placed on separate pages with navigation buttons</div>
+            </div>
+            
+            <div class="form-group-modern field-items-per-page 1" style="display:none;">
+                <label class="form-label-modern" for="items_per_page">Questions Per Page</label>
+                {!! Form::input('number', 'items_per_page', null, ['class' => 'form-control-modern', 'id' => 'items_per_page', 'min' => '1']) !!}
+                <div class="form-help">How many questions will be displayed before the user goes to the next page</div>
+            </div>
+            
+            <div class="form-group-modern">
+                <label class="form-label-modern" for="timed">Timed Assessment</label>
+                {!! Form::select('timed', [
+                    0 => 'No - Users can take unlimited time',
+                    1 => 'Yes - Set a time limit'
+                ], null, [
+                    'class' => 'form-control-modern reveal-field-by-selection',
+                    'id' => 'timed',
+                    'data-field-to-reveal' => 'field-time-limit'
+                ]) !!}
+                <div class="form-help">Whether users will have a limited amount of time to complete the assessment</div>
+            </div>
+            
+            <div class="form-group-modern field-time-limit 1" style="display:none;">
+                <label class="form-label-modern" for="time_limit">Time Limit (Minutes)</label>
+                {!! Form::input('number', 'time_limit', 10, ['class' => 'form-control-modern', 'id' => 'time_limit', 'min' => '1']) !!}
+                <div class="form-help">The amount of time in minutes given to users to complete the assessment</div>
+            </div>
+            
+            <div class="form-group-modern">
+                <label class="form-label-modern" for="target">Assessment Target</label>
+                {!! Form::select('target', [
+                    0 => 'Self - User assesses themselves',
+                    1 => 'Other User - User assesses another person',
+                    2 => 'Group Leader - User assesses their leader'
+                ], null, [
+                    'class' => 'form-control-modern',
+                    'id' => 'target'
+                ]) !!}
+                <div class="form-help">The target determines who the scores of this assessment will apply to</div>
+            </div>
+        </div>
         
         <!-- jQuery Assessment Editor -->
         <div class="form-section">

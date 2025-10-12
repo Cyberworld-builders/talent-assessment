@@ -1036,5 +1036,16 @@ jQuery(document).ready(function($) {
         `)
         .appendTo('head');
     
+    // Reveal field by selection (for paginate, timed, etc.)
+    $('.reveal-field-by-selection').on('change', function(){
+        $('.'+$(this).attr('data-field-to-reveal')).hide();
+        $('.'+$(this).attr('data-field-to-reveal')+'.'+$(this).val()).slideDown();
+    });
+
+    // Check for fields that should already be revealed on page load
+    $('.reveal-field-by-selection').each(function(){
+        $('.'+$(this).attr('data-field-to-reveal')).hide();
+        $('.'+$(this).attr('data-field-to-reveal')+'.'+$(this).val()).show();
+    });
     
 });
