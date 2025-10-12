@@ -974,12 +974,30 @@ class AssessmentsController extends Controller
 				];
 			}
 			
-			$deleted_questions = null; // jQuery handles deletion via AJAX
-		}
+		$deleted_questions = null; // jQuery handles deletion via AJAX
+	}
 
-		// Update the assessment
-		$assessment = Assessment::findOrFail($id);
-		$assessment->update($assessment_data);
+	// Store the logo
+	if ($request->file('logo'))
+	{
+		$imageName = $request->file('logo')->getClientOriginalName();
+		$s3 = new S3Client(config('aws'));
+		$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
+		$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+	}
+
+	// Store the background
+	if ($request->file('background'))
+	{
+		$imageName = $request->file('background')->getClientOriginalName();
+		$s3 = new S3Client(config('aws'));
+		$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
+		$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+	}
+
+	// Update the assessment
+	$assessment = Assessment::findOrFail($id);
+	$assessment->update($assessment_data);
 
 		$valid_ids = $assessment->get_existing_question_ids();
 		$questions_without_ids = [];
