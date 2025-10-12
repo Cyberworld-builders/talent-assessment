@@ -218,7 +218,7 @@
                             </div>
                         @endif
                         @role('admin|reseller')
-                            <div class="btn-group" style="display: inline-block; margin-left:5px;">
+                            {{-- <div class="btn-group" style="display: inline-block; margin-left:5px;">
                                 <button aria-expanded="false" type="button" class="btn btn-black dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa-briefcase"></i> From Job Family <span class="caret"></span>
                                 </button>
@@ -227,7 +227,7 @@
                                         <li><a class="add-by-job-family">{{ $family }}</a></li>
                                     @endforeach
                                 </ul>
-                            </div>
+                            </div> --}}
                         @endrole
                     </div>
 
@@ -805,8 +805,8 @@
             });
         });
 
-        // Add Users From A Specific Job Family
-        $('.add-by-job-family').on('click', function()
+        // Add Users From A Specific Job Family - Removed per user request
+        /*$('.add-by-job-family').on('click', function()
         {
             $modal = $('#modal-users');
             $modal.modal('show');
@@ -845,9 +845,9 @@
                     $('html').prepend(data.responseText);
                 }
             });
-        });
+        });*/
 
-        // Add Users From A Specific Job Family
+        // Add Users From A Specific Job
         $('.add-by-job').on('click', function()
         {
             $modal = $('#modal-users');
