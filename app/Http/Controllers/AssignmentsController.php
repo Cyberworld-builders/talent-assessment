@@ -225,18 +225,29 @@ class AssignmentsController extends Controller {
 	 */
 	public function assignmentsForDate($id, $date)
 	{
-		$client = Client::findOrFail($id);
-		$users = $client->users;
+		try {
+			$client = Client::findOrFail($id);
+			$users = $client->users;
 
-		$userIds = [];
-		foreach ($users as $user)
-			array_push($userIds, $user->id);
+			$userIds = [];
+			foreach ($users as $user)
+				array_push($userIds, $user->id);
 
-		$assignments = Assignment::all()->filter(function($assignment) use ($userIds, $date) {
-			return (in_array($assignment->user_id, $userIds) && $assignment->created_at->format('Y-m-d H:i') == $date);
-		});
+			$assignments = Assignment::all()->filter(function($assignment) use ($userIds, $date) {
+				return (in_array($assignment->user_id, $userIds) && $assignment->created_at->format('Y-m-d H:i') == $date);
+			});
 
-		return view('dashboard.clients.assignments', compact('client', 'assignments', 'date'));
+			return view('dashboard.clients.assignments', compact('client', 'assignments', 'date'));
+			
+		} catch (\Exception $e) {
+			\Log::error('Error loading assignments for date: ' . $e->getMessage(), [
+				'client_id' => $id,
+				'date' => $date,
+				'trace' => $e->getTraceAsString()
+			]);
+			
+			return redirect()->back()->with('error', 'An error occurred while loading assignments. Please try again or contact support if the problem persists.');
+		}
 	}
 
 
