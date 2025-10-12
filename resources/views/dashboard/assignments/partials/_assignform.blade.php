@@ -63,9 +63,9 @@
                 </div>
 
 
-                {{-- Tie To Specific Job --}}
+                {{-- Tie To Specific Job - Removed per user request --}}
                 @role('admin')
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <div class="row">
                             <div class="col-sm-4">
                                 {!! Form::label('job_id', 'Lock To Specific Job', ['class' => 'control-label']) !!}
@@ -75,7 +75,7 @@
                                 {!! Form::select('job_id', $jobsArray, ($edit ? $assignment->job_id : 0), ['class' => 'form-control input-lg']) !!}
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @endrole
 
                 {{-- Make Part of Existing Survey --}}
