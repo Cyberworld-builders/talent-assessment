@@ -880,7 +880,7 @@
                                 <input type="hidden" name="field_id[]" value="{{ $question['id'] }}">
                             @endif
                             <input type="hidden" name="field_type[]" value="{{ $question['type'] }}">
-                            <input type="hidden" name="field_content[]" value="{{ $question['content'] }}">
+                            <input type="hidden" name="field_content[]" value="{!! htmlspecialchars(preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', preg_replace('/on\w+\s*=\s*["\'][^"\']*["\']/i', '', $question['content'])), ENT_QUOTES, 'UTF-8') !!}">
                             <input type="hidden" name="field_number[]" value="{{ $index + 1 }}">
                             @if (isset($question['anchors']))
                                 <input type="hidden" name="field_anchors[]" value="{{ json_encode($question['anchors']) }}">
