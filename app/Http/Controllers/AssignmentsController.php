@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Aws\S3\S3Client;
 
 /**
  * Class AssignmentsController
@@ -1632,9 +1633,38 @@ class AssignmentsController extends Controller {
 		if ($type == 2)
 			$data = $this->excelTemplateDetailedDimensionScores($client, $users, $assessments, $total);
 
-        // Return a csv
+        // Store locally first
         $return_data = $data->store('csv', false, true);
-        sse_complete($return_data);
+        
+        // Upload to S3
+        try {
+            $s3 = new S3Client(config('aws'));
+            $localPath = $return_data['full'];
+            $filename = basename($localPath);
+            $s3Path = 'exports/' . $filename;
+            
+            // Upload file to S3
+            $result = $s3->upload(
+                env('AWS_S3_BUCKET'), 
+                $s3Path, 
+                file_get_contents($localPath)
+            );
+            
+            // Convert S3 URL to CloudFront URL
+            $s3Url = s3_to_cloudfront_url($result->get('ObjectURL'));
+            
+            // Delete local file after successful upload
+            if (file_exists($localPath)) {
+                unlink($localPath);
+            }
+            
+            // Send S3 URL to client
+            sse_complete($s3Url);
+        } catch (\Exception $e) {
+            // If S3 upload fails, fall back to local file
+            \Log::error('S3 upload failed for export: ' . $e->getMessage());
+            sse_complete($return_data);
+        }
         
         // Restore original error reporting
         error_reporting($oldErrorReporting);
