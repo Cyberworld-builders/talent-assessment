@@ -104,8 +104,15 @@ function custom_fields($assignment_id, $string)
  */
 function sse_init()
 {
+	// Start output buffering if not already started
+	if (ob_get_level() == 0) {
+		ob_start();
+	}
+	
 	header('Content-Type: text/event-stream');
 	header('Cache-Control: no-cache');
+	header('X-Accel-Buffering: no'); // Disable nginx buffering
+	
 	sse_send(0, 0);
 }
 
@@ -124,7 +131,10 @@ function sse_send($iteration, $message)
 	echo "data: " . json_encode($data) . PHP_EOL;
 	echo PHP_EOL;
 
-	ob_flush();
+	// Only flush if output buffering is active
+	if (ob_get_level() > 0) {
+		ob_flush();
+	}
 	flush();
 }
 
