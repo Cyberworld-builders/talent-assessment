@@ -18,10 +18,10 @@
 
             <div class="question-container">
                 <p>
-                    {{-- Page Number --}}
-                    @if ($question->showPageNumber())
+                    {{-- Page Number - Removed for user assessments to avoid confusion --}}
+                    {{-- @if ($question->showPageNumber())
                         <strong>{{ $question->number }}.</strong>&nbsp;
-                    @endif
+                    @endif --}}
 
                     {{-- Question Content --}}
                     @if ($question->showContent())
