@@ -81,7 +81,7 @@ class Mailer {
 			'username'         => $user->username,
 			'email'            => $user->email,
 			'password'         => $user->generate_password_for_user(),
-			'expiration-date'  => Carbon::createFromFormat('D, d M Y', $expiration)->format('l, F jS, Y'),
+			'expiration-date'  => Carbon::createFromFormat('d M Y', $expiration)->format('l, F jS, Y'),
 			'login-link'       => $assignments_link,
 			'assessments'      => $assessmentsList,
 		], $body);
