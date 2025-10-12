@@ -266,7 +266,16 @@
                         $('#progress-text').text('');
                         $('#progress-bar').css('width', '0%');
                         $('#cancel-download').remove();
-                        window.location = '/download/' + result.message.file;
+                        
+                        // Check if message is a full URL (S3/CloudFront) or local file path
+                        var downloadUrl = result.message;
+                        if (typeof downloadUrl === 'string' && (downloadUrl.startsWith('http://') || downloadUrl.startsWith('https://'))) {
+                            // Full URL - use directly
+                            window.location = downloadUrl;
+                        } else {
+                            // Local file path - use download route
+                            window.location = '/download/' + result.message.file;
+                        }
                     }
 
                     // Update progress
