@@ -114,7 +114,23 @@ jobs:
           sed -i "s/AWS_S3_BUCKET=.*/AWS_S3_BUCKET=$(jq -r '.STAGING_S3_BUCKET' secrets.json)/" .env.staging
           sed -i "s/AWS_REGION=.*/AWS_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)/" .env.staging
           sed -i "s/AWS_DEFAULT_REGION=.*/AWS_DEFAULT_REGION=$(jq -r '.STAGING_SES_REGION' secrets.json)/" .env.staging
-          sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)/" .env.staging
+          
+          # Configure SES email (using IAM role-based authentication, no credentials needed)
+          echo "Configuring SES email settings..."
+          sed -i "s|MAIL_DRIVER=.*|MAIL_DRIVER=ses|" .env.staging
+          sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)|" .env.staging
+          sed -i "s|MAIL_FROM_NAME=.*|MAIL_FROM_NAME=\"Talent Assessment Staging\"|" .env.staging
+          
+          # Ensure SES config values exist (add if missing)
+          if ! grep -q "^MAIL_DRIVER=" .env.staging; then
+            echo "MAIL_DRIVER=ses" >> .env.staging
+          fi
+          if ! grep -q "^MAIL_FROM_ADDRESS=" .env.staging; then
+            echo "MAIL_FROM_ADDRESS=$(jq -r '.STAGING_SES_FROM_ADDRESS' secrets.json)" >> .env.staging
+          fi
+          if ! grep -q "^MAIL_FROM_NAME=" .env.staging; then
+            echo "MAIL_FROM_NAME=\"Talent Assessment Staging\"" >> .env.staging
+          fi
           
           # Update APP_VERSION with the deployment tag
           echo "Updating APP_VERSION to: $IMAGE_TAG"
