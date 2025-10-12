@@ -50,6 +50,26 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.2 - Email Configuration & Deployment Fixes:</strong> Fixed production email system by implementing IAM role-based SES authentication, preventing deployment scripts from resetting to broken Mailtrap configuration. Updated both staging and production deployment workflows to explicitly configure SES email settings on every deployment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented IAM role-based authentication for Amazon SES - no credentials needed, more secure, follows AWS best practices.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed deployment scripts that were resetting email configuration to Mailtrap on every deployment, causing all production emails to fail.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added comprehensive email testing scripts for both staging and production environments with detailed error reporting.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added error handling and graceful error messages to assignments page for improved user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.0 - Assessment Editor Overhaul & Drag-and-Drop Restoration:</strong> Major release featuring complete drag-and-drop functionality restoration, fixed field positioning, enhanced delete functionality, and modern UI/UX improvements.</p>
             </li>
             <li>
