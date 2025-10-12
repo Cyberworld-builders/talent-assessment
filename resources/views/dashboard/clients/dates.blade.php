@@ -243,9 +243,12 @@
             // Server-sent Events
             var es;
 
-            $('#download-all-data').on('click', function()
+            $('.download-all-data').on('click', function()
             {
-                var url = '/dashboard/assignments/download/{{ $client->id }}';
+                var type = $(this).attr('data-type');
+                var url = '/dashboard/assignments/download/{{ $client->id }}/'+type;
+                console.log('Download type:', type);
+                console.log('Download URL:', url);
                 es = new EventSource(url);
 
                 // Add a cancel option
