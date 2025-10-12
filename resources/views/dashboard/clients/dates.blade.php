@@ -279,8 +279,10 @@
 
                 // Error
                 es.addEventListener('error', function(e) {
-                    console.log(e);
-                    alert('Error occurred');
+                    console.log('EventSource error:', e);
+                    console.log('ReadyState:', es.readyState);
+                    console.log('URL:', es.url);
+                    alert('Error occurred during download. Check console for details.');
                     es.close();
                 });
             });

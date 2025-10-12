@@ -129,6 +129,8 @@
             {
                 var type = $(this).attr('data-type');
                 var url = '/dashboard/assignments/download/{{ $client->id }}/'+type;
+                console.log('Download type:', type);
+                console.log('Download URL:', url);
                 es = new EventSource(url);
 
                 // Add a cancel option
