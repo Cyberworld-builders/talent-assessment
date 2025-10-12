@@ -50,6 +50,22 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.3 - Assessment UX Improvements:</strong> Significantly improved user experience for assessment takers with cleaner interface, dedicated instruction page, and removal of confusing numbering elements.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Removed question numbering from user-facing assessment views - numbers are still visible in admin edit/preview modes for easy reference.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Removed "QUESTIONS" heading for a cleaner, more professional assessment interface.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Made assessment description a dedicated first page - for paginated assessments, instructions now appear on page 1, with questions starting on page 2. Instructions no longer repeat on every page.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.2 - Email Configuration & Deployment Fixes:</strong> Fixed production email system by implementing IAM role-based SES authentication, preventing deployment scripts from resetting to broken Mailtrap configuration. Updated both staging and production deployment workflows to explicitly configure SES email settings on every deployment.</p>
             </li>
             <li>
