@@ -53,6 +53,10 @@
                 <p><strong>v1.6.0 - Assessment Editor Overhaul & Drag-and-Drop Restoration:</strong> Major release featuring complete drag-and-drop functionality restoration, fixed field positioning, enhanced delete functionality, and modern UI/UX improvements.</p>
             </li>
             <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p><strong>v1.6.1 - Critical Bug Fix:</strong> Fixed critical "Whoops" error on assignments page - resolved undefined variable error in AssignmentsController@assignmentsForDate method that was causing 500 errors when clicking on assignment date/time links.</p>
+            </li>
+            <li>
                 <i class="fa-asterisk text-info"></i>
                 <p>Fixed new field positioning issue - fields now correctly appear at the bottom of the list instead of in the second position.</p>
             </li>
