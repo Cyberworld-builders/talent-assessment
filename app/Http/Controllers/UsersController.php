@@ -578,12 +578,17 @@ class UsersController extends Controller
                 $industry = isset($data['industry']) ? $data['industry'] : '';
             }
             
-            $job = $data['job_id'][$i];
+            // Handle optional job_id field
+            $job = null;
+            if (isset($data['job_id']) && is_array($data['job_id']) && isset($data['job_id'][$i])) {
+                $job = $data['job_id'][$i];
+            }
 
             // Find industry by name (case-insensitive)
             $industryRecord = \App\Industry::whereRaw('LOWER(name) = ?', [strtolower($industry)])->first();
             if (!$industryRecord) {
-                $availableIndustries = \App\Industry::pluck('name')->toArray();
+                // In Laravel 5.1, use lists() and convert Collection to array
+                $availableIndustries = \App\Industry::lists('name')->all();
                 \Log::error("Industry not found for user $name", [
                     'industry' => $industry, 
                     'available_industries' => $availableIndustries
