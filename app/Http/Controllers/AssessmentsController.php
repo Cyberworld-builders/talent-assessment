@@ -159,42 +159,22 @@ class AssessmentsController extends Controller
 
         return \Response::json([
 			'success' => true,
-			'redirect' => '/dashboard/assessments/'.$assessment->id.'/edit',
+			'redirect' => '/dashboard/assessments/'.$assessment->id.'/edit-new',
 		]);
     }
 
 	/**
 	 * Edit a specified assessment in storage.
+	 * 
+	 * LEGACY ROUTE - Redirects to modern editor
 	 *
 	 * @param $id
-	 * @return View
+	 * @return Redirect
 	 */
     public function edit($id)
     {
-    	$assessment = Assessment::findOrFail($id);
-        $dimensions = Dimension::where('assessment_id', $id)->get();
-//		$unsorted_questions = $assessment->questions->toArray();
-
-		// Edit the questions and resort them
-//		$questions = [];
-//		foreach ($unsorted_questions as $i => $question) {
-//			$numeric_order = $question['number'];
-//			$questions[$numeric_order] = $question;
-//		}
-//		ksort($questions);
-
-		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
-		
-		// Convert to array and use model accessors for proper data
-		$questionsArray = [];
-		foreach ($questions as $question) {
-			$questionData = $question->toArray();
-			// Use the model's accessor to get properly unserialized anchors
-			$questionData['anchors'] = $question->anchors;
-			$questionsArray[] = $questionData;
-		}
-
-    	return view('dashboard.assessments.edit', compact('assessment', 'dimensions') + ['questions' => $questionsArray]);
+    	// Redirect to the modern editor
+    	return redirect()->to("/dashboard/assessments/{$id}/edit-new");
     }
 
 	/**
