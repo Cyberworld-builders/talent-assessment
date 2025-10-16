@@ -50,6 +50,22 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.8 - Assessment Editor Modernization & Security Fixes:</strong> Retired legacy assessment editor, fixed security configuration issue, and improved user experience with consistent modern interface.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Assessment edit page now always shows modern drag-and-drop form - legacy form has been retired and all links redirect to modern editor.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed problematic ls alias in .bashrc that was overriding the ls command and causing users to be dropped into Docker containers.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added comprehensive security investigation report documenting October 5th configuration modification incident.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.6 - Critical Bugfixes & Data Export:</strong> Fixed critical issues with server-sent events, assignment URLs, email date formatting, and added user bulk upload improvements.</p>
             </li>
             <li>
