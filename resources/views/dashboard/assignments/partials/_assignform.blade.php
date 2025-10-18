@@ -2,10 +2,10 @@
     <div class="panel-body">
         <div class="member-form-inputs">
 
-            <h3>Basic Info</h3><br/>
+            <h3>Assessment Settings</h3><br/>
 
             @if (! $edit)
-                {{-- Assessment --}}
+                {{-- Assessments --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
@@ -34,63 +34,30 @@
             @endif
             <div class="hidden-group" <?php echo ($edit || $oldInput) ? '' : 'style="display:none;"' ?>>
 
-                {{-- Expiration Field --}}
+                {{-- Expiration Date --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
                             {!! Form::label('expiration', 'Expiration Date', ['class' => 'control-label']) !!}
-                            <p class="small text-muted">Users will not be able to start or finish unfinished assignments after they have expired.</p>
+                            <p class="small text-muted">Users will not be able to start or finish assignments after they have expired.</p>
                         </div>
                         <div class="col-sm-8">
                             <div class="input-group">
                                 @if (! $edit)
-                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
+                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'dd M yyyy',
+                                        'data-format' => 'D, dd M yyyy',
                                     ]) !!}
                                 @else
                                     {!! Form::text('expiration', $assignment->expiration, [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'dd M yyyy',
+                                        'data-format' => 'D, dd M yyyy',
                                     ]) !!}
                                 @endif
                                 <div class="input-group-addon">
                                     <i class="linecons-calendar"></i>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Email Reminder --}}
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            {!! Form::label('email-reminder', 'Email Reminder', ['class' => 'control-label']) !!}
-                            <p class="small text-muted">Users will receive periodic email reminders for incomplete assessments.</p>
-                        </div>
-                        <div class="col-sm-8">
-                            {!! Form::select('reminder', [
-                                0 => 'No',
-                                1 => 'Yes',
-                            ], 0, ['class' => 'form-control input-lg']) !!}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group field-reminder" style="display:none;">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            {!! Form::label('field-reminder', 'Reminder Frequency', ['class' => 'control-label']) !!}
-                            <p class="small text-muted">Users will be notified of pending tasks on selected frequency.</p>
-                        </div>
-                        <div class="col-sm-8">
-                            {!! Form::select('reminder-frequency', [
-                                '+1 week' => '1 Week',
-                                '+2 weeks' => '2 Weeks',
-                                '+3 weeks' =>'3 Weeks',
-                                '+1 month'=>'Monthly'
-                            ], '+1 week', ['class' => 'form-control input-lg']) !!}
                         </div>
                     </div>
                 </div>
@@ -110,7 +77,7 @@
                     </div> --}}
                 @endrole
 
-                {{-- Make Part of Existing Survey --}}
+                {{-- Add To Existing Survey --}}
                 @if (!$edit || ($edit && $assessment->target))
                 <div class="form-group">
                     <div class="row">
@@ -136,7 +103,10 @@
                     </div>
                 </div>
 
-                {{-- Send Email --}}
+                <br/>
+                <h3>Emails</h3><br/>
+
+                {{-- Email Notification --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
@@ -198,6 +168,42 @@
                     </div>
 
                     <br/>
+                    <h3>Reminders</h3><br/>
+
+                    {{-- Send Reminders --}}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('email-reminder', 'Send Reminders', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">Users will receive periodic email reminders for incomplete assessments.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                {!! Form::select('reminder', [
+                                    0 => 'No',
+                                    1 => 'Yes',
+                                ], 0, ['class' => 'form-control input-lg']) !!}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('field-reminder', 'Reminder Frequency', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">Users will be notified of pending tasks on selected frequency.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                {!! Form::select('reminder-frequency', [
+                                    '+1 week' => '1 Week',
+                                    '+2 weeks' => '2 Weeks',
+                                    '+3 weeks' =>'3 Weeks',
+                                    '+1 month'=>'Monthly'
+                                ], '+1 week', ['class' => 'form-control input-lg']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
                     <h3>Assign To</h3><br/>
 
                     {{-- Helper Buttons --}}
@@ -233,7 +239,7 @@
 
                     {{-- Upload --}}
                     <div class="pull-right">
-                        <a id="import" class="btn btn-black"><i class="fa-edit"></i> Upload Targets From Excel</a>
+                        <a id="import" class="btn btn-black"><i class="fa-upload"></i> Upload Targets From Excel</a>
                     </div>
                     <div style="clear:both;"></div>
 
