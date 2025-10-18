@@ -6,7 +6,7 @@
 
 set -e
 
-CRON_JOB='* * * * * cd /opt/talent-assessment && docker-compose -f docker-compose.production.yml exec -T app-production php artisan schedule:run >> /var/log/laravel-scheduler.log 2>&1'
+CRON_JOB='* * * * * cd /opt/talent-assessment && docker-compose -f docker-compose.production.yml exec -T app-production php artisan schedule:run >> /var/log/laravel-scheduler.log 2>&1 # CloudWatch: /talent-assessment/production/laravel-scheduler'
 
 echo "Setting up Laravel Scheduler cron job..."
 echo ""
