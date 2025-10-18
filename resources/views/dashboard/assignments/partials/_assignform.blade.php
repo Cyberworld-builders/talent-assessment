@@ -189,16 +189,80 @@
                     <div class="form-group field-reminder" style="display:none;">
                         <div class="row">
                             <div class="col-sm-4">
+                                {!! Form::label('reminder-start', 'First Reminder Date & Time', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">The date and time when the first reminder should be sent.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            {!! Form::text('reminder-start-date', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                                'class' => 'form-control input-lg datepicker',
+                                                'data-format' => 'D, dd M yyyy',
+                                                'placeholder' => 'Date'
+                                            ]) !!}
+                                            <div class="input-group-addon">
+                                                <i class="linecons-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        {!! Form::text('reminder-start-time', '09:00 AM', [
+                                            'class' => 'form-control input-lg',
+                                            'placeholder' => 'Time (e.g., 09:00 AM)'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
                                 {!! Form::label('field-reminder', 'Reminder Frequency', ['class' => 'control-label']) !!}
-                                <p class="small text-muted">Users will be notified of pending tasks on selected frequency.</p>
+                                <p class="small text-muted">How often reminders should be sent after the first one.</p>
                             </div>
                             <div class="col-sm-8">
                                 {!! Form::select('reminder-frequency', [
-                                    '+1 week' => '1 Week',
-                                    '+2 weeks' => '2 Weeks',
-                                    '+3 weeks' =>'3 Weeks',
-                                    '+1 month'=>'Monthly'
-                                ], '+1 week', ['class' => 'form-control input-lg']) !!}
+                                    'daily' => 'Daily',
+                                    'every-2-days' => 'Every 2 Days',
+                                    'every-3-days' => 'Every 3 Days',
+                                    'weekly' => 'Weekly',
+                                    'bi-weekly' => 'Bi-Weekly',
+                                    'monthly' => 'Monthly'
+                                ], 'weekly', ['class' => 'form-control input-lg']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('reminder-end', 'Stop Reminders On', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">When to stop sending reminders (defaults to expiration date).</p>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            {!! Form::text('reminder-end-date', '', [
+                                                'class' => 'form-control input-lg datepicker',
+                                                'data-format' => 'D, dd M yyyy',
+                                                'placeholder' => 'Date (optional)'
+                                            ]) !!}
+                                            <div class="input-group-addon">
+                                                <i class="linecons-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        {!! Form::text('reminder-end-time', '', [
+                                            'class' => 'form-control input-lg',
+                                            'placeholder' => 'Time (optional)'
+                                        ]) !!}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
