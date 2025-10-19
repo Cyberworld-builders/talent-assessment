@@ -572,6 +572,7 @@ class AssignmentsController extends Controller {
 	public function assignAssessment(Request $request)
 	{
 		$data = $request->all();
+		\Log::info('Assignment Form Data:', $data);
 		$expiration = $data['expiration'];
 
 		if (! $data['user'])
@@ -686,7 +687,7 @@ class AssignmentsController extends Controller {
 			}
 
 			// Process reminder settings for all assignments
-			if (isset($data['send-reminders']) && $data['send-reminders'] == 1)
+			if (isset($data['reminder']) && $data['reminder'] == 1)
 			{
 				$reminderData = [];
 				$reminderData['reminder'] = 1;
@@ -700,9 +701,9 @@ class AssignmentsController extends Controller {
 				}
 				
 				// Parse stop reminders date/time (optional)
-				if (isset($data['reminder-stop-date']) && $data['reminder-stop-date'] && isset($data['reminder-stop-time']) && $data['reminder-stop-time'])
+				if (isset($data['reminder-end-date']) && $data['reminder-end-date'] && isset($data['reminder-end-time']) && $data['reminder-end-time'])
 				{
-					$reminderData['stop_reminders_at'] = $data['reminder-stop-date'] . ' ' . $data['reminder-stop-time'];
+					$reminderData['stop_reminders_at'] = $data['reminder-end-date'] . ' ' . $data['reminder-end-time'];
 				}
 				
 				// Update all assignments with reminder data
