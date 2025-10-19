@@ -50,6 +50,22 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.13 - Modern Assessment Editor & Image Path Fixes:</strong> Updated create assessment page to use modern drag-and-drop editor and fixed missing image 404 errors in assignment details view.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Create assessment now uses modern editor with drag-and-drop field reordering, CKEditor for rich text, and improved user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed image paths in assignment details report view - updated logo.png and report-background.jpg to use /assets/images/ instead of /images/.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed preview mode error by properly maintaining currentPage variable for pagination logic in assessment forms.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.12 - Assessment Description Display Fix:</strong> Fixed duplicate description issue where global description was appearing twice on assessments, once on the intro page and again on page 1 of questions.</p>
             </li>
             <li>
