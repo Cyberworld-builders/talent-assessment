@@ -100,7 +100,7 @@ class EmailDateAndBrandingTest extends TestCase
     {
         // Test the default form date generation
         $tomorrow = Carbon::tomorrow();
-        $form_date = $tomorrow->format('d M Y');
+        $form_date = $tomorrow->format('D, d M Y');
         
         // Should be in the correct format
         $this->assertRegExp('/^\d{1,2} [A-Za-z]{3} \d{4}$/', $form_date);

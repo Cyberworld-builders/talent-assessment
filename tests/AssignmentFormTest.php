@@ -132,7 +132,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$this->user->id],
             'target' => [0],
             'role' => [''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0,
             'email-subject' => 'Test Assignment Email',
             'email-body' => '<p>Test email body</p>',
@@ -166,7 +166,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$this->user->id],
             'target' => [0],
             'role' => [''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0,
             'email-subject' => 'Test Subject',
             'email-body' => '<p>Test body</p>',
@@ -197,7 +197,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$this->user->id],
             'target' => [0],
             'role' => [''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0
             // Missing 'assessments' field
         ];
@@ -222,7 +222,7 @@ class AssignmentFormTest extends TestCase
             'user' => [], // Empty users array
             'target' => [],
             'role' => [],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0
         ];
 
@@ -258,7 +258,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$this->user->id, $user2->id],
             'target' => [0, 0],
             'role' => ['', ''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 1,
             'email-subject' => 'Test Assignment Email',
             'email-body' => '<p>Test email body</p>',
@@ -303,7 +303,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$userWithJobFamily->id],
             'target' => [0],
             'role' => [''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0,
             'email-subject' => 'Test Subject',
             'email-body' => '<p>Test body</p>',
@@ -329,7 +329,7 @@ class AssignmentFormTest extends TestCase
     {
         $this->be($this->user);
 
-        $expirationDate = Carbon::now()->addDays(7)->format('d M Y');
+        $expirationDate = Carbon::now()->addDays(7)->format('D, d M Y');
 
         $formData = [
             'assessments' => [$this->assessment->id],
@@ -394,7 +394,7 @@ class AssignmentFormTest extends TestCase
             'user' => [$this->user->id],
             'target' => [0],
             'role' => [''],
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 0,
             'email-subject' => 'Test Subject',
             'email-body' => '<p>Test body</p>',
@@ -528,7 +528,7 @@ class AssignmentFormTest extends TestCase
             'user' => array_map(function($user) { return $user->id; }, $users),
             'target' => array_fill(0, 3, 0),
             'role' => array_fill(0, 3, ''),
-            'expiration' => Carbon::tomorrow()->format('d M Y'),
+            'expiration' => Carbon::tomorrow()->format('D, d M Y'),
             'send-email' => 1,
             'email-subject' => 'Bulk Assignment Email',
             'email-body' => '<p>Bulk assignment email body</p>',
