@@ -1,16 +1,15 @@
 @if (! $task)
     <?php
-    // Determine if we should show description or questions
+    // Determine when to show description and questions
     $isPaginated = $assessment->paginate;
     $currentPage = ($questions instanceof \Illuminate\Contracts\Pagination\Paginator) ? $questions->currentPage() : 1;
-    $showDescriptionOnly = $isPaginated && $currentPage == 1;
-    $showQuestions = !$showDescriptionOnly;
+    $showDescription = !$isPaginated || $currentPage == 1;
     ?>
 
-    {{-- For paginated assessments: Page 1 shows description only, Page 2+ shows questions only --}}
+    {{-- For paginated assessments: Page 1 shows description + first questions, Page 2+ shows questions only --}}
     {{-- For non-paginated assessments: Show description and all questions together --}}
     
-    @if (!$isPaginated || $currentPage == 1)
+    @if ($showDescription)
         <div class="description">
             @if (! $preview)
                 @if ($assessment->translation() && $assessment->translation()->description)
@@ -26,7 +25,7 @@
 
     {{-- Questions heading removed for cleaner user experience --}}
 
-    @if ($showQuestions && ! empty($questions))
+    @if (! empty($questions))
         @foreach ($questions as $question)
 
             <div class="question-container">
