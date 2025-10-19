@@ -133,13 +133,17 @@ class SendReminders extends Command
     protected function sendReminder(Assignment $assignment)
     {
         try {
-            // Dispatch the job to send the reminder email
-            // The job itself will update last_reminder_sent_at after successful send
-            $job = new SendReminderEmail($assignment);
-            dispatch($job);
+            // Send email directly (synchronous)
+            $mailer = new \App\Mailer();
+            $mailer->send_reminder($assignment);
+            
+            // Update timestamp after successful send
+            $assignment->last_reminder_sent_at = \Carbon\Carbon::now('UTC');
+            $assignment->save();
 
-            $this->info("Queued reminder for assignment #{$assignment->id} (User: {$assignment->user->email})");
+            $this->info("Sent reminder for assignment #{$assignment->id} (User: {$assignment->user->email})");
         } catch (\Exception $e) {
+            \Log::error("Failed to send reminder for assignment #{$assignment->id}: {$e->getMessage()}");
             $this->error("Failed to send reminder for assignment #{$assignment->id}: {$e->getMessage()}");
         }
     }

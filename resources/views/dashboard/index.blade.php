@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.11 - Reminder System Fixes & Form Improvements:</strong> Fixed reminder email sending and form processing, corrected date format parsing, and enabled CloudWatch logging for staging environment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed reminder form field processing - corrected field names to match actual form submission (reminder, reminder-end-date, reminder-end-time).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented proper date/time parsing for reminder fields using Carbon::createFromFormat with 'D, d M Y h:i A' format.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed date format parsing throughout assignment and mailer code - updated from 'd M Y' to 'D, d M Y' to match datepicker output.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Resolved reminder email sending by implementing synchronous email delivery instead of problematic queue-based approach.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed timestamp tracking by updating last_reminder_sent_at only after successful email delivery, not before.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.10 - Timezone Support for Reminders:</strong> Added intelligent timezone handling for reminder notifications - reminders now respect the admin's local timezone when scheduling, ensuring predictable send times.</p>
             </li>
             <li>

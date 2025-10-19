@@ -572,7 +572,6 @@ class AssignmentsController extends Controller {
 	public function assignAssessment(Request $request)
 	{
 		$data = $request->all();
-		\Log::info('Assignment Form Data:', $data);
 		$expiration = $data['expiration'];
 
 		if (! $data['user'])
