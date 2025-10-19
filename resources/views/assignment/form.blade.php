@@ -1,6 +1,9 @@
 @if (! $task)
-    {{-- Description is shown on the stage.blade.php intro page before starting assessment --}}
-    {{-- No need to duplicate it here in the form itself --}}
+    <?php
+    // Description is shown on the stage.blade.php intro page before starting assessment
+    // We still need currentPage for pagination logic below
+    $currentPage = ($questions instanceof \Illuminate\Contracts\Pagination\Paginator) ? $questions->currentPage() : 1;
+    ?>
 
     @if (! empty($questions))
         @foreach ($questions as $question)
@@ -211,8 +214,8 @@
 @endif
 
 <!-- Submit Field -->
-{{-- Show submit button only on the last page of questions (not on description-only page 1) --}}
-@if (! $assessment->paginate || (! $questions->hasMorePages() && $currentPage > 1))
+{{-- Show submit button only on the last page of questions --}}
+@if (! $assessment->paginate || ! $questions->hasMorePages())
     <div class="form-group" {!! ($task) ? 'style="display:none;"' : '' !!}>
         <br/>
         <div class="pull-right">
