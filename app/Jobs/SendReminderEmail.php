@@ -53,6 +53,10 @@ class SendReminderEmail extends Job implements ShouldQueue
 
         $mailer = new Mailer();
         $mailer->send_reminder($assignment);
+
+        // Update timestamp AFTER email is sent
+        $assignment->last_reminder_sent_at = Carbon::now('UTC');
+        $assignment->save();
     }
 
     /**

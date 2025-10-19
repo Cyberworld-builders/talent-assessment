@@ -134,12 +134,9 @@ class SendReminders extends Command
     {
         try {
             // Dispatch the job to send the reminder email
+            // The job itself will update last_reminder_sent_at after successful send
             $job = new SendReminderEmail($assignment);
             dispatch($job);
-
-            // Update last reminder sent timestamp
-            $assignment->last_reminder_sent_at = Carbon::now();
-            $assignment->save();
 
             $this->info("Queued reminder for assignment #{$assignment->id} (User: {$assignment->user->email})");
         } catch (\Exception $e) {
