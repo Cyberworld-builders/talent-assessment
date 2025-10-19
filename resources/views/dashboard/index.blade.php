@@ -50,6 +50,18 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.12 - Assessment Description Display Fix:</strong> Fixed duplicate description issue where global description was appearing twice on assessments, once on the intro page and again on page 1 of questions.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed description duplication from assessment form - description now only appears on the intro/stage page before starting the assessment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed issue where paginated assessments would show description on page 1 instead of questions, ensuring first page of questions is never replaced by description.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.11 - Reminder System Fixes & Form Improvements:</strong> Fixed reminder email sending and form processing, corrected date format parsing, and enabled CloudWatch logging for staging environment.</p>
             </li>
             <li>

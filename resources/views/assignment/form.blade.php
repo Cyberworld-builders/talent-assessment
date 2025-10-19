@@ -1,29 +1,6 @@
 @if (! $task)
-    <?php
-    // Determine when to show description and questions
-    $isPaginated = $assessment->paginate;
-    $currentPage = ($questions instanceof \Illuminate\Contracts\Pagination\Paginator) ? $questions->currentPage() : 1;
-    $showDescription = !$isPaginated || $currentPage == 1;
-    ?>
-
-    {{-- For paginated assessments: Page 1 shows description + first questions, Page 2+ shows questions only --}}
-    {{-- For non-paginated assessments: Show description and all questions together --}}
-    
-    @if ($showDescription)
-        <div class="description">
-            @if (! $preview)
-                @if ($assessment->translation() && $assessment->translation()->description)
-                    {!! custom_fields($assignment->id, $assessment->translation()->description) !!}
-                @else
-                    {!! custom_fields($assignment->id, $assessment->description) !!}
-                @endif
-            @else
-            {!! $assessment->description !!}
-        @endif
-        </div>
-    @endif
-
-    {{-- Questions heading removed for cleaner user experience --}}
+    {{-- Description is shown on the stage.blade.php intro page before starting assessment --}}
+    {{-- No need to duplicate it here in the form itself --}}
 
     @if (! empty($questions))
         @foreach ($questions as $question)
