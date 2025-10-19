@@ -50,7 +50,15 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
-                <p><strong>v1.6.8 - Reminder System & CloudWatch Monitoring:</strong> Complete reminder notification system for assessments, AWS CloudWatch logging infrastructure, and critical bug fixes for assessment loading.</p>
+                <p><strong>v1.6.10 - Timezone Support for Reminders:</strong> Added intelligent timezone handling for reminder notifications - reminders now respect the admin's local timezone when scheduling, ensuring predictable send times.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>JavaScript auto-detects admin's timezone when creating assignments - reminders sent at the scheduled time in admin's timezone converted to UTC for accurate delivery.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.9 - Reminder System & CloudWatch Monitoring:</strong> Complete reminder notification system for assessments, AWS CloudWatch logging infrastructure, and critical bug fixes for assessment loading.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-success"></i>
