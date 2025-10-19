@@ -50,12 +50,8 @@ resource "aws_iam_role_policy" "cloudwatch_logs_policy" {
           "logs:DescribeLogStreams"
         ]
         Resource = [
-          aws_cloudwatch_log_group.laravel_scheduler.arn,
-          "${aws_cloudwatch_log_group.laravel_scheduler.arn}:*",
-          aws_cloudwatch_log_group.application.arn,
-          "${aws_cloudwatch_log_group.application.arn}:*",
-          aws_cloudwatch_log_group.system.arn,
-          "${aws_cloudwatch_log_group.system.arn}:*"
+          "arn:aws:logs:*:*:log-group:/talent-assessment/*",
+          "arn:aws:logs:*:*:log-group:/talent-assessment/*:log-stream:*"
         ]
       },
       {
