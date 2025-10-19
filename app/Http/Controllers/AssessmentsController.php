@@ -91,8 +91,35 @@ class AssessmentsController extends Controller
 	 */
 	public function store(AssessmentRequest $request)
     {
-        $assessment_data = $request->except('questions');
-        $question_data = json_decode($request->get('questions'));
+		// Handle both old JSON format and new array format (modern editor)
+		if ($request->has('questions') && is_string($request->get('questions'))) {
+			// Old AJAX format
+			$assessment_data = $request->except('questions');
+			$question_data = json_decode($request->get('questions'));
+		} else {
+			// New jQuery array format from modern editor
+			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors', 'field_number', 'field_practice']);
+			
+			// Convert arrays to question data format
+			$field_types = $request->get('field_type', []);
+			$field_contents = $request->get('field_content', []);
+			$field_dimensions = $request->get('field_dimension', []);
+			$field_anchors = $request->get('field_anchors', []);
+			$field_numbers = $request->get('field_number', []);
+			$field_practice = $request->get('field_practice', []);
+			
+			$question_data = [];
+			for ($i = 0; $i < count($field_types); $i++) {
+				$question_data[] = (object)[
+					'type' => $field_types[$i],
+					'content' => $field_contents[$i],
+					'number' => !empty($field_numbers[$i]) ? $field_numbers[$i] : $i + 1,
+					'dimension_id' => !empty($field_dimensions[$i]) ? $field_dimensions[$i] : null,
+					'anchors' => !empty($field_anchors[$i]) ? json_decode($field_anchors[$i], true) : [],
+					'practice' => !empty($field_practice[$i]) ? $field_practice[$i] : 0
+				];
+			}
+		}
 
 		// If target is Self
 		if ($assessment_data['target'] == 0)
