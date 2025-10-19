@@ -67,6 +67,8 @@ class AssessmentsController extends Controller
 	 */
     public function create()
     {
+		// Create a blank assessment object for the form
+		$assessment = new Assessment();
         $dimensions = Dimension::all();
 		$questions = [
 			[
@@ -80,7 +82,7 @@ class AssessmentsController extends Controller
 			]
 		];
 
-    	return view('dashboard.assessments.create', compact('dimensions', 'questions'));
+    	return view('dashboard.assessments.create', compact('assessment', 'dimensions', 'questions'));
     }
 
 	/**
