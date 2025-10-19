@@ -402,6 +402,9 @@
                             </div>
                         </div>
 
+                        {{-- Hidden field for user's timezone --}}
+                        {!! Form::hidden('reminder-timezone', 'UTC', ['id' => 'reminder-timezone']) !!}
+
                         <br/>
                         <h3>Assign To</h3><br/>
 
@@ -1102,6 +1105,16 @@
                 todayHighlight: true,
                 startDate: new Date()
             });
+
+            // Auto-detect and set user's timezone
+            try {
+                var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                $('#reminder-timezone').val(timezone);
+                console.log('User timezone detected:', timezone);
+            } catch(e) {
+                console.log('Could not detect timezone, defaulting to UTC');
+                $('#reminder-timezone').val('UTC');
+            }
         });
     </script>
 @stop

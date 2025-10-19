@@ -40,34 +40,15 @@ class SendReminders extends Command
      */
     public function handle()
     {
-        $now = Carbon::now();
-        $this->info("Checking for reminders to send at {$now->toDateTimeString()}");
+        $now = Carbon::now('UTC');
+        $this->info("Checking for reminders to send at {$now->toDateTimeString()} UTC");
 
         // Find assignments that need reminders
+        // Note: We'll do timezone conversion in shouldSendReminder() since we can't easily
+        // convert arbitrary timezones in SQL. We fetch candidates and filter in PHP.
         $assignments = Assignment::where('reminder', 1)
             ->where('completed', 0)
             ->whereNotNull('first_reminder_at')
-            ->where(function($query) use ($now) {
-                // First reminder is due
-                $query->where(function($q) use ($now) {
-                    $q->where('first_reminder_at', '<=', $now)
-                      ->whereNull('last_reminder_sent_at');
-                })
-                // Or next reminder is due (based on frequency)
-                ->orWhere(function($q) use ($now) {
-                    $q->whereNotNull('last_reminder_sent_at')
-                      ->whereNotNull('reminder_frequency')
-                      ->whereRaw('DATE_ADD(last_reminder_sent_at, INTERVAL ? SECOND) <= ?', [
-                          $this->getFrequencyInSeconds('reminder_frequency'),
-                          $now->toDateTimeString()
-                      ]);
-                });
-            })
-            ->where(function($query) use ($now) {
-                // Either no stop date, or stop date not reached
-                $query->whereNull('stop_reminders_at')
-                      ->orWhere('stop_reminders_at', '>', $now);
-            })
             ->where('expires', '>', $now) // Don't send reminders for expired assignments
             ->with('user')
             ->get();
@@ -104,21 +85,32 @@ class SendReminders extends Command
             return false;
         }
 
-        // Skip if expired
-        if ($assignment->expires && Carbon::parse($assignment->expires)->isPast()) {
-            return false;
+        // Get the assignment's timezone (default to UTC if not set)
+        $timezone = $assignment->reminder_timezone ?? 'UTC';
+
+        // Skip if expired (convert expiration to UTC for comparison)
+        if ($assignment->expires) {
+            $expiresUtc = Carbon::parse($assignment->expires, $timezone)->setTimezone('UTC');
+            if ($expiresUtc->isPast()) {
+                return false;
+            }
         }
 
-        // Skip if stop date has passed
-        if ($assignment->stop_reminders_at && 
-            Carbon::parse($assignment->stop_reminders_at)->isPast()) {
-            return false;
+        // Skip if stop date has passed (convert to UTC for comparison)
+        if ($assignment->stop_reminders_at) {
+            $stopUtc = Carbon::parse($assignment->stop_reminders_at, $timezone)->setTimezone('UTC');
+            if ($stopUtc->isPast()) {
+                return false;
+            }
         }
 
-        // If never sent, check if first reminder time has passed
+        // If never sent, check if first reminder time has passed (convert to UTC for comparison)
         if (!$assignment->last_reminder_sent_at) {
-            return $assignment->first_reminder_at && 
-                   Carbon::parse($assignment->first_reminder_at)->lte($now);
+            if ($assignment->first_reminder_at) {
+                $firstReminderUtc = Carbon::parse($assignment->first_reminder_at, $timezone)->setTimezone('UTC');
+                return $firstReminderUtc->lte($now);
+            }
+            return false;
         }
 
         // Check if enough time has passed based on frequency
@@ -126,7 +118,8 @@ class SendReminders extends Command
             return false;
         }
 
-        $lastSent = Carbon::parse($assignment->last_reminder_sent_at);
+        // last_reminder_sent_at is stored in UTC, so use it directly
+        $lastSent = Carbon::parse($assignment->last_reminder_sent_at, 'UTC');
         $nextDue = $this->calculateNextReminderDate($lastSent, $assignment->reminder_frequency);
 
         return $nextDue && $nextDue->lte($now);

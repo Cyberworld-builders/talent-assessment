@@ -28,6 +28,7 @@ class Assignment extends Model
 		'first_reminder_at',
 		'stop_reminders_at',
 		'last_reminder_sent_at',
+		'reminder_timezone',
 		'job_id',
 		'short_name',
 	];

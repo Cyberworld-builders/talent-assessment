@@ -267,6 +267,9 @@
                         </div>
                     </div>
 
+                    {{-- Hidden field for user's timezone --}}
+                    {!! Form::hidden('reminder-timezone', 'UTC', ['id' => 'reminder-timezone']) !!}
+
                     <br/>
                     <h3>Assign To</h3><br/>
 
