@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
+        \App\Console\Commands\SendReminders::class,
     ];
 
     /**
@@ -26,5 +27,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('inspire')
                  ->hourly();
+        
+        // Send reminder emails every 30 minutes
+        $schedule->command('reminders:send')
+                 ->everyThirtyMinutes()
+                 ->withoutOverlapping()
+                 ->runInBackground();
     }
 }

@@ -25,11 +25,14 @@ class Assignment extends Model
 		'reminder',
 		'next_reminder',
 		'reminder_frequency',
+		'first_reminder_at',
+		'stop_reminders_at',
+		'last_reminder_sent_at',
 		'job_id',
 		'short_name',
 	];
 
-	protected $dates = ['started_at', 'completed_at', 'expires'];
+	protected $dates = ['started_at', 'completed_at', 'expires', 'first_reminder_at', 'stop_reminders_at', 'last_reminder_sent_at'];
 
 	/**
 	 * Get the user to which this assignment is assigned to.

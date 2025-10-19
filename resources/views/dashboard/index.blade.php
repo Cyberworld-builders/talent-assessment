@@ -50,19 +50,39 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
-                <p><strong>v1.6.8 - Assessment Editor Modernization & Security Fixes:</strong> Retired legacy assessment editor, fixed security configuration issue, and improved user experience with consistent modern interface.</p>
-            </li>
-            <li>
-                <i class="fa-asterisk text-info"></i>
-                <p>Assessment edit page now always shows modern drag-and-drop form - legacy form has been retired and all links redirect to modern editor.</p>
-            </li>
-            <li>
-                <i class="fa-asterisk text-warning"></i>
-                <p>Fixed problematic ls alias in .bashrc that was overriding the ls command and causing users to be dropped into Docker containers.</p>
+                <p><strong>v1.6.8 - Reminder System & CloudWatch Monitoring:</strong> Complete reminder notification system for assessments, AWS CloudWatch logging infrastructure, and critical bug fixes for assessment loading.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-success"></i>
-                <p>Added comprehensive security investigation report documenting October 5th configuration modification incident.</p>
+                <p>Implemented automated reminder emails with granular scheduling controls - first reminder date/time, flexible frequencies (30 min, hourly, daily, weekly, bi-weekly), and stop date options.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added Laravel scheduler integration with queue jobs for reliable email delivery - reminders run every 30 minutes and respect assignment expiration dates.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Beautiful responsive reminder email template with urgency indicators, countdown timers, and dynamic subject lines based on days remaining.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>AWS CloudWatch integration - centralized logging for scheduler, application, and system logs with 30-day retention and real-time monitoring.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Host-level cron setup for Laravel scheduler following Docker best practices - easier to maintain and debug than in-container cron.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p>Fixed critical bug: assessments hanging on first page due to infinite 404 loop from incorrect image asset paths in header fallbacks.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Reorganized assignment form with clearer sections: Assessment Settings, Emails, Reminders, and Assign To - improved UX with datetime pickers and dynamic field visibility.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added comprehensive infrastructure documentation: CloudWatch setup guide, scheduler documentation, and automated setup scripts.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-success"></i>
