@@ -31,7 +31,6 @@ class Kernel extends ConsoleKernel
         // Send reminder emails every 30 minutes
         $schedule->command('reminders:send')
                  ->everyThirtyMinutes()
-                 ->withoutOverlapping()
-                 ->runInBackground();
+                 ->withoutOverlapping();
     }
 }
