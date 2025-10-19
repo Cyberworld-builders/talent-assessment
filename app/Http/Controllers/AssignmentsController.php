@@ -686,7 +686,7 @@ class AssignmentsController extends Controller {
 			}
 
 			// Process reminder settings for all assignments
-			if (isset($data['send-reminders']) && $data['send-reminders'] == 'yes')
+			if (isset($data['send-reminders']) && $data['send-reminders'] == 1)
 			{
 				$reminderData = [];
 				$reminderData['reminder'] = 1;
