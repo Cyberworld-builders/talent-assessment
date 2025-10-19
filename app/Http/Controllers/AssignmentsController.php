@@ -697,13 +697,15 @@ class AssignmentsController extends Controller {
 				// Parse first reminder date/time
 				if (isset($data['reminder-start-date']) && isset($data['reminder-start-time']))
 				{
-					$reminderData['first_reminder_at'] = $data['reminder-start-date'] . ' ' . $data['reminder-start-time'];
+					$dateTimeString = $data['reminder-start-date'] . ' ' . $data['reminder-start-time'];
+					$reminderData['first_reminder_at'] = Carbon::createFromFormat('D, d M Y h:i A', $dateTimeString);
 				}
 				
 				// Parse stop reminders date/time (optional)
 				if (isset($data['reminder-end-date']) && $data['reminder-end-date'] && isset($data['reminder-end-time']) && $data['reminder-end-time'])
 				{
-					$reminderData['stop_reminders_at'] = $data['reminder-end-date'] . ' ' . $data['reminder-end-time'];
+					$dateTimeString = $data['reminder-end-date'] . ' ' . $data['reminder-end-time'];
+					$reminderData['stop_reminders_at'] = Carbon::createFromFormat('D, d M Y h:i A', $dateTimeString);
 				}
 				
 				// Update all assignments with reminder data
