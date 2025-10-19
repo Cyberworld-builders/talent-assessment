@@ -685,6 +685,37 @@ class AssignmentsController extends Controller {
 				}
 			}
 
+			// Process reminder settings for all assignments
+			if (isset($data['send-reminders']) && $data['send-reminders'] == 'yes')
+			{
+				$reminderData = [];
+				$reminderData['reminder'] = 1;
+				$reminderData['reminder_frequency'] = $data['reminder-frequency'] ?? 'daily';
+				$reminderData['reminder_timezone'] = $data['reminder-timezone'] ?? 'UTC';
+				
+				// Parse first reminder date/time
+				if (isset($data['reminder-start-date']) && isset($data['reminder-start-time']))
+				{
+					$reminderData['first_reminder_at'] = $data['reminder-start-date'] . ' ' . $data['reminder-start-time'];
+				}
+				
+				// Parse stop reminders date/time (optional)
+				if (isset($data['reminder-stop-date']) && $data['reminder-stop-date'] && isset($data['reminder-stop-time']) && $data['reminder-stop-time'])
+				{
+					$reminderData['stop_reminders_at'] = $data['reminder-stop-date'] . ' ' . $data['reminder-stop-time'];
+				}
+				
+				// Update all assignments with reminder data
+				foreach ($assignment_ids as $assignment_id)
+				{
+					$assignment = Assignment::find($assignment_id);
+					if ($assignment)
+					{
+						$assignment->update($reminderData);
+					}
+				}
+			}
+
 			// Email assignment links to the user
 			if ($data['send-email'])
 			{
