@@ -156,9 +156,7 @@ echo ""
 # Verify CloudWatch agent status
 echo -e "${YELLOW}Checking CloudWatch agent status...${NC}"
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
-    -a query \
-    -m ec2 \
-    -c default
+    -a status
 
 echo ""
 echo -e "${GREEN}=== CloudWatch Agent Setup Complete! ===${NC}"
@@ -174,7 +172,7 @@ echo "To view logs in CloudWatch:"
 echo "  aws logs tail /talent-assessment/${ENVIRONMENT}/laravel-scheduler --follow"
 echo ""
 echo "To check agent status:"
-echo "  sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a query -m ec2 -c default"
+echo "  sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status"
 echo ""
 echo "To restart agent:"
 echo "  sudo systemctl restart amazon-cloudwatch-agent"

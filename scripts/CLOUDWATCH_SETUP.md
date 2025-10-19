@@ -161,8 +161,7 @@ aws logs put-metric-filter \
 ### Check Agent Status
 
 ```bash
-sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
-    -a query -m ec2 -c default
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status
 ```
 
 ### Restart Agent
