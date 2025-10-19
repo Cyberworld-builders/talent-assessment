@@ -124,7 +124,7 @@ class AssignmentsController extends Controller {
             foreach ($data['assignments'] as $assignment_id)
             {
 				$assignment = Assignment::findOrFail($assignment_id);
-				$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
+				$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
 				$next_reminder = '';
 				$reminder_frequency = '';
 				if ($data['reminder'] == 1)
@@ -1100,7 +1100,7 @@ class AssignmentsController extends Controller {
 
 	public function update_assignment_for_user($assignment_id, $user, $expiration, $whitelabel)
     {
-        $expires = Carbon::createFromFormat('d M Y', $expiration);
+        $expires = Carbon::createFromFormat('D, d M Y', $expiration);
 
         $assignment = Assignment::findOrFail($assignment_id);
         $assignment->update([
@@ -1218,7 +1218,7 @@ class AssignmentsController extends Controller {
     {
 		$data = $request->all();
 		$assignment = Assignment::findOrFail($id);
-		$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
+		$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
 
 		if (! array_key_exists('job_id', $data) || $data['job_id'] == '')
 			$data['job_id'] = null;
@@ -1353,7 +1353,7 @@ class AssignmentsController extends Controller {
 	 */
 	public function generate_assignment_for_user($assessment_id, $user, $job_id, $expiration, $whitelabel, $custom_fields, $target_id, $created_at = null)
 	{
-		$expires = Carbon::createFromFormat('d M Y', $expiration);
+		$expires = Carbon::createFromFormat('D, d M Y', $expiration);
 
 		// Create new assignment
 		$assignment = new Assignment([
