@@ -3383,6 +3383,17 @@ class ReportsController extends Controller
     	$report = new Report($data);
     	$report->save();
 
+		// Create the ClientReport pivot record so the report appears in the client's report list
+		$clientReport = new \App\ClientReport([
+			'client_id' => $clientId,
+			'report_id' => $report->id,
+			'job_id' => $data['job_id'] ?? null,
+			'enabled' => 1,
+			'visible' => 1,
+			'fields' => null,
+		]);
+		$clientReport->save();
+
 		Session::flash('success', 'New report '.$report->name.' created successfully!');
 		return \Response::json([
 			'success' => true,
