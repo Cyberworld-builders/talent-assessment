@@ -1,29 +1,25 @@
-<h3>Hello, {{ $user->name }}</h3>
+Hello, {{ $user->name }}
 
-<p>
-    This is a friendly reminder that you have a pending assessment that needs to be completed.
-</p>
+This is a friendly reminder that you have a pending assessment that needs to be completed.
 
-<p>
-    <strong>Assessment:</strong> {{ $assessment->name }}<br/>
-    <strong>Expires:</strong> {{ $expires->format('l, F jS, Y') }}<br/>
-    @if($days_remaining > 1)
-        <strong>Time Remaining:</strong> {{ $days_remaining }} days
-    @elseif($days_remaining == 1)
-        <strong>Time Remaining:</strong> 1 day
-    @elseif($days_remaining == 0)
-        <strong>⚠️ This assessment expires today!</strong>
-    @else
-        <strong>⚠️ This assessment is overdue!</strong>
-    @endif
-</p>
+Assessment: {{ $assessment->name }}
+Expires: {{ $expires->format('l, F jS, Y') }}
+@if($days_remaining > 1)
+Time Remaining: {{ $days_remaining }} days
+@elseif($days_remaining == 1)
+Time Remaining: 1 day
+@elseif($days_remaining == 0)
+⚠️ This assessment expires today!
+@else
+⚠️ This assessment is overdue!
+@endif
 
-<p>
-    Login <a target="_blank" href="{{ $assignments_link }}">here</a> to complete your assessment. You can use the following credentials:<br/>
-    username: <i>{{ $user->username }}</i><br/>
-    password: <i>{{ $user->generate_password_for_user() }}</i>
-</p>
+Login here to complete your assessment: {{ $assignments_link }}
 
-<br/>
-<div class="footer-text">&copy; {{ date('Y') }} Involved Talent</div>
+You can use the following credentials:
+username: {{ $user->username }}
+password: {{ $user->generate_password_for_user() }}
+
+
+© {{ date('Y') }} Involved Talent
 
