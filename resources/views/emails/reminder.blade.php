@@ -1,7 +1,7 @@
-<p>Hello, {{ $user->name }}</p>
+<h3>Hello, {{ $user->name }}</h3>
 
 <p>
-    This is a friendly reminder that you have a pending assessment that needs to be completed.
+    This is a reminder that you have a pending assessment that needs to be completed.
 </p>
 
 <p>
@@ -12,16 +12,16 @@
     @elseif($days_remaining == 1)
         Time Remaining: 1 day
     @elseif($days_remaining == 0)
-        ⚠️ This assessment expires today!
+        <b>This assessment expires today!</b>
     @else
-        ⚠️ This assessment is overdue!
+        <b>This assessment is overdue!</b>
     @endif
 </p>
 
 <p>
     Login <a target="_blank" href="{{ $assignments_link }}">here</a> to complete your assessment. You can use the following credentials:<br/>
-    username: {{ $user->username }}<br/>
-    password: {{ $user->generate_password_for_user() }}
+    username: <i>{{ $user->username }}</i><br/>
+    password: <i>{{ $user->generate_password_for_user() }}</i>
 </p>
 
 <br/>

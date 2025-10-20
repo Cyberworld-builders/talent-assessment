@@ -251,8 +251,8 @@ class Mailer {
 		$expires = Carbon::parse($assignment->expires);
 		$daysUntilExpiration = Carbon::now()->diffInDays($expires, false);
 		
-		// Build the reminder body
-		$body = "This is a friendly reminder that you have a pending assessment that needs to be completed.";
+		// Build the reminder body (note: this is passed to view but not used in current template)
+		$body = "This is a reminder that you have a pending assessment that needs to be completed.";
 		$body .= "\n\n";
 		$body .= "<strong>Assessment:</strong> {$assessment->name}<br>";
 		$body .= "<strong>Expires:</strong> {$expires->format('l, F jS, Y')}<br>";
@@ -260,9 +260,9 @@ class Mailer {
 		if ($daysUntilExpiration > 0) {
 			$body .= "<strong>Time Remaining:</strong> {$daysUntilExpiration} day(s)<br>";
 		} else if ($daysUntilExpiration == 0) {
-			$body .= "<strong>⚠️ This assessment expires today!</strong><br>";
+			$body .= "<strong>This assessment expires today!</strong><br>";
 		} else {
-			$body .= "<strong>⚠️ This assessment is overdue!</strong><br>";
+			$body .= "<strong>This assessment is overdue!</strong><br>";
 		}
 		
 		$body .= "\n\n";
@@ -283,9 +283,9 @@ class Mailer {
 		$subject = "Reminder: {$assessment->name} Assessment Due";
 		
 		if ($daysUntilExpiration == 0) {
-			$subject = "⚠️ Urgent: {$assessment->name} Assessment Expires Today";
+			$subject = "Urgent: {$assessment->name} Assessment Expires Today";
 		} else if ($daysUntilExpiration < 0) {
-			$subject = "⚠️ Overdue: {$assessment->name} Assessment";
+			$subject = "Action Required: {$assessment->name} Assessment";
 		}
 
 		$view = 'emails.reminder';
