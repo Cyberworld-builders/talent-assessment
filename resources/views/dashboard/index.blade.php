@@ -50,6 +50,22 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.14 - Report Creation & Reminder Email Fixes:</strong> Fixed client reports disappearing after creation and improved reminder email deliverability to avoid spam filters.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed report creation bug - now creates ClientReport pivot record when creating new reports so they persist in the client's report list.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Improved reminder email deliverability by removing emojis from subject lines and body, and using professional business language to avoid spam triggers.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Simplified reminder email template to match basic HTML format of assignment notifications with no CSS styling.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.13 - Modern Assessment Editor & Image Path Fixes:</strong> Updated create assessment page to use modern drag-and-drop editor and fixed missing image 404 errors in assignment details view.</p>
             </li>
             <li>
