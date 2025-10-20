@@ -50,6 +50,18 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.15 - Assessment Display Improvements:</strong> Removed overlaid title from assessment header and disabled default background fallback for cleaner assessment presentation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed white text title overlay that was appearing on top of assessment background images for cleaner visual presentation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Background images now only display when explicitly set - removed fallback to default background.jpg when assessment has no background configured.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.14 - Report Creation & Reminder Email Fixes:</strong> Fixed client reports disappearing after creation and improved reminder email deliverability to avoid spam filters.</p>
             </li>
             <li>
