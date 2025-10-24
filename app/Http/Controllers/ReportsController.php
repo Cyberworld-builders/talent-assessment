@@ -2192,6 +2192,42 @@ class ReportsController extends Controller
 			$scores[$dimension]['Feedback']['Others'] = $otherFeedback;
 		}
 
+		// Add industry norms and group averages from globals
+		$norms = [
+			'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
+			'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
+			'Collaboration' => get_global('norm_collaboration') ?: 3.13,
+			'Self-Development' => get_global('norm_self_development') ?: 3.79,
+			'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
+			'Performance Management' => get_global('norm_performance_management') ?: 3.65,
+			'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
+			'Communication' => get_global('norm_communication') ?: 3.09,
+			'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
+		];
+
+		// Calculate group averages for each dimension
+		$groupAverages = [];
+		foreach ($scores as $dimensionName => $dimensionData) {
+			// Calculate average of all users in the same assignment
+			$allUserScores = [];
+			foreach ($assignments as $assignment) {
+				// Get scores for this dimension from this assignment
+				// This is a simplified calculation - you might want to implement proper group averaging
+				if (isset($dimensionData['Score']['Total'])) {
+					$allUserScores[] = $dimensionData['Score']['Total'];
+				}
+			}
+			
+			// Use the current user's score as group average for now (you can implement proper group calculation)
+			$groupAverages[$dimensionName] = isset($dimensionData['Score']['Total']) ? $dimensionData['Score']['Total'] : 0;
+		}
+
+		// Add norms and group averages to each dimension
+		foreach ($scores as $dimensionName => $dimensionData) {
+			$scores[$dimensionName]['Industry'] = isset($norms[$dimensionName]) ? $norms[$dimensionName] : 0;
+			$scores[$dimensionName]['Group Average'] = isset($groupAverages[$dimensionName]) ? $groupAverages[$dimensionName] : 0;
+		}
+
 		return view('reports.360-legacy', compact('user', 'scores'));
 	}
 

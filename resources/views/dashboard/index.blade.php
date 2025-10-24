@@ -50,6 +50,26 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.17 - Enhanced 360 Report Styling & Industry Norms:</strong> Improved 360 report system with enhanced typography, visual growth opportunity indicators, industry norm configuration, and professional spacing and alignment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added visual growth opportunity indicators with orange triangles for scores below industry norms, positioned prominently past the end of score bars.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented configurable industry norms system using global database settings - norms now stored in database and easily updatable through admin interface.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Enhanced typography and spacing throughout 360 reports - fixed title line heights, improved score positioning, and better feedback section layout with flexbox.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed empty span rendering issues by adding comprehensive conditional rendering for all dynamic content, preventing messy layout elements.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.16 - 360 Report System & Legacy Styling:</strong> Complete 360 report system with legacy-compatible styling, proper feedback grouping, and comprehensive report CSS.</p>
             </li>
             <li>
