@@ -169,10 +169,15 @@ class ReportsController extends Controller
 		$reports = [
 			(int)get_global('leader') => 'cacique',
 			(int)get_global('leader-s') => 'ls',
-			(int)get_global('360') => 'sixty',
 			(int)get_global('leader-sr') => 'lsr',
 		];
-		$report = $reports[$assignment->assessment_id];
+		
+		// Handle 360 assessments (both ID 1 and 4)
+		if ($assignment->assessment_id == 1 || $assignment->assessment_id == 4) {
+			$report = 'sixty';
+		} else {
+			$report = $reports[$assignment->assessment_id];
+		}
 
 		// CTCA Specific
 		if ($report == 'sixty' && $client->id == 22)
@@ -2187,7 +2192,7 @@ class ReportsController extends Controller
 			$scores[$dimension]['Feedback']['Others'] = $otherFeedback;
 		}
 
-		return view('reports.360', compact('user', 'scores'));
+		return view('reports.360-legacy', compact('user', 'scores'));
 	}
 
 	public function sixtyctca($assignmentId, $userId)
@@ -3376,30 +3381,46 @@ class ReportsController extends Controller
      */
     public function store($clientId, Request $request)
     {
-    	$data = $request->all();
-    	$data['client_id'] = $clientId;
-    	$data['assessments'] = \GuzzleHttp\json_encode($data['assessments']);
+    	try {
+    		$data = $request->all();
+    		$data['client_id'] = $clientId;
+    		$data['assessments'] = \GuzzleHttp\json_encode($data['assessments']);
 
-    	$report = new Report($data);
-    	$report->save();
+    		$report = new Report($data);
+    		$report->save();
 
-		// Create the ClientReport pivot record so the report appears in the client's report list
-		$clientReport = new \App\ClientReport([
-			'client_id' => $clientId,
-			'report_id' => $report->id,
-			'job_id' => $data['job_id'] ?? null,
-			'enabled' => 1,
-			'visible' => 1,
-			'fields' => null,
-		]);
-		$clientReport->save();
+    		// Create the ClientReport pivot record so the report appears in the client's report list
+    		$clientReport = new \App\ClientReport([
+    			'client_id' => $clientId,
+    			'report_id' => $report->id,
+    			'job_id' => !empty($data['job_id']) ? $data['job_id'] : null,
+    			'enabled' => 1,
+    			'visible' => 1,
+    			'fields' => null,
+    		]);
+    		$clientReport->save();
 
-		Session::flash('success', 'New report '.$report->name.' created successfully!');
-		return \Response::json([
-			'success' => true,
-			'clientId' => $clientId,
-			'reportId' => $report->id,
-		]);
+    		Session::flash('success', 'New report '.$report->name.' created successfully!');
+    		return \Response::json([
+    			'success' => true,
+    			'clientId' => $clientId,
+    			'reportId' => $report->id,
+    		]);
+    	} catch (\Exception $e) {
+    		// Log the error for debugging
+    		\Log::error('Error creating report: ' . $e->getMessage(), [
+    			'client_id' => $clientId,
+    			'data' => $data,
+    			'trace' => $e->getTraceAsString()
+    		]);
+
+    		// Return user-friendly error response
+    		return \Response::json([
+    			'success' => false,
+    			'error' => 'Failed to create report. Please check your data and try again.',
+    			'message' => $e->getMessage()
+    		], 422);
+    	}
     }
 
     /**
@@ -3539,16 +3560,33 @@ class ReportsController extends Controller
 	public function toggleVisibility($id, $reportId, Request $request)
 	{
 		$client = Client::findorFail($id);
-		$report = Report::findOrFail($reportId);
 		$data = $request->all();
 
+		// Find the ClientReport record for this client and report
+		$clientReport = ClientReport::where([
+			'client_id' => $id,
+			'report_id' => $reportId
+		])->first();
+
+		if (!$clientReport) {
+			// Create a new ClientReport if it doesn't exist
+			$clientReport = new ClientReport([
+				'client_id' => $id,
+				'report_id' => $reportId,
+				'job_id' => null,
+				'enabled' => 0,
+				'visible' => 0,
+				'fields' => null
+			]);
+		}
+
 		if (array_key_exists('enabled', $data))
-			$report->enabled = $data['enabled'];
+			$clientReport->enabled = $data['enabled'];
 
 		if (array_key_exists('visible', $data))
-			$report->visible = $data['visible'];
+			$clientReport->visible = $data['visible'];
 
-		$report->save();
+		$clientReport->save();
 	}
 
 	/**

@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.16 - 360 Report System & Legacy Styling:</strong> Complete 360 report system with legacy-compatible styling, proper feedback grouping, and comprehensive report CSS.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added legacy-compatible 360 report template with exact styling from original system - proper page layout, score charts, and feedback sections.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed feedback grouping to show single header per feedback type instead of multiple headers for each feedback text.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Extracted and included 2000+ lines of report-specific CSS from legacy system for proper styling of page containers, charts, and feedback sections.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed Laravel 5.1 compatibility issues by removing $loop variables and replacing with manual counters.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed array-to-string conversion errors in feedback display by properly handling nested feedback arrays.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.15 - Assessment Display Improvements:</strong> Removed overlaid title from assessment header and disabled default background fallback for cleaner assessment presentation.</p>
             </li>
             <li>

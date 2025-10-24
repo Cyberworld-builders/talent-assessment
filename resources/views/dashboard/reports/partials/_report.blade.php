@@ -11,6 +11,12 @@
         'safety' => 's',
         'leader' => 'l',
         'ospan' => 'wmo',
+        '360' => 'sixty',
+    ];
+    
+    // Direct assessment ID mappings (for assessments without globals)
+    $directTemplates = [
+        1 => 'sixty', // Involved-360 assessment
     ];
 ?>
 
@@ -41,18 +47,30 @@
 {{-- Assessments --}}
 @foreach ($assessments as $assessment)
     <?php $found = false; ?>
-    @foreach ($templates as $global => $template)
-        @if ($assessment->id == get_global($global))
-            @if (View::exists('dashboard.reports.templates.'.$template))
-				<?php $found = true; ?>
-                @include('dashboard.reports.templates.'.$template)
-            @endif
+    
+    {{-- Check direct assessment ID mappings first --}}
+    @if (isset($directTemplates[$assessment->id]))
+        @if (View::exists('dashboard.reports.templates.'.$directTemplates[$assessment->id]))
+            <?php $found = true; ?>
+            @include('dashboard.reports.templates.'.$directTemplates[$assessment->id])
         @endif
-    @endforeach
+    @endif
+    
+    {{-- Check global mappings if not found --}}
+    @if (! $found)
+        @foreach ($templates as $global => $template)
+            @if ($assessment->id == get_global($global))
+                @if (View::exists('dashboard.reports.templates.'.$template))
+                    <?php $found = true; ?>
+                    @include('dashboard.reports.templates.'.$template)
+                @endif
+            @endif
+        @endforeach
+    @endif
 
     @if (! $found)
         <div class="alert alert-danger" role="alert">
-            Didn't find a template for {{ $assessment->name }}
+            Didn't find a template for {{ $assessment->name }} (ID: {{ $assessment->id }})
         </div>
     @endif
 @endforeach

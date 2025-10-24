@@ -50,6 +50,154 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.16 - 360 Report System & Legacy Styling:</strong> Complete 360 report system with legacy-compatible styling, proper feedback grouping, and comprehensive report CSS.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added legacy-compatible 360 report template with exact styling from original system - proper page layout, score charts, and feedback sections.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed feedback grouping to show single header per feedback type instead of multiple headers for each feedback text.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Extracted and included 2000+ lines of report-specific CSS from legacy system for proper styling of page containers, charts, and feedback sections.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed Laravel 5.1 compatibility issues by removing $loop variables and replacing with manual counters.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed array-to-string conversion errors in feedback display by properly handling nested feedback arrays.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.15 - Assessment Display Improvements:</strong> Removed overlaid title from assessment header and disabled default background fallback for cleaner assessment presentation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed white text title overlay that was appearing on top of assessment background images for cleaner visual presentation.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Background images now only display when explicitly set - removed fallback to default background.jpg when assessment has no background configured.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.14 - Report Creation & Reminder Email Fixes:</strong> Fixed client reports disappearing after creation and improved reminder email deliverability to avoid spam filters.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed report creation bug - now creates ClientReport pivot record when creating new reports so they persist in the client's report list.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Improved reminder email deliverability by removing emojis from subject lines and body, and using professional business language to avoid spam triggers.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Simplified reminder email template to match basic HTML format of assignment notifications with no CSS styling.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.13 - Modern Assessment Editor & Image Path Fixes:</strong> Updated create assessment page to use modern drag-and-drop editor and fixed missing image 404 errors in assignment details view.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Create assessment now uses modern editor with drag-and-drop field reordering, CKEditor for rich text, and improved user experience.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed image paths in assignment details report view - updated logo.png and report-background.jpg to use /assets/images/ instead of /images/.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed preview mode error by properly maintaining currentPage variable for pagination logic in assessment forms.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.12 - Assessment Description Display Fix:</strong> Fixed duplicate description issue where global description was appearing twice on assessments, once on the intro page and again on page 1 of questions.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Removed description duplication from assessment form - description now only appears on the intro/stage page before starting the assessment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed issue where paginated assessments would show description on page 1 instead of questions, ensuring first page of questions is never replaced by description.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.11 - Reminder System Fixes & Form Improvements:</strong> Fixed reminder email sending and form processing, corrected date format parsing, and enabled CloudWatch logging for staging environment.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed reminder form field processing - corrected field names to match actual form submission (reminder, reminder-end-date, reminder-end-time).</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented proper date/time parsing for reminder fields using Carbon::createFromFormat with 'D, d M Y h:i A' format.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed date format parsing throughout assignment and mailer code - updated from 'd M Y' to 'D, d M Y' to match datepicker output.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Resolved reminder email sending by implementing synchronous email delivery instead of problematic queue-based approach.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed timestamp tracking by updating last_reminder_sent_at only after successful email delivery, not before.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.10 - Timezone Support for Reminders:</strong> Added intelligent timezone handling for reminder notifications - reminders now respect the admin's local timezone when scheduling, ensuring predictable send times.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>JavaScript auto-detects admin's timezone when creating assignments - reminders sent at the scheduled time in admin's timezone converted to UTC for accurate delivery.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.9 - Reminder System & CloudWatch Monitoring:</strong> Complete reminder notification system for assessments, AWS CloudWatch logging infrastructure, and critical bug fixes for assessment loading.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Implemented automated reminder emails with granular scheduling controls - first reminder date/time, flexible frequencies (30 min, hourly, daily, weekly, bi-weekly), and stop date options.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Added Laravel scheduler integration with queue jobs for reliable email delivery - reminders run every 30 minutes and respect assignment expiration dates.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Beautiful responsive reminder email template with urgency indicators, countdown timers, and dynamic subject lines based on days remaining.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>AWS CloudWatch integration - centralized logging for scheduler, application, and system logs with 30-day retention and real-time monitoring.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Host-level cron setup for Laravel scheduler following Docker best practices - easier to maintain and debug than in-container cron.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p>Fixed critical bug: assessments hanging on first page due to infinite 404 loop from incorrect image asset paths in header fallbacks.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Reorganized assignment form with clearer sections: Assessment Settings, Emails, Reminders, and Assign To - improved UX with datetime pickers and dynamic field visibility.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added comprehensive infrastructure documentation: CloudWatch setup guide, scheduler documentation, and automated setup scripts.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.6 - Critical Bugfixes & Data Export:</strong> Fixed critical issues with server-sent events, assignment URLs, email date formatting, and added user bulk upload improvements.</p>
             </li>
             <li>
