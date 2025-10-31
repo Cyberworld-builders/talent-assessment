@@ -51,6 +51,20 @@ services:
     networks:
       - talent-network-staging
 
+  pdf-worker-staging:
+    image: ${STAGING_PDF_WORKER_IMAGE}
+    container_name: talent-assessment-pdf-worker-staging
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env.staging
+    depends_on:
+      - mysql-staging
+    networks:
+      - talent-network-staging
+    # Run in watch mode - processes pending reports every 30 seconds
+    command: sh -c "while true; do node generate-pdf.js --batch; sleep 30; done"
+
 volumes:
   mysql_data_staging:
   redis_data_staging:

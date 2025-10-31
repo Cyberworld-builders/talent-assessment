@@ -43,11 +43,12 @@ async function generatePDF(reportId) {
   try {
     console.log(`\n🔄 Processing report ID: ${reportId}`);
     
-    // Get report data
+    // Get report data with client_id
     const [rows] = await connection.execute(
-      `SELECT id, user_id, assignment_id, slug, html_url, pdf_url 
-       FROM report_data 
-       WHERE id = ?`,
+      `SELECT rd.id, rd.user_id, rd.assignment_id, rd.slug, rd.html_url, rd.pdf_url, u.client_id
+       FROM report_data rd
+       JOIN users u ON rd.user_id = u.id
+       WHERE rd.id = ?`,
       [reportId]
     );
     
@@ -78,35 +79,41 @@ async function generatePDF(reportId) {
     
     const page = await browser.newPage();
     
-    // Load HTML from CloudFront
-    console.log(`⬇️  Loading HTML...`);
-    await page.goto(report.html_url, {
-      waitUntil: 'networkidle0',
-      timeout: 60000
-    });
-    
-    // Emulate print media for correct CSS
-    await page.emulateMediaType('print');
-    
-    // Wait a bit for any JavaScript to finish (using Promise instead of deprecated waitForTimeout)
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Generate PDF
-    console.log(`📄 Generating PDF...`);
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      preferCSSPageSize: false,
-      margin: { top: 0, bottom: 0, left: 0, right: 0 }
-    });
+  // Load HTML from CloudFront
+  console.log(`⬇️  Loading HTML...`);
+  await page.goto(report.html_url, {
+    waitUntil: 'networkidle0',
+    timeout: 60000
+  });
+  
+  // Hide page numbers before generating PDF (PDFs have their own page indicators)
+  await page.evaluate(() => {
+    const footers = document.querySelectorAll('.page-footer');
+    footers.forEach(footer => footer.style.display = 'none');
+  });
+  
+  // Emulate print media for page-break CSS to work
+  await page.emulateMediaType('print');
+  
+  // Wait for styles and any JavaScript to fully apply
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  // Generate PDF
+  console.log(`📄 Generating PDF...`);
+  const pdfBuffer = await page.pdf({
+    format: 'Letter', // Use Letter format to match report design
+    printBackground: true,
+    preferCSSPageSize: false, // Don't override format
+    margin: { top: 0, bottom: 0, left: 0, right: 0 }
+  });
     
     await browser.close();
     browser = null;
     
     console.log(`✅ PDF generated (${Math.round(pdfBuffer.length / 1024)}KB)`);
     
-    // Upload to S3
-    const s3Key = `reports/${report.user_id}/${report.slug}.pdf`;
+    // Upload to S3 using client_id (matches ReportData model)
+    const s3Key = `reports/${report.client_id}/${report.slug}.pdf`;
     console.log(`⬆️  Uploading to S3: ${s3Key}`);
     
     await s3Client.send(new PutObjectCommand({

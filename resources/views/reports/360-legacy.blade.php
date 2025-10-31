@@ -101,6 +101,39 @@
             position: relative;
             color: #272842;
             box-shadow: rgba(39, 42, 98, 0.04) 4px 5px 0px 0px;
+            page-break-after: always;
+            page-break-inside: avoid;
+            break-after: page; /* Modern CSS */
+            break-inside: avoid; /* Modern CSS */
+        }
+        
+        /* Ensure last page doesn't add extra blank page */
+        body.report .page-container:last-child,
+        .linc-action-plan .page-container:last-child {
+            page-break-after: auto;
+            break-after: auto; /* Modern CSS */
+        }
+        
+        /* Print-specific styles for PDF generation */
+        @media print {
+            @page {
+                size: Letter;
+                margin: 0;
+            }
+            
+            body.report .page-container,
+            .linc-action-plan .page-container {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+                break-after: page;
+            }
+            
+            body.report .page-container:last-child,
+            .linc-action-plan .page-container:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
         }
         
         body.report .page-container .page-wrapper,
@@ -318,13 +351,14 @@
         
         body.report .chart .score,
         .linc-action-plan .chart .score {
-            width: 15%;
+            width: 18%;
             float: left;
-            font-size: 91px;
-            line-height: 60px;
+            font-size: 80px;
+            line-height: 70px;
             height: 230px;
-            padding-top: 80px;
+            padding-top: 60px;
             text-align: center;
+            color: #333;
         }
         
         body.report .chart .score span,
@@ -387,103 +421,140 @@
             margin-top: 20px;
         }
         
+        body.report .chart .graph,
+        .linc-action-plan .chart .graph {
+            position: relative;
+            padding-bottom: 25px;
+        }
+        
         body.report .chart .graph-row,
         .linc-action-plan .chart .graph-row {
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
+            position: relative;
+            height: 25px;
         }
         
         body.report .chart .ratee,
         .linc-action-plan .chart .ratee {
-            width: 120px;
-            font-size: 14px;
+            position: absolute;
+            left: -10px;
+            width: 100px;
+            font-size: 13px;
             font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
-            text-align: left;
-            margin-right: 10px;
+            text-align: right;
+            padding-right: 15px;
+            top: 0;
         }
         
         body.report .chart .bar,
         .linc-action-plan .chart .bar {
-            flex: 1;
+            width: calc(100% - 110px);
             height: 25px;
-            background-color: #f0f0f0;
-            position: relative;
-            margin-right: 30px;
+            background-color: #e8e8e8;
+            position: absolute;
+            left: 110px;
+            top: 0;
+            border-radius: 0;
+            box-sizing: border-box;
         }
         
         body.report .chart .bar .inner,
         .linc-action-plan .chart .bar .inner {
             height: 100%;
-            background-color: #55a1d8;
-            position: relative;
+            background-color: #5b9bd5;
+            position: absolute;
+            left: 0;
+            top: 0;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 8px;
+            padding-right: 5px;
             font-size: 12px;
             color: white;
-            font-weight: bold;
+            /* font-weight: bold; */
+            box-sizing: border-box;
         }
         
         body.report .chart .graph-lines,
         .linc-action-plan .chart .graph-lines {
-            position: relative;
-            height: 20px;
-            margin-bottom: 20px;
+            position: absolute;
+            top: 0;
+            left: 110px;
+            right: 0;
+            bottom: 25px;
+            pointer-events: none;
         }
         
         body.report .chart .graph-lines .line,
         .linc-action-plan .chart .graph-lines .line {
             position: absolute;
-            height: 1px;
+            height: 100%;
+            width: 1px;
             background-color: #ddd;
-            width: 100%;
         }
         
         body.report .chart .graph-lines .line span,
         .linc-action-plan .chart .graph-lines .line span {
             position: absolute;
-            right: -25px;
-            top: -8px;
-            font-size: 10px;
+            bottom: -20px;
+            left: -5px;
+            font-size: 11px;
             color: #666;
+            font-weight: 500;
         }
         
-        body.report .chart .graph-lines .line.one { top: 20%; }
-        body.report .chart .graph-lines .line.two { top: 40%; }
-        body.report .chart .graph-lines .line.three { top: 60%; }
-        body.report .chart .graph-lines .line.four { top: 80%; }
-        body.report .chart .graph-lines .line.five { top: 100%; }
+        body.report .chart .graph-lines .line { left: 0%; }
+        body.report .chart .graph-lines .line.one { left: 20%; }
+        body.report .chart .graph-lines .line.two { left: 40%; }
+        body.report .chart .graph-lines .line.three { left: 60%; }
+        body.report .chart .graph-lines .line.four { left: 80%; }
+        body.report .chart .graph-lines .line.five { left: 100%; }
         
         /* Norms styling */
         body.report .norms,
         .linc-action-plan .norms {
-            margin-top: 30px;
+            margin-top: 40px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            clear: both;
         }
         
         body.report .norm-group,
         .linc-action-plan .norm-group {
-            text-align: center;
-            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        body.report .norms > .pipe,
+        .linc-action-plan .norms > .pipe {
+            font-size: 48px;
+            color: #999;
+            font-weight: 300;
+            line-height: 1;
         }
         
         body.report .norm,
         .linc-action-plan .norm {
-            font-size: 24px;
+            font-size: 48px;
             font-family: 'Avant Garde Demi', Helvetica, Arial, sans-serif;
-            color: #55a1d8;
-            margin-bottom: 5px;
+            color: #333;
+            line-height: 1;
         }
         
         body.report .norm-label,
         .linc-action-plan .norm-label {
-            font-size: 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
             font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
             color: #666;
-            line-height: 1.2;
+            line-height: 1.3;
+            text-align: center;
+            max-width: 120px;
         }
     </style>
     @endif
@@ -635,16 +706,22 @@
                     <div class="norms">
                         <div class="norm-group industry">
                             <div class="norm">{{ isset($dimensionData['Industry']) ? number_format($dimensionData['Industry'], 2) : '0.00' }}</div>
-                            <div class="norm-label">Industry Norm for<br/>@if($user->client && $user->client->industry)<span>{{ $user->client->industry }}</span>@else<span>No Industry Set</span>@endif</div>
-                            <div class="clearfix"></div>
+                            <div class="norm-label">
+                                Industry Norm for 
+                                @if($user->client && $user->client->industry)
+                                    {{ $user->client->industry }}
+                                @else
+                                    No Industry Set
+                                @endif
+                            </div>
                         </div>
+
+                        <div class="pipe">|</div>
 
                         <div class="norm-group group">
                             <div class="norm">{{ isset($dimensionData['Group Average']) ? number_format($dimensionData['Group Average'], 2) : '0.00' }}</div>
-                            <div class="norm-label">Avg Score<br/><span>For This Group</span></div>
+                            <div class="norm-label">Average Score For This Group</div>
                         </div>
-
-                        <div class="clearfix"></div>
                     </div>
                 </div>
 

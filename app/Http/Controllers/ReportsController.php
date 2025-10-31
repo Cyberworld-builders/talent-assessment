@@ -280,8 +280,8 @@ class ReportsController extends Controller
 			return redirect()->back()->with('error', 'HTML report not found. Please generate it first by clicking "Generate Documents".');
 		}
 
-		// Redirect to the S3 URL
-		return redirect($reportData->html_url);
+		// Redirect to our serve route to bypass CDN cache
+		return redirect(url("dashboard/report/development/{$id}/{$assignmentId}/{$userId}/serve-html"));
 	}
 
 	/**
@@ -304,8 +304,111 @@ class ReportsController extends Controller
 			return redirect()->back()->with('info', 'PDF not ready yet. Please wait a moment or click "Generate Documents" first.');
 		}
 
-		// Redirect to the CloudFront PDF URL
-		return redirect($reportData->pdf_url);
+		// Redirect to our serve route to bypass CDN cache
+		return redirect(url("dashboard/report/development/{$id}/{$assignmentId}/{$userId}/serve-pdf"));
+	}
+
+	/**
+	 * Serve the HTML report directly from S3 (bypasses CDN cache).
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function serveHtml($id, $assignmentId, $userId)
+	{
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		if (!$reportData || !$reportData->slug) {
+			abort(404, 'Report not found');
+		}
+
+		try {
+			$s3 = new S3Client(config('aws'));
+			$s3Path = $reportData->getHtmlS3Path();
+			
+			$result = $s3->getObject([
+				'Bucket' => env('AWS_S3_BUCKET'),
+				'Key' => $s3Path,
+			]);
+
+			return response($result['Body'], 200)
+				->header('Content-Type', 'text/html')
+				->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+				->header('Pragma', 'no-cache')
+				->header('Expires', '0');
+
+		} catch (\Exception $e) {
+			\Log::error("Failed to serve HTML from S3: " . $e->getMessage());
+			abort(404, 'Report file not found');
+		}
+	}
+
+	/**
+	 * Serve the PDF report directly from S3 (bypasses CDN cache).
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function servePdf($id, $assignmentId, $userId)
+	{
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		if (!$reportData || !$reportData->slug) {
+			abort(404, 'Report not found');
+		}
+
+		try {
+			$s3 = new S3Client(config('aws'));
+			$s3Path = $reportData->getPdfS3Path();
+			
+			$result = $s3->getObject([
+				'Bucket' => env('AWS_S3_BUCKET'),
+				'Key' => $s3Path,
+			]);
+
+			$user = User::find($userId);
+			$filename = '360 Report for ' . ($user ? $user->name : 'User') . '.pdf';
+
+			return response($result['Body'], 200)
+				->header('Content-Type', 'application/pdf')
+				->header('Content-Disposition', 'inline; filename="' . $filename . '"')
+				->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+				->header('Pragma', 'no-cache')
+				->header('Expires', '0');
+
+		} catch (\Exception $e) {
+			\Log::error("Failed to serve PDF from S3: " . $e->getMessage());
+			abort(404, 'Report file not found');
+		}
+	}
+
+	/**
+	 * Get the development report name from the assessment.
+	 *
+	 * @param  \App\Assessment  $assessment
+	 * @return string
+	 */
+	public function getDevelopmentReportName($assessment)
+	{
+		$report = 'sixty';
+		if ($assessment->name == 'Involved-Leader')
+			$report = 'leader';
+		if ($assessment->name == 'Involved-Me')
+			$report = 'me';
+		if ($assessment->name == 'Involved-Me Peak Week')
+			$report = 'meppw';
+		if ($assessment->name == 'Involved-Blockers')
+			$report = 'blockers';
+
+		return $report;
 	}
 
 	/**
@@ -366,14 +469,15 @@ class ReportsController extends Controller
 			$s3Url = "https://{$bucket}.s3.{$region}.amazonaws.com/{$s3Path}";
 			\Log::info("S3 URL: {$s3Url}");
 			
-			// Convert to CloudFront URL for public access
-			$htmlUrl = s3_to_cloudfront_url($s3Url);
-			\Log::info("CloudFront URL: {$htmlUrl}");
+		// Convert to CloudFront URL for public access
+		$htmlUrl = s3_to_cloudfront_url($s3Url);
+		\Log::info("CloudFront URL: {$htmlUrl}");
 
-			// Save the URL to database
-			$reportData->html_url = $htmlUrl;
-			$reportData->save();
-			\Log::info("Database updated with HTML URL");
+		// Save the URL to database and clear PDF URL to trigger regeneration
+		$reportData->html_url = $htmlUrl;
+		$reportData->pdf_url = null; // Clear PDF URL so worker will regenerate it
+		$reportData->save();
+		\Log::info("Database updated with HTML URL and cleared PDF URL for regeneration");
 			
 			return $reportData;
 

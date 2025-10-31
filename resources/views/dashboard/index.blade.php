@@ -74,6 +74,26 @@
             </li>
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p>Fixed PDF page breaks to properly respect HTML page containers using print media emulation - each report page now breaks correctly in generated PDFs.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added CDN bypass for report previews using Laravel proxy routes - reports now served directly from S3 to avoid CloudFront cache invalidation issues.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Hidden page numbers in PDF output since PDF viewers provide their own page indicators - cleaner professional appearance.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Fixed S3 path consistency by using client_id throughout the system - HTML and PDF files now stored in matching directory structure.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Added pdf-worker service to staging and production docker-compose configurations with volume mounts for easier script updates.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.17 - Enhanced 360 Report Styling & Industry Norms:</strong> Improved 360 report system with enhanced typography, visual growth opportunity indicators, industry norm configuration, and professional spacing and alignment.</p>
             </li>
             <li>
