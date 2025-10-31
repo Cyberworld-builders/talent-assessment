@@ -50,7 +50,7 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
-                <p><strong>v1.6.9 - S3-Based PDF Generation System:</strong> Complete rewrite of PDF generation using S3 storage, CloudFront CDN, and separate Node.js worker service for high-fidelity PDF rendering with Puppeteer.</p>
+                <p><strong>v1.6.18 - S3-Based PDF Generation System:</strong> Complete rewrite of PDF generation using S3 storage, CloudFront CDN, and separate Node.js worker service for high-fidelity PDF rendering with Puppeteer.</p>
             </li>
             <li>
                 <i class="fa-asterisk text-warning"></i>
