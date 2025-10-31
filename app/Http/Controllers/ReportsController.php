@@ -2458,6 +2458,81 @@ class ReportsController extends Controller
 						'Translates department level KPIs and tactics into plans to drive and support strategic growth and to reach function or unit level business objectives including growth, NOI, etc.',
 					],
 				]
+			],
+			'Customer Focus' => [
+				'Answers' => [],
+				'Definition' => 'Customer Focus is defined as the ability to understand and anticipate customer needs, consistently deliver exceptional service, and build strong relationships with both internal and external customers to achieve organizational goals.',
+				'Expectations' => [
+					'1' => [
+						'Rarely considers customer needs in decision making',
+						'Fails to respond to customer concerns in a timely manner',
+						'Shows little interest in customer feedback or satisfaction',
+						'Does not take ownership of customer issues',
+					],
+					'3' => [
+						'Regularly considers customer needs when making decisions',
+						'Responds to customer concerns in a reasonable timeframe',
+						'Seeks customer feedback and works to address concerns',
+						'Takes ownership of customer issues within their area',
+					],
+					'5' => [
+						'Proactively anticipates customer needs and expectations',
+						'Consistently exceeds customer expectations in service delivery',
+						'Actively seeks and implements customer feedback to drive improvements',
+						'Champions customer-centric culture across the organization',
+						'Develops innovative solutions to enhance customer experience',
+					],
+				]
+			],
+			'Communication' => [
+				'Answers' => [],
+				'Definition' => 'Communication is defined as the ability to clearly and effectively convey information, actively listen, and foster open dialogue across all levels of the organization using appropriate channels and methods.',
+				'Expectations' => [
+					'1' => [
+						'Communication is unclear or inconsistent',
+						'Fails to keep key stakeholders informed',
+						'Does not actively listen to others',
+						'Creates confusion through poor messaging',
+					],
+					'3' => [
+						'Communicates clearly with team and stakeholders',
+						'Keeps relevant parties informed of important updates',
+						'Listens to feedback and responds appropriately',
+						'Uses appropriate communication channels for different audiences',
+					],
+					'5' => [
+						'Communicates with exceptional clarity and impact',
+						'Proactively shares information across all levels',
+						'Demonstrates outstanding active listening skills',
+						'Tailors communication style to audience and situation',
+						'Creates open dialogue and encourages transparent communication',
+					],
+				]
+			],
+			'Ethics & Integrity' => [
+				'Answers' => [],
+				'Definition' => 'Ethics & Integrity encompasses consistently demonstrating honesty, transparency, and ethical behavior in all business dealings, maintaining confidentiality, following established policies and procedures, and serving as a role model for ethical conduct.',
+				'Expectations' => [
+					'1' => [
+						'Demonstrates questionable ethical judgment',
+						'Fails to maintain confidentiality when required',
+						'Inconsistent in following policies and procedures',
+						'Does not address ethical concerns when they arise',
+					],
+					'3' => [
+						'Demonstrates honest and ethical behavior',
+						'Maintains appropriate confidentiality',
+						'Follows established policies and procedures',
+						'Addresses ethical concerns within their area',
+					],
+					'5' => [
+						'Serves as a role model for ethical conduct',
+						'Proactively identifies and addresses ethical concerns',
+						'Maintains highest standards of confidentiality and trust',
+						'Champions ethical culture across the organization',
+						'Demonstrates courage in making ethical decisions even when difficult',
+					],
+				]
 			]
 		];
 
