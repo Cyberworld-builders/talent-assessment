@@ -50,6 +50,30 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.9 - S3-Based PDF Generation System:</strong> Complete rewrite of PDF generation using S3 storage, CloudFront CDN, and separate Node.js worker service for high-fidelity PDF rendering with Puppeteer.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Implemented static HTML generation with inlined CSS/JS and absolute image paths - reports now stored in S3 with CloudFront CDN distribution for fast global access.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Created separate pdf-worker Docker service using Puppeteer for browser-based PDF generation - provides high-quality PDFs matching exact web rendering.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Added report_data table migration with slug, html_url, and pdf_url fields - comprehensive tracking of generated report assets in database.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Updated UI with streamlined button workflow: "Run Report" for interactive viewing, "Generate Documents" to create HTML/PDF, "Preview HTML/PDF" for viewing, and removed redundant download button.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented IAM-based S3 authentication for secure, keyless file uploads - no long-lived credentials stored in codebase.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.17 - Enhanced 360 Report Styling & Industry Norms:</strong> Improved 360 report system with enhanced typography, visual growth opportunity indicators, industry norm configuration, and professional spacing and alignment.</p>
             </li>
             <li>
