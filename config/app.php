@@ -160,6 +160,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 		Aws\Laravel\AwsServiceProvider::class,
+		Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -213,6 +214,7 @@ return [
         'Html'      => Illuminate\Html\HtmlFacade::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
 		'AWS'       => Aws\Laravel\AwsFacade::class,
+		'PDF'       => Barryvdh\DomPDF\Facade::class,
 
     ],
 

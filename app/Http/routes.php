@@ -67,6 +67,10 @@ Route::group(['middleware' => ['auth']], function()
 		// Reports
 		Route::get('dashboard/report/{clientId}/{jobId}/{userId}', 'ReportsController@index');
 		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}', 'ReportsController@indexDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/generate', 'ReportsController@generateDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/preview', 'ReportsController@previewDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/preview-pdf', 'ReportsController@previewPdfDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/download', 'ReportsController@downloadDevelopment');
 		Route::get('dashboard/model/{clientId}/{jobId}/{userId}/{modelId}', 'ReportsController@model');
 		Route::get('dashboard/report/cacique', 'ReportsController@caciquetest');
 		Route::get('dashboard/users/{id}/report/{clientReportId}', 'ReportsController@clientReport');

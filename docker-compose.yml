@@ -52,6 +52,22 @@ services:
     networks:
       - talent-network
 
+  pdf-worker:
+    build:
+      context: ./pdf-worker
+      dockerfile: Dockerfile
+    container_name: talent-assessment-pdf-worker
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env.dev
+    depends_on:
+      - mysql
+    networks:
+      - talent-network
+    # Run in watch mode - processes pending reports every 30 seconds
+    command: sh -c "while true; do node generate-pdf.js --batch; sleep 30; done"
+
 volumes:
   mysql_data:
   redis_data:

@@ -15,6 +15,7 @@ use App\Question;
 use App\User;
 use App\Weight;
 use App\Services\FeedbackService;
+use Aws\S3\S3Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SessionCookieJar;
 use GuzzleHttp\Cookie\SetCookie;
@@ -192,6 +193,286 @@ class ReportsController extends Controller
 
 		return $this->{$report}($assignmentId, $userId);
     }
+
+	/**
+	 * Generate the static HTML report and upload to S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function generateDevelopment($id, $assignmentId, $userId)
+	{
+		$client = Client::findOrFail($id);
+		$assignment = Assignment::findOrFail($assignmentId);
+		$assessment = Assessment::findOrFail($assignment->assessment_id);
+
+		$report = $this->getDevelopmentReportName($assessment);
+
+		if (! $report)
+			return view('error', ['message' => "A report template could not be found for this report. Please contact an Involved Talent administrator."]);
+
+		if (! method_exists($this, $report))
+			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an Involved Talent administrator."]);
+
+		// Generate and save static HTML to S3
+		$reportData = $this->generateStaticReport($assignmentId, $userId, $report);
+
+		// PDF worker service will automatically pick this up and generate PDF
+		// (runs every 30 seconds in docker-compose)
+
+		// Redirect back with success message
+		return redirect()->back()->with('success', 'Documents generated! HTML is ready now, PDF will be ready in 30-60 seconds.');
+	}
+
+	/**
+	 * Download a development report in PDF format.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function downloadDevelopment($id, $assignmentId, $userId)
+	{
+		// Check if PDF exists in database
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+		
+		// If PDF URL exists, redirect to CloudFront
+		if ($reportData && $reportData->pdf_url) {
+			return redirect($reportData->pdf_url);
+		}
+		
+		// If HTML exists but PDF doesn't, show message
+		if ($reportData && $reportData->html_url && !$reportData->pdf_url) {
+			return redirect()->back()->with('info', 'PDF is still being generated. Please try again in a few moments, or click "Preview HTML" to view the report now.');
+		}
+		
+		// If nothing exists, show error
+		if (!$reportData || !$reportData->html_url) {
+			return redirect()->back()->with('error', 'Report not found. Please click "Generate Documents" first.');
+		}
+		
+		// This should never be reached (all cases handled above), but just in case
+		return redirect()->back()->with('error', 'Unable to download PDF. Please try generating documents again.');
+	}
+
+	/**
+	 * Preview the HTML report from S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function previewDevelopment($id, $assignmentId, $userId)
+	{
+		// Get report data
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		// If no report data exists or no HTML URL, show error
+		if (!$reportData || !$reportData->html_url) {
+			return redirect()->back()->with('error', 'HTML report not found. Please generate it first by clicking "Generate Documents".');
+		}
+
+		// Redirect to the S3 URL
+		return redirect($reportData->html_url);
+	}
+
+	/**
+	 * Preview the PDF report from S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function previewPdfDevelopment($id, $assignmentId, $userId)
+	{
+		// Get report data
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		// If no report data exists or no PDF URL, show error
+		if (!$reportData || !$reportData->pdf_url) {
+			return redirect()->back()->with('info', 'PDF not ready yet. Please wait a moment or click "Generate Documents" first.');
+		}
+
+		// Redirect to the CloudFront PDF URL
+		return redirect($reportData->pdf_url);
+	}
+
+	/**
+	 * Generate static HTML report and upload to S3.
+	 *
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @param  string  $reportMethod
+	 * @return \App\ReportData|null
+	 */
+	protected function generateStaticReport($assignmentId, $userId, $reportMethod)
+	{
+		try {
+			\Log::info("Starting static report generation for assignment {$assignmentId}, user {$userId}");
+			
+			// Get or create report data record
+			$reportData = \App\ReportData::firstOrCreate(
+				[
+					'user_id' => $userId,
+					'assignment_id' => $assignmentId
+				],
+				['score' => '{}']
+			);
+
+			\Log::info("ReportData record found/created: ID {$reportData->id}");
+
+			// Generate slug if it doesn't exist
+			if (!$reportData->slug) {
+				$reportData->generateSlug();
+				\Log::info("Generated slug: {$reportData->slug}");
+			}
+
+			// Generate the HTML content by calling the report method
+			// We'll capture the output without the download flag
+			\Log::info("Generating HTML content...");
+			$htmlContent = $this->generateStaticHtml($assignmentId, $userId, $reportMethod);
+			\Log::info("HTML content generated, length: " . strlen($htmlContent) . " bytes");
+
+			// Upload to S3 using IAM role (same pattern as AssignmentsController)
+			$s3Path = $reportData->getHtmlS3Path();
+			\Log::info("Uploading to S3 path: {$s3Path}");
+			
+			$s3 = new S3Client(config('aws'));
+			$bucket = env('AWS_S3_BUCKET');
+			
+			// Upload without ACL since bucket has ACLs disabled (modern S3 best practice)
+			$result = $s3->putObject([
+				'Bucket' => $bucket,
+				'Key' => $s3Path,
+				'Body' => $htmlContent,
+				'ContentType' => 'text/html',
+			]);
+			
+			\Log::info("Successfully uploaded to S3");
+
+			// Construct the S3 URL and convert to CloudFront
+			$region = env('AWS_REGION', 'us-east-2');
+			$s3Url = "https://{$bucket}.s3.{$region}.amazonaws.com/{$s3Path}";
+			\Log::info("S3 URL: {$s3Url}");
+			
+			// Convert to CloudFront URL for public access
+			$htmlUrl = s3_to_cloudfront_url($s3Url);
+			\Log::info("CloudFront URL: {$htmlUrl}");
+
+			// Save the URL to database
+			$reportData->html_url = $htmlUrl;
+			$reportData->save();
+			\Log::info("Database updated with HTML URL");
+			
+			return $reportData;
+
+		} catch (\Exception $e) {
+			\Log::error('Failed to generate static report: ' . $e->getMessage());
+			\Log::error('Stack trace: ' . $e->getTraceAsString());
+			return null;
+		}
+	}
+	
+	/**
+	 * Generate static HTML with inline styles and absolute image paths.
+	 *
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @param  string  $reportMethod
+	 * @return string
+	 */
+	protected function generateStaticHtml($assignmentId, $userId, $reportMethod)
+	{
+		// Call the report method to get the view
+		$view = $this->{$reportMethod}($assignmentId, $userId, $download = false);
+		
+		// Render the view to HTML
+		$html = $view->render();
+
+		// Process HTML to make it static
+		$html = $this->makeHtmlStatic($html);
+
+		return $html;
+	}
+
+	/**
+	 * Process HTML to inline styles and use absolute paths for images.
+	 *
+	 * @param  string  $html
+	 * @return string
+	 */
+	protected function makeHtmlStatic($html)
+	{
+		// Replace relative asset URLs with absolute URLs
+		$baseUrl = config('app.url');
+		
+		// Replace CSS links with inline styles
+		$html = preg_replace_callback(
+			'/<link[^>]*href=["\'](.*?\.css)["\'][^>]*>/i',
+			function($matches) {
+				$cssPath = $matches[1];
+				// Remove base URL if present
+				$cssPath = str_replace([config('app.url'), 'http://localhost:8001'], '', $cssPath);
+				$cssPath = ltrim($cssPath, '/');
+				$fullPath = public_path($cssPath);
+				
+				if (file_exists($fullPath)) {
+					$css = file_get_contents($fullPath);
+					return "<style>\n{$css}\n</style>";
+				}
+				return $matches[0];
+			},
+			$html
+		);
+
+		// Replace JS script tags with inline scripts
+		$html = preg_replace_callback(
+			'/<script[^>]*src=["\'](.*?\.js)["\'][^>]*><\/script>/i',
+			function($matches) {
+				$jsPath = $matches[1];
+				// Remove base URL if present
+				$jsPath = str_replace([config('app.url'), 'http://localhost:8001'], '', $jsPath);
+				$jsPath = ltrim($jsPath, '/');
+				$fullPath = public_path($jsPath);
+				
+				if (file_exists($fullPath)) {
+					$js = file_get_contents($fullPath);
+					return "<script>\n{$js}\n</script>";
+				}
+				return $matches[0];
+			},
+			$html
+		);
+
+		// Convert relative image paths to absolute URLs
+		$html = preg_replace_callback(
+			'/(<img[^>]*src=["\'])([^"\']*)(["\']\s*[^>]*>)/i',
+			function($matches) use ($baseUrl) {
+				$imagePath = $matches[2];
+				// If already absolute, leave it
+				if (preg_match('/^(https?:)?\/\//i', $imagePath)) {
+					return $matches[0];
+				}
+				// Convert to absolute URL
+				$imagePath = ltrim($imagePath, '/');
+				return $matches[1] . $baseUrl . '/' . $imagePath . $matches[3];
+			},
+			$html
+		);
+
+		return $html;
+	}
 
     public function caciquetest()
     {
@@ -1890,7 +2171,7 @@ class ReportsController extends Controller
 		return view('reports.aoepa', compact('job', 'user', 'scores', 'export'));
 	}
 
-	public function sixty($assignmentId, $userId)
+	public function sixty($assignmentId, $userId, $download = false)
 	{
 		ini_set('max_execution_time', 520);
 		$assignment = Assignment::find($assignmentId);
@@ -2226,6 +2507,18 @@ class ReportsController extends Controller
 		foreach ($scores as $dimensionName => $dimensionData) {
 			$scores[$dimensionName]['Industry'] = isset($norms[$dimensionName]) ? $norms[$dimensionName] : 0;
 			$scores[$dimensionName]['Group Average'] = isset($groupAverages[$dimensionName]) ? $groupAverages[$dimensionName] : 0;
+		}
+
+		// Download a PDF report
+		if ($download) {
+			$pdf = \PDF::setOptions([
+				'dpi' => 100,
+				'defaultPaperSize' => 'a4',
+				'isRemoteEnabled' => true,
+				'isHtml5ParserEnabled' => false,
+				'chroot' => public_path()
+			])->loadView('reports.360-legacy', compact('user', 'scores', 'download'));
+			return $pdf->download('360 Report for ' . $user->name . '.pdf');
 		}
 
 		return view('reports.360-legacy', compact('user', 'scores'));

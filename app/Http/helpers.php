@@ -563,3 +563,25 @@ function formatDateInterval($format, $interval, $date)
 
 	return sprintf('%s %s', $count, str_plural($interval, $count));
 }
+
+/**
+ * Get asset path - returns URL for web views or absolute path for PDF generation.
+ *
+ * @param string $asset
+ * @param bool $download
+ * @return string
+ */
+function getAsset($asset, $download = false)
+{
+	if ($download) {
+		// For PDF generation, return file:// URL with absolute path
+		$path = public_path($asset);
+		// Ensure the path exists
+		if (!file_exists($path)) {
+			\Log::warning("Asset not found for PDF: {$path}");
+		}
+		return $path;
+	}
+
+	return asset($asset);
+}

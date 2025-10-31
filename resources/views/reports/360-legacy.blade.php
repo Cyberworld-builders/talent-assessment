@@ -8,9 +8,31 @@
 
     <title>Involved Talent : Report for {{ $user->name }}</title>
 
-    <link rel="stylesheet" href="{{ asset('assets/css/fonts/linecons/css/linecons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/fonts/fontawesome/css/font-awesome.min.css') }}">
+    @if(isset($download) && $download)
+        {{-- For PDF: Inline the PDF CSS directly --}}
+        <style>
+        @php
+            // Inline PDF CSS for better DomPDF compatibility
+            $pdfCssPath = public_path('css/pdf.css');
+            if (file_exists($pdfCssPath)) {
+                $css = file_get_contents($pdfCssPath);
+                // Remove @font-face declarations as they don't work well with DomPDF
+                $css = preg_replace('/@font-face\s*\{[^}]+\}/s', '', $css);
+                // Remove font-family references to custom fonts
+                $css = str_replace("font-family: 'Avant Garde'", "font-family: Helvetica", $css);
+                $css = str_replace("font-family: 'Avant Garde Oblique'", "font-family: Helvetica", $css);
+                $css = str_replace("font-family: 'Avant Garde Demi'", "font-family: Helvetica", $css);
+                $css = str_replace("font-family: 'Avant Garde Demi Oblique'", "font-family: Helvetica", $css);
+                echo $css;
+            }
+        @endphp
+        </style>
+    @else
+        <link rel="stylesheet" href="{{ asset('assets/css/fonts/linecons/css/linecons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/fonts/fontawesome/css/font-awesome.min.css') }}">
+    @endif
     
+    @if(!isset($download) || !$download)
     <style>
         /* Essential base styles from legacy scaffolding */
         html, body {
@@ -54,8 +76,12 @@
         body.report,
         .linc-action-plan {
             -webkit-print-color-adjust: exact;
-            background: url('{{ asset('assets/images/report-background.jpg') }}') fixed no-repeat;
-            background-size: cover;
+            @if(isset($download) && $download)
+                background: white;
+            @else
+                background: url('{{ asset('assets/images/report-background.jpg') }}') fixed no-repeat;
+                background-size: cover;
+            @endif
             font-family: 'Avant Garde', Helvetica, Arial, sans-serif;
             color: #272842;
         }
@@ -460,8 +486,11 @@
             line-height: 1.2;
         }
     </style>
+    @endif
     
-    <script src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>
+    @if(!isset($download) || !$download)
+        <script src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>
+    @endif
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -473,11 +502,11 @@
 
 {{-- Cover Page --}}
 <div class="page-container" id="1">
-    <img class="cover-shapes" src="{{ asset('assets/images/report-cover-shapes.png') }}" />
+    <img class="cover-shapes" src="{{ getAsset('assets/images/report-cover-shapes.png', isset($download) ? $download : false) }}" />
     
     <div class="page-wrapper">
         <div class="page-header">
-            <img class="logo right" src="{{ asset('assets/images/involve-360-logo-small.png') }}">
+            <img class="logo right" src="{{ getAsset('assets/images/involve-360-logo-small.png', isset($download) ? $download : false) }}">
             <div class="line"></div>
             <div class="clearfix"></div>
         </div>
@@ -489,7 +518,7 @@
         </div>
 
         <div class="cover-disclaimer">
-            <img src="{{ asset('assets/images/logo-tagline.png') }}" />
+            <img src="{{ getAsset('assets/images/logo-tagline.png', isset($download) ? $download : false) }}" />
         </div>
     </div>
 </div>
@@ -498,13 +527,13 @@
 <div class="page-container" id="2">
     <div class="page-wrapper">
         <div class="page-header">
-            <img class="logo" src="{{ asset('assets/images/logo-small.png') }}">
+            <img class="logo" src="{{ getAsset('assets/images/logo-small.png', isset($download) ? $download : false) }}">
             <div class="line"></div>
             <div class="clearfix"></div>
         </div>
         
         <div class="page-title">
-            <img src="{{ asset('assets/images/badge.png') }}" />
+            <img src="{{ getAsset('assets/images/badge.png', isset($download) ? $download : false) }}" />
             Involved-360
         </div>
         
@@ -536,14 +565,14 @@
         <div class="page-container" id="{{ $pageNumber }}">
             <div class="page-wrapper">
                 <div class="page-header">
-                    <img class="logo right" src="{{ asset('assets/images/involve-360-logo-small.png') }}">
+                    <img class="logo right" src="{{ getAsset('assets/images/involve-360-logo-small.png', isset($download) ? $download : false) }}">
                     <div class="line"></div>
                     <div class="clearfix"></div>
                 </div>
                 
                 <div class="page-title alt">
                     <span class="subtitle">
-                        <img src="{{ asset('assets/images/triangle.png') }}" />
+                        <img src="{{ getAsset('assets/images/triangle.png', isset($download) ? $download : false) }}" />
                         Competency:
                     </span>
                     @if($dimensionName)<span>{{ $dimensionName }}</span>@endif
@@ -557,7 +586,7 @@
                     <div class="chart">
                         <div class="title">
                             Your Current Scores By Ratee Source<br/>
-                            <span><img src="{{ asset('assets/images/triangle-orange.png') }}" /> Indicates Significant Growth Opportunity</span>
+                            <span><img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" /> Indicates Significant Growth Opportunity</span>
                         </div>
 
                         <div class="score">
@@ -589,7 +618,7 @@
                                                         {{ number_format($score, 1) }}
                                                     </div>
                                                     @if(($dimensionData['Industry'] ?? 0) > 0 && $score < (($dimensionData['Industry'] ?? 0) - 0.5))
-                                                        <img src="{{ asset('assets/images/triangle-orange.png') }}" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
+                                                        <img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
                                                     @endif
                                                 </div>
                                                 <div class="clearfix"></div>
@@ -629,7 +658,7 @@
         <div class="page-container" id="{{ $pageNumber + 1 }}">
             <div class="page-wrapper">
                 <div class="page-header">
-                    <img class="logo" src="{{ asset('assets/images/logo-small.png') }}">
+                    <img class="logo" src="{{ getAsset('assets/images/logo-small.png', isset($download) ? $download : false) }}">
                     <div class="line"></div>
                     <div class="clearfix"></div>
                 </div>
@@ -639,7 +668,7 @@
                 </div>
 
                 <div class="page-subtitle">
-                    <img src="{{ asset('assets/images/triangle-orange-large.png') }}" />
+                    <img src="{{ getAsset('assets/images/triangle-orange-large.png', isset($download) ? $download : false) }}" />
                     For: @if($dimensionName)<span>{{ $dimensionName }}</span>@endif
                 </div>
                 
@@ -682,6 +711,7 @@
     @endforeach
 @endif
 
+@if(!isset($download) || !$download)
 <!-- Bottom Scripts -->
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/TweenMax.min.js') }}"></script>
@@ -714,6 +744,7 @@
         console.log(opts);
     });
 </script>
+@endif
 
 </body>
 </html>

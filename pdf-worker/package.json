@@ -1,0 +1,11 @@
+{
+  "name": "pdf-worker",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "puppeteer": "^22.0.0",
+    "@aws-sdk/client-s3": "^3.490.0",
+    "mysql2": "^3.6.0"
+  }
+}
+
