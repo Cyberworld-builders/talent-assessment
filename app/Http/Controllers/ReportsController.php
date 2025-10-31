@@ -2652,18 +2652,58 @@ class ReportsController extends Controller
 			$scores[$dimension]['Feedback']['Others'] = $otherFeedback;
 		}
 
-		// Add industry norms and group averages from globals
-		$norms = [
-			'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
-			'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
-			'Collaboration' => get_global('norm_collaboration') ?: 3.13,
-			'Self-Development' => get_global('norm_self_development') ?: 3.79,
-			'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
-			'Performance Management' => get_global('norm_performance_management') ?: 3.65,
-			'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
-			'Communication' => get_global('norm_communication') ?: 3.09,
-			'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
-		];
+		// Retrieve industry-specific benchmarks if user has an industry set
+		$norms = [];
+		if ($user->industry_id) {
+			// Get benchmarks for this user's industry and the 360 assessment
+			$assessmentId = $assignment->assessment_id;
+			$benchmarks = \App\Benchmark::where('industry_id', $user->industry_id)
+				->whereHas('dimension', function($q) use ($assessmentId) {
+					$q->where('assessment_id', $assessmentId);
+				})
+				->with('dimension')
+				->get();
+			
+			// Map benchmarks to dimension names
+			foreach ($benchmarks as $benchmark) {
+				if ($benchmark->dimension) {
+					$norms[$benchmark->dimension->name] = $benchmark->value;
+				}
+			}
+		}
+		
+		// Fallback to global norms if no industry-specific benchmarks exist
+		if (empty($norms)) {
+			$norms = [
+				'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
+				'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
+				'Collaboration' => get_global('norm_collaboration') ?: 3.13,
+				'Self-Development' => get_global('norm_self_development') ?: 3.79,
+				'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
+				'Performance Management' => get_global('norm_performance_management') ?: 3.65,
+				'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
+				'Communication' => get_global('norm_communication') ?: 3.09,
+				'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
+			];
+		} else {
+			// Fill in any missing dimensions with global fallbacks
+			$globalFallbacks = [
+				'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
+				'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
+				'Collaboration' => get_global('norm_collaboration') ?: 3.13,
+				'Self-Development' => get_global('norm_self_development') ?: 3.79,
+				'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
+				'Performance Management' => get_global('norm_performance_management') ?: 3.65,
+				'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
+				'Communication' => get_global('norm_communication') ?: 3.09,
+				'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
+			];
+			foreach ($globalFallbacks as $dimension => $value) {
+				if (!isset($norms[$dimension])) {
+					$norms[$dimension] = $value;
+				}
+			}
+		}
 
 		// Calculate group averages for each dimension
 		$groupAverages = [];
@@ -2685,10 +2725,36 @@ class ReportsController extends Controller
 		// Add norms and group averages to each dimension
 		foreach ($scores as $dimensionName => $dimensionData) {
 			$scores[$dimensionName]['Industry'] = isset($norms[$dimensionName]) ? $norms[$dimensionName] : 0;
-			$scores[$dimensionName]['Group Average'] = isset($groupAverages[$dimensionName]) ? $groupAverages[$dimensionName] : 0;
-		}
+		$scores[$dimensionName]['Group Average'] = isset($groupAverages[$dimensionName]) ? $groupAverages[$dimensionName] : 0;
+	}
 
-		// Download a PDF report
+	// Order rater types: Total, Coworkers, Staff, Supervisors, Self, then others
+	foreach ($scores as $dimensionName => $dimensionData) {
+		if (isset($dimensionData['Score'])) {
+			// Define the priority order (labels can be updated in assessment editor)
+			$priorityOrder = ['Total', 'Peer', 'Co-workers', 'Coworkers', 'Direct Report', 'Subordinate', 'Staff', 'Supervisor', 'Supervisors', 'Self'];
+			
+			$orderedScores = [];
+			
+			// Add scores in priority order
+			foreach ($priorityOrder as $label) {
+				if (isset($dimensionData['Score'][$label])) {
+					$orderedScores[$label] = $dimensionData['Score'][$label];
+				}
+			}
+			
+			// Add any remaining rater types not in priority list (after Self)
+			foreach ($dimensionData['Score'] as $raterType => $score) {
+				if (!isset($orderedScores[$raterType])) {
+					$orderedScores[$raterType] = $score;
+				}
+			}
+			
+			$scores[$dimensionName]['Score'] = $orderedScores;
+		}
+	}
+
+	// Download a PDF report
 		if ($download) {
 			$pdf = \PDF::setOptions([
 				'dpi' => 100,

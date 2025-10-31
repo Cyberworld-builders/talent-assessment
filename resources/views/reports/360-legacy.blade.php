@@ -660,10 +660,10 @@
                             <span><img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" /> Indicates Significant Growth Opportunity</span>
                         </div>
 
-                        <div class="score">
-                            {{ isset($dimensionData['Score']['Total']) ? number_format($dimensionData['Score']['Total'], 1) : '0.0' }}
-                            <span>out of 5</span>
-                        </div>
+                    <div class="score">
+                        {{ isset($dimensionData['Score']['Total']) ? number_format($dimensionData['Score']['Total'], 1) : '0.0' }}
+                        <span>out of 5</span>
+                    </div>
 
                         <div class="bars">
                             <div class="graph">
@@ -677,26 +677,24 @@
                                     <div class="clearfix"></div>
                                 </div>
 
-                                @if (isset($dimensionData['Score']))
-                                    @foreach ($dimensionData['Score'] as $raterType => $score)
-                                        @if ($raterType !== 'Total')
-                                            <div class="graph-row">
-                                                <div class="ratee">
-                                                    {{ $raterType }}
-                                                </div>
-                                                <div class="bar">
-                                                    <div class="inner" style="width:{{ ($score / 5) * 100 }}%;">
-                                                        {{ number_format($score, 1) }}
-                                                    </div>
-                                                    @if(($dimensionData['Industry'] ?? 0) > 0 && $score < (($dimensionData['Industry'] ?? 0) - 0.5))
-                                                        <img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
-                                                    @endif
-                                                </div>
-                                                <div class="clearfix"></div>
+                            @if (isset($dimensionData['Score']))
+                                @foreach ($dimensionData['Score'] as $raterType => $score)
+                                    <div class="graph-row">
+                                        <div class="ratee">
+                                            {{ $raterType }}
+                                        </div>
+                                        <div class="bar">
+                                            <div class="inner" style="width:{{ ($score / 5) * 100 }}%;">
+                                                {{ number_format($score, 1) }}
                                             </div>
-                                        @endif
-                                    @endforeach
-                                @endif
+                                            @if(($dimensionData['Industry'] ?? 0) > 0 && $score < (($dimensionData['Industry'] ?? 0) - 0.5))
+                                                <img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
+                                            @endif
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                @endforeach
+                            @endif
                             </div>
                         </div>
 
@@ -708,8 +706,8 @@
                             <div class="norm">{{ isset($dimensionData['Industry']) ? number_format($dimensionData['Industry'], 2) : '0.00' }}</div>
                             <div class="norm-label">
                                 Industry Norm for 
-                                @if($user->client && $user->client->industry)
-                                    {{ $user->client->industry }}
+                                @if($user->industry && $user->industry->name)
+                                    {{ $user->industry->name }}
                                 @else
                                     No Industry Set
                                 @endif
