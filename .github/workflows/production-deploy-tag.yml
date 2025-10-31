@@ -211,6 +211,20 @@ jobs:
           sed -i "s|AWS_REGION=.*|AWS_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)|" .env.production
           sed -i "s|AWS_DEFAULT_REGION=.*|AWS_DEFAULT_REGION=$(jq -r '.PRODUCTION_SES_REGION' secrets.json)|" .env.production
           
+          # Get CloudFront domain from secrets or use default
+          CLOUDFRONT_DOMAIN=$(jq -r '.PRODUCTION_CLOUDFRONT_DOMAIN // empty' secrets.json)
+          if [ -z "$CLOUDFRONT_DOMAIN" ]; then
+            # If not in secrets, try to construct from S3 bucket
+            echo "CloudFront domain not in secrets, checking for CloudFront distribution..."
+            CLOUDFRONT_DOMAIN="dhbhjqoqdk3yk.cloudfront.net"
+          fi
+          echo "Using CloudFront domain: $CLOUDFRONT_DOMAIN"
+          if grep -q "AWS_CLOUDFRONT_DOMAIN=" .env.production; then
+            sed -i "s|AWS_CLOUDFRONT_DOMAIN=.*|AWS_CLOUDFRONT_DOMAIN=$CLOUDFRONT_DOMAIN|" .env.production
+          else
+            echo "AWS_CLOUDFRONT_DOMAIN=$CLOUDFRONT_DOMAIN" >> .env.production
+          fi
+          
           # Configure SES email (using IAM role-based authentication, no credentials needed)
           echo "Configuring SES email settings..."
           sed -i "s|MAIL_DRIVER=.*|MAIL_DRIVER=ses|" .env.production
