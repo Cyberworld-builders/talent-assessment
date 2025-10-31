@@ -52,7 +52,9 @@ services:
       - talent-network-production
 
   pdf-worker-production:
-    image: ${PRODUCTION_PDF_WORKER_IMAGE}
+    build:
+      context: ./pdf-worker
+      dockerfile: Dockerfile
     container_name: talent-assessment-pdf-worker-production
     restart: unless-stopped
     working_dir: /app

@@ -52,7 +52,9 @@ services:
       - talent-network-staging
 
   pdf-worker-staging:
-    image: ${STAGING_PDF_WORKER_IMAGE}
+    build:
+      context: ./pdf-worker
+      dockerfile: Dockerfile
     container_name: talent-assessment-pdf-worker-staging
     restart: unless-stopped
     working_dir: /app
