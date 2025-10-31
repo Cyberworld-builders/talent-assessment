@@ -214,9 +214,9 @@ jobs:
           # Get CloudFront domain from secrets or use default
           CLOUDFRONT_DOMAIN=$(jq -r '.PRODUCTION_CLOUDFRONT_DOMAIN // empty' secrets.json)
           if [ -z "$CLOUDFRONT_DOMAIN" ]; then
-            # If not in secrets, try to construct from S3 bucket
-            echo "CloudFront domain not in secrets, checking for CloudFront distribution..."
-            CLOUDFRONT_DOMAIN="dhbhjqoqdk3yk.cloudfront.net"
+            # If not in secrets, use the production CloudFront distribution domain
+            echo "CloudFront domain not in secrets, using production CloudFront distribution..."
+            CLOUDFRONT_DOMAIN="d24v9o7qhnsdvn.cloudfront.net"
           fi
           echo "Using CloudFront domain: $CLOUDFRONT_DOMAIN"
           if grep -q "AWS_CLOUDFRONT_DOMAIN=" .env.production; then
