@@ -50,6 +50,38 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.21 - 360 Report Layout Refinements & Industry Benchmarks:</strong> Major improvements to 360 report visual presentation with proper bar chart alignment, industry-specific benchmark integration, and enhanced rater ordering system.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed 360 report bar chart layout - labels now positioned left of bars (not inside), bars start at zero and properly touch the 0-5 scale lines, with placeholder bars stretching full width.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Implemented industry-specific benchmark retrieval from database - reports now use actual benchmarking system data instead of hardcoded global fallbacks, with automatic fallback for missing dimensions.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Fixed industry display in reports by correcting relationship lookup - now uses user->industry->name instead of non-existent client->industry relationship.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Enhanced rater type ordering in bar charts - Total/All Raters first, followed by specific priority order (Coworkers, Staff, Supervisors), with Self always last and remaining types after.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Centered industry norm and group average scores at bottom of charts with pipe separator, properly aligned labels to right of values for professional appearance.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
+                <p>Fixed production CloudFront configuration in deployment workflow - ensures correct CloudFront domain is set in environment configuration for proper CDN access.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Corrected PDF page breaks by hiding HTML page footers in generated PDFs and enabling print media emulation - PDFs now have proper page boundaries without duplicate page numbers.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.19 - S3-Based PDF Generation System:</strong> Complete rewrite of PDF generation using S3 storage, CloudFront CDN, and separate Node.js worker service for high-fidelity PDF rendering with Puppeteer.</p>
             </li>
             <li>
