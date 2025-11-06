@@ -49,6 +49,10 @@
                        {{-- Changelog --}}
         <ul class="list-unstyled changelog">
             <li>
+                <i class="fa-asterisk text-danger"></i>
+                <p><strong>v1.6.23 - Hotfix: Slug Timestamp Correction:</strong> Critical fix for slug generation using current timestamp instead of record creation timestamp to ensure unique filenames on each regeneration.</p>
+            </li>
+            <li>
                 <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.22 - Report Cache Fix & Collaboration Feedback:</strong> Critical fix for report regeneration cache issues and resolved missing Collaboration feedback in 360 reports.</p>
             </li>
