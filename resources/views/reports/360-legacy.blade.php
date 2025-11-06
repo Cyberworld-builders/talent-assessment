@@ -688,7 +688,7 @@
                                                 {{ number_format($score, 1) }}
                                             </div>
                                             @if(($dimensionData['Industry'] ?? 0) > 0 && $score < (($dimensionData['Industry'] ?? 0) - 0.5))
-                                                <img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
+                                                <img src="{{ getAsset('assets/images/triangle-orange.png', isset($download) ? $download : false) }}" style="position: absolute; left: {{ ($score / 5) * 100 }}%; margin-left: 5px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px;" title="Significantly below industry norm" />
                                             @endif
                                         </div>
                                         <div class="clearfix"></div>
