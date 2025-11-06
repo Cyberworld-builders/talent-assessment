@@ -56,11 +56,11 @@ class ReportData extends Model
             return null;
         }
 
-        // Create slug from user name, assignment ID, and timestamp
+        // Create slug from user name, assignment ID, and current timestamp
         $userName = Str::slug($user->name);
         $clientId = $user->client_id ?? 'unknown';
         $assignmentId = $assignment->id;
-        $timestamp = $this->created_at ? $this->created_at->format('Ymd-His') : date('Ymd-His');
+        $timestamp = date('Ymd-His'); // Always use current timestamp for unique slugs
         
         $this->slug = "{$clientId}-{$userName}-{$assignmentId}-{$timestamp}";
         $this->save();
