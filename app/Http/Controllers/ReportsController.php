@@ -433,13 +433,12 @@ class ReportsController extends Controller
 				['score' => '{}']
 			);
 
-			\Log::info("ReportData record found/created: ID {$reportData->id}");
+		\Log::info("ReportData record found/created: ID {$reportData->id}");
 
-			// Generate slug if it doesn't exist
-			if (!$reportData->slug) {
-				$reportData->generateSlug();
-				\Log::info("Generated slug: {$reportData->slug}");
-			}
+		// Always regenerate slug with new timestamp to bypass CloudFront caching
+		$reportData->slug = null;
+		$reportData->generateSlug();
+		\Log::info("Generated new slug: {$reportData->slug}");
 
 			// Generate the HTML content by calling the report method
 			// We'll capture the output without the download flag
