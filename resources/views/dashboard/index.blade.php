@@ -50,6 +50,18 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.22 - Report Cache Fix & Collaboration Feedback:</strong> Critical fix for report regeneration cache issues and resolved missing Collaboration feedback in 360 reports.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed PDF regeneration not reflecting HTML changes - now generates unique timestamped filenames on each generation to bypass CloudFront cache.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Resolved Collaboration developmental feedback not appearing in reports - corrected question dimension mapping in assessment structure.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.21 - 360 Report Layout Refinements & Industry Benchmarks:</strong> Major improvements to 360 report visual presentation with proper bar chart alignment, industry-specific benchmark integration, and enhanced rater ordering system.</p>
             </li>
             <li>
