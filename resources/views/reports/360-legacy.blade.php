@@ -612,11 +612,12 @@
             <p>
                 This is your Involved-360 report. This report should be used as a critical piece of your overall leadership development at {{ $user->client->name ?? 'your organization' }}.
             </p>
+            
             <p>
-                Stakeholders (e.g., supervisor, peers, subordinates, customers) familiar with your work completed the 360-evaluation to provide you an analytically robust picture of your strengths and improvement opportunities. Additionally, each of your raters was asked to provide qualitative feedback, which can greatly augment your quantitative scores. Taken together, this report provides you a wealth of information to not only significantly develop your own leadership, but also drive critical business outcomes.
+                Stakeholders (e.g., supervisor, peers, direct report, customers) familiar with your work completed the 360-evaluation to provide you with an analytically robust picture of your strengths and improvement opportunities. Additionally, each of your raters was asked to provide qualitative feedback, which can greatly augment your quantitative scores. Taken together, this report provides you with a wealth of information to not only significantly develop your own leadership but also drive critical business outcomes.
             </p>
             <p>
-                Each individual competency score is presented with corresponding rater feedback and suggestions. Your scores are compared to (1) norms for similar jobs/positions and (2) the average of your colleagues that have also recently completed the 360-feedback survey at {{ $user->client->name ?? 'your organization' }}. Anchoring your scores with industry norms and your company averages provides a much more accurate representation of where your scores stand and provides enhanced motivation to accelerate your leadership involvement.
+                Each individual competency score is presented with corresponding rater feedback and suggestions. Your scores are compared to (1) a benchmark for a similar industry and (2) the average of your colleagues (i.e., geonorm) who have also recently completed the 360-degree feedback survey at {{ $user->client->name ?? 'your organization' }}. Anchoring your scores with industry benchmarks and your company averages provides a much more accurate representation of where your scores stand and provides enhanced motivation to accelerate your leadership involvement.
             </p>
         </div>
 
@@ -705,7 +706,7 @@
                         <div class="norm-group industry">
                             <div class="norm">{{ isset($dimensionData['Industry']) ? number_format($dimensionData['Industry'], 2) : '0.00' }}</div>
                             <div class="norm-label">
-                                Industry Norm for 
+                                Industry Benchmark for 
                                 @if($user->industry && $user->industry->name)
                                     {{ $user->industry->name }}
                                 @else
@@ -718,7 +719,7 @@
 
                         <div class="norm-group group">
                             <div class="norm">{{ isset($dimensionData['Group Average']) ? number_format($dimensionData['Group Average'], 2) : '0.00' }}</div>
-                            <div class="norm-label">Average Score For This Group</div>
+                            <div class="norm-label">Geonorm for <br/>this Group<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                         </div>
                     </div>
                 </div>

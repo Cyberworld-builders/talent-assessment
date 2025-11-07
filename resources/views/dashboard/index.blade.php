@@ -49,6 +49,10 @@
                        {{-- Changelog --}}
         <ul class="list-unstyled changelog">
             <li>
+                <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.24 - 360 Report Terminology & Geonorm Implementation:</strong> Comprehensive updates to 360 report including: implemented geonorm calculation (average of all targets' Total scores in survey group), renamed "Industry Norm" to "Industry Benchmark", fixed growth opportunity triangle positioning to align with bar ends, and refined report introduction text with improved terminology and grammar.</p>
+            </li>
+            <li>
                 <i class="fa-asterisk text-danger"></i>
                 <p><strong>v1.6.23 - Hotfix: Slug Timestamp Correction:</strong> Critical fix for slug generation using current timestamp instead of record creation timestamp to ensure unique filenames on each regeneration.</p>
             </li>

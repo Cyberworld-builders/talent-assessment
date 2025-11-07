@@ -2704,22 +2704,63 @@ class ReportsController extends Controller
 			}
 		}
 
-		// Calculate group averages for each dimension
-		$groupAverages = [];
+	// Calculate geonorm for this group (average of all targets' Total scores in the same survey)
+	$groupAverages = [];
+	
+	// Get all unique targets from the same survey
+	$allTargetsInSurvey = Assignment::where('created_at', $assignment->created_at)
+		->where('completed', 1)
+		->where('assessment_id', $assignment->assessment_id)
+		->whereNotNull('target_id')
+		->groupBy('target_id')
+		->get(['target_id'])
+		->pluck('target_id')
+		->all();
+	
+	// Ensure we have valid targets
+	if (empty($allTargetsInSurvey)) {
+		// Fallback: use current user's scores
 		foreach ($scores as $dimensionName => $dimensionData) {
-			// Calculate average of all users in the same assignment
-			$allUserScores = [];
-			foreach ($assignments as $assignment) {
-				// Get scores for this dimension from this assignment
-				// This is a simplified calculation - you might want to implement proper group averaging
-				if (isset($dimensionData['Score']['Total'])) {
-					$allUserScores[] = $dimensionData['Score']['Total'];
+			$groupAverages[$dimensionName] = isset($dimensionData['Score']['Total']) ? $dimensionData['Score']['Total'] : 0;
+		}
+	} else {
+		// For each dimension, calculate the geonorm across all targets
+		foreach ($dimensions as $dimensionName => $dimension) {
+			$targetTotalScores = [];
+			
+			foreach ($allTargetsInSurvey as $targetId) {
+			// Get all assignments rating this target
+			$targetAssignments = Assignment::where([
+				'created_at' => $assignment->created_at,
+				'completed' => 1,
+				'target_id' => $targetId
+			])->get();
+			
+			// Calculate Total score for this target for this dimension
+			$totalScore = 0;
+			$totalCount = 0;
+			
+			foreach ($targetAssignments as $targetAssignment) {
+				$answers = $targetAssignment->answers->filter(function($answer) use ($dimensionName) {
+					$question = Question::find($answer->question_id);
+					return $question && $question->dimension() && $question->dimension()->name == $dimensionName && $question->type == 1;
+				});
+				
+				foreach ($answers as $answer) {
+					$totalScore += $answer->value;
+					$totalCount++;
 				}
 			}
 			
-			// Use the current user's score as group average for now (you can implement proper group calculation)
-			$groupAverages[$dimensionName] = isset($dimensionData['Score']['Total']) ? $dimensionData['Score']['Total'] : 0;
+			if ($totalCount > 0) {
+				$targetTotalScores[] = ($totalScore / $totalCount) + 1;
+			}
 		}
+		
+			// Calculate geonorm (average of all targets' Total scores)
+			$groupAverages[$dimensionName] = count($targetTotalScores) > 0 ? array_sum($targetTotalScores) / count($targetTotalScores) : 0;
+		}
+	}
 
 		// Add norms and group averages to each dimension
 		foreach ($scores as $dimensionName => $dimensionData) {
