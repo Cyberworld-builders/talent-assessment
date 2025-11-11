@@ -50,6 +50,18 @@
         <ul class="list-unstyled changelog">
             <li>
                 <i class="fa-asterisk text-success"></i>
+                <p><strong>v1.6.25 - UX Improvements:</strong> Enhanced user experience with improved password reset flow and client overview pagination visibility.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-info"></i>
+                <p>Fixed password reset to redirect users to login page after successful reset with confirmation message - improves UX to match standard user expectations.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-warning"></i>
+                <p>Fixed pagination controls not appearing on client overview page - corrected condition to check paginator total pages instead of already-sliced user collection count.</p>
+            </li>
+            <li>
+                <i class="fa-asterisk text-success"></i>
                 <p><strong>v1.6.24 - 360 Report Terminology & Geonorm Implementation:</strong> Comprehensive updates to 360 report including: implemented geonorm calculation (average of all targets' Total scores in survey group), renamed "Industry Norm" to "Industry Benchmark", fixed growth opportunity triangle positioning to align with bar ends, and refined report introduction text with improved terminology and grammar.</p>
             </li>
             <li>
