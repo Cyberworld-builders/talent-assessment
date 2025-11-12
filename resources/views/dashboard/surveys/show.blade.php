@@ -80,6 +80,26 @@
 
 @section('content')
 
+    <!-- Success/Error/Info Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong> {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Error!</strong> {{ session('error') }}
+        </div>
+    @endif
+    @if(session('info'))
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Info:</strong> {{ session('info') }}
+        </div>
+    @endif
+
     <!-- Title -->
     <div class="page-title">
         <div class="title-env">
@@ -196,7 +216,19 @@
 
                                         <td>
                                             @if ($leader->scorers)
-                                                <a href="{{ url('dashboard/report/development/'.$client->id.'/'.$leader->survey->id.'/'.$leader->id) }}"><i class="fa-file-text-o"></i> View Report</a>
+                                                <a href="{{ url('dashboard/report/development/'.$client->id.'/'.$leader->survey->id.'/'.$leader->id) }}"><i class="fa-file-text-o"></i> Run Report</a>
+                                                <span style="margin: 0 5px;">|</span>
+                                                <a href="{{ url('dashboard/report/development/'.$client->id.'/'.$leader->survey->id.'/'.$leader->id.'/generate') }}" style="color: #4CAF50;">
+                                                    <i class="fa-cog"></i> Generate Documents
+                                                </a>
+                                                <span style="margin: 0 5px;">|</span>
+                                                <a href="{{ url('dashboard/report/development/'.$client->id.'/'.$leader->survey->id.'/'.$leader->id.'/preview') }}">
+                                                    <i class="fa-external-link"></i> Preview HTML
+                                                </a>
+                                                <span style="margin: 0 5px;">|</span>
+                                                <a href="{{ url('dashboard/report/development/'.$client->id.'/'.$leader->survey->id.'/'.$leader->id.'/preview-pdf') }}">
+                                                    <i class="fa-file-pdf-o"></i> Preview PDF
+                                                </a>
                                             @endif
                                         </td>
 

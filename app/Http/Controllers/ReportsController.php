@@ -15,6 +15,7 @@ use App\Question;
 use App\User;
 use App\Weight;
 use App\Services\FeedbackService;
+use Aws\S3\S3Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SessionCookieJar;
 use GuzzleHttp\Cookie\SetCookie;
@@ -169,10 +170,15 @@ class ReportsController extends Controller
 		$reports = [
 			(int)get_global('leader') => 'cacique',
 			(int)get_global('leader-s') => 'ls',
-			(int)get_global('360') => 'sixty',
 			(int)get_global('leader-sr') => 'lsr',
 		];
-		$report = $reports[$assignment->assessment_id];
+		
+		// Handle 360 assessments (both ID 1 and 4)
+		if ($assignment->assessment_id == 1 || $assignment->assessment_id == 4) {
+			$report = 'sixty';
+		} else {
+			$report = $reports[$assignment->assessment_id];
+		}
 
 		// CTCA Specific
 		if ($report == 'sixty' && $client->id == 22)
@@ -187,6 +193,389 @@ class ReportsController extends Controller
 
 		return $this->{$report}($assignmentId, $userId);
     }
+
+	/**
+	 * Generate the static HTML report and upload to S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function generateDevelopment($id, $assignmentId, $userId)
+	{
+		$client = Client::findOrFail($id);
+		$assignment = Assignment::findOrFail($assignmentId);
+		$assessment = Assessment::findOrFail($assignment->assessment_id);
+
+		$report = $this->getDevelopmentReportName($assessment);
+
+		if (! $report)
+			return view('error', ['message' => "A report template could not be found for this report. Please contact an Involved Talent administrator."]);
+
+		if (! method_exists($this, $report))
+			return view('error', ['message' => "Looks like the method for this report has not been configured yet. Please contact an Involved Talent administrator."]);
+
+		// Generate and save static HTML to S3
+		$reportData = $this->generateStaticReport($assignmentId, $userId, $report);
+
+		// PDF worker service will automatically pick this up and generate PDF
+		// (runs every 30 seconds in docker-compose)
+
+		// Redirect back with success message
+		return redirect()->back()->with('success', 'Documents generated! HTML is ready now, PDF will be ready in 30-60 seconds.');
+	}
+
+	/**
+	 * Download a development report in PDF format.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function downloadDevelopment($id, $assignmentId, $userId)
+	{
+		// Check if PDF exists in database
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+		
+		// If PDF URL exists, redirect to CloudFront
+		if ($reportData && $reportData->pdf_url) {
+			return redirect($reportData->pdf_url);
+		}
+		
+		// If HTML exists but PDF doesn't, show message
+		if ($reportData && $reportData->html_url && !$reportData->pdf_url) {
+			return redirect()->back()->with('info', 'PDF is still being generated. Please try again in a few moments, or click "Preview HTML" to view the report now.');
+		}
+		
+		// If nothing exists, show error
+		if (!$reportData || !$reportData->html_url) {
+			return redirect()->back()->with('error', 'Report not found. Please click "Generate Documents" first.');
+		}
+		
+		// This should never be reached (all cases handled above), but just in case
+		return redirect()->back()->with('error', 'Unable to download PDF. Please try generating documents again.');
+	}
+
+	/**
+	 * Preview the HTML report from S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function previewDevelopment($id, $assignmentId, $userId)
+	{
+		// Get report data
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		// If no report data exists or no HTML URL, show error
+		if (!$reportData || !$reportData->html_url) {
+			return redirect()->back()->with('error', 'HTML report not found. Please generate it first by clicking "Generate Documents".');
+		}
+
+		// Redirect to our serve route to bypass CDN cache
+		return redirect(url("dashboard/report/development/{$id}/{$assignmentId}/{$userId}/serve-html"));
+	}
+
+	/**
+	 * Preview the PDF report from S3 for the specified development report.
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function previewPdfDevelopment($id, $assignmentId, $userId)
+	{
+		// Get report data
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		// If no report data exists or no PDF URL, show error
+		if (!$reportData || !$reportData->pdf_url) {
+			return redirect()->back()->with('info', 'PDF not ready yet. Please wait a moment or click "Generate Documents" first.');
+		}
+
+		// Redirect to our serve route to bypass CDN cache
+		return redirect(url("dashboard/report/development/{$id}/{$assignmentId}/{$userId}/serve-pdf"));
+	}
+
+	/**
+	 * Serve the HTML report directly from S3 (bypasses CDN cache).
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function serveHtml($id, $assignmentId, $userId)
+	{
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		if (!$reportData || !$reportData->slug) {
+			abort(404, 'Report not found');
+		}
+
+		try {
+			$s3 = new S3Client(config('aws'));
+			$s3Path = $reportData->getHtmlS3Path();
+			
+			$result = $s3->getObject([
+				'Bucket' => env('AWS_S3_BUCKET'),
+				'Key' => $s3Path,
+			]);
+
+			return response($result['Body'], 200)
+				->header('Content-Type', 'text/html')
+				->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+				->header('Pragma', 'no-cache')
+				->header('Expires', '0');
+
+		} catch (\Exception $e) {
+			\Log::error("Failed to serve HTML from S3: " . $e->getMessage());
+			abort(404, 'Report file not found');
+		}
+	}
+
+	/**
+	 * Serve the PDF report directly from S3 (bypasses CDN cache).
+	 *
+	 * @param  int  $id
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @return \Illuminate\Http\Response
+	 */
+	public function servePdf($id, $assignmentId, $userId)
+	{
+		$reportData = \App\ReportData::where('user_id', $userId)
+			->where('assignment_id', $assignmentId)
+			->first();
+
+		if (!$reportData || !$reportData->slug) {
+			abort(404, 'Report not found');
+		}
+
+		try {
+			$s3 = new S3Client(config('aws'));
+			$s3Path = $reportData->getPdfS3Path();
+			
+			$result = $s3->getObject([
+				'Bucket' => env('AWS_S3_BUCKET'),
+				'Key' => $s3Path,
+			]);
+
+			$user = User::find($userId);
+			$filename = '360 Report for ' . ($user ? $user->name : 'User') . '.pdf';
+
+			return response($result['Body'], 200)
+				->header('Content-Type', 'application/pdf')
+				->header('Content-Disposition', 'inline; filename="' . $filename . '"')
+				->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+				->header('Pragma', 'no-cache')
+				->header('Expires', '0');
+
+		} catch (\Exception $e) {
+			\Log::error("Failed to serve PDF from S3: " . $e->getMessage());
+			abort(404, 'Report file not found');
+		}
+	}
+
+	/**
+	 * Get the development report name from the assessment.
+	 *
+	 * @param  \App\Assessment  $assessment
+	 * @return string
+	 */
+	public function getDevelopmentReportName($assessment)
+	{
+		$report = 'sixty';
+		if ($assessment->name == 'Involved-Leader')
+			$report = 'leader';
+		if ($assessment->name == 'Involved-Me')
+			$report = 'me';
+		if ($assessment->name == 'Involved-Me Peak Week')
+			$report = 'meppw';
+		if ($assessment->name == 'Involved-Blockers')
+			$report = 'blockers';
+
+		return $report;
+	}
+
+	/**
+	 * Generate static HTML report and upload to S3.
+	 *
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @param  string  $reportMethod
+	 * @return \App\ReportData|null
+	 */
+	protected function generateStaticReport($assignmentId, $userId, $reportMethod)
+	{
+		try {
+			\Log::info("Starting static report generation for assignment {$assignmentId}, user {$userId}");
+			
+			// Get or create report data record
+			$reportData = \App\ReportData::firstOrCreate(
+				[
+					'user_id' => $userId,
+					'assignment_id' => $assignmentId
+				],
+				['score' => '{}']
+			);
+
+		\Log::info("ReportData record found/created: ID {$reportData->id}");
+
+		// Always regenerate slug with new timestamp to bypass CloudFront caching
+		$reportData->slug = null;
+		$reportData->generateSlug();
+		\Log::info("Generated new slug: {$reportData->slug}");
+
+			// Generate the HTML content by calling the report method
+			// We'll capture the output without the download flag
+			\Log::info("Generating HTML content...");
+			$htmlContent = $this->generateStaticHtml($assignmentId, $userId, $reportMethod);
+			\Log::info("HTML content generated, length: " . strlen($htmlContent) . " bytes");
+
+			// Upload to S3 using IAM role (same pattern as AssignmentsController)
+			$s3Path = $reportData->getHtmlS3Path();
+			\Log::info("Uploading to S3 path: {$s3Path}");
+			
+			$s3 = new S3Client(config('aws'));
+			$bucket = env('AWS_S3_BUCKET');
+			
+			// Upload without ACL since bucket has ACLs disabled (modern S3 best practice)
+			$result = $s3->putObject([
+				'Bucket' => $bucket,
+				'Key' => $s3Path,
+				'Body' => $htmlContent,
+				'ContentType' => 'text/html',
+			]);
+			
+			\Log::info("Successfully uploaded to S3");
+
+			// Construct the S3 URL and convert to CloudFront
+			$region = env('AWS_REGION', 'us-east-2');
+			$s3Url = "https://{$bucket}.s3.{$region}.amazonaws.com/{$s3Path}";
+			\Log::info("S3 URL: {$s3Url}");
+			
+		// Convert to CloudFront URL for public access
+		$htmlUrl = s3_to_cloudfront_url($s3Url);
+		\Log::info("CloudFront URL: {$htmlUrl}");
+
+		// Save the URL to database and clear PDF URL to trigger regeneration
+		$reportData->html_url = $htmlUrl;
+		$reportData->pdf_url = null; // Clear PDF URL so worker will regenerate it
+		$reportData->save();
+		\Log::info("Database updated with HTML URL and cleared PDF URL for regeneration");
+			
+			return $reportData;
+
+		} catch (\Exception $e) {
+			\Log::error('Failed to generate static report: ' . $e->getMessage());
+			\Log::error('Stack trace: ' . $e->getTraceAsString());
+			return null;
+		}
+	}
+	
+	/**
+	 * Generate static HTML with inline styles and absolute image paths.
+	 *
+	 * @param  int  $assignmentId
+	 * @param  int  $userId
+	 * @param  string  $reportMethod
+	 * @return string
+	 */
+	protected function generateStaticHtml($assignmentId, $userId, $reportMethod)
+	{
+		// Call the report method to get the view
+		$view = $this->{$reportMethod}($assignmentId, $userId, $download = false);
+		
+		// Render the view to HTML
+		$html = $view->render();
+
+		// Process HTML to make it static
+		$html = $this->makeHtmlStatic($html);
+
+		return $html;
+	}
+
+	/**
+	 * Process HTML to inline styles and use absolute paths for images.
+	 *
+	 * @param  string  $html
+	 * @return string
+	 */
+	protected function makeHtmlStatic($html)
+	{
+		// Replace relative asset URLs with absolute URLs
+		$baseUrl = config('app.url');
+		
+		// Replace CSS links with inline styles
+		$html = preg_replace_callback(
+			'/<link[^>]*href=["\'](.*?\.css)["\'][^>]*>/i',
+			function($matches) {
+				$cssPath = $matches[1];
+				// Remove base URL if present
+				$cssPath = str_replace([config('app.url'), 'http://localhost:8001'], '', $cssPath);
+				$cssPath = ltrim($cssPath, '/');
+				$fullPath = public_path($cssPath);
+				
+				if (file_exists($fullPath)) {
+					$css = file_get_contents($fullPath);
+					return "<style>\n{$css}\n</style>";
+				}
+				return $matches[0];
+			},
+			$html
+		);
+
+		// Replace JS script tags with inline scripts
+		$html = preg_replace_callback(
+			'/<script[^>]*src=["\'](.*?\.js)["\'][^>]*><\/script>/i',
+			function($matches) {
+				$jsPath = $matches[1];
+				// Remove base URL if present
+				$jsPath = str_replace([config('app.url'), 'http://localhost:8001'], '', $jsPath);
+				$jsPath = ltrim($jsPath, '/');
+				$fullPath = public_path($jsPath);
+				
+				if (file_exists($fullPath)) {
+					$js = file_get_contents($fullPath);
+					return "<script>\n{$js}\n</script>";
+				}
+				return $matches[0];
+			},
+			$html
+		);
+
+		// Convert relative image paths to absolute URLs
+		$html = preg_replace_callback(
+			'/(<img[^>]*src=["\'])([^"\']*)(["\']\s*[^>]*>)/i',
+			function($matches) use ($baseUrl) {
+				$imagePath = $matches[2];
+				// If already absolute, leave it
+				if (preg_match('/^(https?:)?\/\//i', $imagePath)) {
+					return $matches[0];
+				}
+				// Convert to absolute URL
+				$imagePath = ltrim($imagePath, '/');
+				return $matches[1] . $baseUrl . '/' . $imagePath . $matches[3];
+			},
+			$html
+		);
+
+		return $html;
+	}
 
     public function caciquetest()
     {
@@ -1885,7 +2274,7 @@ class ReportsController extends Controller
 		return view('reports.aoepa', compact('job', 'user', 'scores', 'export'));
 	}
 
-	public function sixty($assignmentId, $userId)
+	public function sixty($assignmentId, $userId, $download = false)
 	{
 		ini_set('max_execution_time', 520);
 		$assignment = Assignment::find($assignmentId);
@@ -2068,6 +2457,81 @@ class ReportsController extends Controller
 						'Translates department level KPIs and tactics into plans to drive and support strategic growth and to reach function or unit level business objectives including growth, NOI, etc.',
 					],
 				]
+			],
+			'Customer Focus' => [
+				'Answers' => [],
+				'Definition' => 'Customer Focus is defined as the ability to understand and anticipate customer needs, consistently deliver exceptional service, and build strong relationships with both internal and external customers to achieve organizational goals.',
+				'Expectations' => [
+					'1' => [
+						'Rarely considers customer needs in decision making',
+						'Fails to respond to customer concerns in a timely manner',
+						'Shows little interest in customer feedback or satisfaction',
+						'Does not take ownership of customer issues',
+					],
+					'3' => [
+						'Regularly considers customer needs when making decisions',
+						'Responds to customer concerns in a reasonable timeframe',
+						'Seeks customer feedback and works to address concerns',
+						'Takes ownership of customer issues within their area',
+					],
+					'5' => [
+						'Proactively anticipates customer needs and expectations',
+						'Consistently exceeds customer expectations in service delivery',
+						'Actively seeks and implements customer feedback to drive improvements',
+						'Champions customer-centric culture across the organization',
+						'Develops innovative solutions to enhance customer experience',
+					],
+				]
+			],
+			'Communication' => [
+				'Answers' => [],
+				'Definition' => 'Communication is defined as the ability to clearly and effectively convey information, actively listen, and foster open dialogue across all levels of the organization using appropriate channels and methods.',
+				'Expectations' => [
+					'1' => [
+						'Communication is unclear or inconsistent',
+						'Fails to keep key stakeholders informed',
+						'Does not actively listen to others',
+						'Creates confusion through poor messaging',
+					],
+					'3' => [
+						'Communicates clearly with team and stakeholders',
+						'Keeps relevant parties informed of important updates',
+						'Listens to feedback and responds appropriately',
+						'Uses appropriate communication channels for different audiences',
+					],
+					'5' => [
+						'Communicates with exceptional clarity and impact',
+						'Proactively shares information across all levels',
+						'Demonstrates outstanding active listening skills',
+						'Tailors communication style to audience and situation',
+						'Creates open dialogue and encourages transparent communication',
+					],
+				]
+			],
+			'Ethics & Integrity' => [
+				'Answers' => [],
+				'Definition' => 'Ethics & Integrity encompasses consistently demonstrating honesty, transparency, and ethical behavior in all business dealings, maintaining confidentiality, following established policies and procedures, and serving as a role model for ethical conduct.',
+				'Expectations' => [
+					'1' => [
+						'Demonstrates questionable ethical judgment',
+						'Fails to maintain confidentiality when required',
+						'Inconsistent in following policies and procedures',
+						'Does not address ethical concerns when they arise',
+					],
+					'3' => [
+						'Demonstrates honest and ethical behavior',
+						'Maintains appropriate confidentiality',
+						'Follows established policies and procedures',
+						'Addresses ethical concerns within their area',
+					],
+					'5' => [
+						'Serves as a role model for ethical conduct',
+						'Proactively identifies and addresses ethical concerns',
+						'Maintains highest standards of confidentiality and trust',
+						'Champions ethical culture across the organization',
+						'Demonstrates courage in making ethical decisions even when difficult',
+					],
+				]
 			]
 		];
 
@@ -2187,7 +2651,162 @@ class ReportsController extends Controller
 			$scores[$dimension]['Feedback']['Others'] = $otherFeedback;
 		}
 
-		return view('reports.360', compact('user', 'scores'));
+		// Retrieve industry-specific benchmarks if user has an industry set
+		$norms = [];
+		if ($user->industry_id) {
+			// Get benchmarks for this user's industry and the 360 assessment
+			$assessmentId = $assignment->assessment_id;
+			$benchmarks = \App\Benchmark::where('industry_id', $user->industry_id)
+				->whereHas('dimension', function($q) use ($assessmentId) {
+					$q->where('assessment_id', $assessmentId);
+				})
+				->with('dimension')
+				->get();
+			
+			// Map benchmarks to dimension names
+			foreach ($benchmarks as $benchmark) {
+				if ($benchmark->dimension) {
+					$norms[$benchmark->dimension->name] = $benchmark->value;
+				}
+			}
+		}
+		
+		// Fallback to global norms if no industry-specific benchmarks exist
+		if (empty($norms)) {
+			$norms = [
+				'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
+				'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
+				'Collaboration' => get_global('norm_collaboration') ?: 3.13,
+				'Self-Development' => get_global('norm_self_development') ?: 3.79,
+				'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
+				'Performance Management' => get_global('norm_performance_management') ?: 3.65,
+				'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
+				'Communication' => get_global('norm_communication') ?: 3.09,
+				'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
+			];
+		} else {
+			// Fill in any missing dimensions with global fallbacks
+			$globalFallbacks = [
+				'Creative Problem Solving' => get_global('norm_creative_problem_solving') ?: 3.71,
+				'Leadership Adaptability' => get_global('norm_leadership_adaptability') ?: 3.29,
+				'Collaboration' => get_global('norm_collaboration') ?: 3.13,
+				'Self-Development' => get_global('norm_self_development') ?: 3.79,
+				'Business Mindset' => get_global('norm_business_mindset') ?: 3.92,
+				'Performance Management' => get_global('norm_performance_management') ?: 3.65,
+				'Customer Focus' => get_global('norm_customer_focus') ?: 3.23,
+				'Communication' => get_global('norm_communication') ?: 3.09,
+				'Ethics & Integrity' => get_global('norm_ethics_integrity') ?: 3.56
+			];
+			foreach ($globalFallbacks as $dimension => $value) {
+				if (!isset($norms[$dimension])) {
+					$norms[$dimension] = $value;
+				}
+			}
+		}
+
+	// Calculate geonorm for this group (average of all targets' Total scores in the same survey)
+	$groupAverages = [];
+	
+	// Get all unique targets from the same survey
+	$allTargetsInSurvey = Assignment::where('created_at', $assignment->created_at)
+		->where('completed', 1)
+		->where('assessment_id', $assignment->assessment_id)
+		->whereNotNull('target_id')
+		->groupBy('target_id')
+		->get(['target_id'])
+		->pluck('target_id')
+		->all();
+	
+	// Ensure we have valid targets
+	if (empty($allTargetsInSurvey)) {
+		// Fallback: use current user's scores
+		foreach ($scores as $dimensionName => $dimensionData) {
+			$groupAverages[$dimensionName] = isset($dimensionData['Score']['Total']) ? $dimensionData['Score']['Total'] : 0;
+		}
+	} else {
+		// For each dimension, calculate the geonorm across all targets
+		foreach ($dimensions as $dimensionName => $dimension) {
+			$targetTotalScores = [];
+			
+			foreach ($allTargetsInSurvey as $targetId) {
+			// Get all assignments rating this target
+			$targetAssignments = Assignment::where([
+				'created_at' => $assignment->created_at,
+				'completed' => 1,
+				'target_id' => $targetId
+			])->get();
+			
+			// Calculate Total score for this target for this dimension
+			$totalScore = 0;
+			$totalCount = 0;
+			
+			foreach ($targetAssignments as $targetAssignment) {
+				$answers = $targetAssignment->answers->filter(function($answer) use ($dimensionName) {
+					$question = Question::find($answer->question_id);
+					return $question && $question->dimension() && $question->dimension()->name == $dimensionName && $question->type == 1;
+				});
+				
+				foreach ($answers as $answer) {
+					$totalScore += $answer->value;
+					$totalCount++;
+				}
+			}
+			
+			if ($totalCount > 0) {
+				$targetTotalScores[] = ($totalScore / $totalCount) + 1;
+			}
+		}
+		
+			// Calculate geonorm (average of all targets' Total scores)
+			$groupAverages[$dimensionName] = count($targetTotalScores) > 0 ? array_sum($targetTotalScores) / count($targetTotalScores) : 0;
+		}
+	}
+
+		// Add norms and group averages to each dimension
+		foreach ($scores as $dimensionName => $dimensionData) {
+			$scores[$dimensionName]['Industry'] = isset($norms[$dimensionName]) ? $norms[$dimensionName] : 0;
+		$scores[$dimensionName]['Group Average'] = isset($groupAverages[$dimensionName]) ? $groupAverages[$dimensionName] : 0;
+	}
+
+	// Order rater types: Total, Coworkers, Staff, Supervisors, Self, then others
+	foreach ($scores as $dimensionName => $dimensionData) {
+		if (isset($dimensionData['Score'])) {
+			// Define the priority order (labels can be updated in assessment editor)
+			$priorityOrder = ['Total', 'Peer', 'Co-workers', 'Coworkers', 'Direct Report', 'Subordinate', 'Staff', 'Supervisor', 'Supervisors', 'Self'];
+			
+			$orderedScores = [];
+			
+			// Add scores in priority order
+			foreach ($priorityOrder as $label) {
+				if (isset($dimensionData['Score'][$label])) {
+					$orderedScores[$label] = $dimensionData['Score'][$label];
+				}
+			}
+			
+			// Add any remaining rater types not in priority list (after Self)
+			foreach ($dimensionData['Score'] as $raterType => $score) {
+				if (!isset($orderedScores[$raterType])) {
+					$orderedScores[$raterType] = $score;
+				}
+			}
+			
+			$scores[$dimensionName]['Score'] = $orderedScores;
+		}
+	}
+
+	// Download a PDF report
+		if ($download) {
+			$pdf = \PDF::setOptions([
+				'dpi' => 100,
+				'defaultPaperSize' => 'a4',
+				'isRemoteEnabled' => true,
+				'isHtml5ParserEnabled' => false,
+				'chroot' => public_path()
+			])->loadView('reports.360-legacy', compact('user', 'scores', 'download'));
+			return $pdf->download('360 Report for ' . $user->name . '.pdf');
+		}
+
+		return view('reports.360-legacy', compact('user', 'scores'));
 	}
 
 	public function sixtyctca($assignmentId, $userId)
@@ -3376,19 +3995,46 @@ class ReportsController extends Controller
      */
     public function store($clientId, Request $request)
     {
-    	$data = $request->all();
-    	$data['client_id'] = $clientId;
-    	$data['assessments'] = \GuzzleHttp\json_encode($data['assessments']);
+    	try {
+    		$data = $request->all();
+    		$data['client_id'] = $clientId;
+    		$data['assessments'] = \GuzzleHttp\json_encode($data['assessments']);
 
-    	$report = new Report($data);
-    	$report->save();
+    		$report = new Report($data);
+    		$report->save();
 
-		Session::flash('success', 'New report '.$report->name.' created successfully!');
-		return \Response::json([
-			'success' => true,
-			'clientId' => $clientId,
-			'reportId' => $report->id,
-		]);
+    		// Create the ClientReport pivot record so the report appears in the client's report list
+    		$clientReport = new \App\ClientReport([
+    			'client_id' => $clientId,
+    			'report_id' => $report->id,
+    			'job_id' => !empty($data['job_id']) ? $data['job_id'] : null,
+    			'enabled' => 1,
+    			'visible' => 1,
+    			'fields' => null,
+    		]);
+    		$clientReport->save();
+
+    		Session::flash('success', 'New report '.$report->name.' created successfully!');
+    		return \Response::json([
+    			'success' => true,
+    			'clientId' => $clientId,
+    			'reportId' => $report->id,
+    		]);
+    	} catch (\Exception $e) {
+    		// Log the error for debugging
+    		\Log::error('Error creating report: ' . $e->getMessage(), [
+    			'client_id' => $clientId,
+    			'data' => $data,
+    			'trace' => $e->getTraceAsString()
+    		]);
+
+    		// Return user-friendly error response
+    		return \Response::json([
+    			'success' => false,
+    			'error' => 'Failed to create report. Please check your data and try again.',
+    			'message' => $e->getMessage()
+    		], 422);
+    	}
     }
 
     /**
@@ -3528,16 +4174,33 @@ class ReportsController extends Controller
 	public function toggleVisibility($id, $reportId, Request $request)
 	{
 		$client = Client::findorFail($id);
-		$report = Report::findOrFail($reportId);
 		$data = $request->all();
 
+		// Find the ClientReport record for this client and report
+		$clientReport = ClientReport::where([
+			'client_id' => $id,
+			'report_id' => $reportId
+		])->first();
+
+		if (!$clientReport) {
+			// Create a new ClientReport if it doesn't exist
+			$clientReport = new ClientReport([
+				'client_id' => $id,
+				'report_id' => $reportId,
+				'job_id' => null,
+				'enabled' => 0,
+				'visible' => 0,
+				'fields' => null
+			]);
+		}
+
 		if (array_key_exists('enabled', $data))
-			$report->enabled = $data['enabled'];
+			$clientReport->enabled = $data['enabled'];
 
 		if (array_key_exists('visible', $data))
-			$report->visible = $data['visible'];
+			$clientReport->visible = $data['visible'];
 
-		$report->save();
+		$clientReport->save();
 	}
 
 	/**

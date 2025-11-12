@@ -1,0 +1,289 @@
+#!/bin/bash
+# Laravel Development Helper for Talent Assessment Project
+# Usage: laravel-dev [command] [options]
+
+# Change to project directory
+cd /opt/talent-assessment
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Helper function to print colored output
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Check if Docker is running
+check_docker() {
+    if ! docker-compose ps > /dev/null 2>&1; then
+        print_error "Docker containers are not running. Please start them first."
+        echo "Run: docker-compose up -d"
+        exit 1
+    fi
+}
+
+case "$1" in
+    "install")
+        print_status "Installing dependencies..."
+        check_docker
+        docker-compose exec app composer install
+        docker-compose exec app npm install
+        print_success "Dependencies installed successfully!"
+        ;;
+    "setup")
+        print_status "Setting up development environment..."
+        check_docker
+        docker-compose exec app composer install
+        docker-compose exec app php artisan migrate
+        docker-compose exec app npm run gulp
+        print_success "Development environment ready!"
+        ;;
+    "deploy")
+        print_status "Preparing for production deployment..."
+        check_docker
+        docker-compose exec app composer install --no-dev --optimize-autoloader
+        docker-compose exec app php artisan config:cache
+        docker-compose exec app php artisan route:cache
+        docker-compose exec app npm run gulp
+        print_success "Production deployment ready!"
+        ;;
+    "composer")
+        check_docker
+        docker-compose exec app composer "${@:2}"
+        ;;
+    "artisan")
+        check_docker
+        docker-compose exec app php artisan "${@:2}"
+        ;;
+    "test")
+        check_docker
+        if [ -n "$2" ]; then
+            print_status "Running tests with filter: $2"
+            docker-compose exec app vendor/bin/phpunit --filter "$2"
+        else
+            print_status "Running all tests..."
+            docker-compose exec app vendor/bin/phpunit
+        fi
+        ;;
+    "gulp")
+        check_docker
+        print_status "Compiling assets..."
+        docker-compose exec app npm run gulp
+        print_success "Assets compiled!"
+        ;;
+    "build")
+        check_docker
+        print_status "Building assets and clearing caches..."
+        docker-compose exec app npm run gulp
+        docker-compose exec app php artisan view:clear
+        docker-compose exec app php artisan cache:clear
+        docker-compose exec app php artisan config:clear
+        docker-compose exec app php artisan route:clear
+        print_success "Assets compiled and caches cleared!"
+        ;;
+    "logs")
+        check_docker
+        if [ -n "$2" ]; then
+            docker-compose logs app --tail="$2"
+        else
+            docker-compose logs app --tail=50
+        fi
+        ;;
+    "shell")
+        check_docker
+        print_status "Opening container shell..."
+        docker-compose exec app bash
+        ;;
+    "clear")
+        print_status "Clearing caches..."
+        check_docker
+        docker-compose exec app php artisan view:clear
+        docker-compose exec app php artisan cache:clear
+        docker-compose exec app php artisan config:clear
+        docker-compose exec app php artisan route:clear
+        print_success "Caches cleared!"
+        ;;
+    "fresh")
+        print_warning "This will reset your database. Are you sure? (y/N)"
+        read -r response
+        if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            print_status "Running fresh migration with seed..."
+            check_docker
+            docker-compose exec app php artisan migrate:fresh --seed
+            print_success "Database refreshed!"
+        else
+            print_status "Operation cancelled."
+        fi
+        ;;
+    "backup")
+        print_status "Creating database backup..."
+        check_docker
+        timestamp=$(date +%Y%m%d_%H%M%S)
+        backup_file="/opt/talent-assessment-backup-${timestamp}.sql"
+        docker-compose exec mysql mysqldump -u root -proot talent_assessment > "$backup_file"
+        print_success "Backup created: $backup_file"
+        ;;
+    "restore")
+        if [ -z "$2" ]; then
+            print_error "Usage: laravel-dev restore <backup-file>"
+            exit 1
+        fi
+        if [ ! -f "$2" ]; then
+            print_error "Backup file not found: $2"
+            exit 1
+        fi
+        print_warning "This will replace your current database. Are you sure? (y/N)"
+        read -r response
+        if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            print_status "Restoring database from $2..."
+            check_docker
+            docker-compose exec -T mysql mysql -u root -proot talent_assessment < "$2"
+            print_success "Database restored!"
+        else
+            print_status "Operation cancelled."
+        fi
+        ;;
+    "status")
+        print_status "Checking container status..."
+        docker-compose ps
+        ;;
+    "restart")
+        print_status "Restarting containers..."
+        docker-compose down
+        docker-compose up -d
+        print_success "Containers restarted!"
+        ;;
+    "start")
+        print_status "Starting containers..."
+        docker-compose up -d
+        print_success "Containers started!"
+        ;;
+    "stop")
+        print_status "Stopping containers..."
+        docker-compose down
+        print_success "Containers stopped!"
+        ;;
+    "build")
+        print_status "Building containers..."
+        docker-compose build
+        print_success "Containers built!"
+        ;;
+    "assessment")
+        case "$2" in
+            "create")
+                print_status "Creating new assessment..."
+                check_docker
+                docker-compose exec app php artisan make:controller AssessmentController
+                print_success "Assessment controller created!"
+                ;;
+            "test")
+                print_status "Running assessment tests..."
+                check_docker
+                docker-compose exec app vendor/bin/phpunit tests/AssessmentTest.php
+                ;;
+            "seed")
+                print_status "Seeding assessment data..."
+                check_docker
+                docker-compose exec app php artisan db:seed --class=AssessmentSeeder
+                print_success "Assessment data seeded!"
+                ;;
+            *)
+                echo "Assessment commands:"
+                echo "  create  - Create new assessment controller"
+                echo "  test    - Run assessment tests"
+                echo "  seed    - Seed assessment data"
+                ;;
+        esac
+        ;;
+    "user")
+        case "$2" in
+            "import")
+                if [ -z "$3" ]; then
+                    print_error "Usage: laravel-dev user import <csv-file>"
+                    exit 1
+                fi
+                print_status "Importing users from $3..."
+                check_docker
+                docker-compose exec app php artisan users:import "$3"
+                print_success "Users imported!"
+                ;;
+            "export")
+                print_status "Exporting users to CSV..."
+                check_docker
+                docker-compose exec app php artisan users:export
+                print_success "Users exported!"
+                ;;
+            *)
+                echo "User management commands:"
+                echo "  import <file>  - Import users from CSV"
+                echo "  export         - Export users to CSV"
+                ;;
+        esac
+        ;;
+    "version")
+        print_status "Checking versions..."
+        echo "Docker: $(docker --version)"
+        echo "Docker Compose: $(docker-compose --version)"
+        check_docker
+        echo "PHP: $(docker-compose exec app php --version | head -1)"
+        echo "Composer: $(docker-compose exec app composer --version | head -1)"
+        echo "Node: $(docker-compose exec app node --version)"
+        echo "NPM: $(docker-compose exec app npm --version)"
+        ;;
+    "help"|"")
+        echo -e "${BLUE}Laravel Development Helper for Talent Assessment${NC}"
+        echo "Usage: laravel-dev [command] [options]"
+        echo ""
+        echo -e "${GREEN}Environment Commands:${NC}"
+        echo "  install     - Install dependencies (composer + npm)"
+        echo "  setup       - Full development setup"
+        echo "  deploy      - Production deployment preparation"
+        echo "  start       - Start containers"
+        echo "  stop        - Stop containers"
+        echo "  restart     - Restart all containers"
+        echo "  build       - Build containers"
+        echo "  status      - Check container status"
+        echo ""
+        echo -e "${GREEN}Development Commands:${NC}"
+        echo "  composer <cmd>    - Run composer commands"
+        echo "  artisan <cmd>     - Run artisan commands"
+        echo "  test [filter]     - Run PHPUnit tests"
+        echo "  gulp             - Compile assets"
+        echo "  build            - Compile assets and clear caches"
+        echo "  logs [lines]     - Show application logs"
+        echo "  shell            - Open container shell"
+        echo ""
+        echo -e "${GREEN}Maintenance Commands:${NC}"
+        echo "  clear            - Clear all caches"
+        echo "  fresh            - Fresh migration with seed"
+        echo "  backup           - Create database backup"
+        echo "  restore <file>   - Restore database from backup"
+        echo ""
+        echo -e "${GREEN}Project Commands:${NC}"
+        echo "  assessment <cmd> - Assessment management"
+        echo "  user <cmd>       - User management"
+        echo "  version          - Show version information"
+        echo "  help             - Show this help"
+        ;;
+    *)
+        print_error "Unknown command: $1"
+        echo "Run 'laravel-dev help' for available commands."
+        exit 1
+        ;;
+esac

@@ -19,4 +19,10 @@ storage/framework/views/*
 storage/app/uploads/*
 public/uploads/*
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Development tools and documentation
+scripts/
+docs/
+*.md
+!readme.md 

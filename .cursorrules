@@ -148,6 +148,11 @@ docker-compose -f docker-compose.production.yml logs app-production
 docker-compose -f docker-compose.production.yml ps
 ```
 
+## Asset Compilation
+- **Gulp is not installed globally** - use `docker-compose exec app npm run gulp` instead of `gulp`
+- **After making CSS/JS changes**: Always run `docker-compose exec app npm run gulp` to compile assets
+- **Clear views after changes**: Run `docker-compose exec app php artisan view:clear` to clear compiled views
+
 ## Documentation
 - Main README: /readme.md
 - Environment setup: /ENVIRONMENT_SETUP.md

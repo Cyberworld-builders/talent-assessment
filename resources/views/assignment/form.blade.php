@@ -1,27 +1,19 @@
 @if (! $task)
-    <div class="description">
-        @if (! $preview)
-            @if ($assessment->translation() && $assessment->translation()->description)
-                {!! custom_fields($assignment->id, $assessment->translation()->description) !!}
-            @else
-                {!! custom_fields($assignment->id, $assessment->description) !!}
-            @endif
-        @else
-            {!! $assessment->description !!}
-        @endif
-    </div>
-
-    <h1>{{ translate('Questions') }}</h1>
+    <?php
+    // Description is shown on the stage.blade.php intro page before starting assessment
+    // We still need currentPage for pagination logic below
+    $currentPage = ($questions instanceof \Illuminate\Contracts\Pagination\Paginator) ? $questions->currentPage() : 1;
+    ?>
 
     @if (! empty($questions))
         @foreach ($questions as $question)
 
             <div class="question-container">
                 <p>
-                    {{-- Page Number --}}
-                    @if ($question->showPageNumber())
+                    {{-- Page Number - Removed for user assessments to avoid confusion --}}
+                    {{-- @if ($question->showPageNumber())
                         <strong>{{ $question->number }}.</strong>&nbsp;
-                    @endif
+                    @endif --}}
 
                     {{-- Question Content --}}
                     @if ($question->showContent())
@@ -222,6 +214,7 @@
 @endif
 
 <!-- Submit Field -->
+{{-- Show submit button only on the last page of questions --}}
 @if (! $assessment->paginate || ! $questions->hasMorePages())
     <div class="form-group" {!! ($task) ? 'style="display:none;"' : '' !!}>
         <br/>

@@ -18,6 +18,35 @@
 @import "assessments.less";
 @import "clients.less";
 @import "users.less";
+
+// Table styling for rich text content
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    
+    td, th {
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    
+    tr:hover {
+        background-color: #e9ecef;
+    }
+}
 @import "assignment.less";
 @import "dashboard.less";
 @import "dimensions.less";

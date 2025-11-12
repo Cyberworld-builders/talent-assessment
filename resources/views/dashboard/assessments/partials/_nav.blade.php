@@ -53,7 +53,7 @@
 
         <ul class="nav nav-userinfo navbar-right">
             <li>
-                <a href="{{ url('/dashboard/assessments/'.$assessment->id.'/edit') }}">
+                <a href="{{ url('/dashboard/assessments/'.$assessment->id.'/edit-new') }}">
                     <i class="linecons-pencil"></i>
                     <span class="title">Edit Assessment</span>
                 </a>

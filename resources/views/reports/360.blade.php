@@ -1,12 +1,12 @@
-<html><head>
-    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<html moznomarginboxes="" mozdisallowselectionprint="">
+<head>
     <meta name="viewport" content="width=device-width">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="/assets/js/highcharts.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/assets/reports/reports.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/reports.css">
     <style>
         body {
             background-size: cover;
@@ -15,292 +15,318 @@
         .par {font-family:Avenir Next LT Pro Medium;}
         .expectations {border-left: 5px solid #eee;}
         .cover-for {padding-top: 90px; padding-bottom: 60px;}
-        #score-360 {background:url('/assets/images/360-gradient.jpg') center center no-repeat; background-size:contain; height:50px;}
-        .score-bar {
-            background: #02244a;
-            height: 60px;
-            position: absolute;
-            width: 4px;
-            border-radius: 20px;
-            top: -3px;
-            /*outline: 3px solid rgba(255,255,255,0.5);*/
-            left: 50%;
-            z-index: 10;
-        }
-        .score-bar-background {
-            max-width: 100%;
-            position: relative;
-            top: 4px;
-        }
-        .score-bar:before {
-            /*content: "4.3";*/
-            color: white;
-            position: absolute;
-            top: 7px;
-            font-family: bebas neue;
-            font-size: 32px;
-            left: -45px;
-        }
-        #score-360-sm {height:30px; margin-top:20px;}
-        #score-360-sm .score-bar {
-            background: #02244a;
-            height: 32px;
-            position: absolute;
-            width: 2px;
-            border-radius: 20px;
-            top: -2px;
-            /* outline: 3px solid rgba(255,255,255,0.5); */
-            left: 50%;
-            z-index: 10;
-        }
-        #score-360-sm .score-bar:before {
-            /*content: "Supervisor: 4.3";*/
-            color: white;
-            position: absolute;
-            top: 4px;
-            font-family: bebas neue;
-            font-size: 16px;
-            left: -156px;
-            text-align: right;
-            width: 150px;
-        }
-        #other-scores {margin-top: 10px;}
-        @media print {
-            #score-360-sm .score-bar {
-                background: #02244a !important;
-            }
-        }
-
-        @foreach ($scores as $dimensionName => $dimension)
-            #score-360 .score-bar.{{ strtolower(str_replace(' ', '-', $dimensionName)) }} { left: {{ ($dimension['Score']['Total'] - 1) * 25 }}%; }
-            #score-360 .score-bar.{{ strtolower(str_replace(' ', '-', $dimensionName)) }}:before { content: "{{ number_format($dimension['Score']['Total'], 2) }}"; }
-        @endforeach
-
-        @foreach ($scores as $dimensionName => $dimension)
-            @foreach ($dimension['Score'] as $category => $score)
-                #score-360-sm .score-bar.{{ strtolower(str_replace(' ', '-', $dimensionName)) }}.{{ strtolower(str_replace(' ', '-', $category)) }} { left: {{ ($score - 1) * 25 }}%; }
-                #score-360-sm .score-bar.{{ strtolower(str_replace(' ', '-', $dimensionName)) }}.{{ strtolower(str_replace(' ', '-', $category)) }}:before { content: "{{ $category }}: {{ number_format($score, 2) }}"; }
-            @endforeach
-        @endforeach
     </style>
 </head>
 <body>
-<!--Page 1-->
-<div class="page-container" id="1">
-    <div class="container">
-        <!--Logo-->
-        <div class="row">
-            <div class="col-xs-2 visible-xs"></div>
-            <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
-                <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                <img class="img-responsive text-center cover-logo" src="/assets/images/involved-talent-logo.png">
-            </div>
+
+{{-- Cover --}}
+<?php $page = 1; ?>
+<div class="page-container" id="{{ $page }}">
+
+    {{-- Cover Shapes --}}
+    @if ($user->client->whitelabel && $user->client->id == 29)
+        <img class="cover-shapes" src="{{ asset('assets/images/angela-cover-shapes.png') }}" />
+    @else
+        <img class="cover-shapes" src="{{ asset('assets/images/report-cover-shapes.png') }}" />
+    @endif
+    
+    {{-- Container --}}
+    <div class="page-wrapper">
+
+        {{-- Header --}}
+        @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
+
+        {{-- Title --}}
+        <div class="cover-title">
+            <span>Involved-360</span>
+            <span class="report">Report</span>
+            <span class="for"><strong>for</strong> {{ $user->name }}</span>
         </div>
-        <!--Candidate-->
-        <div class="row">
-            <div class="col-sm-5 col-sm-offset-7 text-right cover-for">
-                <h3>360 Report for:</h3>
-                <h4>{{ $user->name }}</h4>
-            </div>
-        </div>
-        <!--Overview-->
-        <div class="row">
-            <div class="col-sm-12">
-                <h5>Overview</h5>
-                <p>
-                    The present report describes the results of a 360 survey for use as a developmental tool.
-                    The six (6) performance dimensions are presented below along with your average score.
-                    We summarized responses from an open-ended question asking for specific developmental comments.
-                    The specific survey used is known as a behavioral-anchored rating scale because the values
-                    on the rating scale are anchored with specific behaviors. We provide a set of anchors in this
-                    feedback form to help you better gauge your scores and feedback. The primary advantage of this tool
-                    is that one is evaluated against a specific criterion and a path towards improvement is clear.
-                </p>
-            </div>
-        </div>
-        <div class="row"><div class="col-sm-12"><hr></div></div>
-        <!--Disclaimer-->
-        <div class="row disclaimer">
-            <div class="col-xs-10 col-sm-10">
-                <small>
-                    Involved Talent offers the most scientifically valid candidate assessments.
-                    We use the latest Talent Evidence from the scientific literature, our own research, and the
-                    needs of organizations to arrive at Evidence-Based Talent Solutions.
-                </small>
-            </div>
-            <div class="col-xs-2 col-sm-2 text-right">
-                <img class="img-responsive" src="{{ asset("assets/images/logo-small.png") }}">
-            </div>
+
+        {{-- Disclaimer --}}
+        <div class="cover-disclaimer">
+            @if ($user->client->whitelabel && $user->client->id == 29)
+                <img src="{{ asset('assets/images/powered-by-involved-medium-gray.png') }}" />
+            @else
+                <img src="{{ asset('assets/images/logo-tagline.png') }}" />
+            @endif
         </div>
     </div>
 </div>
 
-<?php $page = 2; ?>
+{{-- Overview --}}
+<?php $page++; ?>
+<div class="page-container" id="{{ $page }}">
+
+    {{-- Container --}}
+    <div class="page-wrapper">
+
+        {{-- Header --}}
+        @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
+
+        {{-- Title --}}
+        <div class="page-title">
+            @if ($user->client->whitelabel && $user->client->id == 29)
+            @else
+                <img src="{{ asset('assets/images/badge.png') }}" />
+            @endif
+            Involved-360
+        </div>
+        
+        {{-- Content --}}
+        <div class="page-content">
+            <p>This is your Involved-360 report. This report should be used as a critical piece of your overall leadership development at {{ $user->client->name }}. Stakeholders (e.g., supervisor, peers, subordinates, customers) familiar with your work completed the 360-evaluation to provide you an analytically robust picture of your strengths and improvement opportunities. Additionally, each of your raters was asked to provide qualitative feedback, which can greatly augment your quantitative scores. Taken together, this report provides you a wealth of information to not only significantly develop your own leadership, but also drive critical business outcomes. Each individual competency score is presented with corresponding rater feedback and suggestions. Your scores are compared to (1) norms for similar jobs/positions and (2) the average of your colleagues that have also recently completed the 360-feedback survey at {{ $user->client->name }}. Anchoring your scores with industry norms and your company averages provides a much more accurate representation of where your scores stand and provides enhanced motivation to accelerate your leadership involvement.</p>
+        </div>
+
+        {{-- Footer --}}
+        @include('reports.partials._footer', [$page])
+    </div>
+</div>
 
 @foreach ($scores as $dimensionName => $dimension)
 
-    <!--Page 2-->
-    <div class="page-container" id="2">
-        <div class="img-container-1">
-            <img src="/assets/images/involved-talent-logo.png">
-            <small>Page {{ $page }}</small>
-        </div>
-        <div class="container">
-            <!--Heading-->
-            <div class="row text-center">
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div id="invisible-4" class="col-xs-4 visible-xs"></div>
-                        <div class="col-xs-4 col-sm-4 col-sm-offset-4">
-                            <img class="img-responsive" src="/assets/images/aoe-360.png">
-                        </div>
-                        <h1>Developmental Performance Management Systems for:</h1>
-                        <h4>{{ $user->name }}</h4>
+    {{-- Competency Scores --}}
+    <?php $page++; ?>
+    <div class="page-container" id="{{ $page }}">
+
+        {{-- Container --}}
+        <div class="page-wrapper">
+
+            {{-- Header --}}
+            @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
+
+            {{-- Title --}}
+            <div class="page-title alt">
+                <span class="subtitle">
+                    @if ($user->client->whitelabel && $user->client->id == 29)
+                        <img src="{{ asset('assets/images/angela-triangle.png') }}" />
+                    @else
+                        <img src="{{ asset('assets/images/triangle.png') }}" />
+                    @endif
+                    Competency:
+                </span>
+                <span>
+                    {{ $dimensionName }}
+                </span>
+            </div>
+            
+            {{-- Content --}}
+            <div class="page-content">
+                <p>
+                    {{ $scores[$dimensionName]['Definition'] }}
+                </p>
+
+                <div class="chart">
+                    <div class="title">
+                        Your Current Scores By Ratee Source<br/>
+                        <span><img src="{{ asset('assets/images/triangle-orange.png') }}" /> Indicates Significant Growth Opportunity</span>
                     </div>
-                </div>
-                <div class="col-sm-12 text-justify">
-                    <h5>Core Competencies</h5>
-                    <p><strong>Developmental Performance Dimension: {{ $dimensionName }}</strong></p>
-                    <p>Definition: {{ $dimension['Definition'] }}</p>
-                    <div class="row">
-                        <div class="col-sm-12" id="score-360">
-                            <div class="row">
-                                <img class="score-bar-background" src="/assets/images/360-gradient.jpg" />
+
+                    <div class="score">
+                        {{ number_format($scores[$dimensionName]['Score']['Total'], 1) }}
+                        <span>out of 5</span>
+                    </div>
+
+                    <div class="bars">
+                        <div class="graph">
+                            <div class="graph-lines">
+                                <div class="line"><span>0</span></div>
+                                <div class="line one"><span>1</span></div>
+                                <div class="line two"><span>2</span></div>
+                                <div class="line three"><span>3</span></div>
+                                <div class="line four"><span>4</span></div>
+                                <div class="line five"><span>5</span></div>
+                                <div class="clearfix"></div>
                             </div>
-                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }}" src="/assets/images/score-bar.jpg" />
-                            <div class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }}"></div>
+
+                            @foreach ($scores[$dimensionName]['Score'] as $category => $score)
+                                <div class="graph-row">
+                                    <div class="ratee">{{ $category }}</div>
+
+                                    <div class="bar">
+                                        <div class="inner {{ (isset($scores[$dimensionName]['Flagged'][$category]) && $scores[$dimensionName]['Flagged'][$category] ? 'flagged' : '') }}" style="width:{{ isset($scores[$dimensionName]['Percent'][$category]) ? $scores[$dimensionName]['Percent'][$category] : ($scores[$dimensionName]['Score'][$category] / 5 * 100) }}%;">
+                                            {{ number_format($scores[$dimensionName]['Score'][$category], 1) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                    <br>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="norms">
+                    <div class="norm-group industry">
+                        <div class="norm">{{ number_format(isset($scores[$dimensionName]['Norm']) ? $scores[$dimensionName]['Norm'] : 3.5, 2) }}</div>
+                        <div class="norm-label">Industry Norm for<br/><span>{{ isset($scores[$dimensionName]['Industry']) ? $scores[$dimensionName]['Industry'] : 'Similar Roles' }}</span></div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="norm-group group">
+                        <div class="norm">{{ number_format(isset($scores[$dimensionName]['Group Average']) ? $scores[$dimensionName]['Group Average'] : $scores[$dimensionName]['Score']['Total'], 2) }}</div>
+                        <div class="norm-label">Avg Score<br/><span>For This Group</span></div>
+                    </div>
+
+                    <div class="clearfix"></div>
                 </div>
             </div>
-            <div id="invisible-0" class="row">
-                <div class="col-sm-12">
-                    <div class="col-xs-4 expectations">
-                        <h3>1<span class="par">)</span> Below Expectations</h3>
-                        <?php shuffle($dimension['Expectations']['1']) ?>
-                        <small>{{ $dimension['Expectations']['1'][0] }}</small>
-                    </div>
-                    <div class="col-xs-4 expectations">
-                        <h3>3<span class="par">)</span> Meets Expectations</h3>
-                        <?php shuffle($dimension['Expectations']['3']) ?>
-                        <small>{{ $dimension['Expectations']['3'][0] }}</small>
-                    </div>
-                    <div class="col-xs-4 expectations">
-                        <h3>5<span class="par">)</span> Exceeds Expectations</h3>
-                        <?php shuffle($dimension['Expectations']['5']) ?>
-                        <small>{{ $dimension['Expectations']['5'][0] }}</small>
-                    </div>
-                </div>
+
+            {{-- Footer --}}
+            @include('reports.partials._footer', [$page])
+        </div>
+    </div>
+
+    {{-- Feedback --}}
+    <?php
+        $wordCount = 0;
+        $counter = 0;
+        $break = false;
+    ?>
+    <?php $page++; ?>
+    <div class="page-container" id="{{ $page }}">
+
+        {{-- Container --}}
+        <div class="page-wrapper">
+
+            {{-- Header --}}
+            @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
+
+            {{-- Title --}}
+            <div class="page-title alt2">
+                Developmental<br/><span>Feedback</span>
             </div>
-            <div id="other-scores" class="row">
-                @foreach ($dimension['Score'] as $category => $score)
-                    <?php if ($category == 'Total') continue; ?>
-                    <div class="col-xs-6" id="score-360-sm">
-                        <div style="position:relative;">
-                            <img class="score-bar-background" src="/assets/images/360-gradient.jpg">
-                            <img class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}" src="{{ url("/") }}assets/images/score-bar.jpg">
-                            <div class="score-bar {{ strtolower(str_replace(' ', '-', $dimensionName)) }} {{ strtolower(str_replace(' ', '-', $category)) }}"></div>
+
+            {{-- Sub-title --}}
+            <div class="page-subtitle">
+                @if ($user->client->whitelabel && $user->client->id == 29)
+                    <img src="{{ asset('assets/images/angela-triangle.png') }}" />
+                @else
+                    <img src="{{ asset('assets/images/triangle-orange-large.png') }}" />
+                @endif
+                For: <span>{{ $dimensionName }}</span>
+            </div>
+            
+            {{-- Content --}}
+            <div class="page-content">
+                <div class="feedbacks">
+                    <?php $i = 0; ?>
+                    @foreach($scores[$dimensionName]['Feedback'] as $type => $feedbacks)
+                        <?php $i++; ?>
+                        <div class="feedback">
+                            <div class="number">0{{ $i }}</div>
+                            <div class="type">
+                                <h3>{{ $type }}</h3>
+                                @foreach ($feedbacks as $c => $feedback)
+                                    <?php 
+                                        $wordCount += str_word_count($feedback); 
+                                        if ($wordCount > 180) {
+                                            $break = true;
+                                            $counter = $c;
+                                            break;
+                                        }
+                                    ?>
+                                    <p>{{ $feedback }}</p>
+                                @endforeach
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
+
+            {{-- Footer --}}
+            @include('reports.partials._footer', [$page])
         </div>
     </div>
 
     <?php
-        // See if we have any feedback in any of the categories
-        $feedback = false;
-        foreach ($dimension['Feedback'] as $feedbackCollection)
-            if ($feedbackCollection)
-                $feedback = true;
+        $wordCount = 0;
+        $counter2 = 0;
+        $breakAgain = false;
     ?>
-    @if ($feedback)
-        <?php $page++; ?>
-        <?php $num = 1; ?>
-        <?php $strcount = 0; ?>
-        <?php
-            $totalCount = 0;
-            foreach ($dimension['Feedback'] as $feedbacks)
-                foreach ($feedbacks as $feedback)
-                    $totalCount++;
-        ?>
-        <?php $numPerPage = 1; ?>
+    @if ($break)
+    <?php $page++; ?>
+    <div class="page-container" id="{{ $page }}">
 
-        <!--Page 3-->
-        <div class="page-container" id="3">
-            <div class="img-container-1">
-                <img src="/assets/images/involved-talent-logo.png">
-                <small>Page {{ $page }}</small>
-            </div>
-            <div class="container">
-                <!--Heading-->
-                <div class="row text-center">
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <h1>Developmental Feedback</h1>
-                            <h4>For {{ $user->name }}</h4>
-                        </div>
-                    </div>
-                </div>
-                <div id="invisible-0" class="row">
-                    <div class="col-xs-12">
+        {{-- Container --}}
+        <div class="page-wrapper">
 
-                        @foreach ($dimension['Feedback'] as $feedbackCategory => $feedbacks)
+            {{-- Header --}}
+            @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
 
-                            @if ($feedbacks)
-                                <h4 class="small-title">{{ $feedbackCategory }}</h4>
-                            @endif
-
-                            @foreach ($feedbacks as $feedback)
-                                <p>{{ $num }}<span class="par">)</span> {{ $feedback }}</p>
-                                <?php $strcount += strlen($feedback) ?>
-
-                                @if (($numPerPage % 7 == 0 and $num < $totalCount) or ($strcount > 1700 and $num < $totalCount))
-                                    <?php $strcount = 0; ?>
-                                    <?php $numPerPage = 1; ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--Page 3-->
-                                    <div class="page-container" id="3">
-                                        <div class="img-container-1">
-                                            <img src="/assets/images/involved-talent-logo.png">
-                                            <?php $page++; ?>
-                                            <small>Page {{ $page }}</small>
-                                        </div>
-                                        <div class="container">
-                                            <!--Heading-->
-                                            <div class="row text-center">
-                                                <div class="col-sm-12">
-                                                    <div class="row">
-                                                        <h1>Developmental Feedback</h1>
-                                                        <h4>For {{ $user->name }}</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="invisible-0" class="row">
-                                                <div class="col-xs-12">
-                                @endif
-                                <?php $num++; ?>
-                                <?php $numPerPage++; ?>
+            {{-- Content --}}
+            <div class="page-content">
+                <div class="feedbacks">
+                    <div class="feedback">
+                        <div class="number">02</div>
+                        <div class="type">
+                            <h3>Others</h3>
+                            @foreach ($scores[$dimensionName]['Feedback']['Others'] as $c => $feedback)
+                                <?php 
+                                    if ($c < $counter) {
+                                        continue;
+                                    }
+                                    $wordCount += str_word_count($feedback);
+                                    if ($wordCount > 280 && $c > $counter) {
+                                        $breakAgain = true;
+                                        $counter2 = $c;
+                                        break;
+                                    }
+                                ?>
+                                <p>{{ $feedback }}</p>
                             @endforeach
-                        @endforeach
-
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
 
+            {{-- Footer --}}
+            @include('reports.partials._footer', [$page])
+        </div>
+    </div>
     @endif
 
+    @if ($breakAgain)
     <?php $page++; ?>
+    <div class="page-container" id="{{ $page }}">
 
+        {{-- Container --}}
+        <div class="page-wrapper">
+
+            {{-- Header --}}
+            @include('reports.partials._header', [$page, 'logo' => 'involve-360-logo-small.png'])
+
+            {{-- Content --}}
+            <div class="page-content">
+                <div class="feedbacks">
+                    <div class="feedback">
+                        <div class="number">02</div>
+                        <div class="type">
+                            <h3>Others</h3>
+                            @foreach ($scores[$dimensionName]['Feedback']['Others'] as $c => $feedback)
+                                <?php 
+                                    if ($c < $counter2) {
+                                        continue;
+                                    }
+                                ?>
+                                <p>{{ $feedback }}</p>
+                            @endforeach
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Footer --}}
+            @include('reports.partials._footer', [$page])
+        </div>
+    </div>
+    @endif
 @endforeach
 
-<p class="text-center white">Powered by <a href="{{ url("/") }}">Involved Talent</a></p>
-{{--<script src="aoe-360_files/charts.html"></script>--}}
-
-</body></html>
+</body>
+</html>

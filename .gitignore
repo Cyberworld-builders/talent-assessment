@@ -1,4 +1,5 @@
 /node_modules
+/pdf-worker/node_modules
 /public/hot
 /public/storage
 /storage/*.key
@@ -135,6 +136,7 @@ nohup.out
 #################################
 yarn.lock
 /node_modules
+/pdf-worker/node_modules
 /public/mix-manifest.json
 #################################
 # PHP Specific

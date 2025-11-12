@@ -572,4 +572,79 @@ class QuestionManagementTest extends TestCase
         // Test that other user cannot access this question
         $this->assertFalse($otherAssessment->questions->contains($question->id));
     }
+
+    /**
+     * Test that anchor values are properly saved and retrieved for multiple choice questions
+     */
+    public function testAnchorPersistence()
+    {
+        $this->actingAs($this->user);
+
+        // Create a multiple choice question with anchors
+        $anchors = [
+            ['tag' => 'Strongly Agree', 'value' => 5],
+            ['tag' => 'Agree', 'value' => 4],
+            ['tag' => 'Neutral', 'value' => 3],
+            ['tag' => 'Disagree', 'value' => 2],
+            ['tag' => 'Strongly Disagree', 'value' => 1]
+        ];
+
+        $question = new Question([
+            'content' => 'How do you rate your communication skills?',
+            'number' => 1,
+            'type' => 1, // Multiple choice
+            'dimension_id' => $this->dimension->id,
+            'anchors' => $anchors
+        ]);
+        $this->assessment->questions()->save($question);
+
+        // Verify anchors were saved correctly
+        $savedQuestion = Question::find($question->id);
+        $this->assertNotNull($savedQuestion);
+        $this->assertEquals($anchors, $savedQuestion->anchors);
+        
+        // Test that we can access individual anchor values
+        $this->assertEquals('Strongly Agree', $savedQuestion->anchors[0]['tag']);
+        $this->assertEquals(5, $savedQuestion->anchors[0]['value']);
+        $this->assertEquals('Strongly Disagree', $savedQuestion->anchors[4]['tag']);
+        $this->assertEquals(1, $savedQuestion->anchors[4]['value']);
+    }
+
+    /**
+     * Test that anchor data is properly handled when updating questions
+     */
+    public function testAnchorUpdatePersistence()
+    {
+        $this->actingAs($this->user);
+
+        // Create a question with initial anchors
+        $initialAnchors = [
+            ['tag' => 'Yes', 'value' => 1],
+            ['tag' => 'No', 'value' => 0]
+        ];
+
+        $question = new Question([
+            'content' => 'Do you like this feature?',
+            'number' => 1,
+            'type' => 1,
+            'dimension_id' => $this->dimension->id,
+            'anchors' => $initialAnchors
+        ]);
+        $this->assessment->questions()->save($question);
+
+        // Update with new anchors
+        $updatedAnchors = [
+            ['tag' => 'Definitely Yes', 'value' => 2],
+            ['tag' => 'Maybe', 'value' => 1],
+            ['tag' => 'Definitely No', 'value' => 0]
+        ];
+
+        $question->update(['anchors' => $updatedAnchors]);
+
+        // Verify the update was successful
+        $savedQuestion = Question::find($question->id);
+        $this->assertEquals($updatedAnchors, $savedQuestion->anchors);
+        $this->assertEquals(3, count($savedQuestion->anchors));
+        $this->assertEquals('Definitely Yes', $savedQuestion->anchors[0]['tag']);
+    }
 }

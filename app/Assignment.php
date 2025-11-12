@@ -25,11 +25,15 @@ class Assignment extends Model
 		'reminder',
 		'next_reminder',
 		'reminder_frequency',
+		'first_reminder_at',
+		'stop_reminders_at',
+		'last_reminder_sent_at',
+		'reminder_timezone',
 		'job_id',
 		'short_name',
 	];
 
-	protected $dates = ['started_at', 'completed_at', 'expires'];
+	protected $dates = ['started_at', 'completed_at', 'expires', 'first_reminder_at', 'stop_reminders_at', 'last_reminder_sent_at'];
 
 	/**
 	 * Get the user to which this assignment is assigned to.
@@ -158,6 +162,28 @@ class Assignment extends Model
 			return false;
 
 		return true;
+	}
+
+	/**
+	 * Get the URL attribute - regenerate it dynamically to use current APP_URL.
+	 *
+	 * @return string
+	 */
+	public function getUrlAttribute()
+	{
+		// If URL is stored in database but uses wrong domain, regenerate it
+		if (isset($this->attributes['url'])) {
+			$storedUrl = $this->attributes['url'];
+			// If stored URL contains 0.0.0.0 or localhost when we're not on localhost, regenerate
+			if (strpos($storedUrl, '0.0.0.0') !== false || 
+			    (strpos($storedUrl, 'localhost') !== false && $_SERVER['SERVER_NAME'] !== 'localhost')) {
+				return self::generateURL($this->id, $this->user->username, $this->expires);
+			}
+			return $storedUrl;
+		}
+		
+		// Generate URL if not stored
+		return self::generateURL($this->id, $this->user->username, $this->expires);
 	}
 
 	/**

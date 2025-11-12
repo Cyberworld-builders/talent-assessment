@@ -63,7 +63,7 @@
 						<div class="body">
 							<h3>
 								@role('admin')
-									<a href="{{ url('dashboard/assessments/'.$assessment->id.'/edit') }}">
+									<a href="{{ url('dashboard/assessments/'.$assessment->id.'/edit-new') }}">
 								@endrole
 										{{ $assessment->name }}
 								@role('admin')
@@ -81,7 +81,7 @@
 										<i class="fa-eye"></i><br/>
 										<span>Preview</span>
 									</a>
-									<a class="control" href="{{ url('dashboard/assessments/'.$assessment->id.'/edit') }}">
+									<a class="control" href="{{ url('dashboard/assessments/'.$assessment->id.'/edit-new') }}">
 										<i class="fa-edit"></i><br/>
 										<span>Edit</span>
 									</a>

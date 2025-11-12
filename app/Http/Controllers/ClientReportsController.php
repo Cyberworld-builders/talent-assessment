@@ -67,23 +67,34 @@ class ClientReportsController extends Controller
 	 */
 	public function create($id, $jobId, $reportsId)
 	{
-		$client = Client::findOrFail($id);
-        $report = Report::findOrFail($reportsId);
-		$clientReport = new ClientReport([
-			'client_id' => $client->id,
-			'report_id' => $reportsId,
-			'job_id' => ($jobId ? $jobId : null),
-			'enabled' => 0,
-			'visible' => 0,
-			'fields' => null,
-		]);
-		$clientReport->save();
-		$edit = true;
+		try {
+			$client = Client::findOrFail($id);
+	        $report = Report::findOrFail($reportsId);
+			$clientReport = new ClientReport([
+				'client_id' => $client->id,
+				'report_id' => $reportsId,
+				'job_id' => !empty($jobId) ? $jobId : null,
+				'enabled' => 0,
+				'visible' => 0,
+				'fields' => null,
+			]);
+			$clientReport->save();
+			$edit = true;
 
-		// Decode the default fields
-		$report->fields = json_decode($report->fields);
+			// Decode the default fields
+			$report->fields = json_decode($report->fields);
 
-		return view('dashboard.reports.edit', compact('client', 'report', 'clientReport', 'jobId', 'edit'));
+			return view('dashboard.reports.edit', compact('client', 'report', 'clientReport', 'jobId', 'edit'));
+		} catch (\Exception $e) {
+			\Log::error('Error creating client report: ' . $e->getMessage(), [
+				'client_id' => $id,
+				'job_id' => $jobId,
+				'report_id' => $reportsId,
+				'trace' => $e->getTraceAsString()
+			]);
+			
+			return redirect()->back()->with('error', 'Failed to create client report customization. Please try again.');
+		}
 	}
 
 	/**
@@ -95,20 +106,32 @@ class ClientReportsController extends Controller
 	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-    public function store($id, $jobId, $reportsId, Request $request)
+	public function store($id, $jobId, $reportsId, Request $request)
     {
-		$client = Client::findOrFail($id);
-		$data = $request->all();
-		$report = Report::findOrFail($reportsId);
+		try {
+			$client = Client::findOrFail($id);
+			$data = $request->all();
+			$report = Report::findOrFail($reportsId);
 
-		$clientReport = new ClientReport([
-			'client_id' => $client->id,
-			'report_id' => $report->id,
-			'job_id' => ($jobId ? $jobId : null),
-			'fields' => $data['fields'],
-		]);
+			$clientReport = new ClientReport([
+				'client_id' => $client->id,
+				'report_id' => $report->id,
+				'job_id' => !empty($jobId) ? $jobId : null,
+				'fields' => $data['fields'],
+			]);
 
-		$clientReport->save();
+			$clientReport->save();
+		} catch (\Exception $e) {
+			\Log::error('Error creating client report: ' . $e->getMessage(), [
+				'client_id' => $id,
+				'job_id' => $jobId,
+				'report_id' => $reportsId,
+				'data' => $data,
+				'trace' => $e->getTraceAsString()
+			]);
+			
+			return redirect()->back()->with('error', 'Failed to save client report customization. Please try again.');
+		}
     }
 
 	/**
@@ -126,7 +149,7 @@ class ClientReportsController extends Controller
         $clientReport = ClientReport::where([
             'client_id' => $client->id,
             'report_id' => $report->id,
-			'job_id' => ($jobId ? $jobId : null)
+			'job_id' => !empty($jobId) ? $jobId : null
         ])->first();
         $edit = true;
 
@@ -189,7 +212,7 @@ class ClientReportsController extends Controller
 	public function toggleVisibility($id, $jobId, $reportId, Request $request)
 	{
 		$client = Client::findorFail($id);
-		if (!$jobId) $jobId = null;
+		$jobId = !empty($jobId) ? $jobId : null;
 		$data = $request->all();
 		$clientReport = ClientReport::where([
 			'client_id' => $client->id,

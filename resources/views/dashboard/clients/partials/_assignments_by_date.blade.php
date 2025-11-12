@@ -5,7 +5,15 @@
         <div class="pull-right">
             @role('admin')
                 <a class="btn btn-black" href="{{ url('dashboard/clients/'.$client->id.'/assign') }}"><i class="linecons-paper-plane"></i> Assign Assessments</a>
-                <a id="download-all-data" class="btn btn-black"><i class="fa-download"></i> Download All Data</a>
+                <div class="btn-group" style="display: inline-block;">
+                    <button aria-expanded="false" type="button" class="btn btn-black dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa-download"></i> Download All Data <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-black" role="menu">
+                        <li><a class="download-all-data" data-type="1">Assignment Answers</a></li>
+                        <li><a class="download-all-data" data-type="2">Detailed Dimension Scores</a></li>
+                    </ul>
+                </div>
                 <a href="{{ url('dashboard/clients/'.$client->id.'/assignments/bulk-edit') }}" class="btn btn-black"><i class="linecons-pencil"></i> Bulk Edit</a>
             @endrole
             @role('reseller')

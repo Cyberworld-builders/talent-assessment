@@ -108,6 +108,15 @@ The changelog is displayed in `resources/views/dashboard/index.blade.php` with t
 
 ## 📊 Version History
 
+### v1.5.41 - Assessment Editor UI/UX Improvements & Anchor Management
+- **Anchor Persistence**: Fixed anchor value persistence in database by properly handling JSON serialization/deserialization
+- **Error Resolution**: Resolved "Array to string conversion" error in assessment editor by using model accessors
+- **UI Improvements**: Updated field preview to display anchors as UI elements instead of raw Blade code
+- **Modal Fixes**: Fixed modal positioning and z-index issues to prevent backdrop from covering modal content
+- **Field Styling**: Improved field numbering styling from toggle-like circular badges to clean rectangular question numbers
+- **Interface Cleanup**: Removed unnecessary field type badge that served no functional purpose
+- **Layout Enhancement**: Enhanced field header layout with better spacing, alignment, and non-interactive styling
+
 ### v1.5.28 - Infrastructure Planning & UI Fixes
 - **Infrastructure Planning**: Created comprehensive infrastructure plan for dedicated production environment
 - **Login Page Fixes**: Fixed missing logo.png path and added Docker container rules

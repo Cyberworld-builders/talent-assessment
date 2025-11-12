@@ -67,6 +67,8 @@ class AssessmentsController extends Controller
 	 */
     public function create()
     {
+		// Create a blank assessment object for the form
+		$assessment = new Assessment();
         $dimensions = Dimension::all();
 		$questions = [
 			[
@@ -80,7 +82,7 @@ class AssessmentsController extends Controller
 			]
 		];
 
-    	return view('dashboard.assessments.create', compact('dimensions', 'questions'));
+    	return view('dashboard.assessments.create', compact('assessment', 'dimensions', 'questions'));
     }
 
 	/**
@@ -91,8 +93,35 @@ class AssessmentsController extends Controller
 	 */
 	public function store(AssessmentRequest $request)
     {
-        $assessment_data = $request->except('questions');
-        $question_data = json_decode($request->get('questions'));
+		// Handle both old JSON format and new array format (modern editor)
+		if ($request->has('questions') && is_string($request->get('questions'))) {
+			// Old AJAX format
+			$assessment_data = $request->except('questions');
+			$question_data = json_decode($request->get('questions'));
+		} else {
+			// New jQuery array format from modern editor
+			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors', 'field_number', 'field_practice']);
+			
+			// Convert arrays to question data format
+			$field_types = $request->get('field_type', []);
+			$field_contents = $request->get('field_content', []);
+			$field_dimensions = $request->get('field_dimension', []);
+			$field_anchors = $request->get('field_anchors', []);
+			$field_numbers = $request->get('field_number', []);
+			$field_practice = $request->get('field_practice', []);
+			
+			$question_data = [];
+			for ($i = 0; $i < count($field_types); $i++) {
+				$question_data[] = (object)[
+					'type' => $field_types[$i],
+					'content' => $field_contents[$i],
+					'number' => !empty($field_numbers[$i]) ? $field_numbers[$i] : $i + 1,
+					'dimension_id' => !empty($field_dimensions[$i]) ? $field_dimensions[$i] : null,
+					'anchors' => !empty($field_anchors[$i]) ? json_decode($field_anchors[$i], true) : [],
+					'practice' => !empty($field_practice[$i]) ? $field_practice[$i] : 0
+				];
+			}
+		}
 
 		// If target is Self
 		if ($assessment_data['target'] == 0)
@@ -159,33 +188,22 @@ class AssessmentsController extends Controller
 
         return \Response::json([
 			'success' => true,
-			'redirect' => '/dashboard/assessments/'.$assessment->id.'/edit',
+			'redirect' => '/dashboard/assessments/'.$assessment->id.'/edit-new',
 		]);
     }
 
 	/**
 	 * Edit a specified assessment in storage.
+	 * 
+	 * LEGACY ROUTE - Redirects to modern editor
 	 *
 	 * @param $id
-	 * @return View
+	 * @return Redirect
 	 */
     public function edit($id)
     {
-    	$assessment = Assessment::findOrFail($id);
-        $dimensions = Dimension::where('assessment_id', $id)->get();
-//		$unsorted_questions = $assessment->questions->toArray();
-
-		// Edit the questions and resort them
-//		$questions = [];
-//		foreach ($unsorted_questions as $i => $question) {
-//			$numeric_order = $question['number'];
-//			$questions[$numeric_order] = $question;
-//		}
-//		ksort($questions);
-
-		$questions = $assessment->questions()->orderBy('number', 'asc')->get()->toArray();
-
-    	return view('dashboard.assessments.edit', compact('assessment', 'dimensions', 'questions'));
+    	// Redirect to the modern editor
+    	return redirect()->to("/dashboard/assessments/{$id}/edit-new");
     }
 
 	/**
@@ -630,14 +648,45 @@ class AssessmentsController extends Controller
 		if (empty($question_data))
 			return false;
 
+		// Process all questions in the order they appear in the frontend
 		foreach ($question_data as $data)
 		{
 			// Get data in array format
 			$data = json_decode(json_encode($data), true);
+			
+			// Ensure number is set based on frontend order
+			$data['number'] = $i + 1;
 
 			// If question doesn't have an id, it needs to be created
 			if (! $data['id'])
 			{
+				// Handle anchors data properly for new questions
+				if (array_key_exists('anchors', $data)) {
+					// If anchors is a JSON string, decode it to array
+					if (is_string($data['anchors'])) {
+						$data['anchors'] = json_decode($data['anchors'], true);
+					}
+					// If anchors is null or empty, set to empty array
+					if (empty($data['anchors'])) {
+						$data['anchors'] = [];
+					}
+				} else {
+					$data['anchors'] = [];
+				}
+				
+				// Handle dimension_id - if empty or null, get first available dimension
+				if (empty($data['dimension_id'])) {
+					// Get the first dimension for this assessment as default
+					$firstDimension = $assessment->dimensions()->first();
+					if ($firstDimension) {
+						$data['dimension_id'] = $firstDimension->id;
+					} else {
+						// If no dimensions exist, create a default one or use a fallback
+						// For now, we'll skip this question to avoid the error
+						continue;
+					}
+				}
+				
 				$question = new Question($data);
 				$questions_without_ids = array_add($questions_without_ids, $i, $question);
 				$assessment->questions()->save($question);
@@ -649,13 +698,31 @@ class AssessmentsController extends Controller
 			if (! in_array($data['id'], $valid_ids))
 				continue;
 
-			// If anchors don't exist in array, create the anchors key
-			if (! array_key_exists('anchors', $data))
-				$data['anchors'] = '';
+			// Handle anchors data properly
+			if (array_key_exists('anchors', $data)) {
+				// If anchors is a JSON string, decode it to array
+				if (is_string($data['anchors'])) {
+					$data['anchors'] = json_decode($data['anchors'], true);
+				}
+				// If anchors is null or empty, set to empty array
+				if (empty($data['anchors'])) {
+					$data['anchors'] = [];
+				}
+			} else {
+				$data['anchors'] = [];
+			}
 
-			// Update an existing question
+			// Update an existing question with new order
 			$question = Question::findOrFail($data['id']);
+			
+			// Handle dimension_id for existing questions
+			if (array_key_exists('dimension_id', $data) && !empty($data['dimension_id'])) {
+				$question->dimension_id = $data['dimension_id'];
+			}
+			
+			// Update the question with new order number
 			$question->update($data);
+			$i++;
 		}
 
 		return $questions_without_ids;
@@ -841,5 +908,147 @@ class AssessmentsController extends Controller
 		}
 
 		return $task;
+	}
+
+
+	/**
+	 * Show the new assessment editor interface.
+	 *
+	 * @param $id
+	 * @return View
+	 */
+	public function editNew($id)
+	{
+		$assessment = Assessment::findOrFail($id);
+		$dimensions = Dimension::where('assessment_id', $id)->get();
+		$questions = $assessment->questions()->orderBy('number', 'asc')->get();
+		
+		// Convert to array and use model accessors for proper data
+		$questionsArray = [];
+		foreach ($questions as $question) {
+			$questionData = $question->toArray();
+			// Use the model's accessor to get properly unserialized anchors
+			$questionData['anchors'] = $question->anchors;
+			
+			// Add dimension name for display
+			if ($question->dimension_id) {
+				$dimension = $dimensions->find($question->dimension_id);
+				$questionData['dimension_name'] = $dimension ? $dimension->name : 'Unknown Dimension';
+			} else {
+				$questionData['dimension_name'] = null;
+			}
+			
+			$questionsArray[] = $questionData;
+		}
+		
+		return view('dashboard.assessments.edit-new', compact('assessment', 'dimensions') + ['questions' => $questionsArray]);
+	}
+
+	/**
+	 * Update assessment using the new editor interface.
+	 *
+	 * @param $id
+	 * @param AssessmentRequest $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function updateNew($id, AssessmentRequest $request)
+	{
+		// Handle both old JSON format and new array format
+		if ($request->has('questions')) {
+			// Old AJAX format
+			$assessment_data = $request->except(['questions', 'deleted_questions']);
+			$question_data = json_decode($request->get('questions'));
+			$deleted_questions = json_decode($request->get('deleted_questions'));
+		} else {
+			// New jQuery array format
+			$assessment_data = $request->except(['field_id', 'field_type', 'field_content', 'field_dimension', 'field_anchors', 'field_number']);
+			
+			// Convert arrays to question data format
+			$field_ids = $request->get('field_id', []);
+			$field_types = $request->get('field_type', []);
+			$field_contents = $request->get('field_content', []);
+			$field_dimensions = $request->get('field_dimension', []);
+			$field_anchors = $request->get('field_anchors', []);
+			$field_numbers = $request->get('field_number', []);
+			
+			$question_data = [];
+			for ($i = 0; $i < count($field_types); $i++) {
+				$question_data[] = (object)[
+					'id' => !empty($field_ids[$i]) ? $field_ids[$i] : null,
+					'type' => $field_types[$i],
+					'content' => $field_contents[$i],
+					'number' => !empty($field_numbers[$i]) ? $field_numbers[$i] : $i + 1,
+					'dimension_id' => !empty($field_dimensions[$i]) ? $field_dimensions[$i] : null,
+					'anchors' => !empty($field_anchors[$i]) ? json_decode($field_anchors[$i], true) : []
+				];
+			}
+			
+		$deleted_questions = null; // jQuery handles deletion via AJAX
+	}
+
+	// Store the logo
+	if ($request->file('logo'))
+	{
+		$imageName = $request->file('logo')->getClientOriginalName();
+		$s3 = new S3Client(config('aws'));
+		$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('logo')));
+		$assessment_data['logo'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+	}
+
+	// Store the background
+	if ($request->file('background'))
+	{
+		$imageName = $request->file('background')->getClientOriginalName();
+		$s3 = new S3Client(config('aws'));
+		$result = $s3->upload(env('AWS_S3_BUCKET'), 'images/'.$imageName, file_get_contents($request->file('background')));
+		$assessment_data['background'] = s3_to_cloudfront_url($result->get('ObjectURL'));
+	}
+
+	// Update the assessment
+	$assessment = Assessment::findOrFail($id);
+	$assessment->update($assessment_data);
+
+		$valid_ids = $assessment->get_existing_question_ids();
+		$questions_without_ids = [];
+		
+		// Only update questions if question_data is not null
+		if ($question_data) {
+			$questions_without_ids = $this->update_questions($question_data, $valid_ids, $assessment);
+		}
+		
+		// Only delete questions if deleted_questions is not null
+		if ($deleted_questions) {
+			$this->delete_questions($deleted_questions, $valid_ids);
+		}
+
+		// Return appropriate response based on request type
+		if (request()->ajax()) {
+			return response()->json([
+				'success' => true,
+				'message' => 'Assessment updated successfully!'
+			]);
+		}
+		
+		// Return redirect back to the edit page for non-AJAX requests
+		return redirect()->to("/dashboard/assessments/{$assessment->id}/edit-new")
+			->with('success', 'Assessment updated successfully!');
+	}
+
+	/**
+	 * Delete a single question via AJAX
+	 *
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteQuestion($id)
+	{
+		try {
+			$question = Question::findOrFail($id);
+			$question->delete();
+			
+			return \Response::json(['success' => true, 'message' => 'Question deleted successfully']);
+		} catch (\Exception $e) {
+			return \Response::json(['success' => false, 'message' => 'Error deleting question: ' . $e->getMessage()], 500);
+		}
 	}
 }

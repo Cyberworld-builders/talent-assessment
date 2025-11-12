@@ -322,7 +322,7 @@
                                             </div>
 
                                             {{-- Pagination --}}
-                                            @if (count($users) > 10)
+                                            @if ($paginator->lastPage() > 1)
                                                 @include('dashboard.partials._pagination')
                                             @endif
 

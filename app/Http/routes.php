@@ -67,6 +67,12 @@ Route::group(['middleware' => ['auth']], function()
 		// Reports
 		Route::get('dashboard/report/{clientId}/{jobId}/{userId}', 'ReportsController@index');
 		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}', 'ReportsController@indexDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/generate', 'ReportsController@generateDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/preview', 'ReportsController@previewDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/preview-pdf', 'ReportsController@previewPdfDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/download', 'ReportsController@downloadDevelopment');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/serve-html', 'ReportsController@serveHtml');
+		Route::get('dashboard/report/development/{clientId}/{assignmentId}/{userId}/serve-pdf', 'ReportsController@servePdf');
 		Route::get('dashboard/model/{clientId}/{jobId}/{userId}/{modelId}', 'ReportsController@model');
 		Route::get('dashboard/report/cacique', 'ReportsController@caciquetest');
 		Route::get('dashboard/users/{id}/report/{clientReportId}', 'ReportsController@clientReport');
@@ -323,6 +329,9 @@ Route::post('dashboard/benchmarks/{assessmentId}/upload', 'BenchmarksController@
 
 		// Assessments
 		Route::resource('dashboard/assessments', 'AssessmentsController');
+		Route::get('dashboard/assessments/{id}/edit-new', 'AssessmentsController@editNew');
+		Route::patch('dashboard/assessments/{id}/update-new', 'AssessmentsController@updateNew');
+		Route::delete('dashboard/assessments/delete-question/{id}', 'AssessmentsController@deleteQuestion');
 
 		// Assessment Dimensions
 		Route::get('dashboard/assessments/{id}/dimensions', 'DimensionsController@index');

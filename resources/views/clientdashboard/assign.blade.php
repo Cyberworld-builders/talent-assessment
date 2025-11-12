@@ -125,9 +125,9 @@
             {!! Form::open(['url' => 'dashboard/assign']) !!}
                 <div class="assign-panel" style="margin-top: 10px;">
 
-                    <h3>Basic Info</h3><br/>
+                    <h3>Assessment Settings</h3><br/>
 
-                        {{-- Assessment --}}
+                        {{-- Assessments --}}
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-4">
@@ -153,18 +153,18 @@
                             </div>
                         </div>
 
-                        {{-- Exipration Field --}}
+                        {{-- Expiration Date --}}
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-4">
                                     {!! Form::label('expiration', 'Expiration Date', ['class' => 'control-label']) !!}
-                                    <p class="small text-muted">Users will not be able to start or finish unfinished assignments after they have expired.</p>
+                                    <p class="small text-muted">Users will not be able to start or finish assignments after they have expired.</p>
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
+                                        {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
                                             'class' => 'form-control input-lg datepicker',
-                                            'data-format' => 'dd M yyyy',
+                                            'data-format' => 'D, dd M yyyy',
                                         ]) !!}
                                         <div class="input-group-addon">
                                             <i class="linecons-calendar"></i>
@@ -174,7 +174,31 @@
                             </div>
                         </div>
 
-                        {{-- Send Email --}}
+                        {{-- Add To Existing Survey --}}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    {!! Form::label('add-to-survey', 'Add To Existing Survey', ['class' => 'control-label']) !!}
+                                    <p class="small text-muted">Assign this assessment as part of an existing survey of Development assessments that you assigned previously to other users.</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    {!! Form::select('add-to-survey', [
+                                        0 => 'No',
+                                    ], 0, ['class' => 'form-control input-lg', 'id' => 'add-to-survey']) !!}
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function($)
+                                        {
+                                            $("#add-to-survey").select2();
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br/>
+                        <h3>Emails</h3><br/>
+
+                        {{-- Email Notification --}}
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-4">
@@ -189,14 +213,7 @@
                                     <script type="text/javascript">
                                         jQuery(document).ready(function($)
                                         {
-                                            $("#send-email").select2({
-    //                                            placeholder: 'Select Assessments',
-    //                                            allowClear: true
-    //                                        }).on('select2-open', function()
-    //                                        {
-    //                                             Adding Custom Scrollbar
-    //                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                            });
+                                            $("#send-email").select2();
                                         });
                                     </script>
                                 </div>
@@ -280,16 +297,124 @@
                         </div>
 
                         <br/>
+                        <h3>Reminders</h3><br/>
+
+                        {{-- Send Reminders --}}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    {!! Form::label('send-reminders', 'Send Reminders', ['class' => 'control-label']) !!}
+                                    <p class="small text-muted">Users with a valid email address will receive reminders for these assessments.</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    {!! Form::select('send-reminders', [
+                                        0 => 'No',
+                                        1 => 'Yes',
+                                    ], 0, ['class' => 'form-control input-lg', 'id' => 'send-reminders']) !!}
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function($)
+                                        {
+                                            $("#send-reminders").select2();
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group field-reminder" style="display:none;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    {!! Form::label('reminder-start', 'First Reminder Date & Time', ['class' => 'control-label']) !!}
+                                    <p class="small text-muted">The date and time when the first reminder should be sent.</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                {!! Form::text('reminder-start-date', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                                    'class' => 'form-control input-lg datepicker',
+                                                    'data-format' => 'D, dd M yyyy',
+                                                    'placeholder' => 'Date'
+                                                ]) !!}
+                                                <div class="input-group-addon">
+                                                    <i class="linecons-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            {!! Form::text('reminder-start-time', '09:00 AM', [
+                                                'class' => 'form-control input-lg',
+                                                'placeholder' => 'Time (e.g., 09:00 AM)'
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group field-reminder" style="display:none;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    {!! Form::label('reminder-frequency', 'Reminder Frequency', ['class' => 'control-label']) !!}
+                                    <p class="small text-muted">How often reminders should be sent after the first one.</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    {!! Form::select('reminder-frequency', [
+                                        'daily' => 'Daily',
+                                        'every-2-days' => 'Every 2 Days',
+                                        'every-3-days' => 'Every 3 Days',
+                                        'weekly' => 'Weekly',
+                                        'bi-weekly' => 'Bi-Weekly',
+                                        'monthly' => 'Monthly'
+                                    ], 'weekly', ['class' => 'form-control input-lg']) !!}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group field-reminder" style="display:none;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    {!! Form::label('reminder-end', 'Stop Reminders On', ['class' => 'control-label']) !!}
+                                    <p class="small text-muted">When to stop sending reminders (defaults to expiration date).</p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                {!! Form::text('reminder-end-date', '', [
+                                                    'class' => 'form-control input-lg datepicker',
+                                                    'data-format' => 'D, dd M yyyy',
+                                                    'placeholder' => 'Date (optional)'
+                                                ]) !!}
+                                                <div class="input-group-addon">
+                                                    <i class="linecons-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            {!! Form::text('reminder-end-time', '', [
+                                                'class' => 'form-control input-lg',
+                                                'placeholder' => 'Time (optional)'
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Hidden field for user's timezone --}}
+                        {!! Form::hidden('reminder-timezone', 'UTC', ['id' => 'reminder-timezone']) !!}
+
+                        <br/>
                         <h3>Assign To</h3><br/>
 
                         <div class="pull-left">
                             <a id="add-user-modal" class="btn btn-black"><i class="fa-user"></i> Specific User</a>
-                            <a id="add-applicants-from-job" class="btn btn-black"><i class="fa-user"></i> Add All Viable Applicants</a>
+                            <a id="add-all-users" class="btn btn-black"><i class="fa-users"></i> All Users</a>
+                            <a id="add-from-groups" class="btn btn-black"><i class="fa-users"></i> From Groups</a>
                         </div>
                         <div class="pull-right">
-                            {{--@if ($assessment->target > 0)--}}
-                                {{--<a id="import" class="btn btn-black"><i class="fa-edit"></i> Upload Targets From Excel</a>--}}
-                            {{--@endif--}}
+                            <a id="import" class="btn btn-black"><i class="fa-upload"></i> Upload Targets From Excel</a>
                         </div>
                         <div style="clear:both;"></div>
 
@@ -509,6 +634,20 @@
                         if ($('select[name="send-email"]').val() == 1)
                             $('.field-email').show();
 
+                        // Show reminder fields when reminders are enabled
+                        $('select[name="send-reminders"]').on('change', function()
+                        {
+                            var val = $(this).val();
+                            if (val == 1)
+                                $('.field-reminder').slideDown();
+                            else
+                                $('.field-reminder').slideUp();
+                        });
+
+                        // Check if send-reminders is already selected
+                        if ($('select[name="send-reminders"]').val() == 1)
+                            $('.field-reminder').show();
+
                         // Edit email body with wysiwyg
                         $('.edit-email-body').on('click', function(){
                             var current_content = $('input[name="email-body"]').val();
@@ -658,7 +797,7 @@
         //            clear_target_add_form();
         //        });
 
-                        $('#add-applicants-from-job').on('click', function(){
+                        $('#add-all-users').on('click', function(){
         //                        $modal = $('#modal-users');
         //                        $modal.modal('show').on('click', '#add-users', function(){
 
@@ -698,6 +837,11 @@
                                 }
                             });
         //                        });
+                        });
+
+                        $('#add-from-groups').on('click', function(){
+                            // TODO: Implement group selection functionality
+                            toastr.info("Group selection feature coming soon.", "Info", opts);
                         });
 
                         // Remove cached values from target add form
@@ -961,6 +1105,16 @@
                 todayHighlight: true,
                 startDate: new Date()
             });
+
+            // Auto-detect and set user's timezone
+            try {
+                var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                $('#reminder-timezone').val(timezone);
+                console.log('User timezone detected:', timezone);
+            } catch(e) {
+                console.log('Could not detect timezone, defaulting to UTC');
+                $('#reminder-timezone').val('UTC');
+            }
         });
     </script>
 @stop

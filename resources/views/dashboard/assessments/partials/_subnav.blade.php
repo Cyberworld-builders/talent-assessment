@@ -2,7 +2,7 @@
 $tabs = [
     [
         'name' => 'General',
-        'link' => '/dashboard/assessments/'.$assessment->id.'/edit',
+        'link' => '/dashboard/assessments/'.$assessment->id.'/edit-new',
     ],
     [
         'name' => 'Dimensions',

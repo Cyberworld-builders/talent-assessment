@@ -57,7 +57,7 @@
                     .page-container.assignment.details {
                         /*background-image:none;*/
                         /*background-color:#ddd;*/
-                        background:url('{{ asset('images/report-background.jpg') }}') fixed no-repeat;
+                        background:url('{{ asset('assets/images/report-background.jpg') }}') fixed no-repeat;
                         background-size: cover;
                     }
                     .assignment.details .main-content {
@@ -224,7 +224,7 @@
                             <div class="col-xs-2 visible-xs"></div>
                             <div class="col-xs-8 col-sm-8 col-sm-offset-2 text-center">
                                 <br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs"><br class="visible-xs">
-                                <img class="img-responsive text-center cover-logo" src="{{ asset('images/logo.png') }}">
+                                <img class="img-responsive text-center cover-logo" src="{{ asset('assets/images/logo.png') }}">
                             </div>
                         </div>
 
@@ -294,7 +294,7 @@
                                         @if ($assessment->logo)
                                             <img class="img-responsive" src="{{ show_image($assessment->logo) }}">
                                         @else
-                                            <img class="img-responsive" src="{{ asset('images/logo.png') }}">
+                                            <img class="img-responsive" src="{{ asset('assets/images/logo.png') }}">
                                         @endif
                                     </div>
                                 </div>

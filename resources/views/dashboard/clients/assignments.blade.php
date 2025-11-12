@@ -26,6 +26,34 @@
         </div>
     </div>
 
+    {{-- Error Messages --}}
+    @if(session('error'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Error:</strong> {{ session('error') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Success Messages --}}
+    @if(session('success'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Success:</strong> {{ session('success') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row">
 
         {{-- Sub Navigation --}}
@@ -38,7 +66,15 @@
                 <div class="pull-right">
                     @role('admin')
                     <a class="btn btn-black" href="{{ url('dashboard/clients/'.$client->id.'/assign') }}"><i class="linecons-paper-plane"></i> Assign Assessments</a>
-                    <a id="download-all-data" class="btn btn-black"><i class="fa-download"></i> Download All Data</a>
+                    <div class="btn-group" style="display: inline-block;">
+                        <button aria-expanded="false" type="button" class="btn btn-black dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa-download"></i> Download All Data <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-black" role="menu">
+                            <li><a class="download-all-data" data-type="1">Assignment Answers</a></li>
+                            <li><a class="download-all-data" data-type="2">Detailed Dimension Scores</a></li>
+                        </ul>
+                    </div>
                     @endrole
                     @role('reseller')
                     <a class="btn btn-black" href="{{ url('dashboard/clients/'.$client->id.'/assign') }}"><i class="linecons-paper-plane"></i> Assign Assessments</a>
@@ -89,9 +125,12 @@
             // Server-sent Events
             var es;
 
-            $('#download-all-data').on('click', function()
+            $('.download-all-data').on('click', function()
             {
-                var url = '/dashboard/assignments/download/{{ $client->id }}';
+                var type = $(this).attr('data-type');
+                var url = '/dashboard/assignments/download/{{ $client->id }}/'+type;
+                console.log('Download type:', type);
+                console.log('Download URL:', url);
                 es = new EventSource(url);
 
                 // Add a cancel option
@@ -109,7 +148,16 @@
                         $('#progress-text').text('');
                         $('#progress-bar').css('width', '0%');
                         $('#cancel-download').remove();
-                        window.location = '/download/' + result.message.file;
+                        
+                        // Check if message is a full URL (S3/CloudFront) or local file path
+                        var downloadUrl = result.message;
+                        if (typeof downloadUrl === 'string' && (downloadUrl.startsWith('http://') || downloadUrl.startsWith('https://'))) {
+                            // Full URL - use directly
+                            window.location = downloadUrl;
+                        } else {
+                            // Local file path - use download route
+                            window.location = '/download/' + result.message.file;
+                        }
                     }
 
                     // Update progress

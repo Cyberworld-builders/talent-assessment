@@ -78,6 +78,13 @@
         <!-- Errors -->
         @include('errors.list')
 
+        <!-- Success Messages -->
+        @if (session('status'))
+            <div class="alert alert-success" style="max-width: 370px; margin: 0 auto 20px; background: #8dc63f; color: white; padding: 15px; border-radius: 3px; text-align: center;">
+                {{ session('status') }}
+            </div>
+        @endif
+
             <!-- Add class "fade-in-effect" for login form effect -->
             <form method="post" role="form" id="login" class="login-form fade-in-effect" action="login">
             {!! csrf_field() !!}

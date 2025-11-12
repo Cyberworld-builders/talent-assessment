@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Aws\S3\S3Client;
 
 /**
  * Class AssignmentsController
@@ -123,7 +124,7 @@ class AssignmentsController extends Controller {
             foreach ($data['assignments'] as $assignment_id)
             {
 				$assignment = Assignment::findOrFail($assignment_id);
-				$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
+				$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
 				$next_reminder = '';
 				$reminder_frequency = '';
 				if ($data['reminder'] == 1)
@@ -225,18 +226,29 @@ class AssignmentsController extends Controller {
 	 */
 	public function assignmentsForDate($id, $date)
 	{
-		$client = Client::findOrFail($id);
-		$users = $client->users;
+		try {
+			$client = Client::findOrFail($id);
+			$users = $client->users;
 
-		$userIds = [];
-		foreach ($users as $user)
-			array_push($userIds, $user->id);
+			$userIds = [];
+			foreach ($users as $user)
+				array_push($userIds, $user->id);
 
-		$assignments = Assignment::all()->filter(function($assignment) use ($userIds, $date) {
-			return (in_array($assignment->user_id, $userIds) && $assignment->created_at->format('Y-m-d H:i') == $date);
-		});
+			$assignments = Assignment::all()->filter(function($assignment) use ($userIds, $date) {
+				return (in_array($assignment->user_id, $userIds) && $assignment->created_at->format('Y-m-d H:i') == $date);
+			});
 
-		return view('dashboard.clients.assignments', compact('client', 'assignments', 'report', 'date'));
+			return view('dashboard.clients.assignments', compact('client', 'assignments', 'date'));
+			
+		} catch (\Exception $e) {
+			\Log::error('Error loading assignments for date: ' . $e->getMessage(), [
+				'client_id' => $id,
+				'date' => $date,
+				'trace' => $e->getTraceAsString()
+			]);
+			
+			return redirect()->back()->with('error', 'An error occurred while loading assignments. Please try again or contact support if the problem persists.');
+		}
 	}
 
 
@@ -673,6 +685,39 @@ class AssignmentsController extends Controller {
 				}
 			}
 
+			// Process reminder settings for all assignments
+			if (isset($data['reminder']) && $data['reminder'] == 1)
+			{
+				$reminderData = [];
+				$reminderData['reminder'] = 1;
+				$reminderData['reminder_frequency'] = $data['reminder-frequency'] ?? 'daily';
+				$reminderData['reminder_timezone'] = $data['reminder-timezone'] ?? 'UTC';
+				
+				// Parse first reminder date/time
+				if (isset($data['reminder-start-date']) && isset($data['reminder-start-time']))
+				{
+					$dateTimeString = $data['reminder-start-date'] . ' ' . $data['reminder-start-time'];
+					$reminderData['first_reminder_at'] = Carbon::createFromFormat('D, d M Y h:i A', $dateTimeString);
+				}
+				
+				// Parse stop reminders date/time (optional)
+				if (isset($data['reminder-end-date']) && $data['reminder-end-date'] && isset($data['reminder-end-time']) && $data['reminder-end-time'])
+				{
+					$dateTimeString = $data['reminder-end-date'] . ' ' . $data['reminder-end-time'];
+					$reminderData['stop_reminders_at'] = Carbon::createFromFormat('D, d M Y h:i A', $dateTimeString);
+				}
+				
+				// Update all assignments with reminder data
+				foreach ($assignment_ids as $assignment_id)
+				{
+					$assignment = Assignment::find($assignment_id);
+					if ($assignment)
+					{
+						$assignment->update($reminderData);
+					}
+				}
+			}
+
 			// Email assignment links to the user
 			if ($data['send-email'])
 			{
@@ -1088,7 +1133,7 @@ class AssignmentsController extends Controller {
 
 	public function update_assignment_for_user($assignment_id, $user, $expiration, $whitelabel)
     {
-        $expires = Carbon::createFromFormat('d M Y', $expiration);
+        $expires = Carbon::createFromFormat('D, d M Y', $expiration);
 
         $assignment = Assignment::findOrFail($assignment_id);
         $assignment->update([
@@ -1206,7 +1251,7 @@ class AssignmentsController extends Controller {
     {
 		$data = $request->all();
 		$assignment = Assignment::findOrFail($id);
-		$expires = Carbon::createFromFormat('d M Y', $data['expiration']);
+		$expires = Carbon::createFromFormat('D, d M Y', $data['expiration']);
 
 		if (! array_key_exists('job_id', $data) || $data['job_id'] == '')
 			$data['job_id'] = null;
@@ -1341,7 +1386,7 @@ class AssignmentsController extends Controller {
 	 */
 	public function generate_assignment_for_user($assessment_id, $user, $job_id, $expiration, $whitelabel, $custom_fields, $target_id, $created_at = null)
 	{
-		$expires = Carbon::createFromFormat('d M Y', $expiration);
+		$expires = Carbon::createFromFormat('D, d M Y', $expiration);
 
 		// Create new assignment
 		$assignment = new Assignment([
@@ -1621,9 +1666,38 @@ class AssignmentsController extends Controller {
 		if ($type == 2)
 			$data = $this->excelTemplateDetailedDimensionScores($client, $users, $assessments, $total);
 
-        // Return a csv
+        // Store locally first
         $return_data = $data->store('csv', false, true);
-        sse_complete($return_data);
+        
+        // Upload to S3
+        try {
+            $s3 = new S3Client(config('aws'));
+            $localPath = $return_data['full'];
+            $filename = basename($localPath);
+            $s3Path = 'exports/' . $filename;
+            
+            // Upload file to S3
+            $result = $s3->upload(
+                env('AWS_S3_BUCKET'), 
+                $s3Path, 
+                file_get_contents($localPath)
+            );
+            
+            // Convert S3 URL to CloudFront URL
+            $s3Url = s3_to_cloudfront_url($result->get('ObjectURL'));
+            
+            // Delete local file after successful upload
+            if (file_exists($localPath)) {
+                unlink($localPath);
+            }
+            
+            // Send S3 URL to client
+            sse_complete($s3Url);
+        } catch (\Exception $e) {
+            // If S3 upload fails, fall back to local file
+            \Log::error('S3 upload failed for export: ' . $e->getMessage());
+            sse_complete($return_data);
+        }
         
         // Restore original error reporting
         error_reporting($oldErrorReporting);

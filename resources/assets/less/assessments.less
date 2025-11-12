@@ -591,6 +591,36 @@ table.cke_show_border td {
     border: 1px solid #dfdfdf;
 }
 
+// Enhanced table styling for assessment content
+.assignment table,
+.page-container.assignment table,
+.assignment .question-container table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
+    background: white !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    
+    td, th {
+        border: 1px solid #ddd !important;
+        padding: 12px 15px !important;
+        text-align: left !important;
+        vertical-align: top !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+    }
+    
+    th {
+        background-color: #f8f9fa !important;
+        font-weight: 600 !important;
+        color: #2c3e50 !important;
+    }
+    
+    tr:hover {
+        background-color: #e9ecef !important;
+    }
+}
+
 // WYSIWYG
 
 .wysiwyg-color-black {

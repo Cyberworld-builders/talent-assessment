@@ -243,9 +243,12 @@
             // Server-sent Events
             var es;
 
-            $('#download-all-data').on('click', function()
+            $('.download-all-data').on('click', function()
             {
-                var url = '/dashboard/assignments/download/{{ $client->id }}';
+                var type = $(this).attr('data-type');
+                var url = '/dashboard/assignments/download/{{ $client->id }}/'+type;
+                console.log('Download type:', type);
+                console.log('Download URL:', url);
                 es = new EventSource(url);
 
                 // Add a cancel option
@@ -263,7 +266,16 @@
                         $('#progress-text').text('');
                         $('#progress-bar').css('width', '0%');
                         $('#cancel-download').remove();
-                        window.location = '/download/' + result.message.file;
+                        
+                        // Check if message is a full URL (S3/CloudFront) or local file path
+                        var downloadUrl = result.message;
+                        if (typeof downloadUrl === 'string' && (downloadUrl.startsWith('http://') || downloadUrl.startsWith('https://'))) {
+                            // Full URL - use directly
+                            window.location = downloadUrl;
+                        } else {
+                            // Local file path - use download route
+                            window.location = '/download/' + result.message.file;
+                        }
                     }
 
                     // Update progress
@@ -276,8 +288,10 @@
 
                 // Error
                 es.addEventListener('error', function(e) {
-                    console.log(e);
-                    alert('Error occurred');
+                    console.log('EventSource error:', e);
+                    console.log('ReadyState:', es.readyState);
+                    console.log('URL:', es.url);
+                    alert('Error occurred during download. Check console for details.');
                     es.close();
                 });
             });

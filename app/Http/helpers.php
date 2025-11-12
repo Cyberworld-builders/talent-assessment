@@ -104,8 +104,15 @@ function custom_fields($assignment_id, $string)
  */
 function sse_init()
 {
+	// Start output buffering if not already started
+	if (ob_get_level() == 0) {
+		ob_start();
+	}
+	
 	header('Content-Type: text/event-stream');
 	header('Cache-Control: no-cache');
+	header('X-Accel-Buffering: no'); // Disable nginx buffering
+	
 	sse_send(0, 0);
 }
 
@@ -124,7 +131,10 @@ function sse_send($iteration, $message)
 	echo "data: " . json_encode($data) . PHP_EOL;
 	echo PHP_EOL;
 
-	ob_flush();
+	// Only flush if output buffering is active
+	if (ob_get_level() > 0) {
+		ob_flush();
+	}
 	flush();
 }
 
@@ -552,4 +562,26 @@ function formatDateInterval($format, $interval, $date)
 	$count = $date->diff(new DateTime)->format($format);
 
 	return sprintf('%s %s', $count, str_plural($interval, $count));
+}
+
+/**
+ * Get asset path - returns URL for web views or absolute path for PDF generation.
+ *
+ * @param string $asset
+ * @param bool $download
+ * @return string
+ */
+function getAsset($asset, $download = false)
+{
+	if ($download) {
+		// For PDF generation, return file:// URL with absolute path
+		$path = public_path($asset);
+		// Ensure the path exists
+		if (!file_exists($path)) {
+			\Log::warning("Asset not found for PDF: {$path}");
+		}
+		return $path;
+	}
+
+	return asset($asset);
 }

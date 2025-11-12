@@ -223,4 +223,88 @@ class Mailer {
 
 		return true;
 	}
+
+	/**
+	 * Send a reminder email for an assignment.
+	 *
+	 * @param Assignment $assignment
+	 * @return bool
+	 */
+	public function send_reminder($assignment)
+	{
+		$user = $assignment->user;
+		$assessment = $assignment->assessment();
+
+		if (!$user || !$assessment) {
+			return false;
+		}
+
+		// Piece together assignments link
+		$server = $_SERVER['SERVER_NAME'] ?? parse_url(env('APP_URL'), PHP_URL_HOST);
+		if ($server == 'localhost')
+			$server .= ':8000';
+		if (session('reseller'))
+			$server .= '/r/'.session('reseller')->id;
+		$assignments_link = 'https://'.$server.'/assignments';
+
+		// Calculate days until expiration
+		$expires = Carbon::parse($assignment->expires);
+		$daysUntilExpiration = Carbon::now()->diffInDays($expires, false);
+		
+		// Build the reminder body (note: this is passed to view but not used in current template)
+		$body = "This is a reminder that you have a pending assessment that needs to be completed.";
+		$body .= "\n\n";
+		$body .= "<strong>Assessment:</strong> {$assessment->name}<br>";
+		$body .= "<strong>Expires:</strong> {$expires->format('l, F jS, Y')}<br>";
+		
+		if ($daysUntilExpiration > 0) {
+			$body .= "<strong>Time Remaining:</strong> {$daysUntilExpiration} day(s)<br>";
+		} else if ($daysUntilExpiration == 0) {
+			$body .= "<strong>This assessment expires today!</strong><br>";
+		} else {
+			$body .= "<strong>This assessment is overdue!</strong><br>";
+		}
+		
+		$body .= "\n\n";
+		$body .= "Please log in to complete your assessment:";
+
+		// Apply shortcodes
+		$body = do_shortcodes([
+			'name'             => $user->name,
+			'username'         => $user->username,
+			'email'            => $user->email,
+			'password'         => $user->generate_password_for_user(),
+			'login-link'       => $assignments_link,
+			'assessment'       => $assessment->name,
+			'expiration-date'  => $expires->format('l, F jS, Y'),
+			'days-remaining'   => max(0, $daysUntilExpiration),
+		], $body);
+
+		$subject = "Reminder: {$assessment->name} Assessment Due";
+		
+		if ($daysUntilExpiration == 0) {
+			$subject = "Urgent: {$assessment->name} Assessment Expires Today";
+		} else if ($daysUntilExpiration < 0) {
+			$subject = "Action Required: {$assessment->name} Assessment";
+		}
+
+		$view = 'emails.reminder';
+		$view_data = [
+			'body' => $body,
+			'user' => $user,
+			'assessment' => $assessment,
+			'assignment' => $assignment,
+			'assignments_link' => $assignments_link,
+			'expires' => $expires,
+			'days_remaining' => max(0, $daysUntilExpiration),
+		];
+
+		Mail::send($view, $view_data, function ($m) use ($user, $subject)
+		{
+			$m->from($this->domain, $this->from);
+			$m->to($user->email, $user->name)->subject($subject);
+		});
+
+		return true;
+	}
 }

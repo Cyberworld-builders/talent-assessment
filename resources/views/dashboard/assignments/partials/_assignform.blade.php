@@ -2,10 +2,10 @@
     <div class="panel-body">
         <div class="member-form-inputs">
 
-            <h3>Basic Info</h3><br/>
+            <h3>Assessment Settings</h3><br/>
 
             @if (! $edit)
-                {{-- Assessment --}}
+                {{-- Assessments --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
@@ -34,24 +34,24 @@
             @endif
             <div class="hidden-group" <?php echo ($edit || $oldInput) ? '' : 'style="display:none;"' ?>>
 
-                {{-- Expiration Field --}}
+                {{-- Expiration Date --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
                             {!! Form::label('expiration', 'Expiration Date', ['class' => 'control-label']) !!}
-                            <p class="small text-muted">Users will not be able to start or finish unfinished assignments after they have expired.</p>
+                            <p class="small text-muted">Users will not be able to start or finish assignments after they have expired.</p>
                         </div>
                         <div class="col-sm-8">
                             <div class="input-group">
                                 @if (! $edit)
-                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('d M Y'), [
+                                    {!! Form::text('expiration', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'dd M yyyy',
+                                        'data-format' => 'D, dd M yyyy',
                                     ]) !!}
                                 @else
                                     {!! Form::text('expiration', $assignment->expiration, [
                                         'class' => 'form-control input-lg datepicker',
-                                        'data-format' => 'dd M yyyy',
+                                        'data-format' => 'D, dd M yyyy',
                                     ]) !!}
                                 @endif
                                 <div class="input-group-addon">
@@ -62,10 +62,9 @@
                     </div>
                 </div>
 
-
-                {{-- Tie To Specific Job --}}
+                {{-- Tie To Specific Job - Removed per user request --}}
                 @role('admin')
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <div class="row">
                             <div class="col-sm-4">
                                 {!! Form::label('job_id', 'Lock To Specific Job', ['class' => 'control-label']) !!}
@@ -75,10 +74,10 @@
                                 {!! Form::select('job_id', $jobsArray, ($edit ? $assignment->job_id : 0), ['class' => 'form-control input-lg']) !!}
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @endrole
 
-                {{-- Make Part of Existing Survey --}}
+                {{-- Add To Existing Survey --}}
                 @if (!$edit || ($edit && $assessment->target))
                 <div class="form-group">
                     <div class="row">
@@ -104,7 +103,10 @@
                     </div>
                 </div>
 
-                {{-- Send Email --}}
+                <br/>
+                <h3>Emails</h3><br/>
+
+                {{-- Email Notification --}}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
@@ -166,6 +168,109 @@
                     </div>
 
                     <br/>
+                    <h3>Reminders</h3><br/>
+
+                    {{-- Send Reminders --}}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('email-reminder', 'Send Reminders', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">Users will receive periodic email reminders for incomplete assessments.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                {!! Form::select('reminder', [
+                                    0 => 'No',
+                                    1 => 'Yes',
+                                ], 0, ['class' => 'form-control input-lg']) !!}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('reminder-start', 'First Reminder Date & Time', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">The date and time when the first reminder should be sent.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            {!! Form::text('reminder-start-date', Carbon\Carbon::tomorrow()->format('D, d M Y'), [
+                                                'class' => 'form-control input-lg datepicker',
+                                                'data-format' => 'D, dd M yyyy',
+                                                'placeholder' => 'Date'
+                                            ]) !!}
+                                            <div class="input-group-addon">
+                                                <i class="linecons-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        {!! Form::text('reminder-start-time', '09:00 AM', [
+                                            'class' => 'form-control input-lg',
+                                            'placeholder' => 'Time (e.g., 09:00 AM)'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('field-reminder', 'Reminder Frequency', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">How often reminders should be sent after the first one.</p>
+                            </div>
+                            <div class="col-sm-8">
+                                {!! Form::select('reminder-frequency', [
+                                    'daily' => 'Daily',
+                                    'every-2-days' => 'Every 2 Days',
+                                    'every-3-days' => 'Every 3 Days',
+                                    'weekly' => 'Weekly',
+                                    'bi-weekly' => 'Bi-Weekly',
+                                    'monthly' => 'Monthly'
+                                ], 'weekly', ['class' => 'form-control input-lg']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group field-reminder" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {!! Form::label('reminder-end', 'Stop Reminders On', ['class' => 'control-label']) !!}
+                                <p class="small text-muted">When to stop sending reminders (defaults to expiration date).</p>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            {!! Form::text('reminder-end-date', '', [
+                                                'class' => 'form-control input-lg datepicker',
+                                                'data-format' => 'D, dd M yyyy',
+                                                'placeholder' => 'Date (optional)'
+                                            ]) !!}
+                                            <div class="input-group-addon">
+                                                <i class="linecons-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        {!! Form::text('reminder-end-time', '', [
+                                            'class' => 'form-control input-lg',
+                                            'placeholder' => 'Time (optional)'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Hidden field for user's timezone --}}
+                    {!! Form::hidden('reminder-timezone', 'UTC', ['id' => 'reminder-timezone']) !!}
+
+                    <br/>
                     <h3>Assign To</h3><br/>
 
                     {{-- Helper Buttons --}}
@@ -186,7 +291,7 @@
                             </div>
                         @endif
                         @role('admin|reseller')
-                            <div class="btn-group" style="display: inline-block; margin-left:5px;">
+                            {{-- <div class="btn-group" style="display: inline-block; margin-left:5px;">
                                 <button aria-expanded="false" type="button" class="btn btn-black dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa-briefcase"></i> From Job Family <span class="caret"></span>
                                 </button>
@@ -195,13 +300,13 @@
                                         <li><a class="add-by-job-family">{{ $family }}</a></li>
                                     @endforeach
                                 </ul>
-                            </div>
+                            </div> --}}
                         @endrole
                     </div>
 
                     {{-- Upload --}}
                     <div class="pull-right">
-                        <a id="import" class="btn btn-black"><i class="fa-edit"></i> Upload Targets From Excel</a>
+                        <a id="import" class="btn btn-black"><i class="fa-upload"></i> Upload Targets From Excel</a>
                     </div>
                     <div style="clear:both;"></div>
 
@@ -460,6 +565,16 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
             }
+        });
+
+        // Email reminder toggle
+        $('select[name="reminder"]').on('change', function()
+        {
+            var val = $(this).val();
+            if (val == 1)
+                $('.field-reminder').slideDown();
+            else
+                $('.field-reminder').slideUp();
         });
 
         // New save button
@@ -763,8 +878,8 @@
             });
         });
 
-        // Add Users From A Specific Job Family
-        $('.add-by-job-family').on('click', function()
+        // Add Users From A Specific Job Family - Removed per user request
+        /*$('.add-by-job-family').on('click', function()
         {
             $modal = $('#modal-users');
             $modal.modal('show');
@@ -803,9 +918,9 @@
                     $('html').prepend(data.responseText);
                 }
             });
-        });
+        });*/
 
-        // Add Users From A Specific Job Family
+        // Add Users From A Specific Job
         $('.add-by-job').on('click', function()
         {
             $modal = $('#modal-users');
