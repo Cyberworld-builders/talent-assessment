@@ -200,6 +200,10 @@ output "production_test_email_addresses" {
   value       = [for email in aws_ses_email_identity.production_test_emails : email.email]
 }
 
+# Vercel OIDC Outputs (see vercel-oidc.tf for OIDC-based authentication)
+# OIDC is the recommended approach - no long-lived credentials needed!
+# The vercel_ses_role_arn and vercel_oidc_setup_instructions are defined in vercel-oidc.tf
+
 output "deployment_summary" {
   description = "Summary of the deployment"
   value = <<-EOF

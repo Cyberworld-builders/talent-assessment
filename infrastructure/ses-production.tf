@@ -166,6 +166,10 @@ resource "aws_ses_email_identity" "production_test_emails" {
   email     = each.value
 }
 
+# NOTE: Vercel IAM User and Access Keys removed in favor of OIDC authentication
+# See vercel-oidc.tf for the OIDC-based approach (follows AWS best practices)
+# The OIDC approach uses short-lived credentials instead of long-lived access keys
+
 # Variable for production test email addresses
 # Add this to your variables.tf file
 # variable "production_test_email_addresses" {

@@ -85,3 +85,9 @@ variable "production_test_email_addresses" {
     "assessment@involvedtalent.com"
   ]
 }
+
+variable "vercel_team_slug" {
+  description = "Vercel team slug for OIDC configuration (leave null/empty for Global Mode)"
+  type        = string
+  default     = null
+}
