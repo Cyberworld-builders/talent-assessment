@@ -32,7 +32,7 @@ resource "aws_iam_role" "supabase_ses_role" {
           # Require external ID for additional security
           # This should match the external ID configured in Supabase
           StringEquals = {
-            "sts:ExternalId" = var.supabase_external_id
+            "sts:ExternalId" = local.supabase_external_id
           }
           # Optional: Restrict to specific IP ranges if Supabase publishes them
           # IpAddress = {
