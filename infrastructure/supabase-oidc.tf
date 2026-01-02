@@ -84,6 +84,54 @@ resource "aws_iam_role_policy_attachment" "supabase_ses_config_policy" {
   policy_arn = aws_iam_policy.ses_production_config_policy.arn
 }
 
+# IAM User for Supabase Edge Functions
+# This user has minimal permissions - only to assume the role
+# The actual SES permissions are on the role, not the user
+resource "aws_iam_user" "supabase_edge_functions" {
+  name = "${var.project_name}-supabase-edge-functions"
+  path = "/supabase/"
+
+  tags = {
+    Name        = "${var.project_name}-supabase-edge-functions"
+    Environment = "Production"
+    Purpose     = "Supabase Edge Functions - Role Assumption Only"
+  }
+}
+
+# Policy allowing the user to assume the Supabase SES role
+resource "aws_iam_policy" "supabase_assume_role_policy" {
+  name        = "${var.project_name}-supabase-assume-role-policy"
+  description = "Allows Supabase Edge Functions user to assume the SES role"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = aws_iam_role.supabase_ses_role.arn
+        Condition = {
+          StringEquals = {
+            "sts:ExternalId" = local.supabase_external_id
+          }
+        }
+      }
+    ]
+  })
+}
+
+# Attach assume role policy to the user
+resource "aws_iam_user_policy_attachment" "supabase_assume_role" {
+  user       = aws_iam_user.supabase_edge_functions.name
+  policy_arn = aws_iam_policy.supabase_assume_role_policy.arn
+}
+
+# Create access keys for the user (to be stored in Supabase Vault)
+# Note: These keys only allow assuming the role, not direct SES access
+resource "aws_iam_access_key" "supabase_edge_functions" {
+  user = aws_iam_user.supabase_edge_functions.name
+}
+
 # Get current AWS account ID
 data "aws_caller_identity" "current" {}
 
