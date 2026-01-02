@@ -166,8 +166,8 @@ output "supabase_oidc_setup_instructions" {
     2. In Supabase Dashboard, go to your project Settings > Edge Functions > Environment Variables
     
     3. Store access keys in Supabase Vault (Dashboard > Settings > Vault):
-       - Access Key ID: ${aws_iam_access_key.supabase_edge_functions.id}
-       - Secret Access Key: ${aws_iam_access_key.supabase_edge_functions.secret} (SECRET - copy from terraform output)
+       - Access Key ID: Get from 'terraform output supabase_access_key_id'
+       - Secret Access Key: Get from 'terraform output -raw supabase_secret_access_key' (SECRET!)
     
     4. Add the following environment variables to Edge Functions:
        - AWS_ROLE_ARN = ${aws_iam_role.supabase_ses_role.arn}
@@ -228,4 +228,5 @@ output "supabase_oidc_setup_instructions" {
     - Update the trust policy to use Federated principal
     - Follow similar pattern to vercel-oidc.tf
   EOF
+  sensitive   = true
 }
