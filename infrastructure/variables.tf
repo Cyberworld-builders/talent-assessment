@@ -69,7 +69,7 @@ variable "project_name" {
 variable "test_email_addresses" {
   description = "List of email addresses to verify for testing"
   type        = list(string)
-  default     = [
+  default = [
     "admin-goreman@cyberworldbuilders.com",
     "user-apone@cyberworldbuilders.com",
   ]
@@ -78,7 +78,7 @@ variable "test_email_addresses" {
 variable "production_test_email_addresses" {
   description = "List of email addresses to verify for production testing"
   type        = list(string)
-  default     = [
+  default = [
     "admin@involvedtalent.com",
     "support@involvedtalent.com",
     "noreply@involvedtalent.com",
@@ -88,6 +88,18 @@ variable "production_test_email_addresses" {
 
 variable "vercel_team_slug" {
   description = "Vercel team slug for OIDC configuration (leave null/empty for Global Mode)"
+  type        = string
+  default     = null
+}
+
+variable "supabase_project_ref" {
+  description = "Supabase project reference (optional, for documentation purposes)"
+  type        = string
+  default     = null
+}
+
+variable "supabase_external_id" {
+  description = "External ID for Supabase Edge Functions to assume AWS IAM role (should be a secure random string)"
   type        = string
   default     = null
 }
